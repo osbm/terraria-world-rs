@@ -1,0 +1,11 @@
+[package]
+name = "terraria-world-parser"
+version = "0.1.0"
+edition = "2021"
+authors = ["osbm <osbm@osbm.dev>"]
+description = "A simple Terraria world file (.wld) parser library"
+license = "MIT"
+repository = "https://github.com/yourusername/terraria-world-parser-rust"
+keywords = ["terraria", "world", "parser", "game"]
+categories = ["game-development", "parsing"]
+
