@@ -17,16 +17,16 @@
 //! # Ok::<(), Box<dyn std::error::Error>>(())
 //! ```
 
-pub mod error;
-pub mod header;
-pub mod world;
-pub mod parser;
-pub mod types;
+// pub mod error;
+// pub mod header;
+// pub mod world;
+// pub mod parser;
+// pub mod types;
 
-pub use error::ParseError;
-pub use world::WorldFile;
-pub use parser::WorldParser;
+// pub use error::ParseError;
+// pub use world::WorldFile;
+// pub use parser::WorldParser;
 
-/// Result type used throughout the library
-pub type Result<T> = std::result::Result<T, ParseError>;
+// /// Result type used throughout the library
+// pub type Result<T> = std::result::Result<T, ParseError>;
 
