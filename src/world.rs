@@ -127,6 +127,15 @@ pub struct World {
     pub lunar_events_pillars_present_nebula: bool,
     pub lunar_events_pillars_present_stardust: bool,
     pub lunar_events_are_active: bool,
+    pub party_center_active: bool,
+    pub party_natural_active: bool,
+    pub party_cooldown: i32,
+    pub partying_npcs: Vec<i32>,
+    pub is_sandstorm_active: bool,
+    pub sandstorm_time_left: i32,
+    pub sandstorm_severity: f32,
+    pub sandstorm_intended_severity: f32,
+    pub saved_bartender: bool,
 
 }
 
@@ -140,14 +149,15 @@ impl World {
         let savefile_type = r.u8();
         let revision = r.u32();
         let is_favorite = r.u64();
+
         let pointer_count = r.u16();
         let mut pointer_vector = vec![];
         for _ in 0..pointer_count {
             pointer_vector.push(r.u32());
         }
         let pointers = Pointers::from_vector(&pointer_vector); // create this only to use it during parsing
-        let tile_frame_important_size = (r.i16() + 7) / 8;
 
+        let tile_frame_important_size = (r.i16() + 7) / 8;
         let mut tile_frame_important = vec![];
         for _ in 0..tile_frame_important_size {
             let current_bits = r.bits();
@@ -289,6 +299,21 @@ impl World {
         let lunar_events_pillars_present_nebula = r.bool();
         let lunar_events_pillars_present_stardust = r.bool();
         let lunar_events_are_active = r.bool();
+        let party_center_active = r.bool();
+        let party_natural_active = r.bool();
+        let party_cooldown = r.i32();
+
+        let partying_npcs_count = r.i32();
+        let mut partying_npcs = vec![];
+        for _ in 0..partying_npcs_count {
+            partying_npcs.push(r.i32());
+        }
+
+        let is_sandstorm_active = r.bool();
+        let sandstorm_time_left = r.i32();
+        let sandstorm_severity = r.f32();
+        let sandstorm_intended_severity = r.f32();
+        let saved_bartender = r.bool();
 
 
         Ok(Self {
@@ -414,6 +439,15 @@ impl World {
             lunar_events_pillars_present_nebula,
             lunar_events_pillars_present_stardust,
             lunar_events_are_active,
+            party_center_active,
+            party_natural_active,
+            party_cooldown,
+            partying_npcs,
+            is_sandstorm_active,
+            sandstorm_time_left,
+            sandstorm_severity,
+            sandstorm_intended_severity,
+            saved_bartender,
 
         })
     }
