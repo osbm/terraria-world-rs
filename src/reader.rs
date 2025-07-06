@@ -75,11 +75,38 @@ impl<'a> ByteReader<'a> {
         slice
     }
 
+    pub fn read_until(&mut self, address: usize) -> Vec<u8> {
+        let end = std::cmp::min(address, self.data.len());
+        let slice = &self.data[self.offset..end];
+        self.offset = end; // update offset to the end of the slice
+        slice.to_vec()
+    }
+
     pub fn offset(&self) -> usize {
         self.offset
     }
 
     pub fn seek(&mut self, offset: usize) {
         self.offset = offset;
+    }
+
+    pub fn uleb128(&mut self) -> u64 {
+        let mut value = 0u64;
+        let mut shift = 0;
+        loop {
+            let byte = self.u8();
+            value |= ((byte & 0x7F) as u64) << shift;
+            if (byte & 0x80) == 0 {
+                break;
+            }
+            shift += 7;
+        }
+        value
+    }
+
+    pub fn string(&mut self, size: Option<usize>) -> String {
+        let size = size.unwrap_or_else(|| self.uleb128() as usize);
+        let bytes = self.bytes(size);
+        bytes.iter().map(|&b| b as char).collect() // assuming latin1
     }
 }
