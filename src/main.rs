@@ -6,7 +6,7 @@ fn main() {
     let bytes = std::fs::read(path).expect("Failed to read file");
     let mut r = ByteReader::new(&bytes);
 
-    let version = r.u32();
+    let version = r.i32();
     println!("Version: {}", version);
 
     let magic = r.bytes(7);
