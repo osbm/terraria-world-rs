@@ -145,6 +145,11 @@ pub struct World {
     pub forest_background_3: i8,
     pub forest_background_4: i8,
     pub combat_book_used: bool,
+    pub lantern_nights_on_cooldown: i32,
+    pub lantern_night_genuine: bool,
+    pub lantern_night_manual: bool,
+    pub next_night_is_lantern_night: bool,
+    pub treetop_variants: Vec<i32>,
 
 }
 
@@ -332,6 +337,18 @@ impl World {
         let forest_background_3 = r.i8();
         let forest_background_4 = r.i8();
         let combat_book_used = r.bool();
+        let lantern_nights_on_cooldown = r.i32();
+        let lantern_night_genuine = r.bool();
+        let lantern_night_manual = r.bool();
+        let next_night_is_lantern_night = r.bool();
+
+        let treetop_variants_count = r.i32();
+        let mut treetop_variants = vec![];
+        for _ in 0..treetop_variants_count {
+            treetop_variants.push(r.i32());
+        }
+
+
 
 
 
@@ -476,6 +493,11 @@ impl World {
             forest_background_3,
             forest_background_4,
             combat_book_used,
+            lantern_nights_on_cooldown,
+            lantern_night_genuine,
+            lantern_night_manual,
+            next_night_is_lantern_night,
+            treetop_variants,
 
         })
     }
