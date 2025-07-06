@@ -12,7 +12,6 @@ pub struct World {
     pub is_favorite: u64,
     pub pointer_count: u16,
     pub pointer_vector: Vec<u32>,
-    pub tile_frame_important_size: i16,
     pub tile_frame_important: Vec<bool>,
     pub unknown_file_format_data: Vec<u8>, // TODO: find out what this is
     pub world_name: String,
@@ -300,7 +299,6 @@ impl World {
             is_favorite,
             pointer_count,
             pointer_vector,
-            tile_frame_important_size,
             tile_frame_important,
             unknown_file_format_data,
             world_name,
