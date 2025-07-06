@@ -180,7 +180,8 @@ pub struct World {
     pub saved_slime_surly: bool,
     pub saved_slime_mystic: bool,
     pub saved_slime_squire: bool,
-
+    pub moondial_is_running: bool,
+    pub moondial_cooldown: u8,
 
 }
 
@@ -409,6 +410,8 @@ impl World {
         let saved_slime_surly = r.bool();
         let saved_slime_mystic = r.bool();
         let saved_slime_squire = r.bool();
+        let moondial_is_running = r.bool();
+        let moondial_cooldown = r.u8();
 
 
         Ok(Self {
@@ -587,7 +590,8 @@ impl World {
             saved_slime_surly,
             saved_slime_mystic,
             saved_slime_squire,
-
+            moondial_is_running,
+            moondial_cooldown,
         })
     }
 
