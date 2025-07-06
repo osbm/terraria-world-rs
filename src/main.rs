@@ -29,4 +29,11 @@ fn main() {
         pointers.push(r.u32());
     }
     println!("Pointers: {:?}", pointers);
+
+    let tile_frame_important_size = (r.i16() + 7) / 8;
+    println!("Tile frame important size: {}", tile_frame_important_size);
+
+    let tile_frame_important = r.bytes(tile_frame_important_size as usize);
+    println!("Tile frame important: {:?}", tile_frame_important);
+
 }
