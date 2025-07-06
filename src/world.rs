@@ -89,7 +89,6 @@ pub struct World {
     pub hardmode_ore_1: i32,
     pub hardmode_ore_2: i32,
     pub hardmode_ore_3: i32,
-
 }
 
 impl World {
@@ -144,30 +143,12 @@ impl World {
         let created_on = r.datetime();
         let moon_style = r.u8();
 
-        let tree_style_seperators = vec![
-            r.i32(),
-            r.i32(),
-            r.i32(),
-        ];
-        let tree_style_properties = vec![
-            r.i32(),
-            r.i32(),
-            r.i32(),
-            r.i32(),
-        ];
+        let tree_style_seperators = vec![r.i32(), r.i32(), r.i32()];
+        let tree_style_properties = vec![r.i32(), r.i32(), r.i32(), r.i32()];
 
-        let moss_style_seperators = vec![
-            r.i32(),
-            r.i32(),
-            r.i32(),
-        ];
+        let moss_style_seperators = vec![r.i32(), r.i32(), r.i32()];
 
-        let moss_style_properties = vec![
-            r.i32(),
-            r.i32(),
-            r.i32(),
-            r.i32(),
-        ];
+        let moss_style_properties = vec![r.i32(), r.i32(), r.i32(), r.i32()];
         let snow_background_style = r.i32();
         let jungle_background_style = r.i32();
         let hell_background_style = r.i32();
@@ -219,7 +200,6 @@ impl World {
         let hardmode_ore_1 = r.i32();
         let hardmode_ore_2 = r.i32();
         let hardmode_ore_3 = r.i32();
-
 
         Ok(Self {
             version_integer,
@@ -306,7 +286,6 @@ impl World {
             hardmode_ore_1,
             hardmode_ore_2,
             hardmode_ore_3,
-
         })
     }
 
