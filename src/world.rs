@@ -16,6 +16,9 @@ pub struct World {
     pub tile_frame_important: Vec<bool>,
     pub unknown_file_format_data: Vec<u8>, // TODO: find out what this is
     pub world_name: String,
+    pub generator_seed: String,
+    pub generator_version: u64,
+    pub uuid: String,
 }
 
 impl World {
@@ -43,8 +46,12 @@ impl World {
         }
 
         let unknown_file_format_data = r.read_until(pointers.world_header as usize);
-
         let world_name = r.string(None);
+        let generator_seed = r.string(None);
+        let generator_version = r.u64();
+        let uuid = r.uuid();
+
+
         Ok(Self {
             version_integer,
             magic,
@@ -57,6 +64,9 @@ impl World {
             tile_frame_important,
             unknown_file_format_data,
             world_name,
+            generator_seed,
+            generator_version,
+            uuid,
         })
     }
 
