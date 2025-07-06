@@ -38,7 +38,11 @@ pub struct World {
     pub tree_style_properties: Vec<i32>,
     pub moss_style_seperators: Vec<i32>,
     pub moss_style_properties: Vec<i32>,
-
+    pub snow_background_style: i32,
+    pub jungle_background_style: i32,
+    pub hell_background_style: i32,
+    pub spawn_point_x: i32,
+    pub spawn_point_y: i32,
 }
 
 impl World {
@@ -119,6 +123,11 @@ impl World {
             r.i32(),
             r.i32(),
         ];
+        let snow_background_style = r.i32();
+        let jungle_background_style = r.i32();
+        let hell_background_style = r.i32();
+        let spawn_point_x = r.i32();
+        let spawn_point_y = r.i32();
 
         Ok(Self {
             version_integer,
@@ -154,6 +163,11 @@ impl World {
             tree_style_properties,
             moss_style_seperators,
             moss_style_properties,
+            snow_background_style,
+            jungle_background_style,
+            hell_background_style,
+            spawn_point_x,
+            spawn_point_y,
         })
     }
 
