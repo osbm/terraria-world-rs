@@ -142,12 +142,9 @@ impl World {
         let is_zenith_world = r.bool();
         let created_on = r.datetime();
         let moon_style = r.u8();
-
         let tree_style_seperators = vec![r.i32(), r.i32(), r.i32()];
         let tree_style_properties = vec![r.i32(), r.i32(), r.i32(), r.i32()];
-
         let moss_style_seperators = vec![r.i32(), r.i32(), r.i32()];
-
         let moss_style_properties = vec![r.i32(), r.i32(), r.i32(), r.i32()];
         let snow_background_style = r.i32();
         let jungle_background_style = r.i32();
