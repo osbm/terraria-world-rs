@@ -53,6 +53,19 @@ pub struct World {
     pub dungeon_point_x: i32,
     pub dungeon_point_y: i32,
     pub world_evil_type: bool,
+    pub defeated_eye_of_cthulhu: bool,
+    pub defeated_eater_of_worlds: bool,
+    pub defeated_skeletron: bool,
+    pub defeated_queen_bee: bool,
+    pub defeated_the_twins: bool,
+    pub defeated_the_destroyer: bool,
+    pub defeated_skeletron_prime: bool,
+    pub defeated_any_mechanical_boss: bool,
+    pub defeated_plantera: bool,
+    pub defeated_golem: bool,
+    pub defeated_king_slime: bool,
+
+
 }
 
 impl World {
@@ -146,6 +159,18 @@ impl World {
         let dungeon_point_x = r.i32();
         let dungeon_point_y = r.i32();
         let world_evil_type = r.bool();
+        let defeated_eye_of_cthulhu = r.bool();
+        let defeated_eater_of_worlds = r.bool();
+        let defeated_skeletron = r.bool();
+        let defeated_queen_bee = r.bool();
+        let defeated_the_twins = r.bool();
+        let defeated_the_destroyer = r.bool();
+        let defeated_skeletron_prime = r.bool();
+        let defeated_any_mechanical_boss = r.bool();
+        let defeated_plantera = r.bool();
+        let defeated_golem = r.bool();
+        let defeated_king_slime = r.bool();
+
 
         Ok(Self {
             version_integer,
@@ -196,6 +221,17 @@ impl World {
             dungeon_point_x,
             dungeon_point_y,
             world_evil_type,
+            defeated_eye_of_cthulhu,
+            defeated_eater_of_worlds,
+            defeated_skeletron,
+            defeated_queen_bee,
+            defeated_the_twins,
+            defeated_the_destroyer,
+            defeated_skeletron_prime,
+            defeated_any_mechanical_boss,
+            defeated_plantera,
+            defeated_golem,
+            defeated_king_slime,
 
         })
     }
