@@ -65,7 +65,7 @@
           };
         in
         pkgs.mkShell {
-          inputsFrom = with pkgs; [
+          inputsFrom = [
             pkgs."${cargoToml.package.name}"
           ];
           buildInputs = with pkgs; [
