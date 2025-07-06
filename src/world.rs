@@ -101,6 +101,11 @@ pub struct World {
     pub cloud_number: i16,
     pub wind_speed: f32,
     pub angler_today_quest_completed_by: Vec<String>,
+    pub saved_angler: bool,
+    pub angler_daily_quest_target: i32,
+    pub saved_stylist: bool,
+    pub saved_tax_collector: bool,
+    pub saved_golfer: bool,
 }
 
 impl World {
@@ -230,6 +235,11 @@ impl World {
             }
         }
 
+        let saved_angler = r.bool();
+        let angler_daily_quest_target = r.i32();
+        let saved_stylist = r.bool();
+        let saved_tax_collector = r.bool();
+        let saved_golfer = r.bool();
 
         Ok(Self {
             version_integer,
@@ -328,6 +338,12 @@ impl World {
             cloud_number,
             wind_speed,
             angler_today_quest_completed_by,
+            saved_angler,
+            angler_daily_quest_target,
+            saved_stylist,
+            saved_tax_collector,
+            saved_golfer,
+
         })
     }
 
