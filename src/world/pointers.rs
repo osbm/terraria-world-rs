@@ -12,7 +12,6 @@ pub struct Pointers {
     pub bestiary: u32,
     pub journey_powers: u32,
     pub footer: u32,
-    pub unknown: u32,
 }
 
 impl Pointers {
