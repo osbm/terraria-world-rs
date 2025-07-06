@@ -97,6 +97,10 @@ pub struct World {
     pub crimson_background: i8,
     pub desert_background: i8,
     pub ocean_background: i8,
+    pub cloud_background: i32,
+    pub cloud_number: i16,
+    pub wind_speed: f32,
+    pub angler_today_quest_completed_by: Vec<String>,
 }
 
 impl World {
@@ -213,6 +217,19 @@ impl World {
         let crimson_background = r.i8();
         let desert_background = r.i8();
         let ocean_background = r.i8();
+        let cloud_background = r.i32();
+        let cloud_number = r.i16();
+        let wind_speed = r.f32();
+
+        let angler_today_quest_completed_by_count = r.i32();
+        let mut angler_today_quest_completed_by = vec![];
+        for _ in 0..angler_today_quest_completed_by_count {
+            let name = r.string(None);
+            if !name.is_empty() {
+                angler_today_quest_completed_by.push(name);
+            }
+        }
+
 
         Ok(Self {
             version_integer,
@@ -307,6 +324,10 @@ impl World {
             crimson_background,
             desert_background,
             ocean_background,
+            cloud_background,
+            cloud_number,
+            wind_speed,
+            angler_today_quest_completed_by,
         })
     }
 
