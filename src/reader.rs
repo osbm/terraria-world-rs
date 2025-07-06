@@ -174,4 +174,16 @@ impl<'a> ByteReader<'a> {
             None => "⚠️ Invalid datetime".to_string(),
         }
     }
+
+    pub fn f32(&mut self) -> f32 {
+        let bytes = self.bytes(4);
+        let val = f32::from_le_bytes(bytes.try_into().unwrap());
+        val
+    }
+
+    pub fn f64(&mut self) -> f64 {
+        let bytes = self.bytes(8);
+        let val = f64::from_le_bytes(bytes.try_into().unwrap());
+        val
+    }
 }

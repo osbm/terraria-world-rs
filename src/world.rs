@@ -43,6 +43,11 @@ pub struct World {
     pub hell_background_style: i32,
     pub spawn_point_x: i32,
     pub spawn_point_y: i32,
+    pub underground_level: f64,
+    pub cavern_level: f64,
+    pub current_time: f64,
+    pub is_daytime: bool,
+    pub moon_phase: u32,
 }
 
 impl World {
@@ -95,8 +100,6 @@ impl World {
         let is_trap_world = r.bool();
         let is_zenith_world = r.bool();
         let created_on = r.datetime();
-        // println!("Created on: {}", created_on);
-
         let moon_style = r.u8();
 
         let tree_style_seperators = vec![
@@ -128,6 +131,11 @@ impl World {
         let hell_background_style = r.i32();
         let spawn_point_x = r.i32();
         let spawn_point_y = r.i32();
+        let underground_level = r.f64();
+        let cavern_level = r.f64();
+        let current_time = r.f64();
+        let is_daytime = r.bool();
+        let moon_phase = r.u32();
 
         Ok(Self {
             version_integer,
@@ -168,6 +176,12 @@ impl World {
             hell_background_style,
             spawn_point_x,
             spawn_point_y,
+            underground_level,
+            cavern_level,
+            current_time,
+            is_daytime,
+            moon_phase,
+
         })
     }
 
