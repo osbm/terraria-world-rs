@@ -1,3 +1,6 @@
+use chrono::{DateTime, NaiveDateTime, Utc};
+
+
 pub struct ByteReader<'a> {
     data: &'a [u8],
     offset: usize,
@@ -129,4 +132,36 @@ impl<'a> ByteReader<'a> {
             bytes[10], bytes[11], bytes[12], bytes[13], bytes[14], bytes[15],
         )
     }
-}
+
+pub fn datetime(&mut self) -> String {
+    let raw = self.u64(); // already reads 8 bytes little-endian
+    // println!("Raw DateTime (with Kind bits): {}", raw);
+
+    let kind = (raw >> 62) & 0b11;
+    let ticks = raw & 0x3FFF_FFFF_FFFF_FFFF; // mask top 2 bits
+
+    // println!("Kind: {}", match kind {
+    //     0 => "Unspecified",
+    //     1 => "Utc",
+    //     2 => "Local",
+    //     _ => "⚠️ Reserved/Invalid",
+    // });
+
+    // .NET ticks start at 0001-01-01
+    let unix_offset = 621355968000000000;
+    if ticks < unix_offset {
+        return "⚠️ Before UNIX epoch".to_string();
+    }
+
+    let unix_ticks = ticks - unix_offset;
+    let secs = unix_ticks / 10_000_000;
+    let nanos = (unix_ticks % 10_000_000) * 100;
+
+    match NaiveDateTime::from_timestamp_opt(secs as i64, nanos as u32) {
+        Some(ndt) => {
+            let dt: DateTime<Utc> = DateTime::<Utc>::from_utc(ndt, Utc);
+            dt.format("%Y-%m-%d %H:%M:%S").to_string()
+        }
+        None => "⚠️ Invalid datetime".to_string(),
+    }
+}}
