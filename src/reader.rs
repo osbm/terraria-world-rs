@@ -56,8 +56,20 @@ impl<'a> ByteReader<'a> {
         val
     }
 
-    pub fn bool(&mut self) -> bool {
-        self.u8() != 0
+    pub fn bit(&mut self) -> bool {
+        let byte_index = self.offset / 8;
+        let bit_index = self.offset % 8;
+        let bit = (self.data[byte_index] >> bit_index) & 1;
+        self.offset += 1;
+        bit != 0
+    }
+
+    pub fn bits(&mut self) -> Vec<bool> {
+        let mut bits = Vec::with_capacity(8);
+        for _ in 0..8 {
+            bits.push(self.bit());
+        }
+        bits
     }
 
     pub fn bytes(&mut self, count: usize) -> &'a [u8] {
