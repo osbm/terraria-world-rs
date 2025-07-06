@@ -18,19 +18,18 @@ pub struct Pointers {
 impl Pointers {
     pub fn from_vector(vec: &[u32]) -> Self {
         Self {
-            file_format: *vec.get(0).unwrap_or(&0),
-            world_header: *vec.get(1).unwrap_or(&0),
-            world_tiles: *vec.get(2).unwrap_or(&0),
-            chests: *vec.get(3).unwrap_or(&0),
-            signs: *vec.get(4).unwrap_or(&0),
-            npcs: *vec.get(5).unwrap_or(&0),
-            tile_entities: *vec.get(6).unwrap_or(&0),
-            pressure_plates: *vec.get(7).unwrap_or(&0),
-            town_manager: *vec.get(8).unwrap_or(&0),
-            bestiary: *vec.get(9).unwrap_or(&0),
-            journey_powers: *vec.get(10).unwrap_or(&0),
-            footer: *vec.get(11).unwrap_or(&0),
-            unknown: *vec.get(12).unwrap_or(&0),
+            file_format: 0u32,
+            world_header: *vec.get(0).unwrap_or(&0),
+            world_tiles: *vec.get(1).unwrap_or(&0),
+            chests: *vec.get(2).unwrap_or(&0),
+            signs: *vec.get(3).unwrap_or(&0),
+            npcs: *vec.get(4).unwrap_or(&0),
+            tile_entities: *vec.get(5).unwrap_or(&0),
+            pressure_plates: *vec.get(6).unwrap_or(&0),
+            town_manager: *vec.get(7).unwrap_or(&0),
+            bestiary: *vec.get(8).unwrap_or(&0),
+            journey_powers: *vec.get(9).unwrap_or(&0),
+            footer: *vec.get(10).unwrap_or(&0),
         }
     }
 }
