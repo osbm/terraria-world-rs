@@ -83,6 +83,12 @@ pub struct World {
     pub invasion_position: f64,
     pub time_left_slime_rain: f64,
     pub sundial_cooldown: u8,
+    pub is_rain_active: bool,
+    pub rain_time_left: i32,
+    pub max_rain: f32,
+    pub hardmode_ore_1: i32,
+    pub hardmode_ore_2: i32,
+    pub hardmode_ore_3: i32,
 
 }
 
@@ -207,7 +213,12 @@ impl World {
         let invasion_position = r.f64();
         let time_left_slime_rain = r.f64();
         let sundial_cooldown = r.u8();
-
+        let is_rain_active = r.bool();
+        let rain_time_left = r.i32();
+        let max_rain = r.f32();
+        let hardmode_ore_1 = r.i32();
+        let hardmode_ore_2 = r.i32();
+        let hardmode_ore_3 = r.i32();
 
 
         Ok(Self {
@@ -289,6 +300,12 @@ impl World {
             invasion_position,
             time_left_slime_rain,
             sundial_cooldown,
+            is_rain_active,
+            rain_time_left,
+            max_rain,
+            hardmode_ore_1,
+            hardmode_ore_2,
+            hardmode_ore_3,
 
         })
     }
