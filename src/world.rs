@@ -33,6 +33,12 @@ pub struct World {
     pub is_trap_world: bool,
     pub is_zenith_world: bool,
     pub created_on: String,
+    pub moon_style: u8,
+    pub tree_style_seperators: Vec<i32>,
+    pub tree_style_properties: Vec<i32>,
+    pub moss_style_seperators: Vec<i32>,
+    pub moss_style_properties: Vec<i32>,
+
 }
 
 impl World {
@@ -86,6 +92,34 @@ impl World {
         let is_zenith_world = r.bool();
         let created_on = r.datetime();
         // println!("Created on: {}", created_on);
+
+        let moon_style = r.u8();
+
+        let tree_style_seperators = vec![
+            r.i32(),
+            r.i32(),
+            r.i32(),
+        ];
+        let tree_style_properties = vec![
+            r.i32(),
+            r.i32(),
+            r.i32(),
+            r.i32(),
+        ];
+
+        let moss_style_seperators = vec![
+            r.i32(),
+            r.i32(),
+            r.i32(),
+        ];
+
+        let moss_style_properties = vec![
+            r.i32(),
+            r.i32(),
+            r.i32(),
+            r.i32(),
+        ];
+
         Ok(Self {
             version_integer,
             magic,
@@ -115,6 +149,11 @@ impl World {
             is_trap_world,
             is_zenith_world,
             created_on,
+            moon_style,
+            tree_style_seperators,
+            tree_style_properties,
+            moss_style_seperators,
+            moss_style_properties,
         })
     }
 
