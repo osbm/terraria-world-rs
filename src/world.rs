@@ -32,7 +32,7 @@ pub struct World {
     pub is_upside_down: bool,
     pub is_trap_world: bool,
     pub is_zenith_world: bool,
-    // pub created_on: String,
+    pub created_on: String,
 }
 
 impl World {
@@ -76,21 +76,16 @@ impl World {
         let world_width = r.i32();
         let difficulty_value = r.i32();
         let is_drunk_world = r.bool();
-        // print file offset
-        println!("File offset after reading world data: {}", r.offset());
+        // println!("File offset after reading world data: {}", r.offset());
         let is_for_the_worthy = r.bool();
-        // print file offset
-        println!("File offset after reading world data: {}", r.offset());
         let is_tenth_anniversary = r.bool();
-        println!("File offset after reading world data: {}", r.offset());
         let is_the_constant = r.bool();
         let is_bee_world = r.bool();
         let is_upside_down = r.bool();
         let is_trap_world = r.bool();
         let is_zenith_world = r.bool();
-        println!("File offset after reading world data: {}", r.offset());
-        // let created_on = r.string(None);
-
+        let created_on = r.datetime();
+        // println!("Created on: {}", created_on);
         Ok(Self {
             version_integer,
             magic,
@@ -119,7 +114,7 @@ impl World {
             is_upside_down,
             is_trap_world,
             is_zenith_world,
-
+            created_on,
         })
     }
 
