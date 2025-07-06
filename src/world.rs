@@ -109,6 +109,25 @@ pub struct World {
     pub invasion_size_start: i32,
     pub cultist_delay: i32,
     pub mob_kills: Vec<i32>,
+    pub sundial_is_running: bool,
+    pub defeated_duke_fishron: bool,
+    pub defeated_martian_madness: bool,
+    pub defeated_lunatic_cultist: bool,
+    pub deteated_moon_lord: bool,
+    pub defeated_pumpking: bool,
+    pub defeated_mourning_wood: bool,
+    pub defeated_ice_queen: bool,
+    pub defeated_santa_nk1: bool,
+    pub defeated_everscream: bool,
+    pub defeated_solar_pillar: bool,
+    pub defeated_vortex_pillar: bool,
+    pub defeated_nebula_pillar: bool,
+    pub defeated_stardust_pillar: bool,
+    pub lunar_events_pillars_present_solar: bool, // TODO find a better name
+    pub lunar_events_pillars_present_vortex: bool,
+    pub lunar_events_pillars_present_nebula: bool,
+    pub lunar_events_pillars_present_stardust: bool,
+    pub lunar_events_are_active: bool,
 
 }
 
@@ -252,7 +271,25 @@ impl World {
         for _ in 0..mob_kills_count {
             mob_kills.push(r.i32());
         }
-
+        let sundial_is_running = r.bool();
+        let defeated_duke_fishron = r.bool();
+        let defeated_martian_madness = r.bool();
+        let defeated_lunatic_cultist = r.bool();
+        let deteated_moon_lord = r.bool();
+        let defeated_pumpking = r.bool();
+        let defeated_mourning_wood = r.bool();
+        let defeated_ice_queen = r.bool();
+        let defeated_santa_nk1 = r.bool();
+        let defeated_everscream = r.bool();
+        let defeated_solar_pillar = r.bool();
+        let defeated_vortex_pillar = r.bool();
+        let defeated_nebula_pillar = r.bool();
+        let defeated_stardust_pillar = r.bool();
+        let lunar_events_pillars_present_solar = r.bool();
+        let lunar_events_pillars_present_vortex = r.bool();
+        let lunar_events_pillars_present_nebula = r.bool();
+        let lunar_events_pillars_present_stardust = r.bool();
+        let lunar_events_are_active = r.bool();
 
 
         Ok(Self {
@@ -360,6 +397,26 @@ impl World {
             invasion_size_start,
             cultist_delay,
             mob_kills,
+            sundial_is_running,
+            defeated_duke_fishron,
+            defeated_martian_madness,
+            defeated_lunatic_cultist,
+            deteated_moon_lord,
+            defeated_pumpking,
+            defeated_mourning_wood,
+            defeated_ice_queen,
+            defeated_santa_nk1,
+            defeated_everscream,
+            defeated_solar_pillar,
+            defeated_vortex_pillar,
+            defeated_nebula_pillar,
+            defeated_stardust_pillar,
+            lunar_events_pillars_present_solar,
+            lunar_events_pillars_present_vortex,
+            lunar_events_pillars_present_nebula,
+            lunar_events_pillars_present_stardust,
+            lunar_events_are_active,
+
         })
     }
 
