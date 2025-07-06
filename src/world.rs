@@ -260,6 +260,7 @@ impl World {
 
     pub fn save_as_wld(&self, path: &str) -> std::io::Result<()> {
         println!("Saving to {path}...");
+        // test if this produces exactly the same file as the original
         unimplemented!("Saving functionality is not implemented yet.");
     }
 }
