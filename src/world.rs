@@ -1,7 +1,6 @@
-mod reader;
-use reader::ByteReader;
+use crate::reader::ByteReader;
 
-
+#[derive(Debug)]
 pub struct World {
     pub version: i32,
     pub magic: String,
@@ -11,7 +10,6 @@ pub struct World {
     pub pointers: Vec<u32>,
     pub tile_frame_important: Vec<u8>,
 }
-
 
 impl World {
     pub fn from_file(path: &str) -> std::io::Result<Self> {
@@ -45,7 +43,7 @@ impl World {
     }
 
 
-    pub fn remove_corruption(mut self) -> Self {
+    pub fn remove_corruption(self) -> Self {
         println!("Removing corruption...");
         // raise unimplemented error
         unimplemented!("Corruption removal is not implemented yet.");
