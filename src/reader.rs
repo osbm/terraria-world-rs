@@ -56,12 +56,15 @@ impl<'a> ByteReader<'a> {
         val
     }
 
-    pub fn bit(&mut self) -> bool {
-        let byte_index = self.offset / 8;
-        let bit_index = self.offset % 8;
-        let bit = (self.data[byte_index] >> bit_index) & 1;
-        self.offset += 1;
-        bit != 0
+    pub fn bool(&mut self) -> bool {
+        let byte = self.u8();
+        if byte == 0 {
+            false
+        } else if byte == 1 {
+            true
+        } else {
+            panic!("Invalid boolean value: {}", byte);
+        }
     }
 
     pub fn bits(&mut self) -> Vec<bool> {

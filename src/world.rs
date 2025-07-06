@@ -23,7 +23,16 @@ pub struct World {
     pub bounds_vec: Vec<i32>,
     pub world_height: i32,
     pub world_width: i32,
-    pub difficulty_value: i32, // TODO: add difficulty field
+    pub difficulty_value: i32,
+    pub is_drunk_world: bool,
+    pub is_for_the_worthy: bool,
+    pub is_tenth_anniversary: bool,
+    pub is_the_constant: bool,
+    pub is_bee_world: bool,
+    pub is_upside_down: bool,
+    pub is_trap_world: bool,
+    pub is_zenith_world: bool,
+    // pub created_on: String,
 }
 
 impl World {
@@ -66,6 +75,21 @@ impl World {
         let world_height = r.i32();
         let world_width = r.i32();
         let difficulty_value = r.i32();
+        let is_drunk_world = r.bool();
+        // print file offset
+        println!("File offset after reading world data: {}", r.offset());
+        let is_for_the_worthy = r.bool();
+        // print file offset
+        println!("File offset after reading world data: {}", r.offset());
+        let is_tenth_anniversary = r.bool();
+        println!("File offset after reading world data: {}", r.offset());
+        let is_the_constant = r.bool();
+        let is_bee_world = r.bool();
+        let is_upside_down = r.bool();
+        let is_trap_world = r.bool();
+        let is_zenith_world = r.bool();
+        println!("File offset after reading world data: {}", r.offset());
+        // let created_on = r.string(None);
 
         Ok(Self {
             version_integer,
@@ -87,6 +111,15 @@ impl World {
             world_height,
             world_width,
             difficulty_value,
+            is_drunk_world,
+            is_for_the_worthy,
+            is_tenth_anniversary,
+            is_the_constant,
+            is_bee_world,
+            is_upside_down,
+            is_trap_world,
+            is_zenith_world,
+
         })
     }
 
