@@ -182,6 +182,7 @@ pub struct World {
     pub saved_slime_squire: bool,
     pub moondial_is_running: bool,
     pub moondial_cooldown: u8,
+    pub unknown_world_header_data: Vec<u8>, // TODO: find out what this is
 
 }
 
@@ -412,6 +413,9 @@ impl World {
         let saved_slime_squire = r.bool();
         let moondial_is_running = r.bool();
         let moondial_cooldown = r.u8();
+        let unknown_world_header_data = r.read_until(pointers.world_tiles as usize);
+
+        // tiles
 
 
         Ok(Self {
@@ -592,6 +596,7 @@ impl World {
             saved_slime_squire,
             moondial_is_running,
             moondial_cooldown,
+            unknown_world_header_data,
         })
     }
 
