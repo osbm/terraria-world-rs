@@ -13,7 +13,7 @@ pub struct World {
     pub pointer_count: u16,
     pub pointer_vector: Vec<u32>,
     pub tile_frame_important_size: i16,
-    pub tile_frame_important: Vec<u8>,
+    pub tile_frame_important: Vec<bool>,
 }
 
 impl World {
@@ -32,7 +32,12 @@ impl World {
             pointer_vector.push(r.u32());
         }
         let tile_frame_important_size = (r.i16() + 7) / 8;
-        let tile_frame_important = r.bytes(tile_frame_important_size as usize).to_vec();
+
+        let mut tile_frame_important = vec![];
+        for _ in 0..tile_frame_important_size {
+            let current_bits = r.bits();
+            tile_frame_important.extend(current_bits);
+        }
 
         Ok(Self {
             version_integer,
@@ -114,7 +119,17 @@ impl World {
         unimplemented!("Corruption removal is not implemented yet.");
     }
 
-    pub fn save_to(&self, path: &str) -> std::io::Result<()> {
+    pub fn read_from_json(path: &str) -> std::io::Result<Self> {
+        println!("Reading from {path}...");
+        unimplemented!("Reading functionality is not implemented yet.");
+    }
+
+    pub fn save_as_json(&self, path: &str) -> std::io::Result<()> {
+        println!("Saving to {path}...");
+        unimplemented!("Saving functionality is not implemented yet.");
+    }
+
+    pub fn save_as_wld(&self, path: &str) -> std::io::Result<()> {
         println!("Saving to {path}...");
         unimplemented!("Saving functionality is not implemented yet.");
     }
