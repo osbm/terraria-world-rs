@@ -89,6 +89,14 @@ pub struct World {
     pub hardmode_ore_1: i32,
     pub hardmode_ore_2: i32,
     pub hardmode_ore_3: i32,
+    pub forest_background: i8,
+    pub corruption_background: i8,
+    pub jungle_background: i8,
+    pub snow_background: i8,
+    pub hallow_background: i8,
+    pub crimson_background: i8,
+    pub desert_background: i8,
+    pub ocean_background: i8,
 }
 
 impl World {
@@ -197,6 +205,14 @@ impl World {
         let hardmode_ore_1 = r.i32();
         let hardmode_ore_2 = r.i32();
         let hardmode_ore_3 = r.i32();
+        let forest_background = r.i8();
+        let corruption_background = r.i8();
+        let jungle_background = r.i8();
+        let snow_background = r.i8();
+        let hallow_background = r.i8();
+        let crimson_background = r.i8();
+        let desert_background = r.i8();
+        let ocean_background = r.i8();
 
         Ok(Self {
             version_integer,
@@ -283,6 +299,14 @@ impl World {
             hardmode_ore_1,
             hardmode_ore_2,
             hardmode_ore_3,
+            forest_background,
+            corruption_background,
+            jungle_background,
+            snow_background,
+            hallow_background,
+            crimson_background,
+            desert_background,
+            ocean_background,
         })
     }
 
