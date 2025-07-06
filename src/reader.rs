@@ -117,7 +117,6 @@ impl<'a> ByteReader<'a> {
 
     pub fn uuid(&mut self) -> String {
         let bytes = self.bytes(16);
-        println!("UUID bytes: {:?}", bytes);
         format!(
             "{:02x}{:02x}{:02x}{:02x}-\
              {:02x}{:02x}-\
