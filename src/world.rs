@@ -162,6 +162,25 @@ pub struct World {
     pub defeated_empress_of_light: bool,
     pub defeated_queen_slime: bool,
     pub defeated_deerclops: bool,
+    pub saved_slime_nerdy: bool,
+    pub saved_merchant: bool,
+    pub saved_demolitionist: bool,
+    pub saved_party_girl: bool,
+    pub saved_dye_trader: bool,
+    pub saved_truffle: bool,
+    pub saved_arms_dealer: bool,
+    pub saved_nurse: bool,
+    pub saved_princess: bool,
+    pub combat_book_2_used: bool,
+    pub peddler_satchel_used: bool,
+    pub saved_slime_cool: bool,
+    pub saved_slime_elder: bool,
+    pub saved_slime_clumsy: bool,
+    pub saved_slime_diva: bool,
+    pub saved_slime_surly: bool,
+    pub saved_slime_mystic: bool,
+    pub saved_slime_squire: bool,
+
 
 }
 
@@ -372,6 +391,24 @@ impl World {
         let defeated_empress_of_light = r.bool();
         let defeated_queen_slime = r.bool();
         let defeated_deerclops = r.bool();
+        let saved_slime_nerdy = r.bool();
+        let saved_merchant = r.bool();
+        let saved_demolitionist = r.bool();
+        let saved_party_girl = r.bool();
+        let saved_dye_trader = r.bool();
+        let saved_truffle = r.bool();
+        let saved_arms_dealer = r.bool();
+        let saved_nurse = r.bool();
+        let saved_princess = r.bool();
+        let combat_book_2_used = r.bool();
+        let peddler_satchel_used = r.bool();
+        let saved_slime_cool = r.bool();
+        let saved_slime_elder = r.bool();
+        let saved_slime_clumsy = r.bool();
+        let saved_slime_diva = r.bool();
+        let saved_slime_surly = r.bool();
+        let saved_slime_mystic = r.bool();
+        let saved_slime_squire = r.bool();
 
 
         Ok(Self {
@@ -532,6 +569,24 @@ impl World {
             defeated_empress_of_light,
             defeated_queen_slime,
             defeated_deerclops,
+            saved_slime_nerdy,
+            saved_merchant,
+            saved_demolitionist,
+            saved_party_girl,
+            saved_dye_trader,
+            saved_truffle,
+            saved_arms_dealer,
+            saved_nurse,
+            saved_princess,
+            combat_book_2_used,
+            peddler_satchel_used,
+            saved_slime_cool,
+            saved_slime_elder,
+            saved_slime_clumsy,
+            saved_slime_diva,
+            saved_slime_surly,
+            saved_slime_mystic,
+            saved_slime_squire,
 
         })
     }
