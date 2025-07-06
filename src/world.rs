@@ -77,7 +77,12 @@ pub struct World {
     pub altars_smashed: i32,
     pub is_hardmode: bool,
     pub party_is_doomed: bool,
-
+    pub invasion_delay: i32,
+    pub invasion_size: i32,
+    pub invasion_type: i32,
+    pub invasion_position: f64,
+    pub time_left_slime_rain: f64,
+    pub sundial_cooldown: u8,
 
 }
 
@@ -196,6 +201,13 @@ impl World {
         let altars_smashed = r.i32();
         let is_hardmode = r.bool();
         let party_is_doomed = !r.bool(); // ???
+        let invasion_delay = r.i32();
+        let invasion_size = r.i32();
+        let invasion_type = r.i32();
+        let invasion_position = r.f64();
+        let time_left_slime_rain = r.f64();
+        let sundial_cooldown = r.u8();
+
 
 
         Ok(Self {
@@ -271,6 +283,12 @@ impl World {
             altars_smashed,
             is_hardmode,
             party_is_doomed,
+            invasion_delay,
+            invasion_size,
+            invasion_type,
+            invasion_position,
+            time_left_slime_rain,
+            sundial_cooldown,
 
         })
     }
