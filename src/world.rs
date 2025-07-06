@@ -14,6 +14,8 @@ pub struct World {
     pub pointer_vector: Vec<u32>,
     pub tile_frame_important_size: i16,
     pub tile_frame_important: Vec<bool>,
+    pub unknown_file_format_data: Vec<u8>, // TODO: find out what this is
+    pub world_name: String,
 }
 
 impl World {
@@ -31,6 +33,7 @@ impl World {
         for _ in 0..pointer_count {
             pointer_vector.push(r.u32());
         }
+        let pointers = Pointers::from_vector(&pointer_vector); // create this only to use it during parsing
         let tile_frame_important_size = (r.i16() + 7) / 8;
 
         let mut tile_frame_important = vec![];
@@ -39,6 +42,9 @@ impl World {
             tile_frame_important.extend(current_bits);
         }
 
+        let unknown_file_format_data = r.read_until(pointers.world_header as usize);
+
+        let world_name = r.string(None);
         Ok(Self {
             version_integer,
             magic,
@@ -49,6 +55,8 @@ impl World {
             pointer_vector,
             tile_frame_important_size,
             tile_frame_important,
+            unknown_file_format_data,
+            world_name,
         })
     }
 
