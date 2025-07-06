@@ -10,4 +10,5 @@ fn main() {
     println!("World loaded: {:#?}", world);
     println!("Version: {}", world.version());
     println!("Pointers: {:#?}", world.pointers());
+    println!("Difficulty: {}", world.difficulty());
 }

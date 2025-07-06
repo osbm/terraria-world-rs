@@ -23,6 +23,7 @@ pub struct World {
     pub bounds_vec: Vec<i32>,
     pub world_height: i32,
     pub world_width: i32,
+    pub difficulty_value: i32, // TODO: add difficulty field
 }
 
 impl World {
@@ -64,6 +65,7 @@ impl World {
         ];
         let world_height = r.i32();
         let world_width = r.i32();
+        let difficulty_value = r.i32();
 
         Ok(Self {
             version_integer,
@@ -84,6 +86,7 @@ impl World {
             bounds_vec,
             world_height,
             world_width,
+            difficulty_value,
         })
     }
 
@@ -146,6 +149,16 @@ impl World {
 
     pub fn pointers(&self) -> Pointers {
         Pointers::from_vector(&self.pointer_vector)
+    }
+
+    pub fn difficulty(&self) -> &str {
+        match self.difficulty_value {
+            0 => "Classic",
+            1 => "Expert",
+            2 => "Master",
+            3 => "Journey",
+            _ => "Unknown",
+        }
     }
 
     pub fn remove_corruption(self) -> Self {
