@@ -150,6 +150,18 @@ pub struct World {
     pub lantern_night_manual: bool,
     pub next_night_is_lantern_night: bool,
     pub treetop_variants: Vec<i32>,
+    pub halloween_today: bool,
+    pub christmas_today: bool,
+    pub ore_1: i32,
+    pub ore_2: i32,
+    pub ore_3: i32,
+    pub ore_4: i32,
+    pub has_cat: bool,
+    pub has_dog: bool,
+    pub has_bunny: bool,
+    pub defeated_empress_of_light: bool,
+    pub defeated_queen_slime: bool,
+    pub defeated_deerclops: bool,
 
 }
 
@@ -348,8 +360,18 @@ impl World {
             treetop_variants.push(r.i32());
         }
 
-
-
+        let halloween_today = r.bool();
+        let christmas_today = r.bool();
+        let ore_1 = r.i32();
+        let ore_2 = r.i32();
+        let ore_3 = r.i32();
+        let ore_4 = r.i32();
+        let has_cat = r.bool();
+        let has_dog = r.bool();
+        let has_bunny = r.bool();
+        let defeated_empress_of_light = r.bool();
+        let defeated_queen_slime = r.bool();
+        let defeated_deerclops = r.bool();
 
 
         Ok(Self {
@@ -498,6 +520,18 @@ impl World {
             lantern_night_manual,
             next_night_is_lantern_night,
             treetop_variants,
+            halloween_today,
+            christmas_today,
+            ore_1,
+            ore_2,
+            ore_3,
+            ore_4,
+            has_cat,
+            has_dog,
+            has_bunny,
+            defeated_empress_of_light,
+            defeated_queen_slime,
+            defeated_deerclops,
 
         })
     }
