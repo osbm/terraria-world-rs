@@ -136,6 +136,15 @@ pub struct World {
     pub sandstorm_severity: f32,
     pub sandstorm_intended_severity: f32,
     pub saved_bartender: bool,
+    pub old_ones_army_tier_1: bool,
+    pub old_ones_army_tier_2: bool,
+    pub old_ones_army_tier_3: bool,
+    pub mushroom_background: i8,
+    pub underworld_background: i8,
+    pub forest_background_2: i8,
+    pub forest_background_3: i8,
+    pub forest_background_4: i8,
+    pub combat_book_used: bool,
 
 }
 
@@ -314,6 +323,16 @@ impl World {
         let sandstorm_severity = r.f32();
         let sandstorm_intended_severity = r.f32();
         let saved_bartender = r.bool();
+        let old_ones_army_tier_1 = r.bool();
+        let old_ones_army_tier_2 = r.bool();
+        let old_ones_army_tier_3 = r.bool();
+        let mushroom_background = r.i8();
+        let underworld_background = r.i8();
+        let forest_background_2 = r.i8();
+        let forest_background_3 = r.i8();
+        let forest_background_4 = r.i8();
+        let combat_book_used = r.bool();
+
 
 
         Ok(Self {
@@ -448,6 +467,15 @@ impl World {
             sandstorm_severity,
             sandstorm_intended_severity,
             saved_bartender,
+            old_ones_army_tier_1,
+            old_ones_army_tier_2,
+            old_ones_army_tier_3,
+            mushroom_background,
+            underworld_background,
+            forest_background_2,
+            forest_background_3,
+            forest_background_4,
+            combat_book_used,
 
         })
     }
