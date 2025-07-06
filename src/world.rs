@@ -64,7 +64,13 @@ pub struct World {
     pub defeated_plantera: bool,
     pub defeated_golem: bool,
     pub defeated_king_slime: bool,
-
+    pub saved_goblin_tinkerer: bool,
+    pub saved_wizard: bool,
+    pub saved_mechanic: bool,
+    pub defeated_goblin_army: bool,
+    pub defeated_clown: bool,
+    pub defeated_frost_moon: bool,
+    pub defeated_pirate_invasion: bool,
 
 }
 
@@ -170,6 +176,13 @@ impl World {
         let defeated_plantera = r.bool();
         let defeated_golem = r.bool();
         let defeated_king_slime = r.bool();
+        let saved_goblin_tinkerer = r.bool();
+        let saved_wizard = r.bool();
+        let saved_mechanic = r.bool();
+        let defeated_goblin_army = r.bool();
+        let defeated_clown = r.bool();
+        let defeated_frost_moon = r.bool();
+        let defeated_pirate_invasion = r.bool();
 
 
         Ok(Self {
@@ -232,6 +245,13 @@ impl World {
             defeated_plantera,
             defeated_golem,
             defeated_king_slime,
+            saved_goblin_tinkerer,
+            saved_wizard,
+            saved_mechanic,
+            defeated_goblin_army,
+            defeated_clown,
+            defeated_frost_moon,
+            defeated_pirate_invasion,
 
         })
     }
