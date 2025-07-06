@@ -106,6 +106,10 @@ pub struct World {
     pub saved_stylist: bool,
     pub saved_tax_collector: bool,
     pub saved_golfer: bool,
+    pub invasion_size_start: i32,
+    pub cultist_delay: i32,
+    pub mob_kills: Vec<i32>,
+
 }
 
 impl World {
@@ -240,6 +244,16 @@ impl World {
         let saved_stylist = r.bool();
         let saved_tax_collector = r.bool();
         let saved_golfer = r.bool();
+        let invasion_size_start = r.i32();
+        let cultist_delay = r.i32();
+
+        let mob_kills_count = r.i16();
+        let mut mob_kills = vec![];
+        for _ in 0..mob_kills_count {
+            mob_kills.push(r.i32());
+        }
+
+
 
         Ok(Self {
             version_integer,
@@ -343,7 +357,9 @@ impl World {
             saved_stylist,
             saved_tax_collector,
             saved_golfer,
-
+            invasion_size_start,
+            cultist_delay,
+            mob_kills,
         })
     }
 
