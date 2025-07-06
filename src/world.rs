@@ -19,6 +19,10 @@ pub struct World {
     pub generator_seed: String,
     pub generator_version: u64,
     pub uuid: String,
+    pub id: i32,
+    pub bounds_vec: Vec<i32>,
+    pub world_height: i32,
+    pub world_width: i32,
 }
 
 impl World {
@@ -50,7 +54,16 @@ impl World {
         let generator_seed = r.string(None);
         let generator_version = r.u64();
         let uuid = r.uuid();
+        let id = r.i32();
 
+        let bounds_vec = vec![
+            r.i32(), // left
+            r.i32(), // right
+            r.i32(), // top
+            r.i32(), // bottom
+        ];
+        let world_height = r.i32();
+        let world_width = r.i32();
 
         Ok(Self {
             version_integer,
@@ -67,6 +80,10 @@ impl World {
             generator_seed,
             generator_version,
             uuid,
+            id,
+            bounds_vec,
+            world_height,
+            world_width,
         })
     }
 
