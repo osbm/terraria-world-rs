@@ -48,6 +48,11 @@ pub struct World {
     pub current_time: f64,
     pub is_daytime: bool,
     pub moon_phase: u32,
+    pub blood_moon: bool,
+    pub eclipse: bool,
+    pub dungeon_point_x: i32,
+    pub dungeon_point_y: i32,
+    pub world_evil_type: bool,
 }
 
 impl World {
@@ -136,6 +141,11 @@ impl World {
         let current_time = r.f64();
         let is_daytime = r.bool();
         let moon_phase = r.u32();
+        let blood_moon = r.bool();
+        let eclipse = r.bool();
+        let dungeon_point_x = r.i32();
+        let dungeon_point_y = r.i32();
+        let world_evil_type = r.bool();
 
         Ok(Self {
             version_integer,
@@ -181,6 +191,11 @@ impl World {
             current_time,
             is_daytime,
             moon_phase,
+            blood_moon,
+            eclipse,
+            dungeon_point_x,
+            dungeon_point_y,
+            world_evil_type,
 
         })
     }
