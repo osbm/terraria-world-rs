@@ -71,6 +71,13 @@ pub struct World {
     pub defeated_clown: bool,
     pub defeated_frost_moon: bool,
     pub defeated_pirate_invasion: bool,
+    pub shadow_orbs_smashed_at_least_once: bool,
+    pub shadow_orbs_spawn_meteorite: bool,
+    pub shadow_orbs_evil_boss_counter: u8,
+    pub altars_smashed: i32,
+    pub is_hardmode: bool,
+    pub party_is_doomed: bool,
+
 
 }
 
@@ -183,6 +190,12 @@ impl World {
         let defeated_clown = r.bool();
         let defeated_frost_moon = r.bool();
         let defeated_pirate_invasion = r.bool();
+        let shadow_orbs_smashed_at_least_once = r.bool();
+        let shadow_orbs_spawn_meteorite = r.bool();
+        let shadow_orbs_evil_boss_counter = r.u8();
+        let altars_smashed = r.i32();
+        let is_hardmode = r.bool();
+        let party_is_doomed = !r.bool(); // ???
 
 
         Ok(Self {
@@ -252,6 +265,12 @@ impl World {
             defeated_clown,
             defeated_frost_moon,
             defeated_pirate_invasion,
+            shadow_orbs_smashed_at_least_once,
+            shadow_orbs_spawn_meteorite,
+            shadow_orbs_evil_boss_counter,
+            altars_smashed,
+            is_hardmode,
+            party_is_doomed,
 
         })
     }
