@@ -1,8 +1,7 @@
-mod world;
 mod reader;
+mod world;
 
 use world::World;
-
 
 fn main() {
     let path = "worlds/small_corruption.wld";
