@@ -1,4 +1,5 @@
 use crate::reader::ByteReader;
+use crate::tile::{Tile, TileMatrix, Block, Wall, Liquid, Wiring, BlockType, WallType, LiquidType, FrameImportantData, RLEEncoding};
 
 mod pointers;
 use pointers::Pointers;
@@ -183,6 +184,7 @@ pub struct World {
     pub moondial_is_running: bool,
     pub moondial_cooldown: u8,
     pub unknown_world_header_data: Vec<u8>, // TODO: find out what this is
+    pub tiles: TileMatrix,
 
 }
 
@@ -416,6 +418,7 @@ impl World {
         let unknown_world_header_data = r.read_until(pointers.world_tiles as usize);
 
         // tiles
+        let tiles = Self::create_tile_matrix(&mut r, (world_width as usize, world_height as usize), &tile_frame_important);
 
 
         Ok(Self {
@@ -597,6 +600,7 @@ impl World {
             moondial_is_running,
             moondial_cooldown,
             unknown_world_header_data,
+            tiles,
         })
     }
 
@@ -691,5 +695,146 @@ impl World {
         println!("Saving to {path}...");
         // test if this produces exactly the same file as the original
         unimplemented!("Saving functionality is not implemented yet.");
+    }
+
+    fn read_tile_block(r: &mut ByteReader, tile_frame_important: &[bool]) -> (Tile, usize) {
+        let flags1 = r.bits();
+        let has_flags2 = flags1[0];
+        let flags2 = if has_flags2 { r.bits() } else { vec![false; 8] };
+        let has_flags3 = flags2[0];
+        let flags3 = if has_flags3 { r.bits() } else { vec![false; 8] };
+        let has_flags4 = flags3[0];
+        let flags4 = if has_flags4 { r.bits() } else { vec![false; 8] };
+
+        let has_block = flags1[1];
+        let has_extended_block_id = flags1[5];
+        let is_block_painted = flags3[3];
+        let is_block_active = !flags3[2];
+        let is_block_echo = flags4[1];
+        let is_block_illuminant = flags4[3];
+
+        let has_wall = flags1[2];
+        let has_extended_wall_id = flags3[6];
+        let is_wall_painted = flags3[4];
+        let is_wall_echo = flags4[2];
+        let is_wall_illuminant = flags4[4];
+
+        let liquid_type = Self::liquid_type_from_flags(&flags1, &flags3);
+        let rle_compression = Self::rle_encoding_from_flags(&flags1);
+        let block_shape = 0; // TODO: Implement proper shape parsing
+        let wiring = Self::wiring_from_flags(&flags2, &flags3);
+
+        // Parse block
+        let block = if has_block {
+            let block_type = if has_extended_block_id {
+                BlockType::from(r.u16())
+            } else {
+                BlockType::from(r.u8() as u16)
+            };
+
+            let frame = if tile_frame_important.get(block_type.id() as usize).copied().unwrap_or(false) {
+                Some(FrameImportantData::new(r.u16(), r.u16()))
+            } else {
+                None
+            };
+
+            let block_paint = if is_block_painted { Some(r.u8()) } else { None };
+
+            Some(Block::new(
+                block_type,
+                frame,
+                block_paint,
+                is_block_active,
+                block_shape,
+                is_block_illuminant,
+                is_block_echo,
+            ))
+        } else {
+            None
+        };
+
+        // Parse wall
+        let wall_type_l = if has_wall { r.u8() } else { 0 };
+        let wall_paint = if has_wall && is_wall_painted { Some(r.u8()) } else { None };
+
+        // Parse liquid
+        let liquid = if liquid_type != LiquidType::NoLiquid {
+            Some(Liquid::new(liquid_type, r.u8()))
+        } else {
+            None
+        };
+
+        // Parse wall, again
+        let wall_type_g = if has_extended_wall_id { r.u8() } else { 0 };
+
+        let wall = if has_wall {
+            let wall_type = WallType::from((wall_type_g as u16) * 256 + (wall_type_l as u16));
+            Some(Wall::new(wall_type, wall_paint, is_wall_illuminant, is_wall_echo))
+        } else {
+            None
+        };
+
+        // Find RLE Compression multiplier
+        let multiply_by = match rle_compression {
+            RLEEncoding::DoubleByte => r.u16() as usize + 1,
+            RLEEncoding::SingleByte => r.u8() as usize + 1,
+            RLEEncoding::NoCompression => 1,
+        };
+
+        // Create tile
+        let tile = Tile::new(block, wall, liquid, wiring);
+        (tile, multiply_by)
+    }
+
+    fn liquid_type_from_flags(flags1: &[bool], flags3: &[bool]) -> LiquidType {
+        let flags13 = flags1.get(3).unwrap_or(&false);
+        let flags14 = flags1.get(4).unwrap_or(&false);
+        let flags37 = flags3.get(7).unwrap_or(&false);
+
+        if *flags37 {
+            LiquidType::Shimmer
+        } else if *flags13 && *flags14 {
+            LiquidType::Honey
+        } else if *flags14 {
+            LiquidType::Lava
+        } else if *flags13 {
+            LiquidType::Water
+        } else {
+            LiquidType::NoLiquid
+        }
+    }
+
+    fn rle_encoding_from_flags(flags1: &[bool]) -> RLEEncoding {
+        let flags16 = flags1.get(6).unwrap_or(&false);
+        let flags17 = flags1.get(7).unwrap_or(&false);
+        let value = (*flags17 as u8) * 2 + (*flags16 as u8);
+        RLEEncoding::from(value)
+    }
+
+    fn wiring_from_flags(flags2: &[bool], flags3: &[bool]) -> Wiring {
+        let red = flags2.get(1).unwrap_or(&false);
+        let blue = flags2.get(2).unwrap_or(&false);
+        let green = flags2.get(3).unwrap_or(&false);
+        let yellow = flags3.get(1).unwrap_or(&false);
+
+        Wiring::new(*red, *blue, *green, *yellow)
+    }
+
+    fn create_tile_matrix(r: &mut ByteReader, world_size: (usize, usize), tile_frame_important: &[bool]) -> TileMatrix {
+        let mut tm = TileMatrix::new();
+        let (width, height) = world_size;
+
+        for _x in 0..width {
+            let mut column = Vec::new();
+            while column.len() < height {
+                let (tile, multiply_by) = Self::read_tile_block(r, tile_frame_important);
+                for _ in 0..multiply_by {
+                    column.push(tile.clone());
+                }
+            }
+            tm.add_column(column);
+        }
+
+        tm
     }
 }
