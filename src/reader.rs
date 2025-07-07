@@ -1,4 +1,4 @@
-use chrono::{DateTime, NaiveDateTime, Utc};
+use chrono::DateTime;
 
 pub struct ByteReader<'a> {
     data: &'a [u8],
@@ -146,7 +146,7 @@ impl<'a> ByteReader<'a> {
         let raw = self.u64(); // already reads 8 bytes little-endian
                               // println!("Raw DateTime (with Kind bits): {}", raw);
 
-        let kind = (raw >> 62) & 0b11;
+        let _kind = (raw >> 62) & 0b11;
         let ticks = raw & 0x3FFF_FFFF_FFFF_FFFF; // mask top 2 bits
 
         // println!("Kind: {}", match kind {
@@ -166,11 +166,8 @@ impl<'a> ByteReader<'a> {
         let secs = unix_ticks / 10_000_000;
         let nanos = (unix_ticks % 10_000_000) * 100;
 
-        match NaiveDateTime::from_timestamp_opt(secs as i64, nanos as u32) {
-            Some(ndt) => {
-                let dt: DateTime<Utc> = DateTime::<Utc>::from_utc(ndt, Utc);
-                dt.format("%Y-%m-%d %H:%M:%S").to_string()
-            }
+        match DateTime::from_timestamp(secs as i64, nanos as u32) {
+            Some(dt) => dt.format("%Y-%m-%d %H:%M:%S").to_string(),
             None => "⚠️ Invalid datetime".to_string(),
         }
     }
