@@ -59,7 +59,9 @@
       defaultPackage = forAllSystems (system: (import nixpkgs {
         inherit system;
         overlays = [ self.overlay ];
-      })."${cargoToml.package.name}");
+      })."${cargoToml.package.name}" // {
+        TEST_WORLDS_DIR = "${terraria-worlds}";
+      });
 
       checks = forAllSystems (system:
         let
@@ -80,7 +82,17 @@
             touch $out # it worked!
           '';
 
-          "${cargoToml.package.name}" = pkgs."${cargoToml.package.name}";
+          "${cargoToml.package.name}" = pkgs.stdenv.mkDerivation {
+            name = "${cargoToml.package.name}-test";
+            buildInputs = [ pkgs."${cargoToml.package.name}" ];
+            TEST_WORLDS_DIR = "${terraria-worlds}";
+            phases = [ "buildPhase" "checkPhase" ];
+            buildPhase = "true";
+            checkPhase = ''
+              cargo test --release
+            '';
+            installPhase = "touch $out";
+          };
 
           # Integration test using lihzahrd Python library
           integration-test = pkgs.runCommand "integration-test"

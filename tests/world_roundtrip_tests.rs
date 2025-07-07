@@ -5,18 +5,16 @@ use terraria_world_parser::world::World;
 
 #[test]
 fn test_world_roundtrip() {
-    // let test_worlds_dir = "tests/test_worlds";
-    // read the environment variable for test worlds directory
     let test_worlds_dir = std::env::var("TEST_WORLDS_DIR")
-        .unwrap_or_else(|_| "tests/test_worlds".to_string());
+        .expect("TEST_WORLDS_DIR environment variable not set. Please provide the test worlds directory as a flake input.");
     println!("Using test worlds directory: {}", test_worlds_dir);
     // Get all .wld files in the test worlds directory
-    let entries = fs::read_dir(test_worlds_dir).expect("Failed to read test worlds directory");
+    let entries = fs::read_dir(&test_worlds_dir).expect("Failed to read test worlds directory");
     let wld_files: Vec<_> = entries
         .filter_map(|entry| {
             let entry = entry.ok()?;
             let path = entry.path();
-            if path.extension()?.to_str()? == "wld" {
+            if path.extension().map(|ext| ext == "wld").unwrap_or(false) {
                 Some(path)
             } else {
                 None
@@ -25,7 +23,7 @@ fn test_world_roundtrip() {
         .collect();
 
     if wld_files.is_empty() {
-        println!("No .wld files found in tests/test_worlds directory");
+        println!("No .wld files found in $TEST_WORLDS_DIR directory");
         return;
     }
 
@@ -40,7 +38,7 @@ fn test_world_roundtrip() {
             .expect(&format!("Failed to read world file: {}", file_name));
 
         // Save as WLD
-        let output_wld_path = format!("{}.roundtrip.wld", wld_file.to_str().unwrap());
+        let output_wld_path = format!("./{}.roundtrip.wld", file_name);
         world.save_as_wld(&output_wld_path)
             .expect(&format!("Failed to save WLD for: {}", file_name));
 

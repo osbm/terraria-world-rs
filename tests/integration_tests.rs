@@ -182,37 +182,19 @@ mod test_utils {
 
     /// Get test world files from environment or default
     pub fn get_test_world_files() -> Vec<String> {
-        // Check for world files in the current directory
         let mut world_files = Vec::new();
-
-        // Common test world names
-        let test_names = [
-            "small_corruption.wld",
-            "small_crimson.wld",
-            "medium_corruption.wld",
-            "medium_crimson.wld",
-            "large_corruption.wld",
-            "large_crimson.wld",
-        ];
-
-        for name in &test_names {
-            if Path::new(name).exists() {
-                world_files.push(name.to_string());
-            }
-        }
-
-        // If no world files found, check TEST_WORLDS_DIR environment variable
-        if world_files.is_empty() {
-            if let Ok(world_path) = std::env::var("TEST_WORLDS_DIR") {
-                for name in &test_names {
-                    let full_path = format!("{}/{}", world_path, name);
-                    if Path::new(&full_path).exists() {
-                        world_files.push(full_path);
+        if let Ok(world_path) = std::env::var("TEST_WORLDS_DIR") {
+            if let Ok(entries) = std::fs::read_dir(&world_path) {
+                for entry in entries.flatten() {
+                    let path = entry.path();
+                    if path.extension().map(|ext| ext == "wld").unwrap_or(false) {
+                        world_files.push(path.to_string_lossy().to_string());
                     }
                 }
             }
+        } else {
+            eprintln!("TEST_WORLDS_DIR environment variable not set. Skipping integration tests.");
         }
-
         world_files
     }
 }
