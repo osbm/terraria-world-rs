@@ -619,15 +619,15 @@ impl World {
         let saved_slime_squire = r.bool();
         let moondial_is_running = r.bool();
         let moondial_cooldown = r.u8();
-        println!("File offset before unknown world data: {}", r.offset());
+        // println!("File offset before unknown world data: {}", r.offset());
         let unknown_world_header_data = r.read_until(pointers.world_tiles as usize);
-        println!("File offset after unknown world data: {}", r.offset());
+        // println!("File offset after unknown world data: {}", r.offset());
         // tiles
         let tiles = Self::create_tile_matrix(&mut r, (world_width as usize, world_height as usize), &tile_frame_important);
 
-        println!("File offset before unknown tiles data: {}", r.offset());
+        // println!("File offset before unknown tiles data: {}", r.offset());
         let unknown_tiles_data = r.read_until(pointers.chests as usize);
-        println!("File offset after unknown tiles data: {}", r.offset());
+        // println!("File offset after unknown tiles data: {}", r.offset());
 
         // --- CHEST PARSING ---
         let chests_count = r.i16();
@@ -659,9 +659,9 @@ impl World {
             });
         }
         // Read unknown chest data until signs pointer
-        println!("File offset before unknown chest data: {}", r.offset());
+        // println!("File offset before unknown chest data: {}", r.offset());
         let unknown_chests_data = r.read_until(pointers.signs as usize);
-        println!("File offset after unknown chest data: {}", r.offset());
+        // println!("File offset after unknown chest data: {}", r.offset());
         // --- SIGN PARSING ---
         let signs_count = r.i16();
         let mut signs = Vec::with_capacity(signs_count as usize);
@@ -675,9 +675,9 @@ impl World {
             });
         }
         // Read unknown signs data until npcs pointer
-        println!("File offset before unknown signs data: {}", r.offset());
+        // println!("File offset before unknown signs data: {}", r.offset());
         let unknown_signs_data = r.read_until(pointers.npcs as usize);
-        println!("File offset after unknown signs data: {}", r.offset());
+        // println!("File offset after unknown signs data: {}", r.offset());
 
         // Parse entities
         let mut npcs = Vec::new();
@@ -685,31 +685,48 @@ impl World {
 
         // Parse shimmered NPCs
         let shimmered_npcs_count = r.i32();
+        println!("shimmered_npcs_count: {} at offset {}", shimmered_npcs_count, r.offset());
         let mut shimmered_npcs = Vec::with_capacity(shimmered_npcs_count as usize);
-        for _ in 0..shimmered_npcs_count {
-            shimmered_npcs.push(r.i32());
+        for i in 0..shimmered_npcs_count {
+            let npc_id = r.i32();
+            println!("shimmered_npcs[{}]: {} at offset {}", i, npc_id, r.offset());
+            shimmered_npcs.push(npc_id);
         }
 
         // Parse NPCs
+        let mut npc_index = 0;
         while r.bool() {
+            println!("NPC {}: start at offset {}", npc_index, r.offset());
             let npc_type = EntityType::from(r.i32());
+            println!("NPC {}: type = {:?} at offset {}", npc_index, npc_type, r.offset());
             let npc_name = r.string(None);
+            println!("NPC {}: name = '{}' at offset {}", npc_index, npc_name, r.offset());
             let npc_position = Coordinates {
                 x: r.f32() as i32,
                 y: r.f32() as i32,
             };
+            println!("NPC {}: position = {:?} at offset {}", npc_index, npc_position, r.offset());
             let is_homeless = r.bool();
+            println!("NPC {}: is_homeless = {} at offset {}", npc_index, is_homeless, r.offset());
             let npc_home = if is_homeless {
                 None
             } else {
-                Some(Coordinates {
+                println!("NPC is homeless: {}", is_homeless);
+                let home = Coordinates {
                     x: r.i32(),
                     y: r.i32(),
-                })
+                };
+                Some(home)
             };
+            println!("NPC {}: home = {:?} at offset {}", npc_index, npc_home, r.offset());
 
             let npc_flags = r.bits();
-            let npc_variation_index = if npc_flags[0] { r.i32() } else { 0 };
+            println!("NPC {}: flags = {:?} at offset {}", npc_index, npc_flags, r.offset());
+            let npc_variation_index = r.i32();
+            if !npc_flags[0] {
+                let npc_variation_index = 0i32;
+            }
+            println!("NPC {}: variation_index = {} at offset {}", npc_index, npc_variation_index, r.offset());
 
             let npc = NPC::new(
                 npc_type,
@@ -719,18 +736,25 @@ impl World {
                 npc_variation_index,
             );
             npcs.push(npc);
+            println!("NPC {}: end at offset {}", npc_index, r.offset());
+            npc_index += 1;
         }
 
         // Parse mobs
+        let mut mob_index = 0;
         while r.bool() {
+            println!("Mob {}: start at offset {}", mob_index, r.offset());
             let mob_type = EntityType::from(r.i32());
+            println!("Mob {}: type = {:?} at offset {}", mob_index, mob_type, r.offset());
             let mob_position = Coordinates {
                 x: r.f32() as i32,
                 y: r.f32() as i32,
             };
-
+            println!("Mob {}: position = {:?} at offset {}", mob_index, mob_position, r.offset());
             let mob = Mob::new(mob_type, mob_position);
             mobs.push(mob);
+            println!("Mob {}: end at offset {}", mob_index, r.offset());
+            mob_index += 1;
         }
 
         // Read unknown NPCs data until tile entities pointer
