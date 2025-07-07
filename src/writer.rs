@@ -132,4 +132,13 @@ impl ByteWriter {
             }
         }
     }
+
+    /// Overwrite a u32 value at a specific offset in the buffer (little-endian)
+    pub fn patch_u32(&mut self, offset: usize, value: u32) {
+        let bytes = value.to_le_bytes();
+        if offset + 4 > self.buffer.len() {
+            self.buffer.resize(offset + 4, 0);
+        }
+        self.buffer[offset..offset + 4].copy_from_slice(&bytes);
+    }
 } 
