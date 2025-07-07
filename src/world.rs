@@ -140,6 +140,56 @@ impl Room {
     }
 }
 
+// Bestiary
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Bestiary {
+    pub kills: std::collections::HashMap<String, i32>,
+    pub sightings: Vec<String>,
+    pub chats: Vec<String>,
+}
+
+impl Bestiary {
+    pub fn new(kills: std::collections::HashMap<String, i32>, sightings: Vec<String>, chats: Vec<String>) -> Self {
+        Self { kills, sightings, chats }
+    }
+}
+
+// Journey Powers
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct JourneyPowers {
+    pub freeze_time: bool,
+    pub time_rate: f32,
+    pub freeze_rain: bool,
+    pub freeze_wind: bool,
+    pub difficulty: f32,
+    pub freeze_biome_spread: bool,
+}
+
+impl JourneyPowers {
+    pub fn new() -> Self {
+        Self {
+            freeze_time: false,
+            time_rate: 1.0,
+            freeze_rain: false,
+            freeze_wind: false,
+            difficulty: 1.0,
+            freeze_biome_spread: false,
+        }
+    }
+}
+
+// Custom error for invalid footer
+#[derive(Debug)]
+pub struct InvalidFooterError(pub String);
+
+impl std::fmt::Display for InvalidFooterError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Invalid footer: {}", self.0)
+    }
+}
+
+impl std::error::Error for InvalidFooterError {}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct World {
     pub version_integer: i32,
@@ -335,6 +385,10 @@ pub struct World {
     pub unknown_pressure_plates_data: Vec<u8>, // TODO: find out what this is
     pub rooms: Vec<Room>,
     pub unknown_town_manager_data: Vec<u8>, // TODO: find out what this is
+    pub bestiary: Bestiary,
+    pub unknown_bestiary_data: Vec<u8>, // TODO: find out what this is
+    pub journey_powers: JourneyPowers,
+    pub unknown_journey_powers_data: Vec<u8>, // TODO: find out what this is
 }
 
 impl World {
@@ -851,6 +905,74 @@ impl World {
         // Read unknown town manager data until bestiary pointer
         let unknown_town_manager_data = r.read_until(pointers.bestiary as usize);
 
+        // Parse bestiary
+        let bestiary_kills_count = r.i32();
+        let mut bestiary_kills = std::collections::HashMap::new();
+        for _ in 0..bestiary_kills_count {
+            let entity = r.string(None);
+            let kills = r.i32();
+            bestiary_kills.insert(entity, kills);
+        }
+
+        let bestiary_sightings_count = r.i32();
+        let mut bestiary_sightings = Vec::with_capacity(bestiary_sightings_count as usize);
+        for _ in 0..bestiary_sightings_count {
+            bestiary_sightings.push(r.string(None));
+        }
+
+        let bestiary_chats_count = r.i32();
+        let mut bestiary_chats = Vec::with_capacity(bestiary_chats_count as usize);
+        for _ in 0..bestiary_chats_count {
+            bestiary_chats.push(r.string(None));
+        }
+
+        let bestiary = Bestiary::new(bestiary_kills, bestiary_sightings, bestiary_chats);
+
+        // Read unknown bestiary data until journey powers pointer
+        let unknown_bestiary_data = r.read_until(pointers.journey_powers as usize);
+
+        // Parse journey powers
+        let mut journey_powers = JourneyPowers::new();
+        while r.bool() {
+            let power_id = r.i16();
+            match power_id {
+                0 => journey_powers.freeze_time = r.bool(),
+                8 => journey_powers.time_rate = r.f32(),
+                9 => journey_powers.freeze_rain = r.bool(),
+                10 => journey_powers.freeze_wind = r.bool(),
+                12 => journey_powers.difficulty = r.f32(),
+                13 => journey_powers.freeze_biome_spread = r.bool(),
+                _ => {
+                    println!("Unknown journey power ID: {}", power_id);
+                }
+            }
+        }
+
+        // Read unknown journey powers data until footer
+        let unknown_journey_powers_data = r.read_until(pointers.footer as usize);
+
+        // Parse footer
+        if !r.bool() {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                InvalidFooterError("Invalid footer".to_string()),
+            ));
+        }
+        let footer_world_name = r.string(None);
+        if footer_world_name != world_name {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                InvalidFooterError("Invalid footer - world name mismatch".to_string()),
+            ));
+        }
+        let footer_world_id = r.i32();
+        if footer_world_id != id {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                InvalidFooterError("Invalid footer - world ID mismatch".to_string()),
+            ));
+        }
+
         Ok(Self {
             version_integer,
             magic,
@@ -1045,6 +1167,10 @@ impl World {
             unknown_pressure_plates_data,
             rooms,
             unknown_town_manager_data,
+            bestiary,
+            unknown_bestiary_data,
+            journey_powers,
+            unknown_journey_powers_data,
         })
     }
 

@@ -1,7 +1,7 @@
 use std::fs;
 use std::path::Path;
 use serde_json::Value;
-use terraria_world_parser::world::{World, TileEntityExtra, WeighedPressurePlate, Room};
+use terraria_world_parser::world::{World, TileEntityExtra, WeighedPressurePlate, Room, Bestiary, JourneyPowers};
 
 /// Test utilities for integration tests
 mod test_utils {
@@ -727,6 +727,107 @@ fn test_town_manager_parsing() {
         if world.rooms.len() > 5 {
             println!("  ... and {} more", world.rooms.len() - 5);
         }
+        println!();
+    }
+}
+
+#[test]
+fn test_bestiary_parsing() {
+    let test_worlds_dir = "tests/test_worlds";
+    if !Path::new(test_worlds_dir).exists() {
+        println!("No test worlds directory found, skipping bestiary test");
+        return;
+    }
+    let entries = fs::read_dir(test_worlds_dir).expect("Failed to read test worlds directory");
+    let wld_files: Vec<_> = entries
+        .filter_map(|entry| {
+            let entry = entry.ok()?;
+            let path = entry.path();
+            if path.extension()?.to_str()? == "wld" {
+                Some(path)
+            } else {
+                None
+            }
+        })
+        .collect();
+    if wld_files.is_empty() {
+        println!("No .wld files found in tests/test_worlds directory, skipping bestiary test");
+        return;
+    }
+    for wld_file in wld_files {
+        let file_name = wld_file.file_name().unwrap().to_str().unwrap();
+        println!("Testing bestiary for: {}", file_name);
+        let world = World::from_file(wld_file.to_str().unwrap())
+            .expect(&format!("Failed to read world file: {}", file_name));
+        println!("Bestiary stats:");
+        println!("  Kills: {} entries", world.bestiary.kills.len());
+        println!("  Sightings: {} entries", world.bestiary.sightings.len());
+        println!("  Chats: {} entries", world.bestiary.chats.len());
+        
+        // Print first few kills
+        let mut kill_iter = world.bestiary.kills.iter().take(5);
+        if let Some((entity, kills)) = kill_iter.next() {
+            println!("  Sample kills:");
+            println!("    {}: {}", entity, kills);
+            for (entity, kills) in kill_iter {
+                println!("    {}: {}", entity, kills);
+            }
+        }
+        
+        // Print first few sightings
+        if !world.bestiary.sightings.is_empty() {
+            println!("  Sample sightings:");
+            for entity in world.bestiary.sightings.iter().take(5) {
+                println!("    {}", entity);
+            }
+        }
+        
+        // Print first few chats
+        if !world.bestiary.chats.is_empty() {
+            println!("  Sample chats:");
+            for entity in world.bestiary.chats.iter().take(5) {
+                println!("    {}", entity);
+            }
+        }
+        println!();
+    }
+}
+
+#[test]
+fn test_journey_powers_parsing() {
+    let test_worlds_dir = "tests/test_worlds";
+    if !Path::new(test_worlds_dir).exists() {
+        println!("No test worlds directory found, skipping journey powers test");
+        return;
+    }
+    let entries = fs::read_dir(test_worlds_dir).expect("Failed to read test worlds directory");
+    let wld_files: Vec<_> = entries
+        .filter_map(|entry| {
+            let entry = entry.ok()?;
+            let path = entry.path();
+            if path.extension()?.to_str()? == "wld" {
+                Some(path)
+            } else {
+                None
+            }
+        })
+        .collect();
+    if wld_files.is_empty() {
+        println!("No .wld files found in tests/test_worlds directory, skipping journey powers test");
+        return;
+    }
+    for wld_file in wld_files {
+        let file_name = wld_file.file_name().unwrap().to_str().unwrap();
+        println!("Testing journey powers for: {}", file_name);
+        let world = World::from_file(wld_file.to_str().unwrap())
+            .expect(&format!("Failed to read world file: {}", file_name));
+        println!("Journey powers:");
+        println!("  Freeze time: {}", world.journey_powers.freeze_time);
+        println!("  Time rate: {}", world.journey_powers.time_rate);
+        println!("  Freeze rain: {}", world.journey_powers.freeze_rain);
+        println!("  Freeze wind: {}", world.journey_powers.freeze_wind);
+        println!("  Difficulty: {}", world.journey_powers.difficulty);
+        println!("  Freeze biome spread: {}", world.journey_powers.freeze_biome_spread);
         println!();
     }
 }
