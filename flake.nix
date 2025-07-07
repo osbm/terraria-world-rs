@@ -17,7 +17,10 @@
     in
     {
       overlay = final: prev: {
-        "${cargoToml.package.name}" = final.callPackage ./. { inherit naersk; };
+        "${cargoToml.package.name}" = final.callPackage ./. {
+          inherit naersk terraria-worlds;
+          lihzahrd = self.outputs.packages.${final.system}.lihzahrd;
+        };
       };
 
       packages = forAllSystems (system:
@@ -31,7 +34,7 @@
         in
         {
           "${cargoToml.package.name}" = pkgs."${cargoToml.package.name}";
-          lihzahrd = pkgs.python312Packages.buildPythonPackage rec {
+           lihzahrd = pkgs.python312Packages.buildPythonPackage rec {
             pname = "lihzahrd";
             version = "3.1.1";
             src = pkgs.fetchFromGitHub {
@@ -46,7 +49,7 @@
             ];
             pythonImportsCheck = [ "lihzahrd" ];
 
-            doCheck = false; # Disable tests for now
+            doCheck = false; # no tests available
 
             meta = with pkgs.lib; {
               description = "Terraria game world parser for Python";
@@ -56,12 +59,11 @@
           };
         });
 
+
       defaultPackage = forAllSystems (system: (import nixpkgs {
         inherit system;
         overlays = [ self.overlay ];
-      })."${cargoToml.package.name}" // {
-        TEST_WORLDS_DIR = "${terraria-worlds}";
-      });
+      })."${cargoToml.package.name}");
 
       checks = forAllSystems (system:
         let
@@ -81,42 +83,8 @@
             ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt --check ${./.}
             touch $out # it worked!
           '';
-
-          "${cargoToml.package.name}" = pkgs.stdenv.mkDerivation {
-            name = "${cargoToml.package.name}-test";
-            buildInputs = [ pkgs."${cargoToml.package.name}" ];
-            TEST_WORLDS_DIR = "${terraria-worlds}";
-            phases = [ "buildPhase" "checkPhase" ];
-            buildPhase = "true";
-            checkPhase = ''
-              cargo test --release
-            '';
-            installPhase = "touch $out";
-          };
-
-          # Integration test using lihzahrd Python library
-          integration-test = pkgs.runCommand "integration-test"
-            {
-              buildInputs = with pkgs; [
-                python312
-                python312Packages.lihzahrd
-                cargo
-                rustc
-              ];
-              TEST_WORLDS_DIR = "${terraria-worlds}";
-            } ''
-            # Run the external integration test script
-            if [ -f "small_corruption.wld" ]; then
-              python3 ${./tests/integration_test.py} small_corruption.wld > python_output.json
-              echo "Python parsing completed successfully"
-            else
-              echo "No test world file found, skipping integration test"
-            fi
-
-            touch $out
-          '';
+          "${cargoToml.package.name}" = pkgs."${cargoToml.package.name}";
         });
-
       devShell = forAllSystems (system:
         let
           pkgs = import nixpkgs {
@@ -131,11 +99,14 @@
           buildInputs = with pkgs; [
             rustfmt
             nixpkgs-fmt
-            python312
-            self.packages."${system}".lihzahrd
-
+            (pkgs.python312.withPackages (python-pkgs: [
+              python-pkgs.pip
+              self.outputs.packages.${system}.lihzahrd
+            ]))
           ];
+          LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
           TEST_WORLDS_DIR = "${terraria-worlds}";
+
         });
     };
 }

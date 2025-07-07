@@ -10,6 +10,9 @@
 , rustfmt
 , cargo
 , rustc
+, python312
+, terraria-worlds
+, lihzahrd
   # , llvmPackages # Optional
   # , protobuf     # Optional
 }:
@@ -27,6 +30,10 @@ naersk.lib."${targetPlatform.system}".buildPackage rec {
     cargo
     rustc
     libiconv
+    (python312.withPackages (python-pkgs: [
+      python-pkgs.pip
+      lihzahrd
+    ]))
   ];
   checkInputs = [ cargo rustc ];
 
@@ -43,6 +50,7 @@ naersk.lib."${targetPlatform.system}".buildPackage rec {
   # If you depend on protobuf:
   # PROTOC = "${protobuf}/bin/protoc";
   # PROTOC_INCLUDE = "${protobuf}/include";
+  TEST_WORLDS_DIR = "${terraria-worlds}";
 
   name = cargoToml.package.name;
   version = cargoToml.package.version;
