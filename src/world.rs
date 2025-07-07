@@ -371,6 +371,7 @@ pub struct World {
     pub moondial_cooldown: u8,
     pub unknown_world_header_data: Vec<u8>, // TODO: find out what this is
     pub tiles: TileMatrix,
+    pub unknown_tiles_data: Vec<u8>, // TODO: find out what this is
     pub chests: Vec<Chest>,
     pub unknown_chests_data: Vec<u8>, // TODO: find out what this is
     pub signs: Vec<Sign>,
@@ -618,10 +619,15 @@ impl World {
         let saved_slime_squire = r.bool();
         let moondial_is_running = r.bool();
         let moondial_cooldown = r.u8();
+        println!("File offset before unknown world data: {}", r.offset());
         let unknown_world_header_data = r.read_until(pointers.world_tiles as usize);
-
+        println!("File offset after unknown world data: {}", r.offset());
         // tiles
         let tiles = Self::create_tile_matrix(&mut r, (world_width as usize, world_height as usize), &tile_frame_important);
+
+        println!("File offset before unknown tiles data: {}", r.offset());
+        let unknown_tiles_data = r.read_until(pointers.chests as usize);
+        println!("File offset after unknown tiles data: {}", r.offset());
 
         // --- CHEST PARSING ---
         let chests_count = r.i16();
@@ -653,8 +659,9 @@ impl World {
             });
         }
         // Read unknown chest data until signs pointer
+        println!("File offset before unknown chest data: {}", r.offset());
         let unknown_chests_data = r.read_until(pointers.signs as usize);
-
+        println!("File offset after unknown chest data: {}", r.offset());
         // --- SIGN PARSING ---
         let signs_count = r.i16();
         let mut signs = Vec::with_capacity(signs_count as usize);
@@ -668,7 +675,9 @@ impl World {
             });
         }
         // Read unknown signs data until npcs pointer
+        println!("File offset before unknown signs data: {}", r.offset());
         let unknown_signs_data = r.read_until(pointers.npcs as usize);
+        println!("File offset after unknown signs data: {}", r.offset());
 
         // Parse entities
         let mut npcs = Vec::new();
@@ -725,7 +734,9 @@ impl World {
         }
 
         // Read unknown NPCs data until tile entities pointer
+        println!("File offset before unknown NPCs data: {}", r.offset());
         let unknown_npcs_data = r.read_until(pointers.tile_entities as usize);
+        println!("File offset after unknown NPCs data: {}", r.offset());
 
         // Parse tile entities
         let tile_entities_count = r.i32();
@@ -737,7 +748,7 @@ impl World {
                 x: r.i16() as i32,
                 y: r.i16() as i32,
             };
-            
+
             let te_extra = match te_type {
                 0 => {
                     // Target Dummy
@@ -768,7 +779,7 @@ impl World {
                     let dye_flags = r.bits();
                     let mut mannequin_items = vec![None; item_flags.len()];
                     let mut mannequin_dyes = vec![None; dye_flags.len()];
-                    
+
                     for (index, &flag) in item_flags.iter().enumerate() {
                         if !flag {
                             continue;
@@ -782,7 +793,7 @@ impl World {
                             prefix: item_prefix,
                         });
                     }
-                    
+
                     for (index, &flag) in dye_flags.iter().enumerate() {
                         if !flag {
                             continue;
@@ -796,7 +807,7 @@ impl World {
                             prefix: item_prefix,
                         });
                     }
-                    
+
                     Some(TileEntityExtra::Mannequin { items: mannequin_items, dyes: mannequin_dyes })
                 }
                 4 => {
@@ -816,7 +827,7 @@ impl World {
                     let item_flags = r.bits();
                     let mut rack_items = vec![None; 2];
                     let mut rack_dyes = vec![None; 2];
-                    
+
                     for (index, &flag) in item_flags.iter().take(2).enumerate() {
                         if !flag {
                             continue;
@@ -830,7 +841,7 @@ impl World {
                             prefix: item_prefix,
                         });
                     }
-                    
+
                     for (index, &flag) in item_flags.iter().skip(2).take(2).enumerate() {
                         if !flag {
                             continue;
@@ -844,7 +855,7 @@ impl World {
                             prefix: item_prefix,
                         });
                     }
-                    
+
                     Some(TileEntityExtra::HatRack { items: rack_items, dyes: rack_dyes })
                 }
                 6 => {
@@ -868,13 +879,15 @@ impl World {
                     None
                 }
             };
-            
+
             let tile_entity = TileEntity::new(te_id, te_position, te_extra);
             tile_entities.push(tile_entity);
         }
 
         // Read unknown tile entities data until pressure plates pointer
+        println!("File offset before unknown tile entities data: {}", r.offset());
         let unknown_tile_entities_data = r.read_until(pointers.pressure_plates as usize);
+        println!("File offset after unknown tile entities data: {}", r.offset());
 
         // Parse weighed pressure plates
         let weighed_pressure_plates_count = r.i32();
@@ -888,7 +901,9 @@ impl World {
         }
 
         // Read unknown pressure plates data until town manager pointer
+        println!("File offset before unknown pressure plates data: {}", r.offset());
         let unknown_pressure_plates_data = r.read_until(pointers.town_manager as usize);
+        println!("File offset after unknown pressure plates data: {}", r.offset());
 
         // Parse town manager (rooms)
         let rooms_count = r.i32();
@@ -903,7 +918,9 @@ impl World {
         }
 
         // Read unknown town manager data until bestiary pointer
+        println!("File offset before unknown town manager data: {}", r.offset());
         let unknown_town_manager_data = r.read_until(pointers.bestiary as usize);
+        println!("File offset after unknown town manager data: {}", r.offset());
 
         // Parse bestiary
         let bestiary_kills_count = r.i32();
@@ -929,7 +946,9 @@ impl World {
         let bestiary = Bestiary::new(bestiary_kills, bestiary_sightings, bestiary_chats);
 
         // Read unknown bestiary data until journey powers pointer
+        println!("File offset before unknown bestiary data: {}", r.offset());
         let unknown_bestiary_data = r.read_until(pointers.journey_powers as usize);
+        println!("File offset after unknown bestiary data: {}", r.offset());
 
         // Parse journey powers
         let mut journey_powers = JourneyPowers::new();
@@ -949,7 +968,9 @@ impl World {
         }
 
         // Read unknown journey powers data until footer
+        println!("File offset before unknown journey powers data: {}", r.offset());
         let unknown_journey_powers_data = r.read_until(pointers.footer as usize);
+        println!("File offset after unknown journey powers data: {}", r.offset());
 
         // Parse footer
         if !r.bool() {
@@ -1153,6 +1174,7 @@ impl World {
             moondial_cooldown,
             unknown_world_header_data,
             tiles,
+            unknown_tiles_data,
             chests,
             unknown_chests_data,
             signs,
