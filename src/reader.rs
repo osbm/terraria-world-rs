@@ -11,48 +11,72 @@ impl<'a> ByteReader<'a> {
     }
 
     pub fn u8(&mut self) -> u8 {
+        if self.offset >= self.data.len() {
+            panic!("Attempted to read u8 at offset {} but data length is {}", self.offset, self.data.len());
+        }
         let val = self.data[self.offset];
         self.offset += 1;
         val
     }
 
     pub fn u16(&mut self) -> u16 {
+        if self.offset + 2 > self.data.len() {
+            panic!("Attempted to read u16 at offset {} but data length is {}", self.offset, self.data.len());
+        }
         let val = u16::from_le_bytes(self.data[self.offset..self.offset + 2].try_into().unwrap());
         self.offset += 2;
         val
     }
 
     pub fn u32(&mut self) -> u32 {
+        if self.offset + 4 > self.data.len() {
+            panic!("Attempted to read u32 at offset {} but data length is {}", self.offset, self.data.len());
+        }
         let val = u32::from_le_bytes(self.data[self.offset..self.offset + 4].try_into().unwrap());
         self.offset += 4;
         val
     }
 
     pub fn u64(&mut self) -> u64 {
+        if self.offset + 8 > self.data.len() {
+            panic!("Attempted to read u64 at offset {} but data length is {}", self.offset, self.data.len());
+        }
         let val = u64::from_le_bytes(self.data[self.offset..self.offset + 8].try_into().unwrap());
         self.offset += 8;
         val
     }
 
     pub fn i8(&mut self) -> i8 {
+        if self.offset >= self.data.len() {
+            panic!("Attempted to read i8 at offset {} but data length is {}", self.offset, self.data.len());
+        }
         let val = self.data[self.offset] as i8;
         self.offset += 1;
         val
     }
 
     pub fn i16(&mut self) -> i16 {
+        if self.offset + 2 > self.data.len() {
+            panic!("Attempted to read i16 at offset {} but data length is {}", self.offset, self.data.len());
+        }
         let val = i16::from_le_bytes(self.data[self.offset..self.offset + 2].try_into().unwrap());
         self.offset += 2;
         val
     }
 
     pub fn i32(&mut self) -> i32 {
+        if self.offset + 4 > self.data.len() {
+            panic!("Attempted to read i32 at offset {} but data length is {}", self.offset, self.data.len());
+        }
         let val = i32::from_le_bytes(self.data[self.offset..self.offset + 4].try_into().unwrap());
         self.offset += 4;
         val
     }
 
     pub fn i64(&mut self) -> i64 {
+        if self.offset + 8 > self.data.len() {
+            panic!("Attempted to read i64 at offset {} but data length is {}", self.offset, self.data.len());
+        }
         let val = i64::from_le_bytes(self.data[self.offset..self.offset + 8].try_into().unwrap());
         self.offset += 8;
         val
@@ -60,13 +84,8 @@ impl<'a> ByteReader<'a> {
 
     pub fn bool(&mut self) -> bool {
         let byte = self.u8();
-        if byte == 0 {
-            false
-        } else if byte == 1 {
-            true
-        } else {
-            panic!("Invalid boolean value: {}", byte);
-        }
+        // In Terraria world files, any non-zero value is considered true
+        byte != 0
     }
 
     pub fn bits(&mut self) -> Vec<bool> {
@@ -75,6 +94,9 @@ impl<'a> ByteReader<'a> {
     }
 
     pub fn bytes(&mut self, count: usize) -> &'a [u8] {
+        if self.offset + count > self.data.len() {
+            panic!("Attempted to read {} bytes at offset {} but data length is {}", count, self.offset, self.data.len());
+        }
         let slice = &self.data[self.offset..self.offset + count];
         self.offset += count;
         slice
@@ -82,6 +104,9 @@ impl<'a> ByteReader<'a> {
 
     pub fn read_until(&mut self, address: usize) -> Vec<u8> {
         let end = std::cmp::min(address, self.data.len());
+        if self.offset >= end {
+            return Vec::new(); // Already past the target address
+        }
         let slice = &self.data[self.offset..end];
         self.offset = end; // update offset to the end of the slice
         slice.to_vec()
@@ -173,12 +198,18 @@ impl<'a> ByteReader<'a> {
     }
 
     pub fn f32(&mut self) -> f32 {
+        if self.offset + 4 > self.data.len() {
+            panic!("Attempted to read f32 at offset {} but data length is {}", self.offset, self.data.len());
+        }
         let bytes = self.bytes(4);
         let val = f32::from_le_bytes(bytes.try_into().unwrap());
         val
     }
 
     pub fn f64(&mut self) -> f64 {
+        if self.offset + 8 > self.data.len() {
+            panic!("Attempted to read f64 at offset {} but data length is {}", self.offset, self.data.len());
+        }
         let bytes = self.bytes(8);
         let val = f64::from_le_bytes(bytes.try_into().unwrap());
         val

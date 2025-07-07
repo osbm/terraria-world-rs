@@ -1,36 +1,95 @@
 use crate::reader::ByteReader;
 use crate::tile::{Tile, TileMatrix, Block, Wall, Liquid, Wiring, BlockType, WallType, LiquidType, FrameImportantData, RLEEncoding};
+use serde::{Serialize, Deserialize};
 
 mod pointers;
 use pointers::Pointers;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Coordinates {
     pub x: i32,
     pub y: i32,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ItemStack {
     pub quantity: i16,
     pub type_id: i32,
     pub prefix: u8,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Chest {
     pub position: Coordinates,
     pub name: String,
     pub contents: Vec<Option<ItemStack>>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Sign {
     pub text: String,
     pub position: Coordinates,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct EntityType(pub i32);
+
+impl EntityType {
+    pub fn new(id: i32) -> Self {
+        Self(id)
+    }
+
+    pub fn id(&self) -> i32 {
+        self.0
+    }
+}
+
+impl From<i32> for EntityType {
+    fn from(value: i32) -> Self {
+        Self(value)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NPC {
+    pub type_: EntityType,
+    pub name: String,
+    pub position: Coordinates,
+    pub home: Option<Coordinates>,
+    pub variation_index: i32,
+}
+
+impl NPC {
+    pub fn new(
+        type_: EntityType,
+        name: String,
+        position: Coordinates,
+        home: Option<Coordinates>,
+        variation_index: i32,
+    ) -> Self {
+        Self {
+            type_,
+            name,
+            position,
+            home,
+            variation_index,
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Mob {
+    pub type_: EntityType,
+    pub position: Coordinates,
+}
+
+impl Mob {
+    pub fn new(type_: EntityType, position: Coordinates) -> Self {
+        Self { type_, position }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct World {
     pub version_integer: i32,
     pub magic: String,
@@ -212,7 +271,13 @@ pub struct World {
     pub unknown_world_header_data: Vec<u8>, // TODO: find out what this is
     pub tiles: TileMatrix,
     pub chests: Vec<Chest>,
+    pub unknown_chests_data: Vec<u8>, // TODO: find out what this is
     pub signs: Vec<Sign>,
+    pub unknown_signs_data: Vec<u8>, // TODO: find out what this is
+    pub npcs: Vec<NPC>,
+    pub mobs: Vec<Mob>,
+    pub shimmered_npcs: Vec<i32>,
+    pub unknown_npcs_data: Vec<u8>, // TODO: find out what this is
 }
 
 impl World {
@@ -476,8 +541,8 @@ impl World {
                 contents: chest_contents,
             });
         }
-        // Skip unknown chest data until signs pointer
-        let _unknown_chests_data = r.read_until(pointers.signs as usize);
+        // Read unknown chest data until signs pointer
+        let unknown_chests_data = r.read_until(pointers.signs as usize);
 
         // --- SIGN PARSING ---
         let signs_count = r.i16();
@@ -491,9 +556,65 @@ impl World {
                 position: Coordinates { x: sign_x, y: sign_y },
             });
         }
-        // Skip unknown signs data until npcs pointer
-        let _unknown_signs_data = r.read_until(pointers.npcs as usize);
+        // Read unknown signs data until npcs pointer
+        let unknown_signs_data = r.read_until(pointers.npcs as usize);
 
+        // Parse entities
+        let mut npcs = Vec::new();
+        let mut mobs = Vec::new();
+
+        // Parse shimmered NPCs
+        let shimmered_npcs_count = r.i32();
+        let mut shimmered_npcs = Vec::with_capacity(shimmered_npcs_count as usize);
+        for _ in 0..shimmered_npcs_count {
+            shimmered_npcs.push(r.i32());
+        }
+
+        // Parse NPCs
+        while r.bool() {
+            let npc_type = EntityType::from(r.i32());
+            let npc_name = r.string(None);
+            let npc_position = Coordinates {
+                x: r.f32() as i32,
+                y: r.f32() as i32,
+            };
+            let is_homeless = r.bool();
+            let npc_home = if is_homeless {
+                None
+            } else {
+                Some(Coordinates {
+                    x: r.i32(),
+                    y: r.i32(),
+                })
+            };
+
+            let npc_flags = r.bits();
+            let npc_variation_index = if npc_flags[0] { r.i32() } else { 0 };
+
+            let npc = NPC::new(
+                npc_type,
+                npc_name,
+                npc_position,
+                npc_home,
+                npc_variation_index,
+            );
+            npcs.push(npc);
+        }
+
+        // Parse mobs
+        while r.bool() {
+            let mob_type = EntityType::from(r.i32());
+            let mob_position = Coordinates {
+                x: r.f32() as i32,
+                y: r.f32() as i32,
+            };
+
+            let mob = Mob::new(mob_type, mob_position);
+            mobs.push(mob);
+        }
+
+        // Read unknown NPCs data until tile entities pointer
+        let unknown_npcs_data = r.read_until(pointers.tile_entities as usize);
 
         Ok(Self {
             version_integer,
@@ -676,7 +797,13 @@ impl World {
             unknown_world_header_data,
             tiles,
             chests,
+            unknown_chests_data,
             signs,
+            unknown_signs_data,
+            npcs,
+            mobs,
+            shimmered_npcs,
+            unknown_npcs_data,
         })
     }
 
@@ -758,19 +885,24 @@ impl World {
     }
 
     pub fn read_from_json(path: &str) -> std::io::Result<Self> {
-        println!("Reading from {path}...");
-        unimplemented!("Reading functionality is not implemented yet.");
+        let file = std::fs::File::open(path)?;
+        let reader = std::io::BufReader::new(file);
+        let world = serde_json::from_reader(reader)
+            .map_err(|e| std::io::Error::new(std::io::ErrorKind::InvalidData, e))?;
+        Ok(world)
     }
 
     pub fn save_as_json(&self, path: &str) -> std::io::Result<()> {
-        println!("Saving to {path}...");
-        unimplemented!("Saving functionality is not implemented yet.");
+        let file = std::fs::File::create(path)?;
+        let writer = std::io::BufWriter::new(file);
+        serde_json::to_writer_pretty(writer, self)
+            .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))
     }
 
     pub fn save_as_wld(&self, path: &str) -> std::io::Result<()> {
         println!("Saving to {path}...");
         // test if this produces exactly the same file as the original
-        unimplemented!("Saving functionality is not implemented yet.");
+        Err(std::io::Error::new(std::io::ErrorKind::Other, "Saving as .wld is not implemented yet."))
     }
 
     fn read_tile_block(r: &mut ByteReader, tile_frame_important: &[bool]) -> (Tile, usize) {

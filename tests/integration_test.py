@@ -47,7 +47,6 @@ def parse_world_file(world_file: str) -> Dict[str, Any]:
             "dungeon_point": {"x": world.dungeon_point.x, "y": world.dungeon_point.y},
             "underground_level": world.underground_level,
             "cavern_level": world.cavern_level,
-            "tile_frame_important": world.tile_frame_important,
         }
         
         # Extract sample tiles for comparison
@@ -94,10 +93,16 @@ def parse_world_file(world_file: str) -> Dict[str, Any]:
                 }
                 for item in chest.contents:
                     if item is not None:
+                        type_id = None
+                        if hasattr(item, 'type') and item.type is not None:
+                            type_id = item.type.value if hasattr(item.type, 'value') else int(item.type)
+                        prefix = None
+                        if hasattr(item, 'prefix') and item.prefix is not None:
+                            prefix = item.prefix.value if hasattr(item.prefix, 'value') else int(item.prefix)
                         chest_data["contents"].append({
                             "quantity": item.quantity,
-                            "type_id": item.type_.value,
-                            "prefix": item.prefix.value if hasattr(item.prefix, 'value') else int(item.prefix)
+                            "type_id": type_id,
+                            "prefix": prefix
                         })
                     else:
                         chest_data["contents"].append(None)
@@ -113,6 +118,33 @@ def parse_world_file(world_file: str) -> Dict[str, Any]:
                 }
                 signs.append(sign_data)
         
+        # Extract entities
+        npcs = []
+        mobs = []
+        shimmered_npcs = []
+        
+        if hasattr(world, 'npcs') and world.npcs:
+            for npc in world.npcs:
+                npc_data = {
+                    "type_id": npc.type.value if hasattr(npc.type, 'value') else int(npc.type),
+                    "name": npc.name,
+                    "position": {"x": npc.position.x, "y": npc.position.y},
+                    "home": None if npc.home is None else {"x": npc.home.x, "y": npc.home.y},
+                    "variation_index": npc.variation_index,
+                }
+                npcs.append(npc_data)
+        
+        if hasattr(world, 'mobs') and world.mobs:
+            for mob in world.mobs:
+                mob_data = {
+                    "type_id": mob.type.value if hasattr(mob.type, 'value') else int(mob.type),
+                    "position": {"x": mob.position.x, "y": mob.position.y},
+                }
+                mobs.append(mob_data)
+        
+        if hasattr(world, 'shimmered_npcs') and world.shimmered_npcs:
+            shimmered_npcs = list(world.shimmered_npcs)
+        
         return {
             "metadata": metadata,
             "tiles": {
@@ -120,7 +152,10 @@ def parse_world_file(world_file: str) -> Dict[str, Any]:
                 "total_tiles": sum(len(col) for col in world.tiles.tiles) if hasattr(world.tiles, 'tiles') else 0
             },
             "chests": chests,
-            "signs": signs
+            "signs": signs,
+            "npcs": npcs,
+            "mobs": mobs,
+            "shimmered_npcs": shimmered_npcs
         }
         
     except Exception as e:
@@ -297,6 +332,9 @@ def main():
             print(f"Size: {world_data['metadata']['size']['width']}x{world_data['metadata']['size']['height']}")
             print(f"Sample tiles: {len(world_data['tiles']['sample_tiles'])}")
             print(f"Total tiles: {world_data['tiles']['total_tiles']}")
+            print(f"NPCs: {len(world_data['npcs'])}")
+            print(f"Mobs: {len(world_data['mobs'])}")
+            print(f"Shimmered NPCs: {len(world_data['shimmered_npcs'])}")
             
         except Exception as e:
             print(f"Error processing {world_file}: {e}")

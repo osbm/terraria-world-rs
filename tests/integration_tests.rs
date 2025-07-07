@@ -156,6 +156,36 @@ mod test_utils {
         Ok(())
     }
 
+    /// Validate NPC data against reference
+    pub fn validate_npc(npc: &terraria_world_parser::world::NPC, npc_ref: &Value) -> Result<(), String> {
+        assert_eq!(npc.type_.id(), npc_ref["type_id"].as_i64().unwrap() as i32, "NPC type mismatch");
+        assert_eq!(npc.name, npc_ref["name"].as_str().unwrap(), "NPC name mismatch");
+        assert_eq!(npc.position.x, npc_ref["position"]["x"].as_i64().unwrap() as i32, "NPC position X mismatch");
+        assert_eq!(npc.position.y, npc_ref["position"]["y"].as_i64().unwrap() as i32, "NPC position Y mismatch");
+        assert_eq!(npc.variation_index, npc_ref["variation_index"].as_i64().unwrap() as i32, "NPC variation index mismatch");
+
+        // Validate home coordinates
+        match (npc.home.as_ref(), npc_ref["home"].as_object()) {
+            (None, None) => {},
+            (Some(home), Some(home_ref)) => {
+                assert_eq!(home.x, home_ref["x"].as_i64().unwrap() as i32, "NPC home X mismatch");
+                assert_eq!(home.y, home_ref["y"].as_i64().unwrap() as i32, "NPC home Y mismatch");
+            },
+            (None, Some(_)) => return Err("NPC home: Rust None but Python not null".to_string()),
+            (Some(_), None) => return Err("NPC home: Rust Some but Python null".to_string()),
+        }
+
+        Ok(())
+    }
+
+    /// Validate mob data against reference
+    pub fn validate_mob(mob: &terraria_world_parser::world::Mob, mob_ref: &Value) -> Result<(), String> {
+        assert_eq!(mob.type_.id(), mob_ref["type_id"].as_i64().unwrap() as i32, "Mob type mismatch");
+        assert_eq!(mob.position.x, mob_ref["position"]["x"].as_i64().unwrap() as i32, "Mob position X mismatch");
+        assert_eq!(mob.position.y, mob_ref["position"]["y"].as_i64().unwrap() as i32, "Mob position Y mismatch");
+        Ok(())
+    }
+
     /// Get test world files from environment or default
     pub fn get_test_world_files() -> Vec<String> {
         // Check for world files in the current directory
@@ -263,6 +293,32 @@ fn test_world_parsing_against_lihzahrd() {
         }
 
         println!("Successfully validated {} tiles for {}", validated_tiles, world_file);
+
+        // Validate entities
+        let ref_npcs = reference_data["npcs"].as_array().unwrap();
+        assert_eq!(world.npcs.len(), ref_npcs.len(), "NPC count mismatch for {}", world_file);
+        for (i, (npc, ref_npc)) in world.npcs.iter().zip(ref_npcs.iter()).enumerate() {
+            if let Err(e) = validate_npc(npc, ref_npc) {
+                panic!("NPC validation failed for {} at index {}: {}", world_file, i, e);
+            }
+        }
+
+        let ref_mobs = reference_data["mobs"].as_array().unwrap();
+        assert_eq!(world.mobs.len(), ref_mobs.len(), "Mob count mismatch for {}", world_file);
+        for (i, (mob, ref_mob)) in world.mobs.iter().zip(ref_mobs.iter()).enumerate() {
+            if let Err(e) = validate_mob(mob, ref_mob) {
+                panic!("Mob validation failed for {} at index {}: {}", world_file, i, e);
+            }
+        }
+
+        let ref_shimmered_npcs = reference_data["shimmered_npcs"].as_array().unwrap();
+        assert_eq!(world.shimmered_npcs.len(), ref_shimmered_npcs.len(), "Shimmered NPC count mismatch for {}", world_file);
+        for (i, (shimmered_npc, ref_shimmered_npc)) in world.shimmered_npcs.iter().zip(ref_shimmered_npcs.iter()).enumerate() {
+            assert_eq!(*shimmered_npc, ref_shimmered_npc.as_i64().unwrap() as i32, "Shimmered NPC {} mismatch for {}", i, world_file);
+        }
+
+        println!("Successfully validated {} NPCs, {} mobs, {} shimmered NPCs for {}", 
+                world.npcs.len(), world.mobs.len(), world.shimmered_npcs.len(), world_file);
     }
 }
 
@@ -441,5 +497,65 @@ fn test_chests_against_lihzahrd() {
             }
         }
         println!("Successfully validated {} chests for {}", world.chests.len(), world_file);
+    }
+}
+
+#[test]
+fn test_entities_against_lihzahrd() {
+    use test_utils::*;
+    let world_files = get_test_world_files();
+    if world_files.is_empty() {
+        eprintln!("No test world files found. Skipping entity integration test.");
+        return;
+    }
+    for world_file in world_files {
+        println!("Testing entities for world file: {}", world_file);
+        let reference_file = format!("{}.lihzahrd_reference.json", world_file.trim_end_matches(".wld"));
+        if !Path::new(&reference_file).exists() {
+            eprintln!("Reference file {} not found. Run the Python integration test first.", reference_file);
+            continue;
+        }
+        let world = match World::from_file(&world_file) {
+            Ok(w) => w,
+            Err(e) => {
+                eprintln!("Failed to parse world {} with Rust implementation: {}", world_file, e);
+                continue;
+            }
+        };
+        let reference_data = match load_reference_data(&reference_file) {
+            Ok(data) => data,
+            Err(e) => {
+                eprintln!("Failed to load reference data from {}: {}", reference_file, e);
+                continue;
+            }
+        };
+
+        // Validate NPCs
+        let ref_npcs = reference_data["npcs"].as_array().unwrap();
+        assert_eq!(world.npcs.len(), ref_npcs.len(), "NPC count mismatch for {}", world_file);
+        for (i, (npc, ref_npc)) in world.npcs.iter().zip(ref_npcs.iter()).enumerate() {
+            if let Err(e) = validate_npc(npc, ref_npc) {
+                panic!("NPC validation failed for {} at index {}: {}", world_file, i, e);
+            }
+        }
+
+        // Validate mobs
+        let ref_mobs = reference_data["mobs"].as_array().unwrap();
+        assert_eq!(world.mobs.len(), ref_mobs.len(), "Mob count mismatch for {}", world_file);
+        for (i, (mob, ref_mob)) in world.mobs.iter().zip(ref_mobs.iter()).enumerate() {
+            if let Err(e) = validate_mob(mob, ref_mob) {
+                panic!("Mob validation failed for {} at index {}: {}", world_file, i, e);
+            }
+        }
+
+        // Validate shimmered NPCs
+        let ref_shimmered_npcs = reference_data["shimmered_npcs"].as_array().unwrap();
+        assert_eq!(world.shimmered_npcs.len(), ref_shimmered_npcs.len(), "Shimmered NPC count mismatch for {}", world_file);
+        for (i, (shimmered_npc, ref_shimmered_npc)) in world.shimmered_npcs.iter().zip(ref_shimmered_npcs.iter()).enumerate() {
+            assert_eq!(*shimmered_npc, ref_shimmered_npc.as_i64().unwrap() as i32, "Shimmered NPC {} mismatch for {}", i, world_file);
+        }
+
+        println!("Successfully validated {} NPCs, {} mobs, {} shimmered NPCs for {}", 
+                world.npcs.len(), world.mobs.len(), world.shimmered_npcs.len(), world_file);
     }
 } 
