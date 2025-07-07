@@ -190,11 +190,11 @@ mod test_utils {
     pub fn get_test_world_files() -> Vec<String> {
         // Check for world files in the current directory
         let mut world_files = Vec::new();
-        
+
         // Common test world names
         let test_names = [
             "small_corruption.wld",
-            "small_crimson.wld", 
+            "small_crimson.wld",
             "medium_corruption.wld",
             "medium_crimson.wld",
             "large_corruption.wld",
@@ -207,9 +207,9 @@ mod test_utils {
             }
         }
 
-        // If no world files found, check TERRARIA_WORLD_PATH environment variable
+        // If no world files found, check TEST_WORLDS_DIR environment variable
         if world_files.is_empty() {
-            if let Ok(world_path) = std::env::var("TERRARIA_WORLD_PATH") {
+            if let Ok(world_path) = std::env::var("TEST_WORLDS_DIR") {
                 for name in &test_names {
                     let full_path = format!("{}/{}", world_path, name);
                     if Path::new(&full_path).exists() {
@@ -228,18 +228,18 @@ fn test_world_parsing_against_lihzahrd() {
     use test_utils::*;
 
     let world_files = get_test_world_files();
-    
+
     if world_files.is_empty() {
         eprintln!("No test world files found. Skipping integration test.");
-        eprintln!("Place .wld files in the current directory or set TERRARIA_WORLD_PATH environment variable.");
+        eprintln!("Place .wld files in the current directory or set TEST_WORLDS_DIR environment variable.");
         return;
     }
 
     for world_file in world_files {
         println!("Testing world file: {}", world_file);
-        
+
         let reference_file = format!("{}.lihzahrd_reference.json", world_file.trim_end_matches(".wld"));
-        
+
         // Skip if reference file doesn't exist
         if !Path::new(&reference_file).exists() {
             eprintln!("Reference file {} not found. Run the Python integration test first.", reference_file);
@@ -277,11 +277,11 @@ fn test_world_parsing_against_lihzahrd() {
         // Validate sample tiles
         let sample_tiles = &reference_data["tiles"]["sample_tiles"];
         let mut validated_tiles = 0;
-        
+
         for tile_ref in sample_tiles.as_array().unwrap() {
             let x = tile_ref["position"]["x"].as_u64().unwrap() as usize;
             let y = tile_ref["position"]["y"].as_u64().unwrap() as usize;
-            
+
             if let Some(tile) = world.tiles.get_tile(x, y) {
                 if let Err(e) = validate_tile(tile, tile_ref) {
                     panic!("Tile validation failed for {} at ({}, {}): {}", world_file, x, y, e);
@@ -317,7 +317,7 @@ fn test_world_parsing_against_lihzahrd() {
             assert_eq!(*shimmered_npc, ref_shimmered_npc.as_i64().unwrap() as i32, "Shimmered NPC {} mismatch for {}", i, world_file);
         }
 
-        println!("Successfully validated {} NPCs, {} mobs, {} shimmered NPCs for {}", 
+        println!("Successfully validated {} NPCs, {} mobs, {} shimmered NPCs for {}",
                 world.npcs.len(), world.mobs.len(), world.shimmered_npcs.len(), world_file);
     }
 }
@@ -325,7 +325,7 @@ fn test_world_parsing_against_lihzahrd() {
 #[test]
 fn test_world_parsing_basic_functionality() {
     let world_files = test_utils::get_test_world_files();
-    
+
     if world_files.is_empty() {
         eprintln!("No test world files found. Skipping basic functionality test.");
         return;
@@ -333,7 +333,7 @@ fn test_world_parsing_basic_functionality() {
 
     for world_file in world_files {
         println!("Testing basic functionality for: {}", world_file);
-        
+
         let world = match World::from_file(&world_file) {
             Ok(w) => w,
             Err(e) => {
@@ -346,15 +346,15 @@ fn test_world_parsing_basic_functionality() {
         assert!(world.world_width > 0, "World width should be positive");
         assert!(world.world_height > 0, "World height should be positive");
         assert!(!world.world_name.is_empty(), "World name should not be empty");
-        
+
         // Check that spawn and dungeon points are within world bounds
-        assert!(world.spawn_point_x >= 0 && world.spawn_point_x < world.world_width, 
+        assert!(world.spawn_point_x >= 0 && world.spawn_point_x < world.world_width,
                 "Spawn point X should be within world bounds");
-        assert!(world.spawn_point_y >= 0 && world.spawn_point_y < world.world_height, 
+        assert!(world.spawn_point_y >= 0 && world.spawn_point_y < world.world_height,
                 "Spawn point Y should be within world bounds");
-        assert!(world.dungeon_point_x >= 0 && world.dungeon_point_x < world.world_width, 
+        assert!(world.dungeon_point_x >= 0 && world.dungeon_point_x < world.world_width,
                 "Dungeon point X should be within world bounds");
-        assert!(world.dungeon_point_y >= 0 && world.dungeon_point_y < world.world_height, 
+        assert!(world.dungeon_point_y >= 0 && world.dungeon_point_y < world.world_height,
                 "Dungeon point Y should be within world bounds");
 
         // Check underground levels are reasonable
@@ -363,7 +363,7 @@ fn test_world_parsing_basic_functionality() {
 
         // Check tile matrix
         assert!(!world.tile_frame_important.is_empty(), "Tile frame important array should not be empty");
-        
+
         // Try to access some tiles
         let mut accessible_tiles = 0;
         for x in 0..std::cmp::min(10, world.world_width as usize) {
@@ -373,7 +373,7 @@ fn test_world_parsing_basic_functionality() {
                 }
             }
         }
-        
+
         assert!(accessible_tiles > 0, "Should be able to access at least some tiles");
         println!("Successfully accessed {} tiles for {}", accessible_tiles, world_file);
     }
@@ -382,7 +382,7 @@ fn test_world_parsing_basic_functionality() {
 #[test]
 fn test_tile_frame_important_consistency() {
     let world_files = test_utils::get_test_world_files();
-    
+
     if world_files.is_empty() {
         eprintln!("No test world files found. Skipping tile frame important test.");
         return;
@@ -390,7 +390,7 @@ fn test_tile_frame_important_consistency() {
 
     for world_file in world_files {
         println!("Testing tile frame important consistency for: {}", world_file);
-        
+
         let world = match World::from_file(&world_file) {
             Ok(w) => w,
             Err(e) => {
@@ -404,7 +404,7 @@ fn test_tile_frame_important_consistency() {
 
         // Check that we can access tile_frame_important for common block types
         let common_block_ids = [0, 1, 2, 3, 4, 5]; // DIRT, STONE, GRASS, PLANTS, TORCHES, TREES
-        
+
         for &block_id in &common_block_ids {
             if block_id < world.tile_frame_important.len() {
                 let _important = world.tile_frame_important[block_id];
@@ -413,11 +413,11 @@ fn test_tile_frame_important_consistency() {
         }
 
         // Check that the array length is reasonable (should be at least a few hundred for modern Terraria)
-        assert!(world.tile_frame_important.len() >= 100, 
-                "Tile frame important array should have at least 100 entries, got {}", 
+        assert!(world.tile_frame_important.len() >= 100,
+                "Tile frame important array should have at least 100 entries, got {}",
                 world.tile_frame_important.len());
 
-        println!("Tile frame important array has {} entries for {}", 
+        println!("Tile frame important array has {} entries for {}",
                 world.tile_frame_important.len(), world_file);
     }
 }
@@ -435,7 +435,7 @@ fn test_world_file_validation() {
             assert!(result.is_err(), "Should fail to parse invalid file: {}", invalid_file);
         }
     }
-    
+
     // Test that non-world files are handled gracefully
     // Note: We don't test Cargo.toml as it might cause panics due to slice bounds
     // Instead, we test with a small invalid file
@@ -444,7 +444,7 @@ fn test_world_file_validation() {
         let result = World::from_file(test_invalid_file);
         assert!(result.is_err(), "Should fail to parse invalid world file: {}", test_invalid_file);
     }
-} 
+}
 
 #[test]
 fn test_chests_against_lihzahrd() {
@@ -555,7 +555,7 @@ fn test_entities_against_lihzahrd() {
             assert_eq!(*shimmered_npc, ref_shimmered_npc.as_i64().unwrap() as i32, "Shimmered NPC {} mismatch for {}", i, world_file);
         }
 
-        println!("Successfully validated {} NPCs, {} mobs, {} shimmered NPCs for {}", 
+        println!("Successfully validated {} NPCs, {} mobs, {} shimmered NPCs for {}",
                 world.npcs.len(), world.mobs.len(), world.shimmered_npcs.len(), world_file);
     }
-} 
+}

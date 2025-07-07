@@ -91,6 +91,7 @@
                 cargo
                 rustc
               ];
+              TEST_WORLDS_DIR = "${terraria-worlds}";
             } ''
             # Run the external integration test script
             if [ -f "small_corruption.wld" ]; then
@@ -122,7 +123,7 @@
             self.packages."${system}".lihzahrd
 
           ];
-          TERRARIA_WORLD_PATH = "${terraria-worlds}";
+          TEST_WORLDS_DIR = "${terraria-worlds}";
         });
     };
 }

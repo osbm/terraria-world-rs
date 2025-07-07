@@ -16,7 +16,7 @@ The integration testing workflow:
 - **Comprehensive Validation**: Validates world metadata, tile data, wiring, paint, frames, and more
 - **Robust Error Handling**: Graceful handling of missing files and parsing errors
 - **Detailed Reporting**: Clear error messages with specific tile coordinates
-- **Environment Integration**: Supports `TERRARIA_WORLD_PATH` environment variable
+- **Environment Integration**: Supports `TEST_WORLDS_DIR` environment variable
 - **Reproducible Results**: Deterministic sampling for consistent test results
 
 ## Files
@@ -52,13 +52,13 @@ The integration testing workflow:
    ```bash
    # Single world file
    python3 tests/integration_test.py small_corruption.wld
-   
+
    # All world files in current directory
    python3 tests/integration_test.py --all
-   
+
    # With custom output file
    python3 tests/integration_test.py small_corruption.wld -o my_reference.json
-   
+
    # Verbose output
    python3 tests/integration_test.py small_corruption.wld --verbose
    ```
@@ -66,7 +66,7 @@ The integration testing workflow:
 2. Run Rust integration tests:
    ```bash
    cargo test --test integration_tests
-   
+
    # With output capture
    cargo test --test integration_tests -- --nocapture
    ```
@@ -85,7 +85,7 @@ nix develop
 
 ```bash
 # Set environment variable to point to world files
-export TERRARIA_WORLD_PATH=/path/to/terraria/worlds
+export TEST_WORLDS_DIR=/path/to/terraria/worlds
 
 # Run tests (will automatically find world files)
 ./tests/run_integration_tests.sh
@@ -162,7 +162,7 @@ To add new test cases:
 ### Missing World Files
 If you get "No test world files found":
 - Place `.wld` files in the current directory
-- Set `TERRARIA_WORLD_PATH` environment variable
+- Set `TEST_WORLDS_DIR` environment variable
 - Download test worlds from [osbm/terraria-worlds](https://github.com/osbm/terraria-worlds)
 
 ### Python Import Errors
@@ -218,4 +218,4 @@ Successfully validated 18 tiles for small_corruption.wld
 Testing world file: large_crimson.wld
 Successfully validated 18 tiles for large_crimson.wld
 Integration tests passed!
-``` 
+```
