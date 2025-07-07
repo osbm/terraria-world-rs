@@ -1,6 +1,7 @@
 use std::fmt;
 use std::collections::HashMap;
 use once_cell::sync::Lazy;
+use serde::{Serialize, Deserialize};
 
 // Static lookup tables for efficient block/wall type resolution
 static BLOCK_TYPE_NAMES: Lazy<HashMap<u16, &'static str>> = Lazy::new(|| {
@@ -219,7 +220,7 @@ static WALL_TYPE_NAMES: Lazy<HashMap<u16, &'static str>> = Lazy::new(|| {
     map
 });
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum LiquidType {
     NoLiquid = 0,
     Water = 1,
@@ -253,7 +254,7 @@ impl fmt::Display for LiquidType {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct BlockType(u16);
 
 impl BlockType {
@@ -282,7 +283,7 @@ impl fmt::Display for BlockType {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct WallType(u16);
 
 impl WallType {
@@ -311,7 +312,7 @@ impl fmt::Display for WallType {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum RLEEncoding {
     NoCompression = 0,
     SingleByte = 1,
@@ -329,7 +330,7 @@ impl From<u8> for RLEEncoding {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FrameImportantData {
     pub x: u16,
     pub y: u16,
@@ -341,7 +342,7 @@ impl FrameImportantData {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Block {
     pub type_: BlockType,
     pub frame: Option<FrameImportantData>,
@@ -374,7 +375,7 @@ impl Block {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Wall {
     pub type_: WallType,
     pub paint: Option<u8>,
@@ -393,7 +394,7 @@ impl Wall {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Liquid {
     pub type_: LiquidType,
     pub volume: u8,
@@ -405,7 +406,7 @@ impl Liquid {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Wiring {
     pub red: bool,
     pub blue: bool,
@@ -424,7 +425,7 @@ impl Wiring {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tile {
     pub block: Option<Block>,
     pub wall: Option<Wall>,
@@ -443,7 +444,7 @@ impl Tile {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct TileMatrix {
     pub tiles: Vec<Vec<Tile>>,
     pub size: (usize, usize), // (width, height)
