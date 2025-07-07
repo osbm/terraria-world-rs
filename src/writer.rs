@@ -1,5 +1,6 @@
 use std::io::{self, Write, Seek, SeekFrom};
 
+#[derive(Clone)]
 pub struct ByteWriter {
     buffer: Vec<u8>,
     offset: usize,
