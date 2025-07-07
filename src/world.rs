@@ -55,7 +55,7 @@ pub struct NPC {
     pub type_: EntityType,
     pub name: String,
     pub position: Coordinates,
-    pub home: Option<Coordinates>,
+    pub home: Coordinates,
     pub variation_index: i32,
 }
 
@@ -64,7 +64,7 @@ impl NPC {
         type_: EntityType,
         name: String,
         position: Coordinates,
-        home: Option<Coordinates>,
+        home: Coordinates,
         variation_index: i32,
     ) -> Self {
         Self {
@@ -708,16 +708,12 @@ impl World {
             println!("NPC {}: position = {:?} at offset {}", npc_index, npc_position, r.offset());
             let is_homeless = r.bool();
             println!("NPC {}: is_homeless = {} at offset {}", npc_index, is_homeless, r.offset());
-            let npc_home = if is_homeless {
-                None
-            } else {
-                println!("NPC is homeless: {}", is_homeless);
-                let home = Coordinates {
+            let npc_home = Coordinates {
                     x: r.i32(),
                     y: r.i32(),
                 };
-                Some(home)
-            };
+
+
             println!("NPC {}: home = {:?} at offset {}", npc_index, npc_home, r.offset());
 
             let npc_flags = r.bits();
