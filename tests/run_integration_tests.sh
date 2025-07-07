@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Integration test runner for terraria-world-parser-rust
 # This script runs the Python integration test to generate reference data,

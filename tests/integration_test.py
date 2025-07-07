@@ -43,8 +43,8 @@ def parse_world_file(world_file: str) -> Dict[str, Any]:
             "is_upside_down": world.is_upside_down,
             "is_trap_world": world.is_trap_world,
             "is_zenith_world": world.is_zenith_world,
-            "spawn_point": {"x": world.spawn.x, "y": world.spawn.y},
-            "dungeon_point": {"x": world.dungeon.x, "y": world.dungeon.y},
+            "spawn_point": {"x": world.spawn_point.x, "y": world.spawn_point.y},
+            "dungeon_point": {"x": world.dungeon_point.x, "y": world.dungeon_point.y},
             "underground_level": world.underground_level,
             "cavern_level": world.cavern_level,
             "tile_frame_important": world.tile_frame_important,
@@ -61,8 +61,8 @@ def parse_world_file(world_file: str) -> Dict[str, Any]:
                 (world.size.x // 2, world.size.y // 4),  # Middle-top
                 (world.size.x // 4, world.size.y // 2),  # Middle-left
                 (world.size.x - 1, world.size.y - 1),  # Bottom-right
-                (world.spawn.x, world.spawn.y),  # Spawn point
-                (world.dungeon.x, world.dungeon.y),  # Dungeon point
+                (world.spawn_point.x, world.spawn_point.y),  # Spawn point
+                (world.dungeon_point.x, world.dungeon_point.y),  # Dungeon point
             ]
             
             for x, y in sample_positions:
@@ -103,13 +103,24 @@ def parse_world_file(world_file: str) -> Dict[str, Any]:
                         chest_data["contents"].append(None)
                 chests.append(chest_data)
         
+        # Extract signs
+        signs = []
+        if hasattr(world, 'signs') and world.signs:
+            for sign in world.signs:
+                sign_data = {
+                    "text": sign.text,
+                    "position": {"x": sign.position.x, "y": sign.position.y}
+                }
+                signs.append(sign_data)
+        
         return {
             "metadata": metadata,
             "tiles": {
                 "sample_tiles": sample_tiles,
                 "total_tiles": sum(len(col) for col in world.tiles.tiles) if hasattr(world.tiles, 'tiles') else 0
             },
-            "chests": chests
+            "chests": chests,
+            "signs": signs
         }
         
     except Exception as e:

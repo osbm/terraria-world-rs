@@ -24,6 +24,12 @@ pub struct Chest {
     pub contents: Vec<Option<ItemStack>>,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Sign {
+    pub text: String,
+    pub position: Coordinates,
+}
+
 #[derive(Debug)]
 pub struct World {
     pub version_integer: i32,
@@ -206,6 +212,7 @@ pub struct World {
     pub unknown_world_header_data: Vec<u8>, // TODO: find out what this is
     pub tiles: TileMatrix,
     pub chests: Vec<Chest>,
+    pub signs: Vec<Sign>,
 }
 
 impl World {
@@ -472,6 +479,21 @@ impl World {
         // Skip unknown chest data until signs pointer
         let _unknown_chests_data = r.read_until(pointers.signs as usize);
 
+        // --- SIGN PARSING ---
+        let signs_count = r.i16();
+        let mut signs = Vec::with_capacity(signs_count as usize);
+        for _ in 0..signs_count {
+            let sign_text = r.string(None);
+            let sign_x = r.i32();
+            let sign_y = r.i32();
+            signs.push(Sign {
+                text: sign_text,
+                position: Coordinates { x: sign_x, y: sign_y },
+            });
+        }
+        // Skip unknown signs data until npcs pointer
+        let _unknown_signs_data = r.read_until(pointers.npcs as usize);
+
 
         Ok(Self {
             version_integer,
@@ -654,6 +676,7 @@ impl World {
             unknown_world_header_data,
             tiles,
             chests,
+            signs,
         })
     }
 
