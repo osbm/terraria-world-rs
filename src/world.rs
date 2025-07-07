@@ -686,44 +686,44 @@ impl World {
 
         // Parse shimmered NPCs
         let shimmered_npcs_count = r.i32();
-        println!("shimmered_npcs_count: {} at offset {}", shimmered_npcs_count, r.offset());
+        // println!("shimmered_npcs_count: {} at offset {}", shimmered_npcs_count, r.offset());
         let mut shimmered_npcs = Vec::with_capacity(shimmered_npcs_count as usize);
         for i in 0..shimmered_npcs_count {
             let npc_id = r.i32();
-            println!("shimmered_npcs[{}]: {} at offset {}", i, npc_id, r.offset());
+            // println!("shimmered_npcs[{}]: {} at offset {}", i, npc_id, r.offset());
             shimmered_npcs.push(npc_id);
         }
 
         // Parse NPCs
         let mut npc_index = 0;
         while r.bool() {
-            println!("NPC {}: start at offset {}", npc_index, r.offset());
+            // println!("NPC {}: start at offset {}", npc_index, r.offset());
             let npc_type = EntityType::from(r.i32());
-            println!("NPC {}: type = {:?} at offset {}", npc_index, npc_type, r.offset());
+            // println!("NPC {}: type = {:?} at offset {}", npc_index, npc_type, r.offset());
             let npc_name = r.string(None);
-            println!("NPC {}: name = '{}' at offset {}", npc_index, npc_name, r.offset());
+            // println!("NPC {}: name = '{}' at offset {}", npc_index, npc_name, r.offset());
             let npc_position = Coordinates {
                 x: r.f32() as i32,
                 y: r.f32() as i32,
             };
-            println!("NPC {}: position = {:?} at offset {}", npc_index, npc_position, r.offset());
+            // println!("NPC {}: position = {:?} at offset {}", npc_index, npc_position, r.offset());
             let is_homeless = r.bool();
-            println!("NPC {}: is_homeless = {} at offset {}", npc_index, is_homeless, r.offset());
+            // println!("NPC {}: is_homeless = {} at offset {}", npc_index, is_homeless, r.offset());
             let npc_home = Coordinates {
                     x: r.i32(),
                     y: r.i32(),
                 };
 
 
-            println!("NPC {}: home = {:?} at offset {}", npc_index, npc_home, r.offset());
+            // println!("NPC {}: home = {:?} at offset {}", npc_index, npc_home, r.offset());
 
             let npc_flags = r.bits();
-            println!("NPC {}: flags = {:?} at offset {}", npc_index, npc_flags, r.offset());
+            // println!("NPC {}: flags = {:?} at offset {}", npc_index, npc_flags, r.offset());
             let npc_variation_index = r.i32();
             if !npc_flags[0] {
                 let npc_variation_index = 0i32;
             }
-            println!("NPC {}: variation_index = {} at offset {}", npc_index, npc_variation_index, r.offset());
+            // println!("NPC {}: variation_index = {} at offset {}", npc_index, npc_variation_index, r.offset());
 
             let npc = NPC::new(
                 npc_type,
@@ -733,31 +733,31 @@ impl World {
                 npc_variation_index,
             );
             npcs.push(npc);
-            println!("NPC {}: end at offset {}", npc_index, r.offset());
+            // println!("NPC {}: end at offset {}", npc_index, r.offset());
             npc_index += 1;
         }
 
         // Parse mobs
         let mut mob_index = 0;
         while r.bool() {
-            println!("Mob {}: start at offset {}", mob_index, r.offset());
+            // println!("Mob {}: start at offset {}", mob_index, r.offset());
             let mob_type = EntityType::from(r.i32());
-            println!("Mob {}: type = {:?} at offset {}", mob_index, mob_type, r.offset());
+            // println!("Mob {}: type = {:?} at offset {}", mob_index, mob_type, r.offset());
             let mob_position = Coordinates {
                 x: r.f32() as i32,
                 y: r.f32() as i32,
             };
-            println!("Mob {}: position = {:?} at offset {}", mob_index, mob_position, r.offset());
+            // println!("Mob {}: position = {:?} at offset {}", mob_index, mob_position, r.offset());
             let mob = Mob::new(mob_type, mob_position);
             mobs.push(mob);
-            println!("Mob {}: end at offset {}", mob_index, r.offset());
+            // println!("Mob {}: end at offset {}", mob_index, r.offset());
             mob_index += 1;
         }
 
         // Read unknown NPCs data until tile entities pointer
-        println!("File offset before unknown NPCs data: {}", r.offset());
+        // println!("File offset before unknown NPCs data: {}", r.offset());
         let unknown_npcs_data = r.read_until(pointers.tile_entities as usize);
-        println!("File offset after unknown NPCs data: {}", r.offset());
+        // println!("File offset after unknown NPCs data: {}", r.offset());
 
         // Parse tile entities
         let tile_entities_count = r.i32();
@@ -896,7 +896,7 @@ impl World {
                     Some(TileEntityExtra::Pylon)
                 }
                 _ => {
-                    println!("Unknown tile entity type: {}", te_type);
+                    // println!("Unknown tile entity type: {}", te_type);
                     None
                 }
             };
@@ -906,9 +906,9 @@ impl World {
         }
 
         // Read unknown tile entities data until pressure plates pointer
-        println!("File offset before unknown tile entities data: {}", r.offset());
+        // println!("File offset before unknown tile entities data: {}", r.offset());
         let unknown_tile_entities_data = r.read_until(pointers.pressure_plates as usize);
-        println!("File offset after unknown tile entities data: {}", r.offset());
+        // println!("File offset after unknown tile entities data: {}", r.offset());
 
         // Parse weighed pressure plates
         let weighed_pressure_plates_count = r.i32();
@@ -922,9 +922,9 @@ impl World {
         }
 
         // Read unknown pressure plates data until town manager pointer
-        println!("File offset before unknown pressure plates data: {}", r.offset());
+        // println!("File offset before unknown pressure plates data: {}", r.offset());
         let unknown_pressure_plates_data = r.read_until(pointers.town_manager as usize);
-        println!("File offset after unknown pressure plates data: {}", r.offset());
+        // println!("File offset after unknown pressure plates data: {}", r.offset());
 
         // Parse town manager (rooms)
         let rooms_count = r.i32();
@@ -939,9 +939,9 @@ impl World {
         }
 
         // Read unknown town manager data until bestiary pointer
-        println!("File offset before unknown town manager data: {}", r.offset());
+        // println!("File offset before unknown town manager data: {}", r.offset());
         let unknown_town_manager_data = r.read_until(pointers.bestiary as usize);
-        println!("File offset after unknown town manager data: {}", r.offset());
+        // println!("File offset after unknown town manager data: {}", r.offset());
 
         // Parse bestiary
         let bestiary_kills_count = r.i32();
@@ -967,9 +967,9 @@ impl World {
         let bestiary = Bestiary::new(bestiary_kills, bestiary_sightings, bestiary_chats);
 
         // Read unknown bestiary data until journey powers pointer
-        println!("File offset before unknown bestiary data: {}", r.offset());
+        // println!("File offset before unknown bestiary data: {}", r.offset());
         let unknown_bestiary_data = r.read_until(pointers.journey_powers as usize);
-        println!("File offset after unknown bestiary data: {}", r.offset());
+        // println!("File offset after unknown bestiary data: {}", r.offset());
 
         // Parse journey powers
         let mut journey_powers = JourneyPowers::new();
@@ -983,15 +983,15 @@ impl World {
                 12 => journey_powers.difficulty = r.f32(),
                 13 => journey_powers.freeze_biome_spread = r.bool(),
                 _ => {
-                    println!("Unknown journey power ID: {}", power_id);
+                    // println!("Unknown journey power ID: {}", power_id);
                 }
             }
         }
 
         // Read unknown journey powers data until footer
-        println!("File offset before unknown journey powers data: {}", r.offset());
+        // println!("File offset before unknown journey powers data: {}", r.offset());
         let unknown_journey_powers_data = r.read_until(pointers.footer as usize);
-        println!("File offset after unknown journey powers data: {}", r.offset());
+        // println!("File offset after unknown journey powers data: {}", r.offset());
 
         // Parse footer
         if !r.bool() {
