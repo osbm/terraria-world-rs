@@ -39,7 +39,24 @@
     "root": {
       "inputs": {
         "naersk": "naersk",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "terraria-worlds": "terraria-worlds"
+      }
+    },
+    "terraria-worlds": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1751852126,
+        "narHash": "sha256-/km0j96XwF0Aj7vYMcYgjL+zXeNG3b+UKwCqxhg7GKE=",
+        "owner": "osbm",
+        "repo": "terraria-worlds",
+        "rev": "00cb8d7cfe845c9382e1150acf0c258d110304e4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "osbm",
+        "repo": "terraria-worlds",
+        "type": "github"
       }
     }
   },

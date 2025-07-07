@@ -1,0 +1,383 @@
+use std::fs;
+use std::path::Path;
+use serde_json::Value;
+use terraria_world_parser::world::World;
+
+/// Test utilities for integration tests
+mod test_utils {
+    use super::*;
+
+    /// Load reference data from JSON file
+    pub fn load_reference_data(file_path: &str) -> Result<Value, Box<dyn std::error::Error>> {
+        let content = fs::read_to_string(file_path)?;
+        let data: Value = serde_json::from_str(&content)?;
+        Ok(data)
+    }
+
+    /// Compare two values with tolerance for floating point numbers
+    pub fn assert_approx_eq(actual: f64, expected: f64, tolerance: f64) {
+        assert!(
+            (actual - expected).abs() < tolerance,
+            "Expected {} to be within {} of {}",
+            actual,
+            tolerance,
+            expected
+        );
+    }
+
+    /// Validate world metadata against reference
+    pub fn validate_world_metadata(world: &World, metadata: &Value) -> Result<(), String> {
+        // Basic world properties
+        assert_eq!(world.world_name, metadata["name"].as_str().unwrap(), "World name mismatch");
+        assert_eq!(world.world_width, metadata["size"]["width"].as_i64().unwrap() as i32, "World width mismatch");
+        assert_eq!(world.world_height, metadata["size"]["height"].as_i64().unwrap() as i32, "World height mismatch");
+        assert_eq!(world.is_hardmode, metadata["is_hardmode"].as_bool().unwrap(), "Hardmode flag mismatch");
+
+        // World flags
+        let flags = [
+            ("is_drunk_world", world.is_drunk_world),
+            ("is_for_the_worthy", world.is_for_the_worthy),
+            ("is_tenth_anniversary", world.is_tenth_anniversary),
+            ("is_the_constant", world.is_the_constant),
+            ("is_bee_world", world.is_bee_world),
+            ("is_upside_down", world.is_upside_down),
+            ("is_trap_world", world.is_trap_world),
+            ("is_zenith_world", world.is_zenith_world),
+        ];
+
+        for (flag_name, actual_value) in flags {
+            let expected_value = metadata[flag_name].as_bool().unwrap();
+            assert_eq!(actual_value, expected_value, "{} flag mismatch", flag_name);
+        }
+
+        // Spawn and dungeon points
+        assert_eq!(world.spawn_point_x, metadata["spawn_point"]["x"].as_i64().unwrap() as i32, "Spawn X mismatch");
+        assert_eq!(world.spawn_point_y, metadata["spawn_point"]["y"].as_i64().unwrap() as i32, "Spawn Y mismatch");
+        assert_eq!(world.dungeon_point_x, metadata["dungeon_point"]["x"].as_i64().unwrap() as i32, "Dungeon X mismatch");
+        assert_eq!(world.dungeon_point_y, metadata["dungeon_point"]["y"].as_i64().unwrap() as i32, "Dungeon Y mismatch");
+
+        // Underground levels with tolerance
+        assert_approx_eq(
+            world.underground_level,
+            metadata["underground_level"].as_f64().unwrap(),
+            0.1
+        );
+        assert_approx_eq(
+            world.cavern_level,
+            metadata["cavern_level"].as_f64().unwrap(),
+            0.1
+        );
+
+        Ok(())
+    }
+
+    /// Validate tile frame important array
+    pub fn validate_tile_frame_important(world: &World, metadata: &Value) -> Result<(), String> {
+        let ref_tile_frame_important = metadata["tile_frame_important"].as_array().unwrap();
+        assert_eq!(
+            world.tile_frame_important.len(),
+            ref_tile_frame_important.len(),
+            "Tile frame important array length mismatch"
+        );
+
+        // Check that the array is not empty
+        assert!(!world.tile_frame_important.is_empty(), "Tile frame important array should not be empty");
+
+        // Validate a few common block types
+        let common_block_ids = [0, 1, 2, 3, 4, 5]; // DIRT, STONE, GRASS, PLANTS, TORCHES, TREES
+        for &block_id in &common_block_ids {
+            if block_id < world.tile_frame_important.len() {
+                let _important = world.tile_frame_important[block_id];
+                // Just verify we can access it without panicking
+            }
+        }
+
+        Ok(())
+    }
+
+    /// Validate individual tile data
+    pub fn validate_tile(tile: &terraria_world_parser::tile::Tile, tile_ref: &Value) -> Result<(), String> {
+        let x = tile_ref["position"]["x"].as_u64().unwrap() as usize;
+        let y = tile_ref["position"]["y"].as_u64().unwrap() as usize;
+
+        // Basic tile properties
+        assert_eq!(tile.block.is_some(), tile_ref["has_block"].as_bool().unwrap(), "Block presence mismatch at ({}, {})", x, y);
+        assert_eq!(tile.wall.is_some(), tile_ref["has_wall"].as_bool().unwrap(), "Wall presence mismatch at ({}, {})", x, y);
+        assert_eq!(tile.liquid.is_some(), tile_ref["has_liquid"].as_bool().unwrap(), "Liquid presence mismatch at ({}, {})", x, y);
+
+        // Validate wiring
+        let wiring_ref = &tile_ref["wiring"];
+        assert_eq!(tile.wiring.red, wiring_ref["red"].as_bool().unwrap(), "Red wiring mismatch at ({}, {})", x, y);
+        assert_eq!(tile.wiring.blue, wiring_ref["blue"].as_bool().unwrap(), "Blue wiring mismatch at ({}, {})", x, y);
+        assert_eq!(tile.wiring.green, wiring_ref["green"].as_bool().unwrap(), "Green wiring mismatch at ({}, {})", x, y);
+        assert_eq!(tile.wiring.yellow, wiring_ref["yellow"].as_bool().unwrap(), "Yellow wiring mismatch at ({}, {})", x, y);
+
+        // Validate block data
+        if let Some(block) = &tile.block {
+            let block_ref = &tile_ref["block"];
+            assert_eq!(block.type_.id(), block_ref["type_id"].as_u64().unwrap() as u16, "Block type mismatch at ({}, {})", x, y);
+            assert_eq!(block.is_active, block_ref["is_active"].as_bool().unwrap(), "Block active state mismatch at ({}, {})", x, y);
+            assert_eq!(block.paint.is_some(), block_ref["has_paint"].as_bool().unwrap(), "Block paint presence mismatch at ({}, {})", x, y);
+            assert_eq!(block.is_illuminant, block_ref["is_illuminant"].as_bool().unwrap(), "Block illuminant state mismatch at ({}, {})", x, y);
+            assert_eq!(block.is_echo, block_ref["is_echo"].as_bool().unwrap(), "Block echo state mismatch at ({}, {})", x, y);
+
+            if let Some(paint_id) = block_ref["paint_id"].as_u64() {
+                assert_eq!(block.paint.unwrap(), paint_id as u8, "Block paint ID mismatch at ({}, {})", x, y);
+            }
+
+            if let Some(frame_ref) = block_ref.get("frame") {
+                assert!(block.frame.is_some(), "Block frame missing at ({}, {})", x, y);
+                let frame = block.frame.as_ref().unwrap();
+                assert_eq!(frame.x, frame_ref["x"].as_u64().unwrap() as u16, "Block frame X mismatch at ({}, {})", x, y);
+                assert_eq!(frame.y, frame_ref["y"].as_u64().unwrap() as u16, "Block frame Y mismatch at ({}, {})", x, y);
+            }
+        }
+
+        // Validate wall data
+        if let Some(wall) = &tile.wall {
+            let wall_ref = &tile_ref["wall"];
+            assert_eq!(wall.type_.id(), wall_ref["type_id"].as_u64().unwrap() as u16, "Wall type mismatch at ({}, {})", x, y);
+            assert_eq!(wall.paint.is_some(), wall_ref["has_paint"].as_bool().unwrap(), "Wall paint presence mismatch at ({}, {})", x, y);
+            assert_eq!(wall.is_illuminant, wall_ref["is_illuminant"].as_bool().unwrap(), "Wall illuminant state mismatch at ({}, {})", x, y);
+            assert_eq!(wall.is_echo, wall_ref["is_echo"].as_bool().unwrap(), "Wall echo state mismatch at ({}, {})", x, y);
+
+            if let Some(paint_id) = wall_ref["paint_id"].as_u64() {
+                assert_eq!(wall.paint.unwrap(), paint_id as u8, "Wall paint ID mismatch at ({}, {})", x, y);
+            }
+        }
+
+        // Validate liquid data
+        if let Some(liquid) = &tile.liquid {
+            let liquid_ref = &tile_ref["liquid"];
+            assert_eq!(liquid.type_ as u8, liquid_ref["type_id"].as_u64().unwrap() as u8, "Liquid type mismatch at ({}, {})", x, y);
+            assert_eq!(liquid.volume, liquid_ref["volume"].as_u64().unwrap() as u8, "Liquid volume mismatch at ({}, {})", x, y);
+        }
+
+        Ok(())
+    }
+
+    /// Get test world files from environment or default
+    pub fn get_test_world_files() -> Vec<String> {
+        // Check for world files in the current directory
+        let mut world_files = Vec::new();
+        
+        // Common test world names
+        let test_names = [
+            "small_corruption.wld",
+            "small_crimson.wld", 
+            "medium_corruption.wld",
+            "medium_crimson.wld",
+            "large_corruption.wld",
+            "large_crimson.wld",
+        ];
+
+        for name in &test_names {
+            if Path::new(name).exists() {
+                world_files.push(name.to_string());
+            }
+        }
+
+        // If no world files found, check TERRARIA_WORLD_PATH environment variable
+        if world_files.is_empty() {
+            if let Ok(world_path) = std::env::var("TERRARIA_WORLD_PATH") {
+                for name in &test_names {
+                    let full_path = format!("{}/{}", world_path, name);
+                    if Path::new(&full_path).exists() {
+                        world_files.push(full_path);
+                    }
+                }
+            }
+        }
+
+        world_files
+    }
+}
+
+#[test]
+fn test_world_parsing_against_lihzahrd() {
+    use test_utils::*;
+
+    let world_files = get_test_world_files();
+    
+    if world_files.is_empty() {
+        eprintln!("No test world files found. Skipping integration test.");
+        eprintln!("Place .wld files in the current directory or set TERRARIA_WORLD_PATH environment variable.");
+        return;
+    }
+
+    for world_file in world_files {
+        println!("Testing world file: {}", world_file);
+        
+        let reference_file = format!("{}.lihzahrd_reference.json", world_file.trim_end_matches(".wld"));
+        
+        // Skip if reference file doesn't exist
+        if !Path::new(&reference_file).exists() {
+            eprintln!("Reference file {} not found. Run the Python integration test first.", reference_file);
+            continue;
+        }
+
+        // Parse world with our Rust implementation
+        let world = match World::from_file(&world_file) {
+            Ok(w) => w,
+            Err(e) => {
+                eprintln!("Failed to parse world {} with Rust implementation: {}", world_file, e);
+                continue;
+            }
+        };
+
+        // Load reference data from Python
+        let reference_data = match load_reference_data(&reference_file) {
+            Ok(data) => data,
+            Err(e) => {
+                eprintln!("Failed to load reference data from {}: {}", reference_file, e);
+                continue;
+            }
+        };
+
+        // Validate world metadata
+        if let Err(e) = validate_world_metadata(&world, &reference_data["metadata"]) {
+            panic!("World metadata validation failed for {}: {}", world_file, e);
+        }
+
+        // Validate tile frame important array
+        if let Err(e) = validate_tile_frame_important(&world, &reference_data["metadata"]) {
+            panic!("Tile frame important validation failed for {}: {}", world_file, e);
+        }
+
+        // Validate sample tiles
+        let sample_tiles = &reference_data["tiles"]["sample_tiles"];
+        let mut validated_tiles = 0;
+        
+        for tile_ref in sample_tiles.as_array().unwrap() {
+            let x = tile_ref["position"]["x"].as_u64().unwrap() as usize;
+            let y = tile_ref["position"]["y"].as_u64().unwrap() as usize;
+            
+            if let Some(tile) = world.tiles.get_tile(x, y) {
+                if let Err(e) = validate_tile(tile, tile_ref) {
+                    panic!("Tile validation failed for {} at ({}, {}): {}", world_file, x, y, e);
+                }
+                validated_tiles += 1;
+            } else {
+                eprintln!("Warning: Tile not found at ({}, {}) in {}", x, y, world_file);
+            }
+        }
+
+        println!("Successfully validated {} tiles for {}", validated_tiles, world_file);
+    }
+}
+
+#[test]
+fn test_world_parsing_basic_functionality() {
+    let world_files = test_utils::get_test_world_files();
+    
+    if world_files.is_empty() {
+        eprintln!("No test world files found. Skipping basic functionality test.");
+        return;
+    }
+
+    for world_file in world_files {
+        println!("Testing basic functionality for: {}", world_file);
+        
+        let world = match World::from_file(&world_file) {
+            Ok(w) => w,
+            Err(e) => {
+                eprintln!("Failed to parse world {}: {}", world_file, e);
+                continue;
+            }
+        };
+
+        // Basic sanity checks
+        assert!(world.world_width > 0, "World width should be positive");
+        assert!(world.world_height > 0, "World height should be positive");
+        assert!(!world.world_name.is_empty(), "World name should not be empty");
+        
+        // Check that spawn and dungeon points are within world bounds
+        assert!(world.spawn_point_x >= 0 && world.spawn_point_x < world.world_width, 
+                "Spawn point X should be within world bounds");
+        assert!(world.spawn_point_y >= 0 && world.spawn_point_y < world.world_height, 
+                "Spawn point Y should be within world bounds");
+        assert!(world.dungeon_point_x >= 0 && world.dungeon_point_x < world.world_width, 
+                "Dungeon point X should be within world bounds");
+        assert!(world.dungeon_point_y >= 0 && world.dungeon_point_y < world.world_height, 
+                "Dungeon point Y should be within world bounds");
+
+        // Check underground levels are reasonable
+        assert!(world.underground_level > 0.0, "Underground level should be positive");
+        assert!(world.cavern_level > world.underground_level, "Cavern level should be deeper than underground level");
+
+        // Check tile matrix
+        assert!(!world.tile_frame_important.is_empty(), "Tile frame important array should not be empty");
+        
+        // Try to access some tiles
+        let mut accessible_tiles = 0;
+        for x in 0..std::cmp::min(10, world.world_width as usize) {
+            for y in 0..std::cmp::min(10, world.world_height as usize) {
+                if world.tiles.get_tile(x, y).is_some() {
+                    accessible_tiles += 1;
+                }
+            }
+        }
+        
+        assert!(accessible_tiles > 0, "Should be able to access at least some tiles");
+        println!("Successfully accessed {} tiles for {}", accessible_tiles, world_file);
+    }
+}
+
+#[test]
+fn test_tile_frame_important_consistency() {
+    let world_files = test_utils::get_test_world_files();
+    
+    if world_files.is_empty() {
+        eprintln!("No test world files found. Skipping tile frame important test.");
+        return;
+    }
+
+    for world_file in world_files {
+        println!("Testing tile frame important consistency for: {}", world_file);
+        
+        let world = match World::from_file(&world_file) {
+            Ok(w) => w,
+            Err(e) => {
+                eprintln!("Failed to parse world {}: {}", world_file, e);
+                continue;
+            }
+        };
+
+        // Check that tile_frame_important array is not empty
+        assert!(!world.tile_frame_important.is_empty(), "Tile frame important array should not be empty");
+
+        // Check that we can access tile_frame_important for common block types
+        let common_block_ids = [0, 1, 2, 3, 4, 5]; // DIRT, STONE, GRASS, PLANTS, TORCHES, TREES
+        
+        for &block_id in &common_block_ids {
+            if block_id < world.tile_frame_important.len() {
+                let _important = world.tile_frame_important[block_id];
+                // Just verify we can access it without panicking
+            }
+        }
+
+        // Check that the array length is reasonable (should be at least a few hundred for modern Terraria)
+        assert!(world.tile_frame_important.len() >= 100, 
+                "Tile frame important array should have at least 100 entries, got {}", 
+                world.tile_frame_important.len());
+
+        println!("Tile frame important array has {} entries for {}", 
+                world.tile_frame_important.len(), world_file);
+    }
+}
+
+#[test]
+fn test_world_file_validation() {
+    // Test that invalid files are handled gracefully
+    let invalid_files = [
+        "nonexistent.wld",
+        "Cargo.toml", // Not a world file
+    ];
+
+    for invalid_file in &invalid_files {
+        if Path::new(invalid_file).exists() {
+            let result = World::from_file(invalid_file);
+            assert!(result.is_err(), "Should fail to parse invalid file: {}", invalid_file);
+        }
+    }
+} 

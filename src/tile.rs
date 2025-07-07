@@ -219,7 +219,7 @@ static WALL_TYPE_NAMES: Lazy<HashMap<u16, &'static str>> = Lazy::new(|| {
     map
 });
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum LiquidType {
     NoLiquid = 0,
     Water = 1,
