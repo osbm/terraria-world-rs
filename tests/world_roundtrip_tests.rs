@@ -29,6 +29,7 @@ fn test_world_roundtrip() {
 
     println!("Found {} .wld files for roundtrip testing", wld_files.len());
 
+    let mut failures = Vec::new();
     for wld_file in wld_files {
         let file_name = wld_file.file_name().unwrap().to_str().unwrap();
         println!("Testing roundtrip for: {}", file_name);
@@ -42,34 +43,37 @@ fn test_world_roundtrip() {
         world.save_as_wld(&output_wld_path)
             .expect(&format!("Failed to save WLD for: {}", file_name));
 
-        // Compare hashes using bash
-        let original_hash = Command::new("sha256sum")
-            .arg(wld_file.to_str().unwrap())
-            .output()
-            .expect("Failed to compute original file hash");
-
-        let output_hash = Command::new("sha256sum")
-            .arg(&output_wld_path)
-            .output()
-            .expect("Failed to compute output file hash");
-
-        let original_hash_lossy = String::from_utf8_lossy(&original_hash.stdout);
-        let original_hash_str = original_hash_lossy.split_whitespace().next().unwrap();
-        let output_hash_lossy = String::from_utf8_lossy(&output_hash.stdout);
-        let output_hash_str = output_hash_lossy.split_whitespace().next().unwrap();
-
-        assert_eq!(
-            original_hash_str,
-            output_hash_str,
-            "Hash mismatch for {} - Original: {}, Output: {}",
-            file_name,
-            original_hash_str,
-            output_hash_str
-        );
-
-        println!("✓ Roundtrip test passed for: {} (hash: {})", file_name, original_hash_str);
+        // Read both files as bytes
+        let orig_bytes = fs::read(&wld_file).expect("Failed to read original file bytes");
+        let out_bytes = fs::read(&output_wld_path).expect("Failed to read output file bytes");
+        let min_len = orig_bytes.len().min(out_bytes.len());
+        let mut first_diff = None;
+        for i in 0..min_len {
+            if orig_bytes[i] != out_bytes[i] {
+                first_diff = Some(i);
+                break;
+            }
+        }
+        let result = if let Some(idx) = first_diff {
+            let percent = (idx as f64) / (orig_bytes.len().max(out_bytes.len()) as f64) * 100.0;
+            println!("✗ {}: first difference at byte {} / {} ({:.2}%)", file_name, idx, orig_bytes.len().max(out_bytes.len()), percent);
+            failures.push((file_name.to_string(), idx, orig_bytes.len().max(out_bytes.len()), percent));
+        } else if orig_bytes.len() != out_bytes.len() {
+            let min_len = orig_bytes.len().min(out_bytes.len());
+            println!("✗ {}: files are identical for first {} bytes, but lengths differ ({} vs {})", file_name, min_len, orig_bytes.len(), out_bytes.len());
+            failures.push((file_name.to_string(), min_len, orig_bytes.len().max(out_bytes.len()), (min_len as f64) / (orig_bytes.len().max(out_bytes.len()) as f64) * 100.0));
+        } else {
+            println!("✓ {}: OK (100%)", file_name);
+        };
 
         // Clean up temporary files
         fs::remove_file(output_wld_path).ok();
+    }
+    if !failures.is_empty() {
+        println!("\nSummary of roundtrip failures:");
+        for (file, idx, len, percent) in &failures {
+            println!("  {}: first difference at byte {} / {} ({:.2}%)", file, idx, len, percent);
+        }
+        panic!("{} roundtrip test(s) failed", failures.len());
     }
 }
