@@ -115,6 +115,31 @@ impl TileEntity {
     }
 }
 
+// Weighed Pressure Plate
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WeighedPressurePlate {
+    pub position: Coordinates,
+}
+
+impl WeighedPressurePlate {
+    pub fn new(position: Coordinates) -> Self {
+        Self { position }
+    }
+}
+
+// Room for Town Manager
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Room {
+    pub npc: EntityType,
+    pub position: Coordinates,
+}
+
+impl Room {
+    pub fn new(npc: EntityType, position: Coordinates) -> Self {
+        Self { npc, position }
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct World {
     pub version_integer: i32,
@@ -306,6 +331,10 @@ pub struct World {
     pub unknown_npcs_data: Vec<u8>, // TODO: find out what this is
     pub tile_entities: Vec<TileEntity>,
     pub unknown_tile_entities_data: Vec<u8>, // TODO: find out what this is
+    pub weighed_pressure_plates: Vec<WeighedPressurePlate>,
+    pub unknown_pressure_plates_data: Vec<u8>, // TODO: find out what this is
+    pub rooms: Vec<Room>,
+    pub unknown_town_manager_data: Vec<u8>, // TODO: find out what this is
 }
 
 impl World {
@@ -793,6 +822,35 @@ impl World {
         // Read unknown tile entities data until pressure plates pointer
         let unknown_tile_entities_data = r.read_until(pointers.pressure_plates as usize);
 
+        // Parse weighed pressure plates
+        let weighed_pressure_plates_count = r.i32();
+        let mut weighed_pressure_plates = Vec::with_capacity(weighed_pressure_plates_count as usize);
+        for _ in 0..weighed_pressure_plates_count {
+            let position = Coordinates {
+                x: r.i32(),
+                y: r.i32(),
+            };
+            weighed_pressure_plates.push(WeighedPressurePlate::new(position));
+        }
+
+        // Read unknown pressure plates data until town manager pointer
+        let unknown_pressure_plates_data = r.read_until(pointers.town_manager as usize);
+
+        // Parse town manager (rooms)
+        let rooms_count = r.i32();
+        let mut rooms = Vec::with_capacity(rooms_count as usize);
+        for _ in 0..rooms_count {
+            let npc = EntityType::from(r.i32());
+            let position = Coordinates {
+                x: r.i32(),
+                y: r.i32(),
+            };
+            rooms.push(Room::new(npc, position));
+        }
+
+        // Read unknown town manager data until bestiary pointer
+        let unknown_town_manager_data = r.read_until(pointers.bestiary as usize);
+
         Ok(Self {
             version_integer,
             magic,
@@ -983,6 +1041,10 @@ impl World {
             unknown_npcs_data,
             tile_entities,
             unknown_tile_entities_data,
+            weighed_pressure_plates,
+            unknown_pressure_plates_data,
+            rooms,
+            unknown_town_manager_data,
         })
     }
 

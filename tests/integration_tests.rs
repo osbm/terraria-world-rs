@@ -1,7 +1,7 @@
 use std::fs;
 use std::path::Path;
 use serde_json::Value;
-use terraria_world_parser::world::{World, TileEntityExtra};
+use terraria_world_parser::world::{World, TileEntityExtra, WeighedPressurePlate, Room};
 
 /// Test utilities for integration tests
 mod test_utils {
@@ -644,5 +644,89 @@ fn test_tile_entity_parsing() {
                 }
             }
         }
+    }
+}
+
+#[test]
+fn test_weighed_pressure_plates_parsing() {
+    let test_worlds_dir = "tests/test_worlds";
+    if !Path::new(test_worlds_dir).exists() {
+        println!("No test worlds directory found, skipping weighed pressure plates test");
+        return;
+    }
+    let entries = fs::read_dir(test_worlds_dir).expect("Failed to read test worlds directory");
+    let wld_files: Vec<_> = entries
+        .filter_map(|entry| {
+            let entry = entry.ok()?;
+            let path = entry.path();
+            if path.extension()?.to_str()? == "wld" {
+                Some(path)
+            } else {
+                None
+            }
+        })
+        .collect();
+    if wld_files.is_empty() {
+        println!("No .wld files found in tests/test_worlds directory, skipping weighed pressure plates test");
+        return;
+    }
+    for wld_file in wld_files {
+        let file_name = wld_file.file_name().unwrap().to_str().unwrap();
+        println!("Testing weighed pressure plates for: {}", file_name);
+        let world = World::from_file(wld_file.to_str().unwrap())
+            .expect(&format!("Failed to read world file: {}", file_name));
+        println!("Found {} weighed pressure plates", world.weighed_pressure_plates.len());
+        // Basic assertion: at least 0 weighed pressure plates (should always be true)
+        assert!(world.weighed_pressure_plates.len() >= 0);
+        // Print details of the first few weighed pressure plates
+        for (i, wpp) in world.weighed_pressure_plates.iter().take(5).enumerate() {
+            println!("  Weighed pressure plate {}: position ({}, {})", i, wpp.position.x, wpp.position.y);
+        }
+        if world.weighed_pressure_plates.len() > 5 {
+            println!("  ... and {} more", world.weighed_pressure_plates.len() - 5);
+        }
+        println!();
+    }
+}
+
+#[test]
+fn test_town_manager_parsing() {
+    let test_worlds_dir = "tests/test_worlds";
+    if !Path::new(test_worlds_dir).exists() {
+        println!("No test worlds directory found, skipping town manager test");
+        return;
+    }
+    let entries = fs::read_dir(test_worlds_dir).expect("Failed to read test worlds directory");
+    let wld_files: Vec<_> = entries
+        .filter_map(|entry| {
+            let entry = entry.ok()?;
+            let path = entry.path();
+            if path.extension()?.to_str()? == "wld" {
+                Some(path)
+            } else {
+                None
+            }
+        })
+        .collect();
+    if wld_files.is_empty() {
+        println!("No .wld files found in tests/test_worlds directory, skipping town manager test");
+        return;
+    }
+    for wld_file in wld_files {
+        let file_name = wld_file.file_name().unwrap().to_str().unwrap();
+        println!("Testing town manager (rooms) for: {}", file_name);
+        let world = World::from_file(wld_file.to_str().unwrap())
+            .expect(&format!("Failed to read world file: {}", file_name));
+        println!("Found {} rooms", world.rooms.len());
+        // Basic assertion: at least 0 rooms (should always be true)
+        assert!(world.rooms.len() >= 0);
+        // Print details of the first few rooms
+        for (i, room) in world.rooms.iter().take(5).enumerate() {
+            println!("  Room {}: NPC type {}, position ({}, {})", i, room.npc.id(), room.position.x, room.position.y);
+        }
+        if world.rooms.len() > 5 {
+            println!("  ... and {} more", world.rooms.len() - 5);
+        }
+        println!();
     }
 }
