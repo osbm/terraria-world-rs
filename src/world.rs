@@ -89,6 +89,32 @@ impl Mob {
     }
 }
 
+// Tile Entity types
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum TileEntityExtra {
+    TargetDummy { npc: i16 },
+    ItemFrame { item: ItemStack },
+    LogicSensor { logic_check: u8, enabled: bool },
+    Mannequin { items: Vec<Option<ItemStack>>, dyes: Vec<Option<ItemStack>> },
+    WeaponRack { item: ItemStack },
+    HatRack { items: Vec<Option<ItemStack>>, dyes: Vec<Option<ItemStack>> },
+    Plate { item: ItemStack },
+    Pylon,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TileEntity {
+    pub id: i32,
+    pub position: Coordinates,
+    pub extra: Option<TileEntityExtra>,
+}
+
+impl TileEntity {
+    pub fn new(id: i32, position: Coordinates, extra: Option<TileEntityExtra>) -> Self {
+        Self { id, position, extra }
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct World {
     pub version_integer: i32,
@@ -278,6 +304,8 @@ pub struct World {
     pub mobs: Vec<Mob>,
     pub shimmered_npcs: Vec<i32>,
     pub unknown_npcs_data: Vec<u8>, // TODO: find out what this is
+    pub tile_entities: Vec<TileEntity>,
+    pub unknown_tile_entities_data: Vec<u8>, // TODO: find out what this is
 }
 
 impl World {
@@ -616,6 +644,155 @@ impl World {
         // Read unknown NPCs data until tile entities pointer
         let unknown_npcs_data = r.read_until(pointers.tile_entities as usize);
 
+        // Parse tile entities
+        let tile_entities_count = r.i32();
+        let mut tile_entities = Vec::with_capacity(tile_entities_count as usize);
+        for _ in 0..tile_entities_count {
+            let te_type = r.u8();
+            let te_id = r.i32();
+            let te_position = Coordinates {
+                x: r.i16() as i32,
+                y: r.i16() as i32,
+            };
+            
+            let te_extra = match te_type {
+                0 => {
+                    // Target Dummy
+                    let npc = r.i16();
+                    Some(TileEntityExtra::TargetDummy { npc })
+                }
+                1 => {
+                    // Item Frame
+                    let item_type = r.i16();
+                    let item_prefix = r.u8();
+                    let item_quantity = r.i16();
+                    let item = ItemStack {
+                        quantity: item_quantity,
+                        type_id: item_type as i32,
+                        prefix: item_prefix,
+                    };
+                    Some(TileEntityExtra::ItemFrame { item })
+                }
+                2 => {
+                    // Logic Sensor
+                    let logic_check = r.u8();
+                    let enabled = r.bool();
+                    Some(TileEntityExtra::LogicSensor { logic_check, enabled })
+                }
+                3 => {
+                    // Mannequin
+                    let item_flags = r.bits();
+                    let dye_flags = r.bits();
+                    let mut mannequin_items = vec![None; item_flags.len()];
+                    let mut mannequin_dyes = vec![None; dye_flags.len()];
+                    
+                    for (index, &flag) in item_flags.iter().enumerate() {
+                        if !flag {
+                            continue;
+                        }
+                        let item_type = r.i16();
+                        let item_prefix = r.u8();
+                        let item_quantity = r.i16();
+                        mannequin_items[index] = Some(ItemStack {
+                            quantity: item_quantity,
+                            type_id: item_type as i32,
+                            prefix: item_prefix,
+                        });
+                    }
+                    
+                    for (index, &flag) in dye_flags.iter().enumerate() {
+                        if !flag {
+                            continue;
+                        }
+                        let item_type = r.i16();
+                        let item_prefix = r.u8();
+                        let item_quantity = r.i16();
+                        mannequin_dyes[index] = Some(ItemStack {
+                            quantity: item_quantity,
+                            type_id: item_type as i32,
+                            prefix: item_prefix,
+                        });
+                    }
+                    
+                    Some(TileEntityExtra::Mannequin { items: mannequin_items, dyes: mannequin_dyes })
+                }
+                4 => {
+                    // Weapon Rack
+                    let item_type = r.i16();
+                    let item_prefix = r.u8();
+                    let item_quantity = r.i16();
+                    let item = ItemStack {
+                        quantity: item_quantity,
+                        type_id: item_type as i32,
+                        prefix: item_prefix,
+                    };
+                    Some(TileEntityExtra::WeaponRack { item })
+                }
+                5 => {
+                    // Hat Rack
+                    let item_flags = r.bits();
+                    let mut rack_items = vec![None; 2];
+                    let mut rack_dyes = vec![None; 2];
+                    
+                    for (index, &flag) in item_flags.iter().take(2).enumerate() {
+                        if !flag {
+                            continue;
+                        }
+                        let item_type = r.i16();
+                        let item_prefix = r.u8();
+                        let item_quantity = r.i16();
+                        rack_items[index] = Some(ItemStack {
+                            quantity: item_quantity,
+                            type_id: item_type as i32,
+                            prefix: item_prefix,
+                        });
+                    }
+                    
+                    for (index, &flag) in item_flags.iter().skip(2).take(2).enumerate() {
+                        if !flag {
+                            continue;
+                        }
+                        let item_type = r.i16();
+                        let item_prefix = r.u8();
+                        let item_quantity = r.i16();
+                        rack_dyes[index] = Some(ItemStack {
+                            quantity: item_quantity,
+                            type_id: item_type as i32,
+                            prefix: item_prefix,
+                        });
+                    }
+                    
+                    Some(TileEntityExtra::HatRack { items: rack_items, dyes: rack_dyes })
+                }
+                6 => {
+                    // Food Plate
+                    let item_type = r.i16();
+                    let item_prefix = r.u8();
+                    let item_quantity = r.i16();
+                    let item = ItemStack {
+                        quantity: item_quantity,
+                        type_id: item_type as i32,
+                        prefix: item_prefix,
+                    };
+                    Some(TileEntityExtra::Plate { item })
+                }
+                7 => {
+                    // Teleport Pylon
+                    Some(TileEntityExtra::Pylon)
+                }
+                _ => {
+                    println!("Unknown tile entity type: {}", te_type);
+                    None
+                }
+            };
+            
+            let tile_entity = TileEntity::new(te_id, te_position, te_extra);
+            tile_entities.push(tile_entity);
+        }
+
+        // Read unknown tile entities data until pressure plates pointer
+        let unknown_tile_entities_data = r.read_until(pointers.pressure_plates as usize);
+
         Ok(Self {
             version_integer,
             magic,
@@ -804,6 +981,8 @@ impl World {
             mobs,
             shimmered_npcs,
             unknown_npcs_data,
+            tile_entities,
+            unknown_tile_entities_data,
         })
     }
 

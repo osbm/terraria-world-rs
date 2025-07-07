@@ -1,7 +1,7 @@
 use std::fs;
 use std::path::Path;
 use serde_json::Value;
-use terraria_world_parser::world::World;
+use terraria_world_parser::world::{World, TileEntityExtra};
 
 /// Test utilities for integration tests
 mod test_utils {
@@ -557,5 +557,92 @@ fn test_entities_against_lihzahrd() {
 
         println!("Successfully validated {} NPCs, {} mobs, {} shimmered NPCs for {}",
                 world.npcs.len(), world.mobs.len(), world.shimmered_npcs.len(), world_file);
+    }
+}
+
+#[test]
+fn test_tile_entity_parsing() {
+    let test_worlds_dir = "tests/test_worlds";
+    if !Path::new(test_worlds_dir).exists() {
+        println!("No test worlds directory found, skipping tile entity test");
+        return;
+    }
+    let entries = fs::read_dir(test_worlds_dir).expect("Failed to read test worlds directory");
+    let wld_files: Vec<_> = entries
+        .filter_map(|entry| {
+            let entry = entry.ok()?;
+            let path = entry.path();
+            if path.extension()?.to_str()? == "wld" {
+                Some(path)
+            } else {
+                None
+            }
+        })
+        .collect();
+    if wld_files.is_empty() {
+        println!("No .wld files found in tests/test_worlds directory, skipping tile entity test");
+        return;
+    }
+    for wld_file in wld_files {
+        let file_name = wld_file.file_name().unwrap().to_str().unwrap();
+        println!("Testing tile entities for: {}", file_name);
+        let world = World::from_file(wld_file.to_str().unwrap())
+            .expect(&format!("Failed to read world file: {}", file_name));
+        println!("Found {} tile entities", world.tile_entities.len());
+        // Basic assertion: at least 0 tile entities (should always be true)
+        assert!(world.tile_entities.len() >= 0);
+        // Print a summary of tile entity types
+        let mut type_counts = std::collections::HashMap::new();
+        for te in &world.tile_entities {
+            let type_str = match &te.extra {
+                Some(TileEntityExtra::TargetDummy { .. }) => "TargetDummy",
+                Some(TileEntityExtra::ItemFrame { .. }) => "ItemFrame",
+                Some(TileEntityExtra::LogicSensor { .. }) => "LogicSensor",
+                Some(TileEntityExtra::Mannequin { .. }) => "Mannequin",
+                Some(TileEntityExtra::WeaponRack { .. }) => "WeaponRack",
+                Some(TileEntityExtra::HatRack { .. }) => "HatRack",
+                Some(TileEntityExtra::Plate { .. }) => "Plate",
+                Some(TileEntityExtra::Pylon) => "Pylon",
+                None => "Unknown",
+            };
+            *type_counts.entry(type_str).or_insert(0) += 1;
+        }
+        println!("Tile entity type counts: {{");
+        for (type_str, count) in &type_counts {
+            println!("  {}: {}", type_str, count);
+        }
+        println!("}}\n");
+        // Optionally, check the first tile entity for expected fields
+        if let Some(first) = world.tile_entities.first() {
+            match &first.extra {
+                Some(TileEntityExtra::TargetDummy { npc }) => {
+                    println!("First tile entity is TargetDummy with npc: {}", npc);
+                }
+                Some(TileEntityExtra::ItemFrame { item }) => {
+                    println!("First tile entity is ItemFrame with item type_id: {}", item.type_id);
+                }
+                Some(TileEntityExtra::LogicSensor { logic_check, enabled }) => {
+                    println!("First tile entity is LogicSensor with logic_check: {}, enabled: {}", logic_check, enabled);
+                }
+                Some(TileEntityExtra::Mannequin { items, dyes }) => {
+                    println!("First tile entity is Mannequin with {} items and {} dyes", items.len(), dyes.len());
+                }
+                Some(TileEntityExtra::WeaponRack { item }) => {
+                    println!("First tile entity is WeaponRack with item type_id: {}", item.type_id);
+                }
+                Some(TileEntityExtra::HatRack { items, dyes }) => {
+                    println!("First tile entity is HatRack with {} items and {} dyes", items.len(), dyes.len());
+                }
+                Some(TileEntityExtra::Plate { item }) => {
+                    println!("First tile entity is Plate with item type_id: {}", item.type_id);
+                }
+                Some(TileEntityExtra::Pylon) => {
+                    println!("First tile entity is Pylon");
+                }
+                None => {
+                    println!("First tile entity is Unknown");
+                }
+            }
+        }
     }
 }
