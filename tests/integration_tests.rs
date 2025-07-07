@@ -389,3 +389,57 @@ fn test_world_file_validation() {
         assert!(result.is_err(), "Should fail to parse invalid world file: {}", test_invalid_file);
     }
 } 
+
+#[test]
+fn test_chests_against_lihzahrd() {
+    use test_utils::*;
+    let world_files = get_test_world_files();
+    if world_files.is_empty() {
+        eprintln!("No test world files found. Skipping chest integration test.");
+        return;
+    }
+    for world_file in world_files {
+        println!("Testing chests for world file: {}", world_file);
+        let reference_file = format!("{}.lihzahrd_reference.json", world_file.trim_end_matches(".wld"));
+        if !Path::new(&reference_file).exists() {
+            eprintln!("Reference file {} not found. Run the Python integration test first.", reference_file);
+            continue;
+        }
+        let world = match World::from_file(&world_file) {
+            Ok(w) => w,
+            Err(e) => {
+                eprintln!("Failed to parse world {} with Rust implementation: {}", world_file, e);
+                continue;
+            }
+        };
+        let reference_data = match load_reference_data(&reference_file) {
+            Ok(data) => data,
+            Err(e) => {
+                eprintln!("Failed to load reference data from {}: {}", reference_file, e);
+                continue;
+            }
+        };
+        let ref_chests = reference_data["chests"].as_array().unwrap();
+        assert_eq!(world.chests.len(), ref_chests.len(), "Chest count mismatch for {}", world_file);
+        for (i, (chest, ref_chest)) in world.chests.iter().zip(ref_chests.iter()).enumerate() {
+            assert_eq!(chest.position.x, ref_chest["position"]["x"].as_i64().unwrap() as i32, "Chest {} x position mismatch", i);
+            assert_eq!(chest.position.y, ref_chest["position"]["y"].as_i64().unwrap() as i32, "Chest {} y position mismatch", i);
+            assert_eq!(chest.name, ref_chest["name"].as_str().unwrap(), "Chest {} name mismatch", i);
+            let ref_contents = ref_chest["contents"].as_array().unwrap();
+            assert_eq!(chest.contents.len(), ref_contents.len(), "Chest {} contents length mismatch", i);
+            for (j, (item, ref_item)) in chest.contents.iter().zip(ref_contents.iter()).enumerate() {
+                match (item, ref_item) {
+                    (None, serde_json::Value::Null) => {},
+                    (Some(item), serde_json::Value::Object(ref obj)) => {
+                        assert_eq!(item.quantity, obj["quantity"].as_i64().unwrap() as i16, "Chest {} item {} quantity mismatch", i, j);
+                        assert_eq!(item.type_id, obj["type_id"].as_i64().unwrap() as i32, "Chest {} item {} type_id mismatch", i, j);
+                        assert_eq!(item.prefix, obj["prefix"].as_u64().unwrap() as u8, "Chest {} item {} prefix mismatch", i, j);
+                    },
+                    (None, _) => panic!("Chest {} item {}: Rust None but Python not null", i, j),
+                    (Some(_), _) => panic!("Chest {} item {}: Rust Some but Python null or not object", i, j),
+                }
+            }
+        }
+        println!("Successfully validated {} chests for {}", world.chests.len(), world_file);
+    }
+} 

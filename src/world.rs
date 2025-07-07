@@ -4,6 +4,26 @@ use crate::tile::{Tile, TileMatrix, Block, Wall, Liquid, Wiring, BlockType, Wall
 mod pointers;
 use pointers::Pointers;
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Coordinates {
+    pub x: i32,
+    pub y: i32,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ItemStack {
+    pub quantity: i16,
+    pub type_id: i32,
+    pub prefix: u8,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Chest {
+    pub position: Coordinates,
+    pub name: String,
+    pub contents: Vec<Option<ItemStack>>,
+}
+
 #[derive(Debug)]
 pub struct World {
     pub version_integer: i32,
@@ -185,7 +205,7 @@ pub struct World {
     pub moondial_cooldown: u8,
     pub unknown_world_header_data: Vec<u8>, // TODO: find out what this is
     pub tiles: TileMatrix,
-
+    pub chests: Vec<Chest>,
 }
 
 impl World {
@@ -420,6 +440,38 @@ impl World {
         // tiles
         let tiles = Self::create_tile_matrix(&mut r, (world_width as usize, world_height as usize), &tile_frame_important);
 
+        // --- CHEST PARSING ---
+        let chests_count = r.i16();
+        let chests_max_items = r.i16();
+        let mut chests = Vec::with_capacity(chests_count as usize);
+        for _ in 0..chests_count {
+            let chest_x = r.i32();
+            let chest_y = r.i32();
+            let chest_name = r.string(None);
+            let mut chest_contents = Vec::with_capacity(chests_max_items as usize);
+            for _ in 0..chests_max_items {
+                let item_quantity = r.i16();
+                if item_quantity > 0 {
+                    let item_type = r.i32();
+                    let item_prefix = r.u8();
+                    chest_contents.push(Some(ItemStack {
+                        quantity: item_quantity,
+                        type_id: item_type,
+                        prefix: item_prefix,
+                    }));
+                } else {
+                    chest_contents.push(None);
+                }
+            }
+            chests.push(Chest {
+                position: Coordinates { x: chest_x, y: chest_y },
+                name: chest_name,
+                contents: chest_contents,
+            });
+        }
+        // Skip unknown chest data until signs pointer
+        let _unknown_chests_data = r.read_until(pointers.signs as usize);
+
 
         Ok(Self {
             version_integer,
@@ -601,6 +653,7 @@ impl World {
             moondial_cooldown,
             unknown_world_header_data,
             tiles,
+            chests,
         })
     }
 

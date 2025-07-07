@@ -83,12 +83,33 @@ def parse_world_file(world_file: str) -> Dict[str, Any]:
                     tile_data = extract_tile_data(tile, x, y)
                     sample_tiles.append(tile_data)
         
+        # Extract chests
+        chests = []
+        if hasattr(world, 'chests') and world.chests:
+            for chest in world.chests:
+                chest_data = {
+                    "position": {"x": chest.position.x, "y": chest.position.y},
+                    "name": chest.name,
+                    "contents": []
+                }
+                for item in chest.contents:
+                    if item is not None:
+                        chest_data["contents"].append({
+                            "quantity": item.quantity,
+                            "type_id": item.type_.value,
+                            "prefix": item.prefix.value if hasattr(item.prefix, 'value') else int(item.prefix)
+                        })
+                    else:
+                        chest_data["contents"].append(None)
+                chests.append(chest_data)
+        
         return {
             "metadata": metadata,
             "tiles": {
                 "sample_tiles": sample_tiles,
                 "total_tiles": sum(len(col) for col in world.tiles.tiles) if hasattr(world.tiles, 'tiles') else 0
-            }
+            },
+            "chests": chests
         }
         
     except Exception as e:
@@ -275,4 +296,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()
