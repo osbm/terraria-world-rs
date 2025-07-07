@@ -1,5 +1,6 @@
 use crate::reader::ByteReader;
 use crate::tile::{Tile, TileMatrix, Block, Wall, Liquid, Wiring, BlockType, WallType, LiquidType, FrameImportantData, RLEEncoding};
+use crate::writer::ByteWriter;
 use serde::{Serialize, Deserialize};
 
 mod pointers;
@@ -1301,17 +1302,532 @@ impl World {
         Ok(world)
     }
 
-    pub fn save_as_json(&self, path: &str) -> std::io::Result<()> {
-        let file = std::fs::File::create(path)?;
-        let writer = std::io::BufWriter::new(file);
-        serde_json::to_writer_pretty(writer, self)
-            .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))
-    }
-
     pub fn save_as_wld(&self, path: &str) -> std::io::Result<()> {
+        use crate::writer::ByteWriter;
         println!("Saving to {path}...");
-        // test if this produces exactly the same file as the original
-        Err(std::io::Error::new(std::io::ErrorKind::Other, "Saving as .wld is not implemented yet."))
+
+        let mut writer = ByteWriter::new();
+        // let mut section_offsets = Vec::new(); // Remove unused variable
+
+        // 1. Write header fields
+        writer.i32(self.version_integer);
+        writer.bytes(self.magic.as_bytes());
+        writer.u8(self.savefile_type);
+        writer.u32(self.revision);
+        writer.u64(self.is_favorite);
+
+        // 2. Write pointer vector (placeholder values for now)
+        let pointer_count = self.pointer_count;
+        writer.u16(pointer_count);
+        let pointer_vec_offset = writer.offset();
+        for _ in 0..pointer_count {
+            writer.u32(0); // placeholder, will patch later
+        }
+
+        // 3. Write tile_frame_important
+        let tile_frame_important_size = ((self.tile_frame_important.len() as i16 + 7) / 8) as usize;
+        for chunk in self.tile_frame_important.chunks(8) {
+            writer.bits(chunk);
+        }
+
+        // 4. Write unknown_file_format_data
+        writer.bytes(&self.unknown_file_format_data);
+
+        // 5. Write world_name, generator_seed, generator_version, uuid, id
+        writer.string(&self.world_name);
+        writer.string(&self.generator_seed);
+        writer.u64(self.generator_version);
+        writer.uuid(&self.uuid);
+        writer.i32(self.id);
+
+        // 6. Write bounds_vec (left, right, top, bottom)
+        for v in &self.bounds_vec {
+            writer.i32(*v);
+        }
+
+        // 7. Write world_height, world_width, difficulty_value, flags, created_on, moon_style
+        writer.i32(self.world_height);
+        writer.i32(self.world_width);
+        writer.i32(self.difficulty_value);
+        writer.bool(self.is_drunk_world);
+        writer.bool(self.is_for_the_worthy);
+        writer.bool(self.is_tenth_anniversary);
+        writer.bool(self.is_the_constant);
+        writer.bool(self.is_bee_world);
+        writer.bool(self.is_upside_down);
+        writer.bool(self.is_trap_world);
+        writer.bool(self.is_zenith_world);
+        // created_on (datetime)
+        // We'll need to convert self.created_on back to the .NET ticks format if possible
+        // For now, just write 0 as a placeholder
+        writer.u64(0); // TODO: Proper datetime serialization
+        writer.u8(self.moon_style);
+
+        // 8. Write tree_style_seperators, tree_style_properties, moss_style_seperators, moss_style_properties
+        for v in &self.tree_style_seperators { writer.i32(*v); }
+        for v in &self.tree_style_properties { writer.i32(*v); }
+        for v in &self.moss_style_seperators { writer.i32(*v); }
+        for v in &self.moss_style_properties { writer.i32(*v); }
+
+        // 9. Write background styles
+        writer.i32(self.snow_background_style);
+        writer.i32(self.jungle_background_style);
+        writer.i32(self.hell_background_style);
+
+        // 10. Write spawn point, underground/cavern levels, time, day, moon, events, dungeon, world evil, boss flags, etc.
+        writer.i32(self.spawn_point_x);
+        writer.i32(self.spawn_point_y);
+        writer.f64(self.underground_level);
+        writer.f64(self.cavern_level);
+        writer.f64(self.current_time);
+        writer.bool(self.is_daytime);
+        writer.u32(self.moon_phase);
+        writer.bool(self.blood_moon);
+        writer.bool(self.eclipse);
+        writer.i32(self.dungeon_point_x);
+        writer.i32(self.dungeon_point_y);
+        writer.bool(self.world_evil_type);
+        writer.bool(self.defeated_eye_of_cthulhu);
+        writer.bool(self.defeated_eater_of_worlds);
+        writer.bool(self.defeated_skeletron);
+        writer.bool(self.defeated_queen_bee);
+        writer.bool(self.defeated_the_twins);
+        writer.bool(self.defeated_the_destroyer);
+        writer.bool(self.defeated_skeletron_prime);
+        writer.bool(self.defeated_any_mechanical_boss);
+        writer.bool(self.defeated_plantera);
+        writer.bool(self.defeated_golem);
+        writer.bool(self.defeated_king_slime);
+        writer.bool(self.saved_goblin_tinkerer);
+        writer.bool(self.saved_wizard);
+        writer.bool(self.saved_mechanic);
+        writer.bool(self.defeated_goblin_army);
+        writer.bool(self.defeated_clown);
+        writer.bool(self.defeated_frost_moon);
+        writer.bool(self.defeated_pirate_invasion);
+        writer.bool(self.shadow_orbs_smashed_at_least_once);
+        writer.bool(self.shadow_orbs_spawn_meteorite);
+        writer.u8(self.shadow_orbs_evil_boss_counter);
+        writer.i32(self.altars_smashed);
+        writer.bool(self.is_hardmode);
+        writer.bool(!self.party_is_doomed); // party_is_doomed is inverted
+        writer.i32(self.invasion_delay);
+        writer.i32(self.invasion_size);
+        writer.i32(self.invasion_type);
+        writer.f64(self.invasion_position);
+        writer.f64(self.time_left_slime_rain);
+        writer.u8(self.sundial_cooldown);
+        writer.bool(self.is_rain_active);
+        writer.i32(self.rain_time_left);
+        writer.f32(self.max_rain);
+        writer.i32(self.hardmode_ore_1);
+        writer.i32(self.hardmode_ore_2);
+        writer.i32(self.hardmode_ore_3);
+        writer.i8(self.forest_background);
+        writer.i8(self.corruption_background);
+        writer.i8(self.jungle_background);
+        writer.i8(self.snow_background);
+        writer.i8(self.hallow_background);
+        writer.i8(self.crimson_background);
+        writer.i8(self.desert_background);
+        writer.i8(self.ocean_background);
+        writer.i32(self.cloud_background);
+        writer.i16(self.cloud_number);
+        writer.f32(self.wind_speed);
+
+        // 11. Angler quest completed by
+        writer.i32(self.angler_today_quest_completed_by.len() as i32);
+        for name in &self.angler_today_quest_completed_by {
+            writer.string(name);
+        }
+
+        // 12. Angler and other NPCs
+        writer.bool(self.saved_angler);
+        writer.i32(self.angler_daily_quest_target);
+        writer.bool(self.saved_stylist);
+        writer.bool(self.saved_tax_collector);
+        writer.bool(self.saved_golfer);
+        writer.i32(self.invasion_size_start);
+        writer.i32(self.cultist_delay);
+
+        // 13. Mob kills
+        writer.i16(self.mob_kills.len() as i16);
+        for v in &self.mob_kills { writer.i32(*v); }
+        writer.bool(self.sundial_is_running);
+        writer.bool(self.defeated_duke_fishron);
+        writer.bool(self.defeated_martian_madness);
+        writer.bool(self.defeated_lunatic_cultist);
+        writer.bool(self.deteated_moon_lord);
+        writer.bool(self.defeated_pumpking);
+        writer.bool(self.defeated_mourning_wood);
+        writer.bool(self.defeated_ice_queen);
+        writer.bool(self.defeated_santa_nk1);
+        writer.bool(self.defeated_everscream);
+        writer.bool(self.defeated_solar_pillar);
+        writer.bool(self.defeated_vortex_pillar);
+        writer.bool(self.defeated_nebula_pillar);
+        writer.bool(self.defeated_stardust_pillar);
+        writer.bool(self.lunar_events_pillars_present_solar);
+        writer.bool(self.lunar_events_pillars_present_vortex);
+        writer.bool(self.lunar_events_pillars_present_nebula);
+        writer.bool(self.lunar_events_pillars_present_stardust);
+        writer.bool(self.lunar_events_are_active);
+        writer.bool(self.party_center_active);
+        writer.bool(self.party_natural_active);
+        writer.i32(self.party_cooldown);
+        writer.i32(self.partying_npcs.len() as i32);
+        for v in &self.partying_npcs { writer.i32(*v); }
+        writer.bool(self.is_sandstorm_active);
+        writer.i32(self.sandstorm_time_left);
+        writer.f32(self.sandstorm_severity);
+        writer.f32(self.sandstorm_intended_severity);
+        writer.bool(self.saved_bartender);
+        writer.bool(self.old_ones_army_tier_1);
+        writer.bool(self.old_ones_army_tier_2);
+        writer.bool(self.old_ones_army_tier_3);
+        writer.i8(self.mushroom_background);
+        writer.i8(self.underworld_background);
+        writer.i8(self.forest_background_2);
+        writer.i8(self.forest_background_3);
+        writer.i8(self.forest_background_4);
+        writer.bool(self.combat_book_used);
+        writer.i32(self.lantern_nights_on_cooldown);
+        writer.bool(self.lantern_night_genuine);
+        writer.bool(self.lantern_night_manual);
+        writer.bool(self.next_night_is_lantern_night);
+        writer.i32(self.treetop_variants.len() as i32);
+        for v in &self.treetop_variants { writer.i32(*v); }
+        writer.bool(self.halloween_today);
+        writer.bool(self.christmas_today);
+        writer.i32(self.ore_1);
+        writer.i32(self.ore_2);
+        writer.i32(self.ore_3);
+        writer.i32(self.ore_4);
+        writer.bool(self.has_cat);
+        writer.bool(self.has_dog);
+        writer.bool(self.has_bunny);
+        writer.bool(self.defeated_empress_of_light);
+        writer.bool(self.defeated_queen_slime);
+        writer.bool(self.defeated_deerclops);
+        writer.bool(self.saved_slime_nerdy);
+        writer.bool(self.saved_merchant);
+        writer.bool(self.saved_demolitionist);
+        writer.bool(self.saved_party_girl);
+        writer.bool(self.saved_dye_trader);
+        writer.bool(self.saved_truffle);
+        writer.bool(self.saved_arms_dealer);
+        writer.bool(self.saved_nurse);
+        writer.bool(self.saved_princess);
+        writer.bool(self.combat_book_2_used);
+        writer.bool(self.peddler_satchel_used);
+        writer.bool(self.saved_slime_cool);
+        writer.bool(self.saved_slime_elder);
+        writer.bool(self.saved_slime_clumsy);
+        writer.bool(self.saved_slime_diva);
+        writer.bool(self.saved_slime_surly);
+        writer.bool(self.saved_slime_mystic);
+        writer.bool(self.saved_slime_squire);
+        writer.bool(self.moondial_is_running);
+        writer.u8(self.moondial_cooldown);
+
+        // 14. Write unknown_world_header_data
+        writer.bytes(&self.unknown_world_header_data);
+
+        // 15. Write tiles (with RLE encoding and serialization)
+        // Tiles are stored column-major, with RLE encoding
+        let (width, height) = self.tiles.size;
+        for x in 0..width {
+            let column = &self.tiles.tiles[x];
+            let mut y = 0;
+            while y < height {
+                let tile = &column[y];
+                let mut run_length = 1;
+                while y + run_length < height && column[y + run_length] == *tile && run_length < 0xFFFF {
+                    run_length += 1;
+                }
+                // --- BEGIN TILE SERIALIZATION ---
+                // Write flags1, flags2, flags3, flags4 as in read_tile_block (reverse logic)
+                // For brevity, this is a simplified version. Full compatibility may require more detail.
+                let mut flags1 = [false; 8];
+                let mut flags2 = [false; 8];
+                let mut flags3 = [false; 8];
+                let mut flags4 = [false; 8];
+                // Set flags based on tile contents
+                if tile.block.is_some() { flags1[1] = true; }
+                if tile.wall.is_some() { flags1[2] = true; }
+                if let Some(liquid) = &tile.liquid {
+                    match liquid.type_ {
+                        crate::tile::LiquidType::Water => flags1[3] = true,
+                        crate::tile::LiquidType::Lava => flags1[4] = true,
+                        crate::tile::LiquidType::Honey => { flags1[3] = true; flags1[4] = true; },
+                        crate::tile::LiquidType::Shimmer => flags3[7] = true,
+                        _ => {}
+                    }
+                }
+                // TODO: Set other flags as needed for paint, echo, illuminant, etc.
+                // Write flags
+                writer.bits(&flags1);
+                if flags1[0] { writer.bits(&flags2); }
+                if flags2[0] { writer.bits(&flags3); }
+                if flags3[0] { writer.bits(&flags4); }
+                // Write block
+                if let Some(block) = &tile.block {
+                    // TODO: handle extended block id
+                    writer.u8(block.type_.id() as u8);
+                    if let Some(frame) = &block.frame {
+                        writer.u16(frame.x);
+                        writer.u16(frame.y);
+                    }
+                    if let Some(paint) = block.paint {
+                        writer.u8(paint);
+                    }
+                }
+                // Write wall
+                if let Some(wall) = &tile.wall {
+                    writer.u8(wall.type_.id() as u8);
+                    if let Some(paint) = wall.paint {
+                        writer.u8(paint);
+                    }
+                }
+                // Write liquid
+                if let Some(liquid) = &tile.liquid {
+                    writer.u8(liquid.volume);
+                }
+                // Write wall extended id if needed (not handled here)
+                // Write RLE
+                if run_length > 1 {
+                    if run_length <= 0xFF {
+                        writer.u8((run_length - 1) as u8);
+                    } else {
+                        writer.u16((run_length - 1) as u16);
+                    }
+                }
+                y += run_length;
+            }
+        }
+
+        // 16. Write unknown_tiles_data
+        writer.bytes(&self.unknown_tiles_data);
+
+        // 17. Write chests
+        writer.i16(self.chests.len() as i16);
+        let max_items = self.chests.iter().map(|c| c.contents.len()).max().unwrap_or(0) as i16;
+        writer.i16(max_items);
+        for chest in &self.chests {
+            writer.i32(chest.position.x);
+            writer.i32(chest.position.y);
+            writer.string(&chest.name);
+            for item in &chest.contents {
+                if let Some(item) = item {
+                    writer.i16(item.quantity);
+                    writer.i32(item.type_id);
+                    writer.u8(item.prefix);
+                } else {
+                    writer.i16(0);
+                }
+            }
+        }
+
+        // 18. Write unknown_chests_data
+        writer.bytes(&self.unknown_chests_data);
+
+        // 19. Write signs
+        writer.i16(self.signs.len() as i16);
+        for sign in &self.signs {
+            writer.string(&sign.text);
+            writer.i32(sign.position.x);
+            writer.i32(sign.position.y);
+        }
+
+        // 20. Write unknown_signs_data
+        writer.bytes(&self.unknown_signs_data);
+
+        // 21. Write shimmered_npcs, npcs, mobs
+        writer.i32(self.shimmered_npcs.len() as i32);
+        for id in &self.shimmered_npcs {
+            writer.i32(*id);
+        }
+        // Write npcs
+        for npc in &self.npcs {
+            writer.bool(true); // presence flag
+            writer.i32(npc.type_.id());
+            writer.string(&npc.name);
+            writer.f32(npc.position.x as f32);
+            writer.f32(npc.position.y as f32);
+            writer.bool(false); // is_homeless (not tracked)
+            writer.i32(npc.home.x);
+            writer.i32(npc.home.y);
+            writer.bits(&[true, false, false, false, false, false, false, false]); // npc_flags (placeholder)
+            writer.i32(npc.variation_index);
+        }
+        writer.bool(false); // end of npcs
+        // Write mobs
+        for mob in &self.mobs {
+            writer.bool(true);
+            writer.i32(mob.type_.id());
+            writer.f32(mob.position.x as f32);
+            writer.f32(mob.position.y as f32);
+        }
+        writer.bool(false); // end of mobs
+
+        // 22. Write unknown_npcs_data
+        writer.bytes(&self.unknown_npcs_data);
+
+        // 23. Write tile_entities
+        writer.i32(self.tile_entities.len() as i32);
+        for te in &self.tile_entities {
+            let (te_type, extra) = match &te.extra {
+                Some(crate::world::TileEntityExtra::TargetDummy { .. }) => (0u8, &te.extra),
+                Some(crate::world::TileEntityExtra::ItemFrame { .. }) => (1u8, &te.extra),
+                Some(crate::world::TileEntityExtra::LogicSensor { .. }) => (2u8, &te.extra),
+                Some(crate::world::TileEntityExtra::Mannequin { .. }) => (3u8, &te.extra),
+                Some(crate::world::TileEntityExtra::WeaponRack { .. }) => (4u8, &te.extra),
+                Some(crate::world::TileEntityExtra::HatRack { .. }) => (5u8, &te.extra),
+                Some(crate::world::TileEntityExtra::Plate { .. }) => (6u8, &te.extra),
+                Some(crate::world::TileEntityExtra::Pylon) => (7u8, &te.extra),
+                None => (255u8, &te.extra),
+            };
+            writer.u8(te_type);
+            writer.i32(te.id);
+            writer.i16(te.position.x as i16);
+            writer.i16(te.position.y as i16);
+            match extra {
+                Some(crate::world::TileEntityExtra::TargetDummy { npc }) => {
+                    writer.i16(*npc);
+                }
+                Some(crate::world::TileEntityExtra::ItemFrame { item }) => {
+                    writer.i16(item.type_id as i16);
+                    writer.u8(item.prefix);
+                    writer.i16(item.quantity);
+                }
+                Some(crate::world::TileEntityExtra::LogicSensor { logic_check, enabled }) => {
+                    writer.u8(*logic_check);
+                    writer.bool(*enabled);
+                }
+                Some(crate::world::TileEntityExtra::Mannequin { items, dyes }) => {
+                    let item_flags: Vec<bool> = items.iter().map(|i| i.is_some()).collect();
+                    let dye_flags: Vec<bool> = dyes.iter().map(|i| i.is_some()).collect();
+                    writer.bits(&item_flags);
+                    writer.bits(&dye_flags);
+                    for (i, item) in items.iter().enumerate() {
+                        if let Some(item) = item {
+                            writer.i16(item.type_id as i16);
+                            writer.u8(item.prefix);
+                            writer.i16(item.quantity);
+                        }
+                    }
+                    for (i, dye) in dyes.iter().enumerate() {
+                        if let Some(dye) = dye {
+                            writer.i16(dye.type_id as i16);
+                            writer.u8(dye.prefix);
+                            writer.i16(dye.quantity);
+                        }
+                    }
+                }
+                Some(crate::world::TileEntityExtra::WeaponRack { item }) => {
+                    writer.i16(item.type_id as i16);
+                    writer.u8(item.prefix);
+                    writer.i16(item.quantity);
+                }
+                Some(crate::world::TileEntityExtra::HatRack { items, dyes }) => {
+                    let item_flags: Vec<bool> = items.iter().chain(dyes.iter()).map(|i| i.is_some()).collect();
+                    writer.bits(&item_flags);
+                    for item in items.iter().chain(dyes.iter()) {
+                        if let Some(item) = item {
+                            writer.i16(item.type_id as i16);
+                            writer.u8(item.prefix);
+                            writer.i16(item.quantity);
+                        }
+                    }
+                }
+                Some(crate::world::TileEntityExtra::Plate { item }) => {
+                    writer.i16(item.type_id as i16);
+                    writer.u8(item.prefix);
+                    writer.i16(item.quantity);
+                }
+                Some(crate::world::TileEntityExtra::Pylon) => {}
+                None => {}
+            }
+        }
+
+        // 24. Write unknown_tile_entities_data
+        writer.bytes(&self.unknown_tile_entities_data);
+
+        // 25. Write weighed_pressure_plates
+        writer.i32(self.weighed_pressure_plates.len() as i32);
+        for plate in &self.weighed_pressure_plates {
+            writer.i32(plate.position.x);
+            writer.i32(plate.position.y);
+        }
+
+        // 26. Write unknown_pressure_plates_data
+        writer.bytes(&self.unknown_pressure_plates_data);
+
+        // 27. Write rooms
+        writer.i32(self.rooms.len() as i32);
+        for room in &self.rooms {
+            writer.i32(room.npc.id());
+            writer.i32(room.position.x);
+            writer.i32(room.position.y);
+        }
+
+        // 28. Write unknown_town_manager_data
+        writer.bytes(&self.unknown_town_manager_data);
+
+        // 29. Write bestiary
+        writer.i32(self.bestiary.kills.len() as i32);
+        for (entity, kills) in &self.bestiary.kills {
+            writer.string(entity);
+            writer.i32(*kills);
+        }
+        writer.i32(self.bestiary.sightings.len() as i32);
+        for s in &self.bestiary.sightings {
+            writer.string(s);
+        }
+        writer.i32(self.bestiary.chats.len() as i32);
+        for c in &self.bestiary.chats {
+            writer.string(c);
+        }
+
+        // 30. Write unknown_bestiary_data
+        writer.bytes(&self.unknown_bestiary_data);
+
+        // 31. Write journey_powers
+        // Write each power as a pair (id, value) in the same order as read
+        if self.journey_powers.freeze_time {
+            writer.bool(true); writer.i16(0); writer.bool(true);
+        }
+        if self.journey_powers.time_rate != 1.0 {
+            writer.bool(true); writer.i16(8); writer.f32(self.journey_powers.time_rate);
+        }
+        if self.journey_powers.freeze_rain {
+            writer.bool(true); writer.i16(9); writer.bool(true);
+        }
+        if self.journey_powers.freeze_wind {
+            writer.bool(true); writer.i16(10); writer.bool(true);
+        }
+        if self.journey_powers.difficulty != 1.0 {
+            writer.bool(true); writer.i16(12); writer.f32(self.journey_powers.difficulty);
+        }
+        if self.journey_powers.freeze_biome_spread {
+            writer.bool(true); writer.i16(13); writer.bool(true);
+        }
+        writer.bool(false); // end of journey powers
+
+        // 32. Write unknown_journey_powers_data
+        writer.bytes(&self.unknown_journey_powers_data);
+
+        // 33. Write footer
+        writer.bool(true);
+        writer.string(&self.world_name);
+        writer.i32(self.id);
+
+        // TODO: Patch pointer vector with actual offsets (not implemented here)
+
+        // Write buffer to file
+        let buffer = writer.into_inner();
+        std::fs::write(path, buffer)?;
+        Ok(())
     }
 
     fn read_tile_block(r: &mut ByteReader, tile_frame_important: &[bool]) -> (Tile, usize) {

@@ -165,15 +165,9 @@ mod test_utils {
         assert_eq!(npc.variation_index, npc_ref["variation_index"].as_i64().unwrap() as i32, "NPC variation index mismatch");
 
         // Validate home coordinates
-        match (npc.home.as_ref(), npc_ref["home"].as_object()) {
-            (None, None) => {},
-            (Some(home), Some(home_ref)) => {
-                assert_eq!(home.x, home_ref["x"].as_i64().unwrap() as i32, "NPC home X mismatch");
-                assert_eq!(home.y, home_ref["y"].as_i64().unwrap() as i32, "NPC home Y mismatch");
-            },
-            (None, Some(_)) => return Err("NPC home: Rust None but Python not null".to_string()),
-            (Some(_), None) => return Err("NPC home: Rust Some but Python null".to_string()),
-        }
+        let home_ref = npc_ref["home"].as_object().unwrap();
+        assert_eq!(npc.home.x, home_ref["x"].as_i64().unwrap() as i32, "NPC home X mismatch");
+        assert_eq!(npc.home.y, home_ref["y"].as_i64().unwrap() as i32, "NPC home Y mismatch");
 
         Ok(())
     }
