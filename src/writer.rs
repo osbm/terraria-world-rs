@@ -1,4 +1,3 @@
-use std::io::{self, Seek, SeekFrom, Write};
 
 #[derive(Clone)]
 pub struct ByteWriter {
@@ -155,7 +154,7 @@ impl ByteWriter {
                 .unwrap();
 
             // Convert to Unix timestamp
-            let unix_secs = default_date.timestamp();
+            let unix_secs = default_date.and_utc().timestamp();
 
             // Convert to .NET ticks (1 tick = 100 nanoseconds)
             let unix_ticks = (unix_secs as u64) * 10_000_000;
