@@ -163,10 +163,6 @@ impl ByteWriter {
 
             // Hardcode kind bits to 10 (binary) = 2 (decimal) = "Local"
             let raw = (0b10u64 << 62) | (net_ticks & 0x3FFF_FFFF_FFFF_FFFF);
-            println!(
-                "DEBUG: Writing datetime raw value: 0x{:016x} (default date)",
-                raw
-            );
             writer.u64(raw);
         };
 
@@ -189,7 +185,6 @@ impl ByteWriter {
 
             // Hardcode kind bits to 10 (binary) = 2 (decimal) = "Local"
             let raw = (0b10u64 << 62) | (net_ticks & 0x3FFF_FFFF_FFFF_FFFF);
-            println!("DEBUG: Writing datetime raw value: 0x{:016x}", raw);
             self.u64(raw);
         } else {
             write_default_date(
