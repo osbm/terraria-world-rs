@@ -134,7 +134,7 @@ mod test_utils {
 
     /// Validate individual tile data
     pub fn validate_tile(
-        tile: &terraria_world_parser::tile::Tile,
+        tile: &terraria_world_parser::world::tile::Tile,
         tile_ref: &Value,
     ) -> Result<(), String> {
         let x = tile_ref["position"]["x"].as_u64().unwrap() as usize;

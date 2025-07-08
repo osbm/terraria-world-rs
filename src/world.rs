@@ -1,5 +1,5 @@
 use crate::reader::ByteReader;
-mod tile;
+pub mod tile;
 mod pointers;
 use self::tile::{
     Block, BlockType, FrameImportantData, Liquid, LiquidType, RLEEncoding, Tile, TileMatrix, Wall,
