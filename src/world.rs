@@ -1810,7 +1810,9 @@ impl World {
         final_writer.u16(self.pointer_count);
 
         // Write updated pointer vector
-        for &pointer in &pointer_vector {
+        // TODO: Revert to placeholder pointers after confirming world serialization/deserialization works correctly
+        // Write actual pointer values from world object for debugging section sizes
+        for &pointer in &self.pointer_vector {
             final_writer.u32(pointer);
         }
 
