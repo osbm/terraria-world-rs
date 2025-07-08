@@ -1273,6 +1273,12 @@ impl World {
         for _ in 0..self.pointer_count {
             header_writer.u32(0);
         }
+        // Write tile_frame_important count and bits in the file header
+        header_writer.i16(self.tile_frame_important.len() as i16);
+        for chunk in self.tile_frame_important.chunks(8) {
+            header_writer.bits(chunk);
+        }
+        
 
         // Section 2: World header
         let mut world_header_writer = &mut section_buffers[0];
@@ -1471,11 +1477,6 @@ impl World {
 
         // Section 3: Tiles
         let mut tiles_writer = &mut section_buffers[1];
-        // Write tile_frame_important first
-        let tile_frame_important_size = ((self.tile_frame_important.len() as i16 + 7) / 8) as usize;
-        for chunk in self.tile_frame_important.chunks(8) {
-            tiles_writer.bits(chunk);
-        }
 
         // Write tiles (with RLE encoding and serialization)
         let (width, height) = self.tiles.size;
