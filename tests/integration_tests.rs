@@ -1018,7 +1018,7 @@ fn test_tile_entity_parsing() {
                 Some(TileEntityExtra::HatRack { .. }) => "HatRack",
                 Some(TileEntityExtra::Plate { .. }) => "Plate",
                 Some(TileEntityExtra::Pylon) => "Pylon",
-                None => "Unknown",
+                _ => "Unknown",
             };
             *type_counts.entry(type_str).or_insert(0) += 1;
         }
