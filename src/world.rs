@@ -698,11 +698,11 @@ impl World {
         // tiles
         let (width, height) = (world_width as usize, world_height as usize);
         let mut tile_bytes: Vec<Vec<Vec<u8>>> = vec![vec![vec![]; height]; width];
-        let tiles = Self::create_tile_matrix_with_bytes(
+        let tiles = Self::create_tile_matrix(
             &mut r,
             (width, height),
             &tile_frame_important,
-            &mut tile_bytes,
+            // &mut tile_bytes,
         );
 
         // --- CHEST PARSING ---
@@ -2166,6 +2166,7 @@ impl World {
             }
             tm.add_column(column);
         }
+        tm
     //     // Tile-by-tile check for a region
     //     for x in 900..910 {
     //         for y in 280..290 {
