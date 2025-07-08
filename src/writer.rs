@@ -142,4 +142,33 @@ impl ByteWriter {
         }
         self.buffer[offset..offset + 4].copy_from_slice(&bytes);
     }
+
+    pub fn datetime(&mut self, datetime_str: &str) {
+        // Parse the datetime string back to a u64 value
+        // The format is "YYYY-MM-DD HH:MM:SS"
+        if datetime_str.starts_with("⚠️") {
+            // Handle invalid datetime - write 0
+            self.u64(0);
+            return;
+        }
+
+        // Parse the datetime string
+        if let Ok(dt) = chrono::NaiveDateTime::parse_from_str(datetime_str, "%Y-%m-%d %H:%M:%S") {
+            // Convert to Unix timestamp
+            let unix_secs = dt.timestamp();
+            
+            // Convert to .NET ticks (1 tick = 100 nanoseconds)
+            let unix_ticks = (unix_secs as u64) * 10_000_000; // seconds to ticks
+            let net_ticks = unix_ticks + 621355968000000000; // add .NET epoch offset
+            
+            // Set kind to Unspecified (0) and write the ticks
+            let raw = net_ticks & 0x3FFF_FFFF_FFFF_FFFF; // mask top 2 bits for kind
+            println!("DEBUG: Writing datetime raw value: 0x{:016x}", raw); // DEBUG: Print raw datetime value
+            self.u64(raw);
+        } else {
+            // If parsing fails, write 0
+            println!("DEBUG: Writing datetime raw value: 0x0000000000000000 (parse failed)"); // DEBUG: Print raw datetime value
+            self.u64(0);
+        }
+    }
 } 

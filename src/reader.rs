@@ -169,6 +169,7 @@ impl<'a> ByteReader<'a> {
 
     pub fn datetime(&mut self) -> String {
         let raw = self.u64(); // already reads 8 bytes little-endian
+        println!("DEBUG: Reading datetime raw value: 0x{:016x}", raw); // DEBUG: Print raw datetime value
                               // println!("Raw DateTime (with Kind bits): {}", raw);
 
         let _kind = (raw >> 62) & 0b11;
