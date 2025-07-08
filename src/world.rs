@@ -515,7 +515,7 @@ impl World {
         let is_upside_down = r.bool();
         let is_trap_world = r.bool();
         let is_zenith_world = r.bool();
-        println!("File offset before date: {}", r.offset());
+        // println!("File offset before date: {}", r.offset());
         let created_on = r.datetime();
         let moon_style = r.u8();
         let tree_style_seperators = vec![r.i32(), r.i32(), r.i32()];
@@ -693,6 +693,7 @@ impl World {
         let saved_slime_squire = r.bool();
         let moondial_is_running = r.bool();
         let moondial_cooldown = r.u8();
+        println!("File offset before tiles: {}", r.offset());
         // tiles
         let tiles = Self::create_tile_matrix(
             &mut r,
