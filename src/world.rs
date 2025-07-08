@@ -1,4 +1,5 @@
 use crate::reader::ByteReader;
+use crate::writer::ByteWriter;
 pub mod tile;
 mod pointers;
 use self::tile::{
