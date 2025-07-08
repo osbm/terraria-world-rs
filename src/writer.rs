@@ -180,8 +180,8 @@ impl ByteWriter {
         if let Ok(dt) = chrono::NaiveDateTime::parse_from_str(datetime_str, "%Y-%m-%d %H:%M:%S%.f")
         {
             // Convert to Unix timestamp with nanosecond precision
-            let unix_secs = dt.timestamp();
-            let unix_nanos = dt.timestamp_subsec_nanos();
+            let unix_secs = dt.and_utc().timestamp();
+            let unix_nanos = dt.and_utc().timestamp_subsec_nanos();
 
             // Convert to .NET ticks (1 tick = 100 nanoseconds)
             let unix_ticks = (unix_secs as u64) * 10_000_000 + (unix_nanos as u64) / 100;
