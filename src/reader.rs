@@ -172,8 +172,8 @@ impl<'a> ByteReader<'a> {
         println!("DEBUG: Reading datetime raw value: 0x{:016x}", raw); // DEBUG: Print raw datetime value
                               // println!("Raw DateTime (with Kind bits): {}", raw);
 
-        let _kind = (raw >> 62) & 0b11;
-        let ticks = raw & 0x3FFF_FFFF_FFFF_FFFF; // mask top 2 bits
+        let _kind: u64 = (raw >> 62) & 0b11;
+        let ticks: u64 = raw & 0x3FFF_FFFF_FFFF_FFFF; // mask top 2 bits
 
         // println!("Kind: {}", match kind {
         //     0 => "Unspecified",
@@ -183,17 +183,21 @@ impl<'a> ByteReader<'a> {
         // });
 
         // .NET ticks start at 0001-01-01
-        let unix_offset = 621355968000000000;
+        let unix_offset: u64 = 621355968000000000;
         if ticks < unix_offset {
             return "⚠️ Before UNIX epoch".to_string();
         }
 
-        let unix_ticks = ticks - unix_offset;
-        let secs = unix_ticks / 10_000_000;
-        let nanos = (unix_ticks % 10_000_000) * 100;
+        let unix_ticks: u64 = ticks - unix_offset;
+        let secs: u64 = unix_ticks / 10_000_000;
+        let nsecs: u64 = (unix_ticks % 10_000_000) * 100;
 
-        match DateTime::from_timestamp(secs as i64, nanos as u32) {
-            Some(dt) => dt.format("%Y-%m-%d %H:%M:%S").to_string(),
+        match DateTime::from_timestamp(secs as i64, nsecs as u32) {
+            Some(dt) => {
+                // Use format with 7 decimal places to preserve .NET tick precision
+                // .NET ticks are 100ns intervals, so 7 decimal places gives us the full precision
+                dt.format("%Y-%m-%d %H:%M:%S%.f").to_string()
+            },
             None => "⚠️ Invalid datetime".to_string(),
         }
     }
