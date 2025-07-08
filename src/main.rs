@@ -1,4 +1,3 @@
-pub use terraria_world_parser::tile;
 use terraria_world_parser::world::World;
 
 fn main() {

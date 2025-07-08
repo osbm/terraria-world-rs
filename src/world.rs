@@ -1,12 +1,12 @@
 use crate::reader::ByteReader;
-use crate::tile::{
+mod tile;
+mod pointers;
+use self::tile::{
     Block, BlockType, FrameImportantData, Liquid, LiquidType, RLEEncoding, Tile, TileMatrix, Wall,
     WallType, Wiring,
 };
+use self::pointers::Pointers;
 use serde::{Deserialize, Serialize};
-
-mod pointers;
-use pointers::Pointers;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Coordinates {
@@ -1601,13 +1601,13 @@ impl World {
                 }
                 if let Some(liquid) = &tile.liquid {
                     match liquid.type_ {
-                        crate::tile::LiquidType::Water => flags1[3] = true,
-                        crate::tile::LiquidType::Lava => flags1[4] = true,
-                        crate::tile::LiquidType::Honey => {
+                        LiquidType::Water => flags1[3] = true,
+                        LiquidType::Lava => flags1[4] = true,
+                        LiquidType::Honey => {
                             flags1[3] = true;
                             flags1[4] = true;
                         }
-                        crate::tile::LiquidType::Shimmer => flags3[7] = true,
+                        LiquidType::Shimmer => flags3[7] = true,
                         _ => {}
                     }
                 }
