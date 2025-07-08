@@ -411,6 +411,7 @@ pub struct World {
     pub rooms: Vec<Room>,
     pub bestiary: Bestiary,
     pub journey_powers: JourneyPowers,
+    pub tile_bytes: Vec<Vec<Vec<u8>>>,
 }
 
 impl World {
@@ -695,10 +696,13 @@ impl World {
         let moondial_cooldown = r.u8();
         println!("File offset before tiles: {}", r.offset());
         // tiles
-        let tiles = Self::create_tile_matrix(
+        let (width, height) = (world_width as usize, world_height as usize);
+        let mut tile_bytes: Vec<Vec<Vec<u8>>> = vec![vec![vec![]; height]; width];
+        let tiles = Self::create_tile_matrix_with_bytes(
             &mut r,
-            (world_width as usize, world_height as usize),
+            (width, height),
             &tile_frame_important,
+            &mut tile_bytes,
         );
 
         // --- CHEST PARSING ---
@@ -1252,6 +1256,7 @@ impl World {
             rooms,
             bestiary,
             journey_powers,
+            tile_bytes,
         })
     }
 
