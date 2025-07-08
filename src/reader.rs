@@ -198,7 +198,7 @@ impl<'a> ByteReader<'a> {
                 // .NET ticks are 100ns intervals, so 7 decimal places gives us the full precision
                 dt.format("%Y-%m-%d %H:%M:%S%.f").to_string()
             },
-            None => "⚠️ Invalid datetime".to_string(),
+            _ => "⚠️ Invalid datetime".to_string(),
         }
     }
 
