@@ -38,7 +38,8 @@ fn test_world_roundtrip() {
 
         // Save as WLD
         let output_wld_path = format!("./{}.roundtrip.wld", file_name);
-        world.save_as_wld(&output_wld_path)
+        world
+            .save_as_wld(&output_wld_path)
             .expect(&format!("Failed to save WLD for: {}", file_name));
 
         // Read both files as bytes
@@ -54,12 +55,34 @@ fn test_world_roundtrip() {
         }
         let result = if let Some(idx) = first_diff {
             let percent = (idx as f64) / (orig_bytes.len().max(out_bytes.len()) as f64) * 100.0;
-            println!("✗ {}: first difference at byte {} / {} ({:.2}%)", file_name, idx, orig_bytes.len().max(out_bytes.len()), percent);
-            failures.push((file_name.to_string(), idx, orig_bytes.len().max(out_bytes.len()), percent));
+            println!(
+                "✗ {}: first difference at byte {} / {} ({:.2}%)",
+                file_name,
+                idx,
+                orig_bytes.len().max(out_bytes.len()),
+                percent
+            );
+            failures.push((
+                file_name.to_string(),
+                idx,
+                orig_bytes.len().max(out_bytes.len()),
+                percent,
+            ));
         } else if orig_bytes.len() != out_bytes.len() {
             let min_len = orig_bytes.len().min(out_bytes.len());
-            println!("✗ {}: files are identical for first {} bytes, but lengths differ ({} vs {})", file_name, min_len, orig_bytes.len(), out_bytes.len());
-            failures.push((file_name.to_string(), min_len, orig_bytes.len().max(out_bytes.len()), (min_len as f64) / (orig_bytes.len().max(out_bytes.len()) as f64) * 100.0));
+            println!(
+                "✗ {}: files are identical for first {} bytes, but lengths differ ({} vs {})",
+                file_name,
+                min_len,
+                orig_bytes.len(),
+                out_bytes.len()
+            );
+            failures.push((
+                file_name.to_string(),
+                min_len,
+                orig_bytes.len().max(out_bytes.len()),
+                (min_len as f64) / (orig_bytes.len().max(out_bytes.len()) as f64) * 100.0,
+            ));
         } else {
             println!("✓ {}: OK (100%)", file_name);
         };
@@ -70,7 +93,10 @@ fn test_world_roundtrip() {
     if !failures.is_empty() {
         println!("\nSummary of roundtrip failures:");
         for (file, idx, len, percent) in &failures {
-            println!("  {}: first difference at byte {} / {} ({:.2}%)", file, idx, len, percent);
+            println!(
+                "  {}: first difference at byte {} / {} ({:.2}%)",
+                file, idx, len, percent
+            );
         }
         panic!("{} roundtrip test(s) failed", failures.len());
     }

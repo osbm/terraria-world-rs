@@ -1,4 +1,4 @@
-use std::io::{self, Write, Seek, SeekFrom};
+use std::io::{self, Seek, SeekFrom, Write};
 
 #[derive(Clone)]
 pub struct ByteWriter {
@@ -163,7 +163,10 @@ impl ByteWriter {
 
             // Hardcode kind bits to 10 (binary) = 2 (decimal) = "Local"
             let raw = (0b10u64 << 62) | (net_ticks & 0x3FFF_FFFF_FFFF_FFFF);
-            println!("DEBUG: Writing datetime raw value: 0x{:016x} (default date)", raw);
+            println!(
+                "DEBUG: Writing datetime raw value: 0x{:016x} (default date)",
+                raw
+            );
             writer.u64(raw);
         };
 
@@ -174,7 +177,8 @@ impl ByteWriter {
         }
 
         // Parse the datetime string with fractional seconds
-        if let Ok(dt) = chrono::NaiveDateTime::parse_from_str(datetime_str, "%Y-%m-%d %H:%M:%S%.f") {
+        if let Ok(dt) = chrono::NaiveDateTime::parse_from_str(datetime_str, "%Y-%m-%d %H:%M:%S%.f")
+        {
             // Convert to Unix timestamp with nanosecond precision
             let unix_secs = dt.timestamp();
             let unix_nanos = dt.timestamp_subsec_nanos();
@@ -188,7 +192,10 @@ impl ByteWriter {
             println!("DEBUG: Writing datetime raw value: 0x{:016x}", raw);
             self.u64(raw);
         } else {
-            write_default_date(self, &format!("Failed to parse datetime '{}'", datetime_str));
+            write_default_date(
+                self,
+                &format!("Failed to parse datetime '{}'", datetime_str),
+            );
         }
     }
 }

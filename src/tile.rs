@@ -1,7 +1,7 @@
-use std::fmt;
-use std::collections::HashMap;
 use once_cell::sync::Lazy;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use std::fmt;
 
 // Static lookup tables for efficient block/wall type resolution
 static BLOCK_TYPE_NAMES: Lazy<HashMap<u16, &'static str>> = Lazy::new(|| {
@@ -434,7 +434,12 @@ pub struct Tile {
 }
 
 impl Tile {
-    pub fn new(block: Option<Block>, wall: Option<Wall>, liquid: Option<Liquid>, wiring: Wiring) -> Self {
+    pub fn new(
+        block: Option<Block>,
+        wall: Option<Wall>,
+        liquid: Option<Liquid>,
+        wiring: Wiring,
+    ) -> Self {
         Self {
             block,
             wall,
@@ -475,4 +480,4 @@ impl Default for TileMatrix {
     fn default() -> Self {
         Self::new()
     }
-} 
+}

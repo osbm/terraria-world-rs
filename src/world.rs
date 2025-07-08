@@ -1,7 +1,10 @@
 use crate::reader::ByteReader;
-use crate::tile::{Tile, TileMatrix, Block, Wall, Liquid, Wiring, BlockType, WallType, LiquidType, FrameImportantData, RLEEncoding};
+use crate::tile::{
+    Block, BlockType, FrameImportantData, Liquid, LiquidType, RLEEncoding, Tile, TileMatrix, Wall,
+    WallType, Wiring,
+};
 use crate::writer::ByteWriter;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 mod pointers;
 use pointers::Pointers;
@@ -93,13 +96,30 @@ impl Mob {
 // Tile Entity types
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum TileEntityExtra {
-    TargetDummy { npc: i16 },
-    ItemFrame { item: ItemStack },
-    LogicSensor { logic_check: u8, enabled: bool },
-    Mannequin { items: Vec<Option<ItemStack>>, dyes: Vec<Option<ItemStack>> },
-    WeaponRack { item: ItemStack },
-    HatRack { items: Vec<Option<ItemStack>>, dyes: Vec<Option<ItemStack>> },
-    Plate { item: ItemStack },
+    TargetDummy {
+        npc: i16,
+    },
+    ItemFrame {
+        item: ItemStack,
+    },
+    LogicSensor {
+        logic_check: u8,
+        enabled: bool,
+    },
+    Mannequin {
+        items: Vec<Option<ItemStack>>,
+        dyes: Vec<Option<ItemStack>>,
+    },
+    WeaponRack {
+        item: ItemStack,
+    },
+    HatRack {
+        items: Vec<Option<ItemStack>>,
+        dyes: Vec<Option<ItemStack>>,
+    },
+    Plate {
+        item: ItemStack,
+    },
     Pylon,
 }
 
@@ -112,7 +132,11 @@ pub struct TileEntity {
 
 impl TileEntity {
     pub fn new(id: i32, position: Coordinates, extra: Option<TileEntityExtra>) -> Self {
-        Self { id, position, extra }
+        Self {
+            id,
+            position,
+            extra,
+        }
     }
 }
 
@@ -150,8 +174,16 @@ pub struct Bestiary {
 }
 
 impl Bestiary {
-    pub fn new(kills: std::collections::HashMap<String, i32>, sightings: Vec<String>, chats: Vec<String>) -> Self {
-        Self { kills, sightings, chats }
+    pub fn new(
+        kills: std::collections::HashMap<String, i32>,
+        sightings: Vec<String>,
+        chats: Vec<String>,
+    ) -> Self {
+        Self {
+            kills,
+            sightings,
+            chats,
+        }
     }
 }
 
@@ -405,16 +437,46 @@ impl World {
         // Print section sizes from pointer table
         println!("=== Section sizes from pointer table ===");
         println!("Section 1 (File Header): {} bytes", pointers.world_header);
-        println!("Section 2 (World Header): {} bytes", pointers.world_tiles - pointers.world_header);
-        println!("Section 3 (Tiles): {} bytes", pointers.chests - pointers.world_tiles);
-        println!("Section 4 (Chests): {} bytes", pointers.signs - pointers.chests);
-        println!("Section 5 (Signs): {} bytes", pointers.npcs - pointers.signs);
-        println!("Section 6 (NPCs): {} bytes", pointers.tile_entities - pointers.npcs);
-        println!("Section 7 (Tile Entities): {} bytes", pointers.pressure_plates - pointers.tile_entities);
-        println!("Section 8 (Pressure Plates): {} bytes", pointers.town_manager - pointers.pressure_plates);
-        println!("Section 9 (Town Manager): {} bytes", pointers.bestiary - pointers.town_manager);
-        println!("Section 10 (Beastiary): {} bytes", pointers.journey_powers - pointers.bestiary);
-        println!("Section 11 (Journey Powers): {} bytes", pointers.footer - pointers.journey_powers);
+        println!(
+            "Section 2 (World Header): {} bytes",
+            pointers.world_tiles - pointers.world_header
+        );
+        println!(
+            "Section 3 (Tiles): {} bytes",
+            pointers.chests - pointers.world_tiles
+        );
+        println!(
+            "Section 4 (Chests): {} bytes",
+            pointers.signs - pointers.chests
+        );
+        println!(
+            "Section 5 (Signs): {} bytes",
+            pointers.npcs - pointers.signs
+        );
+        println!(
+            "Section 6 (NPCs): {} bytes",
+            pointers.tile_entities - pointers.npcs
+        );
+        println!(
+            "Section 7 (Tile Entities): {} bytes",
+            pointers.pressure_plates - pointers.tile_entities
+        );
+        println!(
+            "Section 8 (Pressure Plates): {} bytes",
+            pointers.town_manager - pointers.pressure_plates
+        );
+        println!(
+            "Section 9 (Town Manager): {} bytes",
+            pointers.bestiary - pointers.town_manager
+        );
+        println!(
+            "Section 10 (Beastiary): {} bytes",
+            pointers.journey_powers - pointers.bestiary
+        );
+        println!(
+            "Section 11 (Journey Powers): {} bytes",
+            pointers.footer - pointers.journey_powers
+        );
         println!("========================================");
 
         // println!("File offset after reading pointers: {}", r.offset());
@@ -633,8 +695,11 @@ impl World {
         let moondial_is_running = r.bool();
         let moondial_cooldown = r.u8();
         // tiles
-        let tiles = Self::create_tile_matrix(&mut r, (world_width as usize, world_height as usize), &tile_frame_important);
-
+        let tiles = Self::create_tile_matrix(
+            &mut r,
+            (world_width as usize, world_height as usize),
+            &tile_frame_important,
+        );
 
         // --- CHEST PARSING ---
         let chests_count = r.i16();
@@ -660,7 +725,10 @@ impl World {
                 }
             }
             chests.push(Chest {
-                position: Coordinates { x: chest_x, y: chest_y },
+                position: Coordinates {
+                    x: chest_x,
+                    y: chest_y,
+                },
                 name: chest_name,
                 contents: chest_contents,
             });
@@ -675,7 +743,10 @@ impl World {
             let sign_y = r.i32();
             signs.push(Sign {
                 text: sign_text,
-                position: Coordinates { x: sign_x, y: sign_y },
+                position: Coordinates {
+                    x: sign_x,
+                    y: sign_y,
+                },
             });
         }
 
@@ -709,10 +780,9 @@ impl World {
             let is_homeless = r.bool();
             // println!("NPC {}: is_homeless = {} at offset {}", npc_index, is_homeless, r.offset());
             let npc_home = Coordinates {
-                    x: r.i32(),
-                    y: r.i32(),
-                };
-
+                x: r.i32(),
+                y: r.i32(),
+            };
 
             // println!("NPC {}: home = {:?} at offset {}", npc_index, npc_home, r.offset());
 
@@ -786,7 +856,10 @@ impl World {
                     // Logic Sensor
                     let logic_check = r.u8();
                     let enabled = r.bool();
-                    Some(TileEntityExtra::LogicSensor { logic_check, enabled })
+                    Some(TileEntityExtra::LogicSensor {
+                        logic_check,
+                        enabled,
+                    })
                 }
                 3 => {
                     // Mannequin
@@ -823,7 +896,10 @@ impl World {
                         });
                     }
 
-                    Some(TileEntityExtra::Mannequin { items: mannequin_items, dyes: mannequin_dyes })
+                    Some(TileEntityExtra::Mannequin {
+                        items: mannequin_items,
+                        dyes: mannequin_dyes,
+                    })
                 }
                 4 => {
                     // Weapon Rack
@@ -871,7 +947,10 @@ impl World {
                         });
                     }
 
-                    Some(TileEntityExtra::HatRack { items: rack_items, dyes: rack_dyes })
+                    Some(TileEntityExtra::HatRack {
+                        items: rack_items,
+                        dyes: rack_dyes,
+                    })
                 }
                 6 => {
                     // Food Plate
@@ -899,10 +978,10 @@ impl World {
             tile_entities.push(tile_entity);
         }
 
-
         // Parse weighed pressure plates
         let weighed_pressure_plates_count = r.i32();
-        let mut weighed_pressure_plates = Vec::with_capacity(weighed_pressure_plates_count as usize);
+        let mut weighed_pressure_plates =
+            Vec::with_capacity(weighed_pressure_plates_count as usize);
         for _ in 0..weighed_pressure_plates_count {
             let position = Coordinates {
                 x: r.i32(),
@@ -1282,7 +1361,6 @@ impl World {
             header_writer.u32(0);
         }
 
-
         // Section 2: World header
         let mut world_header_writer = &mut section_buffers[0];
         world_header_writer.string(&self.world_name);
@@ -1312,10 +1390,18 @@ impl World {
         world_header_writer.u8(self.moon_style);
 
         // Write tree_style_seperators, tree_style_properties, moss_style_seperators, moss_style_properties
-        for v in &self.tree_style_seperators { world_header_writer.i32(*v); }
-        for v in &self.tree_style_properties { world_header_writer.i32(*v); }
-        for v in &self.moss_style_seperators { world_header_writer.i32(*v); }
-        for v in &self.moss_style_properties { world_header_writer.i32(*v); }
+        for v in &self.tree_style_seperators {
+            world_header_writer.i32(*v);
+        }
+        for v in &self.tree_style_properties {
+            world_header_writer.i32(*v);
+        }
+        for v in &self.moss_style_seperators {
+            world_header_writer.i32(*v);
+        }
+        for v in &self.moss_style_properties {
+            world_header_writer.i32(*v);
+        }
 
         // Write background styles
         world_header_writer.i32(self.snow_background_style);
@@ -1400,7 +1486,9 @@ impl World {
 
         // Mob kills
         world_header_writer.i16(self.mob_kills.len() as i16);
-        for v in &self.mob_kills { world_header_writer.i32(*v); }
+        for v in &self.mob_kills {
+            world_header_writer.i32(*v);
+        }
         world_header_writer.bool(self.sundial_is_running);
         world_header_writer.bool(self.defeated_duke_fishron);
         world_header_writer.bool(self.defeated_martian_madness);
@@ -1424,7 +1512,9 @@ impl World {
         world_header_writer.bool(self.party_natural_active);
         world_header_writer.i32(self.party_cooldown);
         world_header_writer.i32(self.partying_npcs.len() as i32);
-        for v in &self.partying_npcs { world_header_writer.i32(*v); }
+        for v in &self.partying_npcs {
+            world_header_writer.i32(*v);
+        }
         world_header_writer.bool(self.is_sandstorm_active);
         world_header_writer.i32(self.sandstorm_time_left);
         world_header_writer.f32(self.sandstorm_severity);
@@ -1444,7 +1534,9 @@ impl World {
         world_header_writer.bool(self.lantern_night_manual);
         world_header_writer.bool(self.next_night_is_lantern_night);
         world_header_writer.i32(self.treetop_variants.len() as i32);
-        for v in &self.treetop_variants { world_header_writer.i32(*v); }
+        for v in &self.treetop_variants {
+            world_header_writer.i32(*v);
+        }
         world_header_writer.bool(self.halloween_today);
         world_header_writer.bool(self.christmas_today);
         world_header_writer.i32(self.ore_1);
@@ -1489,7 +1581,10 @@ impl World {
             while y < height {
                 let tile = &column[y];
                 let mut run_length = 1;
-                while y + run_length < height && column[y + run_length] == *tile && run_length < 0xFFFF {
+                while y + run_length < height
+                    && column[y + run_length] == *tile
+                    && run_length < 0xFFFF
+                {
                     run_length += 1;
                 }
                 // --- BEGIN TILE SERIALIZATION ---
@@ -1498,22 +1593,35 @@ impl World {
                 let mut flags3 = [false; 8];
                 let mut flags4 = [false; 8];
                 // Set flags based on tile contents
-                if tile.block.is_some() { flags1[1] = true; }
-                if tile.wall.is_some() { flags1[2] = true; }
+                if tile.block.is_some() {
+                    flags1[1] = true;
+                }
+                if tile.wall.is_some() {
+                    flags1[2] = true;
+                }
                 if let Some(liquid) = &tile.liquid {
                     match liquid.type_ {
                         crate::tile::LiquidType::Water => flags1[3] = true,
                         crate::tile::LiquidType::Lava => flags1[4] = true,
-                        crate::tile::LiquidType::Honey => { flags1[3] = true; flags1[4] = true; },
+                        crate::tile::LiquidType::Honey => {
+                            flags1[3] = true;
+                            flags1[4] = true;
+                        }
                         crate::tile::LiquidType::Shimmer => flags3[7] = true,
                         _ => {}
                     }
                 }
                 // Write flags
                 tiles_writer.bits(&flags1);
-                if flags1[0] { tiles_writer.bits(&flags2); }
-                if flags2[0] { tiles_writer.bits(&flags3); }
-                if flags3[0] { tiles_writer.bits(&flags4); }
+                if flags1[0] {
+                    tiles_writer.bits(&flags2);
+                }
+                if flags2[0] {
+                    tiles_writer.bits(&flags3);
+                }
+                if flags3[0] {
+                    tiles_writer.bits(&flags4);
+                }
                 // Write block
                 if let Some(block) = &tile.block {
                     tiles_writer.u8(block.type_.id() as u8);
@@ -1551,7 +1659,12 @@ impl World {
         // Section 4: Chests
         let mut chests_writer = &mut section_buffers[2];
         chests_writer.i16(self.chests.len() as i16);
-        let max_items = self.chests.iter().map(|c| c.contents.len()).max().unwrap_or(0) as i16;
+        let max_items = self
+            .chests
+            .iter()
+            .map(|c| c.contents.len())
+            .max()
+            .unwrap_or(0) as i16;
         chests_writer.i16(max_items);
         for chest in &self.chests {
             chests_writer.i32(chest.position.x);
@@ -1577,7 +1690,6 @@ impl World {
             signs_writer.i32(sign.position.y);
         }
 
-
         // Section 6: NPCs and Mobs
         let mut npcs_writer = &mut section_buffers[4];
         npcs_writer.i32(self.shimmered_npcs.len() as i32);
@@ -1598,7 +1710,7 @@ impl World {
             npcs_writer.i32(npc.variation_index);
         }
         npcs_writer.bool(false); // end of npcs
-        // Write mobs
+                                 // Write mobs
         for mob in &self.mobs {
             npcs_writer.bool(true);
             npcs_writer.i32(mob.type_.id());
@@ -1635,7 +1747,10 @@ impl World {
                     tile_entities_writer.u8(item.prefix);
                     tile_entities_writer.i16(item.quantity);
                 }
-                Some(crate::world::TileEntityExtra::LogicSensor { logic_check, enabled }) => {
+                Some(crate::world::TileEntityExtra::LogicSensor {
+                    logic_check,
+                    enabled,
+                }) => {
                     tile_entities_writer.u8(*logic_check);
                     tile_entities_writer.bool(*enabled);
                 }
@@ -1665,7 +1780,11 @@ impl World {
                     tile_entities_writer.i16(item.quantity);
                 }
                 Some(crate::world::TileEntityExtra::HatRack { items, dyes }) => {
-                    let item_flags: Vec<bool> = items.iter().chain(dyes.iter()).map(|i| i.is_some()).collect();
+                    let item_flags: Vec<bool> = items
+                        .iter()
+                        .chain(dyes.iter())
+                        .map(|i| i.is_some())
+                        .collect();
                     tile_entities_writer.bits(&item_flags);
                     for item in items.iter().chain(dyes.iter()) {
                         if let Some(item) = item {
@@ -1718,27 +1837,38 @@ impl World {
             bestiary_writer.string(c);
         }
 
-
         // Section 11: Journey Powers
         let mut journey_powers_writer = &mut section_buffers[9];
         // Write each power as a pair (id, value) in the same order as read
         if self.journey_powers.freeze_time {
-            journey_powers_writer.bool(true); journey_powers_writer.i16(0); journey_powers_writer.bool(true);
+            journey_powers_writer.bool(true);
+            journey_powers_writer.i16(0);
+            journey_powers_writer.bool(true);
         }
         if self.journey_powers.time_rate != 1.0 {
-            journey_powers_writer.bool(true); journey_powers_writer.i16(8); journey_powers_writer.f32(self.journey_powers.time_rate);
+            journey_powers_writer.bool(true);
+            journey_powers_writer.i16(8);
+            journey_powers_writer.f32(self.journey_powers.time_rate);
         }
         if self.journey_powers.freeze_rain {
-            journey_powers_writer.bool(true); journey_powers_writer.i16(9); journey_powers_writer.bool(true);
+            journey_powers_writer.bool(true);
+            journey_powers_writer.i16(9);
+            journey_powers_writer.bool(true);
         }
         if self.journey_powers.freeze_wind {
-            journey_powers_writer.bool(true); journey_powers_writer.i16(10); journey_powers_writer.bool(true);
+            journey_powers_writer.bool(true);
+            journey_powers_writer.i16(10);
+            journey_powers_writer.bool(true);
         }
         if self.journey_powers.difficulty != 1.0 {
-            journey_powers_writer.bool(true); journey_powers_writer.i16(12); journey_powers_writer.f32(self.journey_powers.difficulty);
+            journey_powers_writer.bool(true);
+            journey_powers_writer.i16(12);
+            journey_powers_writer.f32(self.journey_powers.difficulty);
         }
         if self.journey_powers.freeze_biome_spread {
-            journey_powers_writer.bool(true); journey_powers_writer.i16(13); journey_powers_writer.bool(true);
+            journey_powers_writer.bool(true);
+            journey_powers_writer.i16(13);
+            journey_powers_writer.bool(true);
         }
         journey_powers_writer.bool(false); // end of journey powers
 
@@ -1823,7 +1953,7 @@ impl World {
         // The original count is what determines how many bytes to read
         let original_count = self.tile_frame_important.len() as i16;
         // println!("Writing tile_frame_important: count={}, actual_bits={}",
-                //  original_count, self.tile_frame_important.len());
+        //  original_count, self.tile_frame_important.len());
         final_writer.i16(original_count);
         for chunk in self.tile_frame_important.chunks(8) {
             final_writer.bits(chunk);
@@ -1832,17 +1962,38 @@ impl World {
         // Print section sizes from buffer lengths
         println!("=== Section sizes from buffer lengths ===");
         println!("Section 1 (File Header): {} bytes", header_writer.offset());
-        println!("Section 2 (World Header): {} bytes", section_buffers[0].offset());
+        println!(
+            "Section 2 (World Header): {} bytes",
+            section_buffers[0].offset()
+        );
         println!("Section 3 (Tiles): {} bytes", section_buffers[1].offset());
         println!("Section 4 (Chests): {} bytes", section_buffers[2].offset());
         println!("Section 5 (Signs): {} bytes", section_buffers[3].offset());
         println!("Section 6 (NPCs): {} bytes", section_buffers[4].offset());
-        println!("Section 7 (Tile Entities): {} bytes", section_buffers[5].offset());
-        println!("Section 8 (Pressure Plates): {} bytes", section_buffers[6].offset());
-        println!("Section 9 (Town Manager): {} bytes", section_buffers[7].offset());
-        println!("Section 10 (Beastiary): {} bytes", section_buffers[8].offset());
-        println!("Section 11 (Journey Powers): {} bytes", section_buffers[9].offset());
-        println!("Section 12 (Footer): {} bytes", section_buffers[10].offset());
+        println!(
+            "Section 7 (Tile Entities): {} bytes",
+            section_buffers[5].offset()
+        );
+        println!(
+            "Section 8 (Pressure Plates): {} bytes",
+            section_buffers[6].offset()
+        );
+        println!(
+            "Section 9 (Town Manager): {} bytes",
+            section_buffers[7].offset()
+        );
+        println!(
+            "Section 10 (Beastiary): {} bytes",
+            section_buffers[8].offset()
+        );
+        println!(
+            "Section 11 (Journey Powers): {} bytes",
+            section_buffers[9].offset()
+        );
+        println!(
+            "Section 12 (Footer): {} bytes",
+            section_buffers[10].offset()
+        );
         println!("=========================================");
 
         // Write all section buffers
@@ -1891,7 +2042,11 @@ impl World {
                 BlockType::from(r.u8() as u16)
             };
 
-            let frame = if tile_frame_important.get(block_type.id() as usize).copied().unwrap_or(false) {
+            let frame = if tile_frame_important
+                .get(block_type.id() as usize)
+                .copied()
+                .unwrap_or(false)
+            {
                 Some(FrameImportantData::new(r.u16(), r.u16()))
             } else {
                 None
@@ -1914,7 +2069,11 @@ impl World {
 
         // Parse wall
         let wall_type_l = if has_wall { r.u8() } else { 0 };
-        let wall_paint = if has_wall && is_wall_painted { Some(r.u8()) } else { None };
+        let wall_paint = if has_wall && is_wall_painted {
+            Some(r.u8())
+        } else {
+            None
+        };
 
         // Parse liquid
         let liquid = if liquid_type != LiquidType::NoLiquid {
@@ -1928,7 +2087,12 @@ impl World {
 
         let wall = if has_wall {
             let wall_type = WallType::from((wall_type_g as u16) * 256 + (wall_type_l as u16));
-            Some(Wall::new(wall_type, wall_paint, is_wall_illuminant, is_wall_echo))
+            Some(Wall::new(
+                wall_type,
+                wall_paint,
+                is_wall_illuminant,
+                is_wall_echo,
+            ))
         } else {
             None
         };
@@ -1979,7 +2143,11 @@ impl World {
         Wiring::new(*red, *blue, *green, *yellow)
     }
 
-    fn create_tile_matrix(r: &mut ByteReader, world_size: (usize, usize), tile_frame_important: &[bool]) -> TileMatrix {
+    fn create_tile_matrix(
+        r: &mut ByteReader,
+        world_size: (usize, usize),
+        tile_frame_important: &[bool],
+    ) -> TileMatrix {
         let mut tm = TileMatrix::new();
         let (width, height) = world_size;
 
