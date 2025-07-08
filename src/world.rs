@@ -395,6 +395,7 @@ impl World {
 
         let pointer_count = r.u16();
         println!("Pointer count: {}", pointer_count);
+        println!("File offset after reading pointer count: {}", r.offset());
         let mut pointer_vector = vec![];
         for _ in 0..pointer_count {
             pointer_vector.push(r.u32());
@@ -415,6 +416,8 @@ impl World {
         println!("Section 10 (Beastiary): {} bytes", pointers.journey_powers - pointers.bestiary);
         println!("Section 11 (Journey Powers): {} bytes", pointers.footer - pointers.journey_powers);
         println!("========================================");
+
+        println!("File offset after reading pointers: {}", r.offset());
 
         let tile_frame_important_size = (r.i16() + 7) / 8;
         let mut tile_frame_important = vec![];
@@ -1278,7 +1281,7 @@ impl World {
         for chunk in self.tile_frame_important.chunks(8) {
             header_writer.bits(chunk);
         }
-        
+
 
         // Section 2: World header
         let mut world_header_writer = &mut section_buffers[0];
