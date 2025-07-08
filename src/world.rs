@@ -1260,7 +1260,7 @@ impl World {
         // Create 11 separate buffers for each section
         let mut section_buffers: Vec<ByteWriter> = vec![ByteWriter::new(); 11];
 
-        // Section 0: File format (always fixed size)
+        // Section 1: File header
         let mut header_writer = ByteWriter::new();
         header_writer.i32(self.version_integer);
         header_writer.bytes(self.magic.as_bytes());
@@ -1274,7 +1274,7 @@ impl World {
             header_writer.u32(0);
         }
 
-        // Section 0: World header (only the world header data, not tile_frame_important)
+        // Section 2: World header
         let mut world_header_writer = &mut section_buffers[0];
         world_header_writer.string(&self.world_name);
         world_header_writer.string(&self.generator_seed);
@@ -1469,7 +1469,7 @@ impl World {
         world_header_writer.bool(self.moondial_is_running);
         world_header_writer.u8(self.moondial_cooldown);
 
-        // Section 1: Tiles (includes tile_frame_important and tile data)
+        // Section 3: Tiles
         let mut tiles_writer = &mut section_buffers[1];
         // Write tile_frame_important first
         let tile_frame_important_size = ((self.tile_frame_important.len() as i16 + 7) / 8) as usize;
@@ -1544,7 +1544,7 @@ impl World {
             }
         }
 
-        // Section 3: Chests
+        // Section 4: Chests
         let mut chests_writer = &mut section_buffers[2];
         chests_writer.i16(self.chests.len() as i16);
         let max_items = self.chests.iter().map(|c| c.contents.len()).max().unwrap_or(0) as i16;
@@ -1564,7 +1564,7 @@ impl World {
             }
         }
 
-        // Section 3: Signs
+        // Section 5: Signs
         let mut signs_writer = &mut section_buffers[3];
         signs_writer.i16(self.signs.len() as i16);
         for sign in &self.signs {
@@ -1574,7 +1574,7 @@ impl World {
         }
 
 
-        // Section 4: NPCs and Mobs
+        // Section 6: NPCs and Mobs
         let mut npcs_writer = &mut section_buffers[4];
         npcs_writer.i32(self.shimmered_npcs.len() as i32);
         for id in &self.shimmered_npcs {
@@ -1603,7 +1603,7 @@ impl World {
         }
         npcs_writer.bool(false); // end of mobs
 
-        // Section 5: Tile Entities
+        // Section 7: Tile Entities
         let mut tile_entities_writer = &mut section_buffers[5];
         tile_entities_writer.i32(self.tile_entities.len() as i32);
         for te in &self.tile_entities {
@@ -1681,7 +1681,7 @@ impl World {
             }
         }
 
-        // Section 6: Pressure Plates
+        // Section 8: Pressure Plates
         let mut pressure_plates_writer = &mut section_buffers[6];
         pressure_plates_writer.i32(self.weighed_pressure_plates.len() as i32);
         for plate in &self.weighed_pressure_plates {
@@ -1689,7 +1689,7 @@ impl World {
             pressure_plates_writer.i32(plate.position.y);
         }
 
-        // Section 7: Town Manager (Rooms)
+        // Section 9: Town Manager
         let mut town_manager_writer = &mut section_buffers[7];
         town_manager_writer.i32(self.rooms.len() as i32);
         for room in &self.rooms {
@@ -1698,7 +1698,7 @@ impl World {
             town_manager_writer.i32(room.position.y);
         }
 
-        // Section 8: Bestiary
+        // Section 10: Bestiary
         let mut bestiary_writer = &mut section_buffers[8];
         bestiary_writer.i32(self.bestiary.kills.len() as i32);
         for (entity, kills) in &self.bestiary.kills {
@@ -1715,7 +1715,7 @@ impl World {
         }
 
 
-        // Section 9: Journey Powers
+        // Section 11: Journey Powers
         let mut journey_powers_writer = &mut section_buffers[9];
         // Write each power as a pair (id, value) in the same order as read
         if self.journey_powers.freeze_time {
@@ -1738,7 +1738,7 @@ impl World {
         }
         journey_powers_writer.bool(false); // end of journey powers
 
-        // Section 10: Footer
+        // Footer
         let mut footer_writer = &mut section_buffers[10];
         footer_writer.bool(true);
         footer_writer.string(&self.world_name);
@@ -1812,17 +1812,18 @@ impl World {
 
         // Print section sizes from buffer lengths
         println!("=== Section sizes from buffer lengths ===");
-        println!("Section 0 (World Header): {} bytes", section_buffers[0].offset());
-        println!("Section 1 (Tiles): {} bytes", section_buffers[1].offset());
-        println!("Section 2 (Chests): {} bytes", section_buffers[2].offset());
-        println!("Section 3 (Signs): {} bytes", section_buffers[3].offset());
-        println!("Section 4 (NPCs): {} bytes", section_buffers[4].offset());
-        println!("Section 5 (Tile Entities): {} bytes", section_buffers[5].offset());
-        println!("Section 6 (Pressure Plates): {} bytes", section_buffers[6].offset());
-        println!("Section 7 (Town Manager): {} bytes", section_buffers[7].offset());
-        println!("Section 8 (Bestiary): {} bytes", section_buffers[8].offset());
-        println!("Section 9 (Journey Powers): {} bytes", section_buffers[9].offset());
-        println!("Section 10 (Footer): {} bytes", section_buffers[10].offset());
+        println!("Section 1 (File Header): {} bytes", header_writer.offset());
+        println!("Section 2 (World Header): {} bytes", section_buffers[0].offset());
+        println!("Section 3 (Tiles): {} bytes", section_buffers[1].offset());
+        println!("Section 4 (Chests): {} bytes", section_buffers[2].offset());
+        println!("Section 5 (Signs): {} bytes", section_buffers[3].offset());
+        println!("Section 6 (NPCs): {} bytes", section_buffers[4].offset());
+        println!("Section 7 (Tile Entities): {} bytes", section_buffers[5].offset());
+        println!("Section 8 (Pressure Plates): {} bytes", section_buffers[6].offset());
+        println!("Section 9 (Town Manager): {} bytes", section_buffers[7].offset());
+        println!("Section 10 (Beastiary): {} bytes", section_buffers[8].offset());
+        println!("Section 11 (Journey Powers): {} bytes", section_buffers[9].offset());
+        println!("Section 12 (Footer): {} bytes", section_buffers[10].offset());
         println!("=========================================");
 
         // Write all section buffers
