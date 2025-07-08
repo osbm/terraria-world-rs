@@ -1211,6 +1211,16 @@ impl Block {
     }
 }
 
+impl fmt::Display for Block {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Block(type_={}, frame={:?}, shape={}, paint={:?}, is_active={}, is_illuminant={}, is_echo={})",
+            self.type_, self.frame, self.shape, self.paint, self.is_active, self.is_illuminant, self.is_echo
+        )
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Wall {
     pub type_: WallType,
@@ -1230,6 +1240,16 @@ impl Wall {
     }
 }
 
+impl fmt::Display for Wall {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Wall(type_={}, paint={:?}, is_illuminant={}, is_echo={})",
+            self.type_, self.paint, self.is_illuminant, self.is_echo
+        )
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Liquid {
     pub type_: LiquidType,
@@ -1239,6 +1259,12 @@ pub struct Liquid {
 impl Liquid {
     pub fn new(type_: LiquidType, volume: u8) -> Self {
         Self { type_, volume }
+    }
+}
+
+impl fmt::Display for Liquid {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Liquid(type={}, volume={})", self.type_, self.volume)
     }
 }
 
