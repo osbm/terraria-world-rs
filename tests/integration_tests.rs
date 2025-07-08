@@ -826,7 +826,7 @@ fn test_chests_against_lihzahrd() {
             for (j, (item, ref_item)) in chest.contents.iter().zip(ref_contents.iter()).enumerate()
             {
                 match (item, ref_item) {
-                    (None, serde_json::Value::Null) => {}
+                    (_, serde_json::Value::Null) => {}
                     (Some(item), serde_json::Value::Object(ref obj)) => {
                         assert_eq!(
                             item.quantity,
@@ -850,11 +850,7 @@ fn test_chests_against_lihzahrd() {
                             j
                         );
                     }
-                    (None, _) => panic!("Chest {} item {}: Rust None but Python not null", i, j),
-                    (Some(_), _) => panic!(
-                        "Chest {} item {}: Rust Some but Python null or not object",
-                        i, j
-                    ),
+                    (_, _) => panic!("Chest {} item {}: Rust None but Python not null", i, j),
                 }
             }
         }
@@ -1077,7 +1073,7 @@ fn test_tile_entity_parsing() {
                 Some(TileEntityExtra::Pylon) => {
                     println!("First tile entity is Pylon");
                 }
-                None => {
+                _ => {
                     println!("First tile entity is Unknown");
                 }
             }
