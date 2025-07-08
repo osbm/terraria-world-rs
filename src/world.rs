@@ -403,17 +403,17 @@ impl World {
 
         // Print section sizes from pointer table
         println!("=== Section sizes from pointer table ===");
-        println!("Section 0 (World Header): {} bytes", pointers.world_header);
-        println!("Section 1 (Tiles): {} bytes", pointers.world_tiles - pointers.world_header);
-        println!("Section 2 (Chests): {} bytes", pointers.chests - pointers.world_tiles);
-        println!("Section 3 (Signs): {} bytes", pointers.signs - pointers.chests);
-        println!("Section 4 (NPCs): {} bytes", pointers.npcs - pointers.signs);
-        println!("Section 5 (Tile Entities): {} bytes", pointers.tile_entities - pointers.npcs);
-        println!("Section 6 (Pressure Plates): {} bytes", pointers.pressure_plates - pointers.tile_entities);
-        println!("Section 7 (Town Manager): {} bytes", pointers.town_manager - pointers.pressure_plates);
-        println!("Section 8 (Bestiary): {} bytes", pointers.bestiary - pointers.town_manager);
-        println!("Section 9 (Journey Powers): {} bytes", pointers.journey_powers - pointers.bestiary);
-        println!("Section 10 (Footer): {} bytes", pointers.footer - pointers.journey_powers);
+        println!("Section 1 (File Header): {} bytes", pointers.world_header);
+        println!("Section 2 (World Header): {} bytes", pointers.world_tiles - pointers.world_header);
+        println!("Section 3 (Tiles): {} bytes", pointers.chests - pointers.world_tiles);
+        println!("Section 4 (Chests): {} bytes", pointers.signs - pointers.chests);
+        println!("Section 5 (Signs): {} bytes", pointers.npcs - pointers.signs);
+        println!("Section 6 (NPCs): {} bytes", pointers.tile_entities - pointers.npcs);
+        println!("Section 7 (Tile Entities): {} bytes", pointers.pressure_plates - pointers.tile_entities);
+        println!("Section 8 (Pressure Plates): {} bytes", pointers.town_manager - pointers.pressure_plates);
+        println!("Section 9 (Town Manager): {} bytes", pointers.bestiary - pointers.town_manager);
+        println!("Section 10 (Beastiary): {} bytes", pointers.journey_powers - pointers.bestiary);
+        println!("Section 11 (Journey Powers): {} bytes", pointers.footer - pointers.journey_powers);
         println!("========================================");
 
         let tile_frame_important_size = (r.i16() + 7) / 8;
