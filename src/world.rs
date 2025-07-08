@@ -419,12 +419,16 @@ impl World {
 
         println!("File offset after reading pointers: {}", r.offset());
 
-        let tile_frame_important_size = (r.i16() + 7) / 8;
+        let tile_frame_important_count = r.i16();
+        println!("Reading tile_frame_important: count={}", tile_frame_important_count);
+        let tile_frame_important_size = (tile_frame_important_count + 7) / 8;
         let mut tile_frame_important = vec![];
         for _ in 0..tile_frame_important_size {
             let current_bits = r.bits();
             tile_frame_important.extend(current_bits);
         }
+        // Truncate to the exact count since we read full bytes but only need specific number of bits
+        tile_frame_important.truncate(tile_frame_important_count as usize);
 
         let world_name = r.string(None);
         let generator_seed = r.string(None);
@@ -1276,11 +1280,6 @@ impl World {
         for _ in 0..self.pointer_count {
             header_writer.u32(0);
         }
-        // Write tile_frame_important count and bits in the file header
-        header_writer.i16(self.tile_frame_important.len() as i16);
-        for chunk in self.tile_frame_important.chunks(8) {
-            header_writer.bits(chunk);
-        }
 
 
         // Section 2: World header
@@ -1750,6 +1749,8 @@ impl World {
 
         // Calculate section lengths and update pointers
         let mut current_offset = header_writer.offset() as u32;
+        
+        // The header_writer already includes the tile_frame_important data, so we don't need to add it again
 
         // Update pointer vector with actual offsets
         let mut pointer_vector = Vec::new();
@@ -1814,6 +1815,17 @@ impl World {
         // Write actual pointer values from world object for debugging section sizes
         for &pointer in &self.pointer_vector {
             final_writer.u32(pointer);
+        }
+        
+        // Write tile_frame_important count and bits in the file header
+        // We need to write the original count, not the actual array length
+        // The original count is what determines how many bytes to read
+        let original_count = self.tile_frame_important.len() as i16;
+        println!("Writing tile_frame_important: count={}, actual_bits={}", 
+                 original_count, self.tile_frame_important.len());
+        final_writer.i16(original_count);
+        for chunk in self.tile_frame_important.chunks(8) {
+            final_writer.bits(chunk);
         }
 
         // Print section sizes from buffer lengths
