@@ -1,9 +1,9 @@
 # default.nix
 { lib
 , naersk
-, stdenv
-, clangStdenv
-, hostPlatform
+# , stdenv
+# , clangStdenv
+# , hostPlatform
 , targetPlatform
 , pkg-config
 , libiconv
@@ -21,7 +21,7 @@ let
   cargoToml = (builtins.fromTOML (builtins.readFile ./Cargo.toml));
 in
 
-naersk.lib."${targetPlatform.system}".buildPackage rec {
+naersk.lib."${targetPlatform.system}".buildPackage {
   src = ./.;
 
   buildInputs = [
@@ -59,6 +59,6 @@ naersk.lib."${targetPlatform.system}".buildPackage rec {
     description = cargoToml.package.description;
     homepage = cargoToml.package.homepage;
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ osbm ];
   };
 }
