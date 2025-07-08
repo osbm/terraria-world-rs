@@ -144,31 +144,51 @@ impl ByteWriter {
     }
 
     pub fn datetime(&mut self, datetime_str: &str) {
-        // Parse the datetime string back to a u64 value
-        // The format is "YYYY-MM-DD HH:MM:SS"
+        // Helper function to write default date (April 7, 2001)
+        let write_default_date = |writer: &mut Self, reason: &str| {
+            println!("⚠️ WARNING: {}, using default date (April 7, 2001)", reason);
+
+            // Create default date: April 7, 2001 00:00:00
+            let default_date = chrono::NaiveDate::from_ymd_opt(2001, 4, 7)
+                .unwrap()
+                .and_hms_opt(0, 0, 0)
+                .unwrap();
+
+            // Convert to Unix timestamp
+            let unix_secs = default_date.timestamp();
+
+            // Convert to .NET ticks (1 tick = 100 nanoseconds)
+            let unix_ticks = (unix_secs as u64) * 10_000_000;
+            let net_ticks = unix_ticks + 621355968000000000; // add .NET epoch offset
+
+            // Hardcode kind bits to 10 (binary) = 2 (decimal) = "Local"
+            let raw = (0b10u64 << 62) | (net_ticks & 0x3FFF_FFFF_FFFF_FFFF);
+            println!("DEBUG: Writing datetime raw value: 0x{:016x} (default date)", raw);
+            writer.u64(raw);
+        };
+
+        // Handle invalid datetime strings or parsing failures
         if datetime_str.starts_with("⚠️") {
-            // Handle invalid datetime - write 0
-            self.u64(0);
+            write_default_date(self, "Invalid datetime string");
             return;
         }
 
-        // Parse the datetime string
-        if let Ok(dt) = chrono::NaiveDateTime::parse_from_str(datetime_str, "%Y-%m-%d %H:%M:%S") {
-            // Convert to Unix timestamp
+        // Parse the datetime string with fractional seconds
+        if let Ok(dt) = chrono::NaiveDateTime::parse_from_str(datetime_str, "%Y-%m-%d %H:%M:%S%.f") {
+            // Convert to Unix timestamp with nanosecond precision
             let unix_secs = dt.timestamp();
-            
+            let unix_nanos = dt.timestamp_subsec_nanos();
+
             // Convert to .NET ticks (1 tick = 100 nanoseconds)
-            let unix_ticks = (unix_secs as u64) * 10_000_000; // seconds to ticks
+            let unix_ticks = (unix_secs as u64) * 10_000_000 + (unix_nanos as u64) / 100;
             let net_ticks = unix_ticks + 621355968000000000; // add .NET epoch offset
-            
-            // Set kind to Unspecified (0) and write the ticks
-            let raw = net_ticks & 0x3FFF_FFFF_FFFF_FFFF; // mask top 2 bits for kind
-            println!("DEBUG: Writing datetime raw value: 0x{:016x}", raw); // DEBUG: Print raw datetime value
+
+            // Hardcode kind bits to 10 (binary) = 2 (decimal) = "Local"
+            let raw = (0b10u64 << 62) | (net_ticks & 0x3FFF_FFFF_FFFF_FFFF);
+            println!("DEBUG: Writing datetime raw value: 0x{:016x}", raw);
             self.u64(raw);
         } else {
-            // If parsing fails, write 0
-            println!("DEBUG: Writing datetime raw value: 0x0000000000000000 (parse failed)"); // DEBUG: Print raw datetime value
-            self.u64(0);
+            write_default_date(self, &format!("Failed to parse datetime '{}'", datetime_str));
         }
     }
-} 
+}
