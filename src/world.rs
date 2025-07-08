@@ -2161,7 +2161,27 @@ impl World {
             }
             tm.add_column(column);
         }
-
-        tm
+    //     // Tile-by-tile check for a region
+    //     for x in 900..910 {
+    //         for y in 280..290 {
+    //             if x < tile_bytes.len() && y < tile_bytes[x].len() {
+    //                 let original = &tile_bytes[x][y];
+    //                 let tile = &tm.tiles[x][y];
+    //                 let serialized = Self::serialize_tile(tile, tile_frame_important);
+    //                 if serialized.is_empty() {
+    //                     // For empty tiles, skip the check (or compare original to itself)
+    //                     continue;
+    //                 }
+    //                 if original != &serialized {
+    //                     println!(
+    //                         "[TILE BYTE MISMATCH] x: {}, y: {}\n  original:   {:02X?}\n  serialized: {:02X?}\n  tile: {}\n",
+    //                         x, y, original, serialized, tile
+    //                     );
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     tm
+    // }
     }
 }
