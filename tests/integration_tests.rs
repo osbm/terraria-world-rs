@@ -739,7 +739,7 @@ fn test_bestiary_parsing() {
         println!("  Kills: {} entries", world.bestiary.kills.len());
         println!("  Sightings: {} entries", world.bestiary.sightings.len());
         println!("  Chats: {} entries", world.bestiary.chats.len());
-        
+
         // Print first few kills
         let mut kill_iter = world.bestiary.kills.iter().take(5);
         if let Some((entity, kills)) = kill_iter.next() {
@@ -749,7 +749,7 @@ fn test_bestiary_parsing() {
                 println!("    {}: {}", entity, kills);
             }
         }
-        
+
         // Print first few sightings
         if !world.bestiary.sightings.is_empty() {
             println!("  Sample sightings:");
@@ -757,7 +757,7 @@ fn test_bestiary_parsing() {
                 println!("    {}", entity);
             }
         }
-        
+
         // Print first few chats
         if !world.bestiary.chats.is_empty() {
             println!("  Sample chats:");
