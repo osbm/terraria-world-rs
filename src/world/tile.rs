@@ -1311,6 +1311,22 @@ impl Tile {
     }
 }
 
+impl fmt::Display for Tile {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Tile {{ block: {}, wall: {}, liquid: {}, wiring: [R:{} B:{} G:{} Y:{}] }}",
+            self.block.as_ref().map_or("None".to_string(), |b| b.to_string()),
+            self.wall.as_ref().map_or("None".to_string(), |w| w.to_string()),
+            self.liquid.as_ref().map_or("None".to_string(), |l| l.to_string()),
+            self.wiring.red,
+            self.wiring.blue,
+            self.wiring.green,
+            self.wiring.yellow
+        )
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct TileMatrix {
     pub tiles: Vec<Vec<Tile>>,
