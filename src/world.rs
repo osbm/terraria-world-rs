@@ -411,6 +411,21 @@ impl World {
             pointer_vector.push(r.u32());
         }
         let pointers = Pointers::from_vector(&pointer_vector); // create this only to use it during parsing
+        
+        // Print section sizes from pointer table
+        println!("=== Section sizes from pointer table ===");
+        println!("Section 0 (World Header): {} bytes", pointers.world_header);
+        println!("Section 1 (Tiles): {} bytes", pointers.world_tiles - pointers.world_header);
+        println!("Section 2 (Chests): {} bytes", pointers.chests - pointers.world_tiles);
+        println!("Section 3 (Signs): {} bytes", pointers.signs - pointers.chests);
+        println!("Section 4 (NPCs): {} bytes", pointers.npcs - pointers.signs);
+        println!("Section 5 (Tile Entities): {} bytes", pointers.tile_entities - pointers.npcs);
+        println!("Section 6 (Pressure Plates): {} bytes", pointers.pressure_plates - pointers.tile_entities);
+        println!("Section 7 (Town Manager): {} bytes", pointers.town_manager - pointers.pressure_plates);
+        println!("Section 8 (Bestiary): {} bytes", pointers.bestiary - pointers.town_manager);
+        println!("Section 9 (Journey Powers): {} bytes", pointers.journey_powers - pointers.bestiary);
+        println!("Section 10 (Footer): {} bytes", pointers.footer - pointers.journey_powers);
+        println!("========================================");
 
         let tile_frame_important_size = (r.i16() + 7) / 8;
         let mut tile_frame_important = vec![];
@@ -1324,7 +1339,7 @@ impl World {
             header_writer.u32(0);
         }
         
-        // Section 1: World header
+        // Section 0: World header (only the world header data, not tile_frame_important)
         let mut world_header_writer = &mut section_buffers[0];
         world_header_writer.bytes(&self.unknown_file_format_data);
         world_header_writer.string(&self.world_name);
@@ -1520,12 +1535,12 @@ impl World {
         world_header_writer.bool(self.moondial_is_running);
         world_header_writer.u8(self.moondial_cooldown);
 
-        // Section 2: Tiles
+        // Section 1: Tiles (includes tile_frame_important and tile data)
         let mut tiles_writer = &mut section_buffers[1];
-        // Write tile_frame_important first (this should be in the header section)
+        // Write tile_frame_important first
         let tile_frame_important_size = ((self.tile_frame_important.len() as i16 + 7) / 8) as usize;
         for chunk in self.tile_frame_important.chunks(8) {
-            header_writer.bits(chunk);
+            tiles_writer.bits(chunk);
         }
         
         // Write tiles (with RLE encoding and serialization)
@@ -1594,6 +1609,9 @@ impl World {
                 y += run_length;
             }
         }
+        
+        // Add unknown tiles data to tiles section
+        tiles_writer.bytes(&self.unknown_tiles_data);
 
         // Section 3: Chests
         let mut chests_writer = &mut section_buffers[2];
@@ -1614,8 +1632,11 @@ impl World {
                 }
             }
         }
+        
+        // Add unknown chests data to chests section
+        chests_writer.bytes(&self.unknown_chests_data);
 
-        // Section 4: Signs
+        // Section 3: Signs
         let mut signs_writer = &mut section_buffers[3];
         signs_writer.i16(self.signs.len() as i16);
         for sign in &self.signs {
@@ -1624,7 +1645,12 @@ impl World {
             signs_writer.i32(sign.position.y);
         }
 
-        // Section 5: NPCs and Mobs
+
+        
+        // Add unknown signs data to signs section
+        signs_writer.bytes(&self.unknown_signs_data);
+
+        // Section 4: NPCs and Mobs
         let mut npcs_writer = &mut section_buffers[4];
         npcs_writer.i32(self.shimmered_npcs.len() as i32);
         for id in &self.shimmered_npcs {
@@ -1652,8 +1678,11 @@ impl World {
             npcs_writer.f32(mob.position.y as f32);
         }
         npcs_writer.bool(false); // end of mobs
+        
+        // Add unknown NPCs data to NPCs section
+        npcs_writer.bytes(&self.unknown_npcs_data);
 
-        // Section 6: Tile Entities
+        // Section 5: Tile Entities
         let mut tile_entities_writer = &mut section_buffers[5];
         tile_entities_writer.i32(self.tile_entities.len() as i32);
         for te in &self.tile_entities {
@@ -1730,16 +1759,22 @@ impl World {
                 None => {}
             }
         }
+        
+        // Add unknown tile entities data to tile entities section
+        tile_entities_writer.bytes(&self.unknown_tile_entities_data);
 
-        // Section 7: Pressure Plates
+        // Section 6: Pressure Plates
         let mut pressure_plates_writer = &mut section_buffers[6];
         pressure_plates_writer.i32(self.weighed_pressure_plates.len() as i32);
         for plate in &self.weighed_pressure_plates {
             pressure_plates_writer.i32(plate.position.x);
             pressure_plates_writer.i32(plate.position.y);
         }
+        
+        // Add unknown pressure plates data to pressure plates section
+        pressure_plates_writer.bytes(&self.unknown_pressure_plates_data);
 
-        // Section 8: Town Manager (Rooms)
+        // Section 7: Town Manager (Rooms)
         let mut town_manager_writer = &mut section_buffers[7];
         town_manager_writer.i32(self.rooms.len() as i32);
         for room in &self.rooms {
@@ -1747,8 +1782,11 @@ impl World {
             town_manager_writer.i32(room.position.x);
             town_manager_writer.i32(room.position.y);
         }
+        
+        // Add unknown town manager data to town manager section
+        town_manager_writer.bytes(&self.unknown_town_manager_data);
 
-        // Section 9: Bestiary
+        // Section 8: Bestiary
         let mut bestiary_writer = &mut section_buffers[8];
         bestiary_writer.i32(self.bestiary.kills.len() as i32);
         for (entity, kills) in &self.bestiary.kills {
@@ -1764,7 +1802,12 @@ impl World {
             bestiary_writer.string(c);
         }
 
-        // Section 10: Journey Powers
+
+        
+        // Add unknown bestiary data to bestiary section
+        bestiary_writer.bytes(&self.unknown_bestiary_data);
+
+        // Section 9: Journey Powers
         let mut journey_powers_writer = &mut section_buffers[9];
         // Write each power as a pair (id, value) in the same order as read
         if self.journey_powers.freeze_time {
@@ -1786,8 +1829,11 @@ impl World {
             journey_powers_writer.bool(true); journey_powers_writer.i16(13); journey_powers_writer.bool(true);
         }
         journey_powers_writer.bool(false); // end of journey powers
+        
+        // Add unknown journey powers data to journey powers section
+        journey_powers_writer.bytes(&self.unknown_journey_powers_data);
 
-        // Section 11: Footer
+        // Section 10: Footer
         let mut footer_writer = &mut section_buffers[10];
         footer_writer.bool(true);
         footer_writer.string(&self.world_name);
@@ -1858,6 +1904,21 @@ impl World {
         for &pointer in &pointer_vector {
             final_writer.u32(pointer);
         }
+        
+        // Print section sizes from buffer lengths
+        println!("=== Section sizes from buffer lengths ===");
+        println!("Section 0 (World Header): {} bytes", section_buffers[0].offset());
+        println!("Section 1 (Tiles): {} bytes", section_buffers[1].offset());
+        println!("Section 2 (Chests): {} bytes", section_buffers[2].offset());
+        println!("Section 3 (Signs): {} bytes", section_buffers[3].offset());
+        println!("Section 4 (NPCs): {} bytes", section_buffers[4].offset());
+        println!("Section 5 (Tile Entities): {} bytes", section_buffers[5].offset());
+        println!("Section 6 (Pressure Plates): {} bytes", section_buffers[6].offset());
+        println!("Section 7 (Town Manager): {} bytes", section_buffers[7].offset());
+        println!("Section 8 (Bestiary): {} bytes", section_buffers[8].offset());
+        println!("Section 9 (Journey Powers): {} bytes", section_buffers[9].offset());
+        println!("Section 10 (Footer): {} bytes", section_buffers[10].offset());
+        println!("=========================================");
         
         // Write all section buffers
         for section_buffer in section_buffers {
