@@ -1308,7 +1308,7 @@ impl World {
         world_header_writer.bool(self.is_upside_down);
         world_header_writer.bool(self.is_trap_world);
         world_header_writer.bool(self.is_zenith_world);
-        world_header_writer.u64(0); // TODO: Proper datetime serialization
+        world_header_writer.datetime(&self.created_on);
         world_header_writer.u8(self.moon_style);
 
         // Write tree_style_seperators, tree_style_properties, moss_style_seperators, moss_style_properties
