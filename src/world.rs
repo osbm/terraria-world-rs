@@ -3,7 +3,6 @@ use crate::tile::{
     Block, BlockType, FrameImportantData, Liquid, LiquidType, RLEEncoding, Tile, TileMatrix, Wall,
     WallType, Wiring,
 };
-use crate::writer::ByteWriter;
 use serde::{Deserialize, Serialize};
 
 mod pointers;
