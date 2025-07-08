@@ -66,3 +66,7 @@ Information about the Beastiary, such as which creatures have been encountered/k
 ### 11. Journey Powers Data
 
 Journey mode powers.
+
+### 12. Footer
+
+Just has world name and id to indicate the end of the file.
