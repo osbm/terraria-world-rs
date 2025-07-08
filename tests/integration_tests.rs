@@ -2,7 +2,7 @@ use serde_json::Value;
 use std::fs;
 use std::path::Path;
 use terraria_world_parser::world::{
-    Bestiary, JourneyPowers, Room, TileEntityExtra, WeighedPressurePlate, World,
+    TileEntityExtra, World,
 };
 
 /// Test utilities for integration tests
