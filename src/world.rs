@@ -2130,17 +2130,14 @@ impl World {
 
 
     fn serialize_tile_data(&self, tile: &Tile) -> Vec<u8> {
-        let size = if self.version_integer >= 269 {
-            16 // 1.4.4+
-        } else if self.version_integer > 222 {
-            15 // 1.4.0+
-        } else {
-            13 // default
-        };
-
-        let mut tile_data = vec![0u8; size];
-        let mut data_index = if self.version_integer >= 269 { 4 } else { 3 }; // 1.4.4+
-
+        let mut tile_data = Vec::new();
+        
+        // Start with headers (we'll fill these in at the end)
+        let header_count = if self.version_integer >= 269 { 4 } else { 3 };
+        for _ in 0..header_count {
+            tile_data.push(0);
+        }
+        
         let mut header4 = 0u8;
         let mut header3 = 0u8;
         let mut header2 = 0u8;
@@ -2153,13 +2150,11 @@ impl World {
                 header1 |= 0b_0000_0010;
 
                 // save tile type as byte or int16
-                tile_data[data_index] = block.type_.id() as u8; // low byte
-                data_index += 1;
+                tile_data.push(block.type_.id() as u8); // low byte
                 
                 if block.type_.id() > 255 {
                     // write high byte
-                    tile_data[data_index] = (block.type_.id() >> 8) as u8;
-                    data_index += 1;
+                    tile_data.push((block.type_.id() >> 8) as u8);
 
                     // set header1 bit[5] for int16 tile type
                     header1 |= 0b_0010_0000;
@@ -2167,24 +2162,16 @@ impl World {
 
                 if let Some(frame) = &block.frame {
                     // pack UV coords
-                    tile_data[data_index] = (frame.x & 0xFF) as u8; // low byte
-                    data_index += 1;
-                    tile_data[data_index] = ((frame.x & 0xFF00) >> 8) as u8; // high byte
-                    data_index += 1;
-                    tile_data[data_index] = (frame.y & 0xFF) as u8; // low byte
-                    data_index += 1;
-                    tile_data[data_index] = ((frame.y & 0xFF00) >> 8) as u8; // high byte
-                    data_index += 1;
+                    tile_data.push((frame.x & 0xFF) as u8); // low byte
+                    tile_data.push(((frame.x & 0xFF00) >> 8) as u8); // high byte
+                    tile_data.push((frame.y & 0xFF) as u8); // low byte
+                    tile_data.push(((frame.y & 0xFF00) >> 8) as u8); // high byte
                 } else if (block.type_.id() as usize) < self.tile_frame_important.len() && self.tile_frame_important[block.type_.id() as usize] {
                     // If no frame data but tile type is frame important, write zeros
-                    tile_data[data_index] = 0; // low byte
-                    data_index += 1;
-                    tile_data[data_index] = 0; // high byte
-                    data_index += 1;
-                    tile_data[data_index] = 0; // low byte
-                    data_index += 1;
-                    tile_data[data_index] = 0; // high byte
-                    data_index += 1;
+                    tile_data.push(0); // low byte
+                    tile_data.push(0); // high byte
+                    tile_data.push(0); // low byte
+                    tile_data.push(0); // high byte
                 }
 
                 if self.version_integer < 269 {
@@ -2200,8 +2187,7 @@ impl World {
 
                             // set header3 bit[3] for tile color active
                             header3 |= 0b_0000_1000;
-                            tile_data[data_index] = color;
-                            data_index += 1;
+                            tile_data.push(color);
                         }
                     }
                 } else {
@@ -2209,8 +2195,7 @@ impl World {
                         if paint != 0 && paint != 31 {
                             // set header3 bit[3] for tile color active
                             header3 |= 0b_0000_1000;
-                            tile_data[data_index] = paint;
-                            data_index += 1;
+                            tile_data.push(paint);
                         }
                     }
                 }
@@ -2222,8 +2207,7 @@ impl World {
             if wall.type_.id() != 0 && wall.type_.id() <= 255 {
                 // set header1 bit[2] for wall active
                 header1 |= 0b_0000_0100;
-                tile_data[data_index] = wall.type_.id() as u8;
-                data_index += 1;
+                tile_data.push(wall.type_.id() as u8);
 
                 // save tile wall color
                 if self.version_integer < 269 {
@@ -2239,8 +2223,7 @@ impl World {
 
                             // set header3 bit[4] for wall color active
                             header3 |= 0b_0001_0000;
-                            tile_data[data_index] = color;
-                            data_index += 1;
+                            tile_data.push(color);
                         }
                     }
                 } else {
@@ -2249,8 +2232,7 @@ impl World {
                         if paint != 0 && paint != 31 {
                             // set header3 bit[4] for wall color active
                             header3 |= 0b_0001_0000;
-                            tile_data[data_index] = paint;
-                            data_index += 1;
+                            tile_data.push(paint);
                         }
                     }
                 }
@@ -2280,8 +2262,7 @@ impl World {
                     }
                 }
 
-                tile_data[data_index] = liquid.volume;
-                data_index += 1;
+                tile_data.push(liquid.volume);
             }
         }
 
@@ -2322,12 +2303,9 @@ impl World {
         if let Some(wall) = &tile.wall {
             if wall.type_.id() > 255 && self.version_integer >= 222 {
                 header3 |= 0b_0100_0000;
-                tile_data[data_index] = (wall.type_.id() >> 8) as u8;
-                data_index += 1;
+                tile_data.push((wall.type_.id() >> 8) as u8);
             }
         }
-
-        let mut header_index = if self.version_integer >= 269 { 3 } else { 2 };
 
         if self.version_integer >= 269 {
             // custom block lighting (v1.4.4+)
@@ -2358,26 +2336,22 @@ impl World {
             if header4 != 0 {
                 // set header4 active flag bit[0] of header3
                 header3 |= 0b_0000_0001;
-                tile_data[header_index] = header4;
-                header_index -= 1;
+                tile_data[3] = header4;
             }
         }
 
         if header3 != 0 {
             // set header3 active flag bit[0] of header2
             header2 |= 0b_0000_0001;
-            tile_data[header_index] = header3;
-            header_index -= 1;
+            tile_data[2] = header3;
         }
         if header2 != 0 {
             // set header2 active flag bit[0] of header1
             header1 |= 0b_0000_0001;
-            tile_data[header_index] = header2;
-            header_index -= 1;
+            tile_data[1] = header2;
         }
 
-        tile_data[header_index] = header1;
-        tile_data.truncate(data_index);
+        tile_data[0] = header1;
         tile_data
     }
 
@@ -2414,26 +2388,25 @@ impl World {
                     }
                 }
 
-                // Serialize the tile data
+                // Serialize the tile data first (without RLE)
                 let mut tile_data = self.serialize_tile_data(current_tile);
                 
                 // Apply RLE compression if needed
                 if rle > 0 {
-                    // Find the header index (first byte)
-                    let header_index = if self.version_integer >= 269 { 3 } else { 2 };
-                    
-                    // Always write lower half of RLE
-                    tile_data.push((rle & 0xFF) as u8);
+                    // Set RLE encoding bits in header1 (bits 6-7)
+                    let header_index = 0; // header1 is always at index 0
                     
                     if rle <= 255 {
                         // set bit[6] of header1 for byte size rle
                         tile_data[header_index] |= 0b_0100_0000; // 64
+                        // Append RLE value at the end
+                        tile_data.push((rle & 0xFF) as u8);
                     } else {
                         // set bit[7] of header1 for int16 size rle
                         tile_data[header_index] |= 0b_1000_0000; // 128
-                        
-                        // grab the upper half of the int16 and stick it in tiledata
-                        tile_data.push(((rle & 0xFF00) >> 8) as u8);
+                        // Append RLE value as u16 at the end
+                        tile_data.push((rle & 0xFF) as u8); // low byte
+                        tile_data.push(((rle & 0xFF00) >> 8) as u8); // high byte
                     }
                 }
 
