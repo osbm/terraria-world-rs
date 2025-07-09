@@ -703,7 +703,7 @@ impl World {
             &mut r,
             (width, height),
             &tile_frame_important,
-            // &mut tile_bytes,
+            &mut tile_bytes,
         );
 
         // --- CHEST PARSING ---
@@ -2101,43 +2101,31 @@ impl World {
         r: &mut ByteReader,
         world_size: (usize, usize),
         tile_frame_important: &[bool],
+        tile_bytes: &mut Vec<Vec<u8>>,
     ) -> TileMatrix {
         let mut tm = TileMatrix::new();
         let (width, height) = world_size;
 
-        for _x in 0..width {
+        for x in 0..width {
             let mut column = Vec::new();
+            let mut column_bytes = Vec::new();
+            let start_offset = r.offset();
+            
             while column.len() < height {
                 let (tile, multiply_by) = Self::read_tile_block(r, tile_frame_important);
                 for _ in 0..multiply_by {
                     column.push(tile.clone());
                 }
             }
+            
+            let end_offset = r.offset();
+            let column_data = r.slice_bytes(start_offset, end_offset);
+            column_bytes.extend_from_slice(&column_data);
+            
             tm.add_column(column);
+            tile_bytes[x] = column_bytes;
         }
         tm
-    //     // Tile-by-tile check for a region
-    //     for x in 900..910 {
-    //         for y in 280..290 {
-    //             if x < tile_bytes.len() && y < tile_bytes[x].len() {
-    //                 let original = &tile_bytes[x][y];
-    //                 let tile = &tm.tiles[x][y];
-    //                 let serialized = Self::serialize_tile(tile, tile_frame_important);
-    //                 if serialized.is_empty() {
-    //                     // For empty tiles, skip the check (or compare original to itself)
-    //                     continue;
-    //                 }
-    //                 if original != &serialized {
-    //                     println!(
-    //                         "[TILE BYTE MISMATCH] x: {}, y: {}\n  original:   {:02X?}\n  serialized: {:02X?}\n  tile: {}\n",
-    //                         x, y, original, serialized, tile
-    //                     );
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     tm
-    // }
     }
 
 
