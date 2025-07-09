@@ -1,9 +1,8 @@
 use serde_json::Value;
 use std::fs;
 use std::path::Path;
-use terraria_world_parser::world::{
-    TileEntityExtra, World,
-};
+use terraria_world_parser::world::World;
+use terraria_world_parser::world::tile_entity::TileEntityExtra;
 
 /// Test utilities for integration tests
 mod test_utils {
@@ -335,7 +334,7 @@ mod test_utils {
 
     /// Validate NPC data against reference
     pub fn validate_npc(
-        npc: &terraria_world_parser::world::NPC,
+        npc: &terraria_world_parser::world::npc::NPC,
         npc_ref: &Value,
     ) -> Result<(), String> {
         assert_eq!(
@@ -382,7 +381,7 @@ mod test_utils {
 
     /// Validate mob data against reference
     pub fn validate_mob(
-        mob: &terraria_world_parser::world::Mob,
+        mob: &terraria_world_parser::world::mob::Mob,
         mob_ref: &Value,
     ) -> Result<(), String> {
         assert_eq!(

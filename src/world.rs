@@ -1,7 +1,23 @@
 use crate::reader::ByteReader;
 use crate::writer::ByteWriter;
+
+// Module declarations
 pub mod tile;
 mod pointers;
+pub mod coordinates;
+pub mod item;
+pub mod chest;
+pub mod sign;
+pub mod entity;
+pub mod npc;
+pub mod mob;
+pub mod tile_entity;
+pub mod pressure_plate;
+pub mod room;
+pub mod bestiary;
+pub mod journey_powers;
+pub mod error;
+
 use self::tile::{
     Block, BlockType, FrameImportantData, Liquid, LiquidType, RLEEncoding, Tile, TileMatrix, Wall,
     WallType, Wiring,
@@ -9,219 +25,22 @@ use self::tile::{
 use self::pointers::Pointers;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct Coordinates {
-    pub x: i32,
-    pub y: i32,
-}
+// Import all the moved types from their submodules
+use crate::world::coordinates::Coordinates;
+use crate::world::item::ItemStack;
+use crate::world::chest::Chest;
+use crate::world::sign::Sign;
+use crate::world::entity::EntityType;
+use crate::world::npc::NPC;
+use crate::world::mob::Mob;
+use crate::world::tile_entity::{TileEntity, TileEntityExtra};
+use crate::world::pressure_plate::WeighedPressurePlate;
+use crate::world::room::Room;
+use crate::world::bestiary::Bestiary;
+use crate::world::journey_powers::JourneyPowers;
+use crate::world::error::InvalidFooterError;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ItemStack {
-    pub quantity: i16,
-    pub type_id: i32,
-    pub prefix: u8,
-}
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct Chest {
-    pub position: Coordinates,
-    pub name: String,
-    pub contents: Vec<Option<ItemStack>>,
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct Sign {
-    pub text: String,
-    pub position: Coordinates,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct EntityType(pub i32);
-
-impl EntityType {
-    pub fn new(id: i32) -> Self {
-        Self(id)
-    }
-
-    pub fn id(&self) -> i32 {
-        self.0
-    }
-}
-
-impl From<i32> for EntityType {
-    fn from(value: i32) -> Self {
-        Self(value)
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct NPC {
-    pub type_: EntityType,
-    pub name: String,
-    pub position: Coordinates,
-    pub home: Coordinates,
-    pub variation_index: i32,
-}
-
-impl NPC {
-    pub fn new(
-        type_: EntityType,
-        name: String,
-        position: Coordinates,
-        home: Coordinates,
-        variation_index: i32,
-    ) -> Self {
-        Self {
-            type_,
-            name,
-            position,
-            home,
-            variation_index,
-        }
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct Mob {
-    pub type_: EntityType,
-    pub position: Coordinates,
-}
-
-impl Mob {
-    pub fn new(type_: EntityType, position: Coordinates) -> Self {
-        Self { type_, position }
-    }
-}
-
-// Tile Entity types
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum TileEntityExtra {
-    TargetDummy {
-        npc: i16,
-    },
-    ItemFrame {
-        item: ItemStack,
-    },
-    LogicSensor {
-        logic_check: u8,
-        enabled: bool,
-    },
-    Mannequin {
-        items: Vec<Option<ItemStack>>,
-        dyes: Vec<Option<ItemStack>>,
-    },
-    WeaponRack {
-        item: ItemStack,
-    },
-    HatRack {
-        items: Vec<Option<ItemStack>>,
-        dyes: Vec<Option<ItemStack>>,
-    },
-    Plate {
-        item: ItemStack,
-    },
-    Pylon,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TileEntity {
-    pub id: i32,
-    pub position: Coordinates,
-    pub extra: Option<TileEntityExtra>,
-}
-
-impl TileEntity {
-    pub fn new(id: i32, position: Coordinates, extra: Option<TileEntityExtra>) -> Self {
-        Self {
-            id,
-            position,
-            extra,
-        }
-    }
-}
-
-// Weighed Pressure Plate
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WeighedPressurePlate {
-    pub position: Coordinates,
-}
-
-impl WeighedPressurePlate {
-    pub fn new(position: Coordinates) -> Self {
-        Self { position }
-    }
-}
-
-// Room for Town Manager
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Room {
-    pub npc: EntityType,
-    pub position: Coordinates,
-}
-
-impl Room {
-    pub fn new(npc: EntityType, position: Coordinates) -> Self {
-        Self { npc, position }
-    }
-}
-
-// Bestiary
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Bestiary {
-    pub kills: std::collections::HashMap<String, i32>,
-    pub sightings: Vec<String>,
-    pub chats: Vec<String>,
-}
-
-impl Bestiary {
-    pub fn new(
-        kills: std::collections::HashMap<String, i32>,
-        sightings: Vec<String>,
-        chats: Vec<String>,
-    ) -> Self {
-        Self {
-            kills,
-            sightings,
-            chats,
-        }
-    }
-}
-
-// Journey Powers
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct JourneyPowers {
-    pub freeze_time: bool,
-    pub time_rate: f32,
-    pub freeze_rain: bool,
-    pub freeze_wind: bool,
-    pub difficulty: f32,
-    pub freeze_biome_spread: bool,
-}
-
-impl JourneyPowers {
-    pub fn new() -> Self {
-        Self {
-            freeze_time: false,
-            time_rate: 1.0,
-            freeze_rain: false,
-            freeze_wind: false,
-            difficulty: 1.0,
-            freeze_biome_spread: false,
-        }
-    }
-}
-
-// Custom error for invalid footer
-#[derive(Debug)]
-pub struct InvalidFooterError(pub String);
-
-impl std::fmt::Display for InvalidFooterError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Invalid footer: {}", self.0)
-    }
-}
-
-impl std::error::Error for InvalidFooterError {}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct World {
