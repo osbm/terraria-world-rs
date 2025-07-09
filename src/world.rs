@@ -412,7 +412,7 @@ pub struct World {
     pub rooms: Vec<Room>,
     pub bestiary: Bestiary,
     pub journey_powers: JourneyPowers,
-    pub tile_bytes: Vec<Vec<Vec<u8>>>,
+    pub tile_bytes: Vec<Vec<u8>>, // Each Vec<u8> represents the entire column data
 }
 
 impl World {
@@ -698,7 +698,7 @@ impl World {
         println!("File offset before tiles: {}", r.offset());
         // tiles
         let (width, height) = (world_width as usize, world_height as usize);
-        let mut tile_bytes: Vec<Vec<Vec<u8>>> = vec![vec![vec![]; height]; width];
+        let mut tile_bytes: Vec<Vec<u8>> = vec![Vec::new(); width]; // Each column will store its entire data
         let tiles = Self::create_tile_matrix(
             &mut r,
             (width, height),
@@ -1069,7 +1069,7 @@ impl World {
             ));
         }
 
-        Ok(Self {
+        let world = Self {
             version_integer,
             magic,
             savefile_type,
@@ -1258,7 +1258,22 @@ impl World {
             bestiary,
             journey_powers,
             tile_bytes,
-        })
+        };
+
+        // Print first column hex after reading
+        if !world.tile_bytes.is_empty() {
+            println!("=== First column (parsed) as hex ===");
+            for (i, byte) in world.tile_bytes[0].iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End first column (parsed) ===");
+        }
+
+        Ok(world)
     }
 
     pub fn version(&self) -> &str {
@@ -1346,7 +1361,7 @@ impl World {
         Ok(world)
     }
 
-    pub fn save_as_wld(&self, path: &str) -> std::io::Result<()> {
+    pub fn save_as_wld(&mut self, path: &str) -> std::io::Result<()> {
         use crate::writer::ByteWriter;
         println!("Saving to {path}...");
 
@@ -1579,87 +1594,20 @@ impl World {
         // Section 3: Tiles
         let mut tiles_writer = &mut section_buffers[1];
 
-        // Write tiles (with RLE encoding and serialization)
-        let (width, height) = self.tiles.size;
-        for x in 0..width {
-            let column = &self.tiles.tiles[x];
-            let mut y = 0;
-            while y < height {
-                let tile = &column[y];
-                let mut run_length = 1;
-                while y + run_length < height
-                    && column[y + run_length] == *tile
-                    && run_length < 0xFFFF
-                {
-                    run_length += 1;
+        // a method named write_tiles_section
+        self.write_tiles_section(tiles_writer);
+
+        // Print first column hex after writing
+        if !self.tile_bytes.is_empty() {
+            println!("=== First column (written) as hex ===");
+            for (i, byte) in self.tile_bytes[0].iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
                 }
-                // --- BEGIN TILE SERIALIZATION ---
-                let mut flags1 = [false; 8];
-                let mut flags2 = [false; 8];
-                let mut flags3 = [false; 8];
-                let mut flags4 = [false; 8];
-                // Set flags based on tile contents
-                if tile.block.is_some() {
-                    flags1[1] = true;
-                }
-                if tile.wall.is_some() {
-                    flags1[2] = true;
-                }
-                if let Some(liquid) = &tile.liquid {
-                    match liquid.type_ {
-                        LiquidType::Water => flags1[3] = true,
-                        LiquidType::Lava => flags1[4] = true,
-                        LiquidType::Honey => {
-                            flags1[3] = true;
-                            flags1[4] = true;
-                        }
-                        LiquidType::Shimmer => flags3[7] = true,
-                        _ => {}
-                    }
-                }
-                // Write flags
-                tiles_writer.bits(&flags1);
-                if flags1[0] {
-                    tiles_writer.bits(&flags2);
-                }
-                if flags2[0] {
-                    tiles_writer.bits(&flags3);
-                }
-                if flags3[0] {
-                    tiles_writer.bits(&flags4);
-                }
-                // Write block
-                if let Some(block) = &tile.block {
-                    tiles_writer.u8(block.type_.id() as u8);
-                    if let Some(frame) = &block.frame {
-                        tiles_writer.u16(frame.x);
-                        tiles_writer.u16(frame.y);
-                    }
-                    if let Some(paint) = block.paint {
-                        tiles_writer.u8(paint);
-                    }
-                }
-                // Write wall
-                if let Some(wall) = &tile.wall {
-                    tiles_writer.u8(wall.type_.id() as u8);
-                    if let Some(paint) = wall.paint {
-                        tiles_writer.u8(paint);
-                    }
-                }
-                // Write liquid
-                if let Some(liquid) = &tile.liquid {
-                    tiles_writer.u8(liquid.volume);
-                }
-                // Write RLE
-                if run_length > 1 {
-                    if run_length <= 0xFF {
-                        tiles_writer.u8((run_length - 1) as u8);
-                    } else {
-                        tiles_writer.u16((run_length - 1) as u16);
-                    }
-                }
-                y += run_length;
             }
+            println!();
+            println!("=== End first column (written) ===");
         }
 
         // Section 4: Chests
@@ -2190,5 +2138,395 @@ impl World {
     //     }
     //     tm
     // }
+    }
+
+
+    fn serialize_tile_data(&self, tile: &Tile) -> Vec<u8> {
+        let size = if self.version_integer >= 269 {
+            16 // 1.4.4+
+        } else if self.version_integer > 222 {
+            15 // 1.4.0+
+        } else {
+            13 // default
+        };
+
+        let mut tile_data = vec![0u8; size];
+        let mut data_index = if self.version_integer >= 269 { 4 } else { 3 }; // 1.4.4+
+
+        let mut header4 = 0u8;
+        let mut header3 = 0u8;
+        let mut header2 = 0u8;
+        let mut header1 = 0u8;
+
+        // tile data
+        if let Some(block) = &tile.block {
+            if block.is_active && block.type_.id() <= 520 && block.type_.id() != 423 {
+                // activate bit[1]
+                header1 |= 0b_0000_0010;
+
+                // save tile type as byte or int16
+                tile_data[data_index] = block.type_.id() as u8; // low byte
+                data_index += 1;
+                
+                if block.type_.id() > 255 {
+                    // write high byte
+                    tile_data[data_index] = (block.type_.id() >> 8) as u8;
+                    data_index += 1;
+
+                    // set header1 bit[5] for int16 tile type
+                    header1 |= 0b_0010_0000;
+                }
+
+                if let Some(frame) = &block.frame {
+                    // pack UV coords
+                    tile_data[data_index] = (frame.x & 0xFF) as u8; // low byte
+                    data_index += 1;
+                    tile_data[data_index] = ((frame.x & 0xFF00) >> 8) as u8; // high byte
+                    data_index += 1;
+                    tile_data[data_index] = (frame.y & 0xFF) as u8; // low byte
+                    data_index += 1;
+                    tile_data[data_index] = ((frame.y & 0xFF00) >> 8) as u8; // high byte
+                    data_index += 1;
+                } else if (block.type_.id() as usize) < self.tile_frame_important.len() && self.tile_frame_important[block.type_.id() as usize] {
+                    // If no frame data but tile type is frame important, write zeros
+                    tile_data[data_index] = 0; // low byte
+                    data_index += 1;
+                    tile_data[data_index] = 0; // high byte
+                    data_index += 1;
+                    tile_data[data_index] = 0; // low byte
+                    data_index += 1;
+                    tile_data[data_index] = 0; // high byte
+                    data_index += 1;
+                }
+
+                if self.version_integer < 269 {
+                    if let Some(paint) = block.paint {
+                        if paint != 0 || block.is_illuminant {
+                            let mut color = paint;
+
+                            // downgraded illuminate coating to illuminate paint
+                            // IF there is no other paint
+                            if color == 0 && block.is_illuminant {
+                                color = 31;
+                            }
+
+                            // set header3 bit[3] for tile color active
+                            header3 |= 0b_0000_1000;
+                            tile_data[data_index] = color;
+                            data_index += 1;
+                        }
+                    }
+                } else {
+                    if let Some(paint) = block.paint {
+                        if paint != 0 && paint != 31 {
+                            // set header3 bit[3] for tile color active
+                            header3 |= 0b_0000_1000;
+                            tile_data[data_index] = paint;
+                            data_index += 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        // wall data
+        if let Some(wall) = &tile.wall {
+            if wall.type_.id() != 0 && wall.type_.id() <= 255 {
+                // set header1 bit[2] for wall active
+                header1 |= 0b_0000_0100;
+                tile_data[data_index] = wall.type_.id() as u8;
+                data_index += 1;
+
+                // save tile wall color
+                if self.version_integer < 269 {
+                    if let Some(paint) = wall.paint {
+                        if paint != 0 || wall.is_illuminant {
+                            let mut color = paint;
+
+                            // downgraded illuminate coating to illuminate paint
+                            // IF there is no other paint
+                            if color == 0 && wall.is_illuminant {
+                                color = 31;
+                            }
+
+                            // set header3 bit[4] for wall color active
+                            header3 |= 0b_0001_0000;
+                            tile_data[data_index] = color;
+                            data_index += 1;
+                        }
+                    }
+                } else {
+                    // for versions >= 269 upgrade illuminant paint to coating
+                    if let Some(paint) = wall.paint {
+                        if paint != 0 && paint != 31 {
+                            // set header3 bit[4] for wall color active
+                            header3 |= 0b_0001_0000;
+                            tile_data[data_index] = paint;
+                            data_index += 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        // liquid data
+        if let Some(liquid) = &tile.liquid {
+            if liquid.volume != 0 && liquid.type_ != LiquidType::NoLiquid {
+                match liquid.type_ {
+                    LiquidType::Shimmer if self.version_integer >= 269 => {
+                        // shimmer (v 1.4.4 +)
+                        header3 |= 0b_1000_0000;
+                        header1 |= 0b_0000_1000;
+                    }
+                    LiquidType::Lava => {
+                        // lava
+                        header1 |= 0b_0001_0000;
+                    }
+                    LiquidType::Honey => {
+                        // honey
+                        header1 |= 0b_0001_1000;
+                    }
+                    _ => {
+                        // water
+                        header1 |= 0b_0000_1000;
+                    }
+                }
+
+                tile_data[data_index] = liquid.volume;
+                data_index += 1;
+            }
+        }
+
+        // wire data
+        if tile.wiring.red {
+            // red wire = header2 bit[1]
+            header2 |= 0b_0000_0010;
+        }
+        if tile.wiring.blue {
+            // blue wire = header2 bit[2]
+            header2 |= 0b_0000_0100;
+        }
+        if tile.wiring.green {
+            // green wire = header2 bit[3]
+            header2 |= 0b_0000_1000;
+        }
+
+        // brick style (shape) - set bits[4,5,6] of header2
+        if let Some(block) = &tile.block {
+            let brick_style = (block.shape << 4) as u8;
+            header2 |= brick_style;
+        }
+
+        // actuator data (not implemented in current Tile structure)
+        // if tile.Actuator {
+        //     // set bit[1] of header3
+        //     header3 |= 0b_0000_0010;
+        // }
+        // if tile.InActive {
+        //     // set bit[2] of header3
+        //     header3 |= 0b_0000_0100;
+        // }
+        if tile.wiring.yellow {
+            header3 |= 0b_0010_0000;
+        }
+
+        // wall high byte
+        if let Some(wall) = &tile.wall {
+            if wall.type_.id() > 255 && self.version_integer >= 222 {
+                header3 |= 0b_0100_0000;
+                tile_data[data_index] = (wall.type_.id() >> 8) as u8;
+                data_index += 1;
+            }
+        }
+
+        let mut header_index = if self.version_integer >= 269 { 3 } else { 2 };
+
+        if self.version_integer >= 269 {
+            // custom block lighting (v1.4.4+)
+            if let Some(block) = &tile.block {
+                if block.is_echo {
+                    header4 |= 0b_0000_0010;
+                }
+            }
+            if let Some(wall) = &tile.wall {
+                if wall.is_echo {
+                    header4 |= 0b_0000_0100;
+                }
+            }
+            if let Some(block) = &tile.block {
+                if block.is_illuminant || block.paint == Some(31) {
+                    // convert illuminant paint
+                    header4 |= 0b_0000_1000;
+                }
+            }
+            if let Some(wall) = &tile.wall {
+                if wall.is_illuminant || wall.paint == Some(31) {
+                    // convert illuminant paint
+                    header4 |= 0b_0001_0000;
+                }
+            }
+
+            // header 4 only used in 1.4.4+
+            if header4 != 0 {
+                // set header4 active flag bit[0] of header3
+                header3 |= 0b_0000_0001;
+                tile_data[header_index] = header4;
+                header_index -= 1;
+            }
+        }
+
+        if header3 != 0 {
+            // set header3 active flag bit[0] of header2
+            header2 |= 0b_0000_0001;
+            tile_data[header_index] = header3;
+            header_index -= 1;
+        }
+        if header2 != 0 {
+            // set header2 active flag bit[0] of header1
+            header1 |= 0b_0000_0001;
+            tile_data[header_index] = header2;
+            header_index -= 1;
+        }
+
+        tile_data[header_index] = header1;
+        tile_data.truncate(data_index);
+        tile_data
+    }
+
+    fn write_tiles_section(&mut self, writer: &mut ByteWriter) {
+        // The thing is that while we have every Tile in the memory
+        // The gamefile format Uses something called RLE Compression
+        // Which essentially just means in a column repeat the same tile
+
+        // But we will need to calculate If a tile will need to be repeated before getting it
+
+        for column_idx in 0..self.world_width as usize {
+            let mut column_data = Vec::new();
+            let mut row_idx = 0;
+            
+            while row_idx < self.world_height as usize {
+                let current_tile = &self.tiles.tiles[column_idx][row_idx];
+                
+                // Calculate RLE (Run Length Encoding) for this tile
+                let mut rle = 0;
+                let mut next_y = row_idx + 1;
+                let mut remaining_y = self.world_height as usize - row_idx - 1;
+                
+                // Check how many consecutive identical tiles we have
+                while remaining_y > 0 && next_y < self.world_height as usize {
+                    let next_tile = &self.tiles.tiles[column_idx][next_y];
+                    
+                    // Check if tiles are equal (excluding special cases)
+                    if self.tiles_equal(current_tile, next_tile) {
+                        rle += 1;
+                        remaining_y -= 1;
+                        next_y += 1;
+                    } else {
+                        break;
+                    }
+                }
+
+                // Serialize the tile data
+                let mut tile_data = self.serialize_tile_data(current_tile);
+                
+                // Apply RLE compression if needed
+                if rle > 0 {
+                    // Find the header index (first byte)
+                    let header_index = if self.version_integer >= 269 { 3 } else { 2 };
+                    
+                    // Always write lower half of RLE
+                    tile_data.push((rle & 0xFF) as u8);
+                    
+                    if rle <= 255 {
+                        // set bit[6] of header1 for byte size rle
+                        tile_data[header_index] |= 0b_0100_0000; // 64
+                    } else {
+                        // set bit[7] of header1 for int16 size rle
+                        tile_data[header_index] |= 0b_1000_0000; // 128
+                        
+                        // grab the upper half of the int16 and stick it in tiledata
+                        tile_data.push(((rle & 0xFF00) >> 8) as u8);
+                    }
+                }
+
+                // Add the tile data to the column
+                column_data.extend_from_slice(&tile_data);
+                
+                // Skip the tiles we've already processed
+                row_idx += rle + 1;
+            }
+            
+            // Store the entire column data in tile_bytes
+            if column_idx < self.tile_bytes.len() {
+                self.tile_bytes[column_idx] = column_data.clone();
+            }
+            
+            // Write the column data to the writer
+            writer.bytes(&column_data);
+        }
+    }
+
+    fn tiles_equal(&self, tile1: &Tile, tile2: &Tile) -> bool {
+        // Check if two tiles are equal for RLE compression
+        // This is a simplified comparison - you might need to adjust based on your needs
+        
+        // Compare blocks
+        let block_equal = match (&tile1.block, &tile2.block) {
+            (Some(b1), Some(b2)) => {
+                b1.type_.id() == b2.type_.id() &&
+                b1.is_active == b2.is_active &&
+                b1.shape == b2.shape &&
+                b1.paint == b2.paint &&
+                b1.is_illuminant == b2.is_illuminant &&
+                b1.is_echo == b2.is_echo &&
+                b1.frame == b2.frame
+            }
+            (None, None) => true,
+            _ => false,
+        };
+
+        // Compare walls
+        let wall_equal = match (&tile1.wall, &tile2.wall) {
+            (Some(w1), Some(w2)) => {
+                w1.type_.id() == w2.type_.id() &&
+                w1.paint == w2.paint &&
+                w1.is_illuminant == w2.is_illuminant &&
+                w1.is_echo == w2.is_echo
+            }
+            (None, None) => true,
+            _ => false,
+        };
+
+        // Compare liquids
+        let liquid_equal = match (&tile1.liquid, &tile2.liquid) {
+            (Some(l1), Some(l2)) => {
+                l1.type_ == l2.type_ && l1.volume == l2.volume
+            }
+            (None, None) => true,
+            _ => false,
+        };
+
+        // Compare wiring
+        let wiring_equal = tile1.wiring.red == tile2.wiring.red &&
+                          tile1.wiring.blue == tile2.wiring.blue &&
+                          tile1.wiring.green == tile2.wiring.green &&
+                          tile1.wiring.yellow == tile2.wiring.yellow;
+
+        block_equal && wall_equal && liquid_equal && wiring_equal
+    }
+
+    /// Get the raw byte data for a specific column (for debugging RLE compression)
+    pub fn get_column_data(&self, column_idx: usize) -> Option<&[u8]> {
+        self.tile_bytes.get(column_idx).map(|data| data.as_slice())
+    }
+
+    /// Get the size of a specific column's data (for debugging RLE compression)
+    pub fn get_column_size(&self, column_idx: usize) -> Option<usize> {
+        self.tile_bytes.get(column_idx).map(|data| data.len())
+    }
+
+    /// Get all column sizes (for debugging RLE compression)
+    pub fn get_all_column_sizes(&self) -> Vec<usize> {
+        self.tile_bytes.iter().map(|data| data.len()).collect()
     }
 }
