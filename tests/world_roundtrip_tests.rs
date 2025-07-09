@@ -53,7 +53,7 @@ fn test_world_roundtrip() {
                 break;
             }
         }
-        let result = if let Some(idx) = first_diff {
+        let _result = if let Some(idx) = first_diff {
             let percent = (idx as f64) / (orig_bytes.len().max(out_bytes.len()) as f64) * 100.0;
             println!(
                 "✗ {}: first difference at byte {} / {} ({:.2}%)",

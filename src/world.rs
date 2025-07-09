@@ -582,41 +582,41 @@ impl World {
         let shimmered_npcs_count = r.i32();
         // println!("shimmered_npcs_count: {} at offset {}", shimmered_npcs_count, r.offset());
         let mut shimmered_npcs = Vec::with_capacity(shimmered_npcs_count as usize);
-        for i in 0..shimmered_npcs_count {
+        for _i in 0..shimmered_npcs_count {
             let npc_id = r.i32();
-            // println!("shimmered_npcs[{}]: {} at offset {}", i, npc_id, r.offset());
+            // println!("shimmered_npcs[{}]: {} at offset {}", _i, npc_id, r.offset());
             shimmered_npcs.push(npc_id);
         }
 
         // Parse NPCs
-        let mut npc_index = 0;
+        let mut _npc_index = 0;
         while r.bool() {
-            // println!("NPC {}: start at offset {}", npc_index, r.offset());
+            // println!("NPC {}: start at offset {}", _npc_index, r.offset());
             let npc_type = EntityType::from(r.i32());
-            // println!("NPC {}: type = {:?} at offset {}", npc_index, npc_type, r.offset());
+            // println!("NPC {}: type = {:?} at offset {}", _npc_index, npc_type, r.offset());
             let npc_name = r.string(None);
-            // println!("NPC {}: name = '{}' at offset {}", npc_index, npc_name, r.offset());
+            // println!("NPC {}: name = '{}' at offset {}", _npc_index, npc_name, r.offset());
             let npc_position = Coordinates {
                 x: r.f32() as i32,
                 y: r.f32() as i32,
             };
-            // println!("NPC {}: position = {:?} at offset {}", npc_index, npc_position, r.offset());
-            let is_homeless = r.bool();
-            // println!("NPC {}: is_homeless = {} at offset {}", npc_index, is_homeless, r.offset());
+            // println!("NPC {}: position = {:?} at offset {}", _npc_index, npc_position, r.offset());
+            let _is_homeless = r.bool();
+            // println!("NPC {}: is_homeless = {} at offset {}", _npc_index, _is_homeless, r.offset());
             let npc_home = Coordinates {
                 x: r.i32(),
                 y: r.i32(),
             };
 
-            // println!("NPC {}: home = {:?} at offset {}", npc_index, npc_home, r.offset());
+            // println!("NPC {}: home = {:?} at offset {}", _npc_index, npc_home, r.offset());
 
             let npc_flags = r.bits();
-            // println!("NPC {}: flags = {:?} at offset {}", npc_index, npc_flags, r.offset());
+            // println!("NPC {}: flags = {:?} at offset {}", _npc_index, npc_flags, r.offset());
             let npc_variation_index = r.i32();
             if !npc_flags[0] {
-                let npc_variation_index = 0i32;
+                let _npc_variation_index = 0i32;
             }
-            // println!("NPC {}: variation_index = {} at offset {}", npc_index, npc_variation_index, r.offset());
+            // println!("NPC {}: variation_index = {} at offset {}", _npc_index, npc_variation_index, r.offset());
 
             let npc = NPC::new(
                 npc_type,
@@ -626,25 +626,25 @@ impl World {
                 npc_variation_index,
             );
             npcs.push(npc);
-            // println!("NPC {}: end at offset {}", npc_index, r.offset());
-            npc_index += 1;
+            // println!("NPC {}: end at offset {}", _npc_index, r.offset());
+            _npc_index += 1;
         }
 
         // Parse mobs
-        let mut mob_index = 0;
+        let mut _mob_index = 0;
         while r.bool() {
-            // println!("Mob {}: start at offset {}", mob_index, r.offset());
+            // println!("Mob {}: start at offset {}", _mob_index, r.offset());
             let mob_type = EntityType::from(r.i32());
-            // println!("Mob {}: type = {:?} at offset {}", mob_index, mob_type, r.offset());
+            // println!("Mob {}: type = {:?} at offset {}", _mob_index, mob_type, r.offset());
             let mob_position = Coordinates {
                 x: r.f32() as i32,
                 y: r.f32() as i32,
             };
-            // println!("Mob {}: position = {:?} at offset {}", mob_index, mob_position, r.offset());
+            // println!("Mob {}: position = {:?} at offset {}", _mob_index, mob_position, r.offset());
             let mob = Mob::new(mob_type, mob_position);
             mobs.push(mob);
-            // println!("Mob {}: end at offset {}", mob_index, r.offset());
-            mob_index += 1;
+            // println!("Mob {}: end at offset {}", _mob_index, r.offset());
+            _mob_index += 1;
         }
 
         // Parse tile entities
@@ -1095,7 +1095,7 @@ impl World {
         if !world.tile_bytes.is_empty() {
             println!("=== Parsed: First 10 tiles in first column ===");
             let mut idx = 0;
-            let mut col = &world.tile_bytes[0];
+            let col = &world.tile_bytes[0];
             let mut offset = 0;
             while idx < 10 && offset < col.len() {
                 // Read headers as Terraria does
@@ -1238,7 +1238,7 @@ impl World {
         }
 
         // Section 2: World header
-        let mut world_header_writer = &mut section_buffers[0];
+        let world_header_writer = &mut section_buffers[0];
         world_header_writer.string(&self.world_name);
         world_header_writer.string(&self.generator_seed);
         world_header_writer.u64(self.generator_version);
@@ -1447,7 +1447,7 @@ impl World {
         world_header_writer.u8(self.moondial_cooldown);
 
         // Section 3: Tiles
-        let mut tiles_writer = &mut section_buffers[1];
+        let tiles_writer = &mut section_buffers[1];
 
         // a method named write_tiles_section
         self.write_tiles_section(tiles_writer);
@@ -1466,7 +1466,7 @@ impl World {
             // Debug: print header info for first 10 tiles in first column (written)
             println!("=== Written: First 10 tiles in first column ===");
             let mut idx = 0;
-            let mut col = &self.tile_bytes[0];
+            let col = &self.tile_bytes[0];
             let mut offset = 0;
             while idx < 10 && offset < col.len() {
                 let mut headers = Vec::new();
@@ -1499,7 +1499,7 @@ impl World {
         }
 
         // Section 4: Chests
-        let mut chests_writer = &mut section_buffers[2];
+        let chests_writer = &mut section_buffers[2];
         chests_writer.i16(self.chests.len() as i16);
         let max_items = self
             .chests
@@ -1524,7 +1524,7 @@ impl World {
         }
 
         // Section 5: Signs
-        let mut signs_writer = &mut section_buffers[3];
+        let signs_writer = &mut section_buffers[3];
         signs_writer.i16(self.signs.len() as i16);
         for sign in &self.signs {
             signs_writer.string(&sign.text);
@@ -1533,7 +1533,7 @@ impl World {
         }
 
         // Section 6: NPCs and Mobs
-        let mut npcs_writer = &mut section_buffers[4];
+        let npcs_writer = &mut section_buffers[4];
         npcs_writer.i32(self.shimmered_npcs.len() as i32);
         for id in &self.shimmered_npcs {
             npcs_writer.i32(*id);
@@ -1562,7 +1562,7 @@ impl World {
         npcs_writer.bool(false); // end of mobs
 
         // Section 7: Tile Entities
-        let mut tile_entities_writer = &mut section_buffers[5];
+        let tile_entities_writer = &mut section_buffers[5];
         tile_entities_writer.i32(self.tile_entities.len() as i32);
         for te in &self.tile_entities {
             let (te_type, extra) = match &te.extra {
@@ -1601,14 +1601,14 @@ impl World {
                     let dye_flags: Vec<bool> = dyes.iter().map(|i| i.is_some()).collect();
                     tile_entities_writer.bits(&item_flags);
                     tile_entities_writer.bits(&dye_flags);
-                    for (i, item) in items.iter().enumerate() {
+                    for (_i, item) in items.iter().enumerate() {
                         if let Some(item) = item {
                             tile_entities_writer.i16(item.type_id as i16);
                             tile_entities_writer.u8(item.prefix);
                             tile_entities_writer.i16(item.quantity);
                         }
                     }
-                    for (i, dye) in dyes.iter().enumerate() {
+                    for (_i, dye) in dyes.iter().enumerate() {
                         if let Some(dye) = dye {
                             tile_entities_writer.i16(dye.type_id as i16);
                             tile_entities_writer.u8(dye.prefix);
@@ -1647,7 +1647,7 @@ impl World {
         }
 
         // Section 8: Pressure Plates
-        let mut pressure_plates_writer = &mut section_buffers[6];
+        let pressure_plates_writer = &mut section_buffers[6];
         pressure_plates_writer.i32(self.weighed_pressure_plates.len() as i32);
         for plate in &self.weighed_pressure_plates {
             pressure_plates_writer.i32(plate.position.x);
@@ -1655,7 +1655,7 @@ impl World {
         }
 
         // Section 9: Town Manager
-        let mut town_manager_writer = &mut section_buffers[7];
+        let town_manager_writer = &mut section_buffers[7];
         town_manager_writer.i32(self.rooms.len() as i32);
         for room in &self.rooms {
             town_manager_writer.i32(room.npc.id());
@@ -1664,7 +1664,7 @@ impl World {
         }
 
         // Section 10: Bestiary
-        let mut bestiary_writer = &mut section_buffers[8];
+        let bestiary_writer = &mut section_buffers[8];
         bestiary_writer.i32(self.bestiary.kills.len() as i32);
         for (entity, kills) in &self.bestiary.kills {
             bestiary_writer.string(entity);
@@ -1680,7 +1680,7 @@ impl World {
         }
 
         // Section 11: Journey Powers
-        let mut journey_powers_writer = &mut section_buffers[9];
+        let journey_powers_writer = &mut section_buffers[9];
         // Write each power as a pair (id, value) in the same order as read
         if self.journey_powers.freeze_time {
             journey_powers_writer.bool(true);
@@ -1715,7 +1715,7 @@ impl World {
         journey_powers_writer.bool(false); // end of journey powers
 
         // Footer
-        let mut footer_writer = &mut section_buffers[10];
+        let footer_writer = &mut section_buffers[10];
         footer_writer.bool(true);
         footer_writer.string(&self.world_name);
         footer_writer.i32(self.id);
@@ -1770,7 +1770,7 @@ impl World {
 
         // Section 10: Footer
         pointer_vector.push(current_offset);
-        current_offset += section_buffers[10].offset() as u32;
+        let _unused_offset = current_offset + section_buffers[10].offset() as u32;
 
         // Write the complete file
         let mut final_writer = ByteWriter::new();

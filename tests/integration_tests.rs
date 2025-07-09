@@ -999,8 +999,8 @@ fn test_tile_entity_parsing() {
         let world = World::from_file(wld_file.to_str().unwrap())
             .expect(&format!("Failed to read world file: {}", file_name));
         println!("Found {} tile entities", world.tile_entities.len());
-        // Basic assertion: at least 0 tile entities (should always be true)
-        assert!(world.tile_entities.len() >= 0);
+        // Basic assertion: tile entities count should be non-negative (always true for Vec)
+        // assert!(world.tile_entities.len() >= 0); // This is always true for Vec
         // Print a summary of tile entity types
         let mut type_counts = std::collections::HashMap::new();
         for te in &world.tile_entities {
@@ -1112,8 +1112,8 @@ fn test_weighed_pressure_plates_parsing() {
             "Found {} weighed pressure plates",
             world.weighed_pressure_plates.len()
         );
-        // Basic assertion: at least 0 weighed pressure plates (should always be true)
-        assert!(world.weighed_pressure_plates.len() >= 0);
+        // Basic assertion: weighed pressure plates count should be non-negative (always true for Vec)
+        // assert!(world.weighed_pressure_plates.len() >= 0); // This is always true for Vec
         // Print details of the first few weighed pressure plates
         for (i, wpp) in world.weighed_pressure_plates.iter().take(5).enumerate() {
             println!(
@@ -1157,8 +1157,8 @@ fn test_town_manager_parsing() {
         let world = World::from_file(wld_file.to_str().unwrap())
             .expect(&format!("Failed to read world file: {}", file_name));
         println!("Found {} rooms", world.rooms.len());
-        // Basic assertion: at least 0 rooms (should always be true)
-        assert!(world.rooms.len() >= 0);
+        // Basic assertion: rooms count should be non-negative (always true for Vec)
+        // assert!(world.rooms.len() >= 0); // This is always true for Vec
         // Print details of the first few rooms
         for (i, room) in world.rooms.iter().take(5).enumerate() {
             println!(
