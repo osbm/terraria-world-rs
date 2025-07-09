@@ -192,4 +192,7 @@ impl ByteWriter {
             );
         }
     }
+    pub fn as_slice(&self) -> &[u8] {
+        &self.buffer
+    }
 }
