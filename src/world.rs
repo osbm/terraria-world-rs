@@ -258,44 +258,65 @@ impl World {
         println!("=== Section sizes from pointer table ===");
         println!("Section 1 (File Header): {} bytes", pointers.world_header);
         println!(
-            "Section 2 (World Header): {} bytes",
-            pointers.world_tiles - pointers.world_header
+            "Section 2 (World Header): {} bytes, starting at {}, ending at {}",
+            pointers.world_tiles - pointers.world_header,
+            pointers.world_header,
+            pointers.world_tiles
+
         );
         println!(
-            "Section 3 (Tiles): {} bytes",
-            pointers.chests - pointers.world_tiles
+            "Section 3 (Tiles): {} bytes, starting at {}, ending at {}",
+            pointers.chests - pointers.world_tiles,
+            pointers.world_tiles,
+            pointers.chests
         );
         println!(
-            "Section 4 (Chests): {} bytes",
-            pointers.signs - pointers.chests
+            "Section 4 (Chests): {} bytes, starting at {}, ending at {}",
+            pointers.signs - pointers.chests,
+            pointers.chests,
+            pointers.signs
         );
         println!(
-            "Section 5 (Signs): {} bytes",
-            pointers.npcs - pointers.signs
+            "Section 5 (Signs): {} bytes, starting at {}, ending at {}",
+            pointers.npcs - pointers.signs,
+            pointers.signs,
+            pointers.npcs
         );
         println!(
-            "Section 6 (NPCs): {} bytes",
-            pointers.tile_entities - pointers.npcs
+            "Section 6 (NPCs): {} bytes, starting at {}, ending at {}",
+            pointers.tile_entities - pointers.npcs,
+            pointers.npcs,
+            pointers.tile_entities
         );
         println!(
-            "Section 7 (Tile Entities): {} bytes",
-            pointers.pressure_plates - pointers.tile_entities
+            "Section 7 (Tile Entities): {} bytes, starting at {}, ending at {}",
+            pointers.pressure_plates - pointers.tile_entities,
+            pointers.tile_entities,
+            pointers.pressure_plates
         );
         println!(
-            "Section 8 (Pressure Plates): {} bytes",
-            pointers.town_manager - pointers.pressure_plates
+            "Section 8 (Pressure Plates): {} bytes, starting at {}, ending at {}",
+            pointers.town_manager - pointers.pressure_plates,
+            pointers.pressure_plates,
+            pointers.town_manager
         );
         println!(
-            "Section 9 (Town Manager): {} bytes",
-            pointers.bestiary - pointers.town_manager
+            "Section 9 (Town Manager): {} bytes, starting at {}, ending at {}",
+            pointers.bestiary - pointers.town_manager,
+            pointers.town_manager,
+            pointers.bestiary
         );
         println!(
-            "Section 10 (Beastiary): {} bytes",
-            pointers.journey_powers - pointers.bestiary
+            "Section 10 (Beastiary): {} bytes, starting at {}, ending at {}",
+            pointers.journey_powers - pointers.bestiary,
+            pointers.bestiary,
+            pointers.journey_powers
         );
         println!(
-            "Section 11 (Journey Powers): {} bytes",
-            pointers.footer - pointers.journey_powers
+            "Section 11 (Journey Powers): {} bytes, starting at {}, ending at {}",
+            pointers.footer - pointers.journey_powers,
+            pointers.journey_powers,
+            pointers.footer
         );
         println!("========================================");
 
@@ -1998,18 +2019,18 @@ impl World {
             let mut column = Vec::new();
             let mut column_bytes = Vec::new();
             let start_offset = r.offset();
-            
+
             while column.len() < height {
                 let (tile, multiply_by) = Self::read_tile_block(r, tile_frame_important);
                 for _ in 0..multiply_by {
                     column.push(tile.clone());
                 }
             }
-            
+
             let end_offset = r.offset();
             let column_data = r.slice_bytes(start_offset, end_offset);
             column_bytes.extend_from_slice(&column_data);
-            
+
             tm.add_column(column);
             tile_bytes[x] = column_bytes;
         }
@@ -2158,19 +2179,19 @@ impl World {
         for column_idx in 0..self.world_width as usize {
             let mut column_data = Vec::new();
             let mut row_idx = 0;
-            
+
             while row_idx < self.world_height as usize {
                 let current_tile = &self.tiles.tiles[column_idx][row_idx];
-                
+
                 // Calculate RLE (Run Length Encoding) for this tile
                 let mut rle = 0;
                 let mut next_y = row_idx + 1;
                 let mut remaining_y = self.world_height as usize - row_idx - 1;
-                
+
                 // Check how many consecutive identical tiles we have
                 while remaining_y > 0 && next_y < self.world_height as usize {
                     let next_tile = &self.tiles.tiles[column_idx][next_y];
-                    
+
                     // Check if tiles are equal (excluding special cases)
                     if self.tiles_equal(current_tile, next_tile) {
                         rle += 1;
@@ -2183,12 +2204,12 @@ impl World {
 
                 // Serialize the tile data first (without RLE)
                 let mut tile_data = self.serialize_tile_data(current_tile);
-                
+
                 // Apply RLE compression if needed
                 if rle > 0 {
                     // Set RLE encoding bits in header1 (bits 6-7)
                     let header_index = 0; // header1 is always at index 0
-                    
+
                     if rle <= 255 {
                         // set bit[6] of header1 for byte size rle
                         tile_data[header_index] |= 0b_0100_0000; // 64
@@ -2205,16 +2226,16 @@ impl World {
 
                 // Add the tile data to the column
                 column_data.extend_from_slice(&tile_data);
-                
+
                 // Skip the tiles we've already processed
                 row_idx += rle + 1;
             }
-            
+
             // Store the entire column data in tile_bytes
             if column_idx < self.tile_bytes.len() {
                 self.tile_bytes[column_idx] = column_data.clone();
             }
-            
+
             // Write the column data to the writer
             writer.bytes(&column_data);
         }
@@ -2223,7 +2244,7 @@ impl World {
     fn tiles_equal(&self, tile1: &Tile, tile2: &Tile) -> bool {
         // Check if two tiles are equal for RLE compression
         // This is a simplified comparison - you might need to adjust based on your needs
-        
+
         // Compare blocks
         let block_equal = match (&tile1.block, &tile2.block) {
             (Some(b1), Some(b2)) => {
