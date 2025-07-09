@@ -1272,6 +1272,42 @@ impl World {
             println!();
             println!("=== End first column (parsed) ===");
         }
+        // Debug: print header info for first 10 tiles in first column (parsed)
+        if !world.tile_bytes.is_empty() {
+            println!("=== Parsed: First 10 tiles in first column ===");
+            let mut idx = 0;
+            let mut col = &world.tile_bytes[0];
+            let mut offset = 0;
+            while idx < 10 && offset < col.len() {
+                // Read headers as Terraria does
+                let mut headers = Vec::new();
+                let mut h = col[offset];
+                headers.push(h);
+                offset += 1;
+                if h & 0b_0000_0001 != 0 && offset < col.len() { // header2 active
+                    h = col[offset];
+                    headers.push(h);
+                    offset += 1;
+                    if h & 0b_0000_0001 != 0 && offset < col.len() { // header3 active
+                        h = col[offset];
+                        headers.push(h);
+                        offset += 1;
+                        if h & 0b_0000_0001 != 0 && offset < col.len() { // header4 active (1.4.4+)
+                            h = col[offset];
+                            headers.push(h);
+                            offset += 1;
+                        }
+                    }
+                }
+                print!("Tile {idx}: headers ({}): ", headers.len());
+                for b in &headers { print!("{:02X} ", b); }
+                println!();
+                // Skip rest of tile data (unknown length, so just skip 5 bytes for now)
+                offset += 5;
+                idx += 1;
+            }
+            println!("=== End parsed headers ===");
+        }
 
         Ok(world)
     }
@@ -1608,6 +1644,39 @@ impl World {
             }
             println!();
             println!("=== End first column (written) ===");
+            // Debug: print header info for first 10 tiles in first column (written)
+            println!("=== Written: First 10 tiles in first column ===");
+            let mut idx = 0;
+            let mut col = &self.tile_bytes[0];
+            let mut offset = 0;
+            while idx < 10 && offset < col.len() {
+                let mut headers = Vec::new();
+                let mut h = col[offset];
+                headers.push(h);
+                offset += 1;
+                if h & 0b_0000_0001 != 0 && offset < col.len() { // header2 active
+                    h = col[offset];
+                    headers.push(h);
+                    offset += 1;
+                    if h & 0b_0000_0001 != 0 && offset < col.len() { // header3 active
+                        h = col[offset];
+                        headers.push(h);
+                        offset += 1;
+                        if h & 0b_0000_0001 != 0 && offset < col.len() { // header4 active (1.4.4+)
+                            h = col[offset];
+                            headers.push(h);
+                            offset += 1;
+                        }
+                    }
+                }
+                print!("Tile {idx}: headers ({}): ", headers.len());
+                for b in &headers { print!("{:02X} ", b); }
+                println!();
+                // Skip rest of tile data (unknown length, so just skip 5 bytes for now)
+                offset += 5;
+                idx += 1;
+            }
+            println!("=== End written headers ===");
         }
 
         // Section 4: Chests
@@ -2130,18 +2199,15 @@ impl World {
 
 
     fn serialize_tile_data(&self, tile: &Tile) -> Vec<u8> {
-        let mut tile_data = Vec::new();
-        
-        // Start with headers (we'll fill these in at the end)
-        let header_count = if self.version_integer >= 269 { 4 } else { 3 };
-        for _ in 0..header_count {
-            tile_data.push(0);
-        }
-        
-        let mut header4 = 0u8;
-        let mut header3 = 0u8;
-        let mut header2 = 0u8;
+        // Prepare headers
         let mut header1 = 0u8;
+        let mut header2 = 0u8;
+        let mut header3 = 0u8;
+        let mut header4 = 0u8;
+        let mut data = Vec::new();
+
+        // ... existing logic to set header1, header2, header3, header4, and push tile data to data ...
+        // (copy from your current function, but don't push headers yet)
 
         // tile data
         if let Some(block) = &tile.block {
@@ -2150,209 +2216,117 @@ impl World {
                 header1 |= 0b_0000_0010;
 
                 // save tile type as byte or int16
-                tile_data.push(block.type_.id() as u8); // low byte
-                
+                data.push(block.type_.id() as u8); // low byte
                 if block.type_.id() > 255 {
                     // write high byte
-                    tile_data.push((block.type_.id() >> 8) as u8);
-
+                    data.push((block.type_.id() >> 8) as u8);
                     // set header1 bit[5] for int16 tile type
                     header1 |= 0b_0010_0000;
                 }
 
                 if let Some(frame) = &block.frame {
-                    // pack UV coords
-                    tile_data.push((frame.x & 0xFF) as u8); // low byte
-                    tile_data.push(((frame.x & 0xFF00) >> 8) as u8); // high byte
-                    tile_data.push((frame.y & 0xFF) as u8); // low byte
-                    tile_data.push(((frame.y & 0xFF00) >> 8) as u8); // high byte
+                    data.push((frame.x & 0xFF) as u8);
+                    data.push(((frame.x & 0xFF00) >> 8) as u8);
+                    data.push((frame.y & 0xFF) as u8);
+                    data.push(((frame.y & 0xFF00) >> 8) as u8);
                 } else if (block.type_.id() as usize) < self.tile_frame_important.len() && self.tile_frame_important[block.type_.id() as usize] {
-                    // If no frame data but tile type is frame important, write zeros
-                    tile_data.push(0); // low byte
-                    tile_data.push(0); // high byte
-                    tile_data.push(0); // low byte
-                    tile_data.push(0); // high byte
+                    data.push(0); data.push(0); data.push(0); data.push(0);
                 }
 
                 if self.version_integer < 269 {
                     if let Some(paint) = block.paint {
                         if paint != 0 || block.is_illuminant {
                             let mut color = paint;
-
-                            // downgraded illuminate coating to illuminate paint
-                            // IF there is no other paint
-                            if color == 0 && block.is_illuminant {
-                                color = 31;
-                            }
-
-                            // set header3 bit[3] for tile color active
+                            if color == 0 && block.is_illuminant { color = 31; }
                             header3 |= 0b_0000_1000;
-                            tile_data.push(color);
+                            data.push(color);
                         }
                     }
                 } else {
                     if let Some(paint) = block.paint {
                         if paint != 0 && paint != 31 {
-                            // set header3 bit[3] for tile color active
                             header3 |= 0b_0000_1000;
-                            tile_data.push(paint);
+                            data.push(paint);
                         }
                     }
                 }
             }
         }
-
-        // wall data
         if let Some(wall) = &tile.wall {
             if wall.type_.id() != 0 && wall.type_.id() <= 255 {
-                // set header1 bit[2] for wall active
                 header1 |= 0b_0000_0100;
-                tile_data.push(wall.type_.id() as u8);
-
-                // save tile wall color
+                data.push(wall.type_.id() as u8);
                 if self.version_integer < 269 {
                     if let Some(paint) = wall.paint {
                         if paint != 0 || wall.is_illuminant {
                             let mut color = paint;
-
-                            // downgraded illuminate coating to illuminate paint
-                            // IF there is no other paint
-                            if color == 0 && wall.is_illuminant {
-                                color = 31;
-                            }
-
-                            // set header3 bit[4] for wall color active
+                            if color == 0 && wall.is_illuminant { color = 31; }
                             header3 |= 0b_0001_0000;
-                            tile_data.push(color);
+                            data.push(color);
                         }
                     }
                 } else {
-                    // for versions >= 269 upgrade illuminant paint to coating
                     if let Some(paint) = wall.paint {
                         if paint != 0 && paint != 31 {
-                            // set header3 bit[4] for wall color active
                             header3 |= 0b_0001_0000;
-                            tile_data.push(paint);
+                            data.push(paint);
                         }
                     }
                 }
             }
         }
-
-        // liquid data
         if let Some(liquid) = &tile.liquid {
             if liquid.volume != 0 && liquid.type_ != LiquidType::NoLiquid {
                 match liquid.type_ {
                     LiquidType::Shimmer if self.version_integer >= 269 => {
-                        // shimmer (v 1.4.4 +)
                         header3 |= 0b_1000_0000;
                         header1 |= 0b_0000_1000;
                     }
-                    LiquidType::Lava => {
-                        // lava
-                        header1 |= 0b_0001_0000;
-                    }
-                    LiquidType::Honey => {
-                        // honey
-                        header1 |= 0b_0001_1000;
-                    }
-                    _ => {
-                        // water
-                        header1 |= 0b_0000_1000;
-                    }
+                    LiquidType::Lava => { header1 |= 0b_0001_0000; }
+                    LiquidType::Honey => { header1 |= 0b_0001_1000; }
+                    _ => { header1 |= 0b_0000_1000; }
                 }
-
-                tile_data.push(liquid.volume);
+                data.push(liquid.volume);
             }
         }
-
-        // wire data
-        if tile.wiring.red {
-            // red wire = header2 bit[1]
-            header2 |= 0b_0000_0010;
-        }
-        if tile.wiring.blue {
-            // blue wire = header2 bit[2]
-            header2 |= 0b_0000_0100;
-        }
-        if tile.wiring.green {
-            // green wire = header2 bit[3]
-            header2 |= 0b_0000_1000;
-        }
-
-        // brick style (shape) - set bits[4,5,6] of header2
+        if tile.wiring.red { header2 |= 0b_0000_0010; }
+        if tile.wiring.blue { header2 |= 0b_0000_0100; }
+        if tile.wiring.green { header2 |= 0b_0000_1000; }
         if let Some(block) = &tile.block {
             let brick_style = (block.shape << 4) as u8;
             header2 |= brick_style;
         }
-
-        // actuator data (not implemented in current Tile structure)
-        // if tile.Actuator {
-        //     // set bit[1] of header3
-        //     header3 |= 0b_0000_0010;
-        // }
-        // if tile.InActive {
-        //     // set bit[2] of header3
-        //     header3 |= 0b_0000_0100;
-        // }
-        if tile.wiring.yellow {
-            header3 |= 0b_0010_0000;
-        }
-
-        // wall high byte
+        if tile.wiring.yellow { header3 |= 0b_0010_0000; }
         if let Some(wall) = &tile.wall {
             if wall.type_.id() > 255 && self.version_integer >= 222 {
                 header3 |= 0b_0100_0000;
-                tile_data.push((wall.type_.id() >> 8) as u8);
+                data.push((wall.type_.id() >> 8) as u8);
             }
         }
-
         if self.version_integer >= 269 {
-            // custom block lighting (v1.4.4+)
-            if let Some(block) = &tile.block {
-                if block.is_echo {
-                    header4 |= 0b_0000_0010;
-                }
-            }
-            if let Some(wall) = &tile.wall {
-                if wall.is_echo {
-                    header4 |= 0b_0000_0100;
-                }
-            }
-            if let Some(block) = &tile.block {
-                if block.is_illuminant || block.paint == Some(31) {
-                    // convert illuminant paint
-                    header4 |= 0b_0000_1000;
-                }
-            }
-            if let Some(wall) = &tile.wall {
-                if wall.is_illuminant || wall.paint == Some(31) {
-                    // convert illuminant paint
-                    header4 |= 0b_0001_0000;
-                }
-            }
+            if let Some(block) = &tile.block { if block.is_echo { header4 |= 0b_0000_0010; } }
+            if let Some(wall) = &tile.wall { if wall.is_echo { header4 |= 0b_0000_0100; } }
+            if let Some(block) = &tile.block { if block.is_illuminant || block.paint == Some(31) { header4 |= 0b_0000_1000; } }
+            if let Some(wall) = &tile.wall { if wall.is_illuminant || wall.paint == Some(31) { header4 |= 0b_0001_0000; } }
+            if header4 != 0 { header3 |= 0b_0000_0001; }
+        }
+        if header3 != 0 { header2 |= 0b_0000_0001; }
+        if header2 != 0 { header1 |= 0b_0000_0001; }
 
-            // header 4 only used in 1.4.4+
-            if header4 != 0 {
-                // set header4 active flag bit[0] of header3
-                header3 |= 0b_0000_0001;
-                tile_data[3] = header4;
+        // Now, push only as many headers as needed
+        let mut out = Vec::new();
+        out.push(header1);
+        if header1 & 0b_0000_0001 != 0 {
+            out.push(header2);
+            if header2 & 0b_0000_0001 != 0 {
+                out.push(header3);
+                if self.version_integer >= 269 && header3 & 0b_0000_0001 != 0 {
+                    out.push(header4);
+                }
             }
         }
-
-        if header3 != 0 {
-            // set header3 active flag bit[0] of header2
-            header2 |= 0b_0000_0001;
-            tile_data[2] = header3;
-        }
-        if header2 != 0 {
-            // set header2 active flag bit[0] of header1
-            header1 |= 0b_0000_0001;
-            tile_data[1] = header2;
-        }
-
-        tile_data[0] = header1;
-        tile_data
+        out.extend(data);
+        out
     }
 
     fn write_tiles_section(&mut self, writer: &mut ByteWriter) {
