@@ -221,6 +221,7 @@ pub struct World {
     pub moondial_is_running: bool,
     pub moondial_cooldown: u8,
     pub tiles: TileMatrix,
+    pub chests_max_items: i16,
     pub chests: Vec<Chest>,
     pub signs: Vec<Sign>,
     pub npcs: Vec<NPC>,
@@ -578,6 +579,7 @@ impl World {
         }
 
         // --- SIGN PARSING ---
+        let debug_signs_offset_before = r.offset();
         let signs_count = r.i16();
         let mut signs = Vec::with_capacity(signs_count as usize);
         for _ in 0..signs_count {
@@ -1085,6 +1087,7 @@ impl World {
             moondial_is_running,
             moondial_cooldown,
             tiles,
+            chests_max_items,
             chests,
             signs,
             npcs,
@@ -1520,13 +1523,7 @@ impl World {
         // Section 4: Chests
         let chests_writer = &mut section_buffers[2];
         chests_writer.i16(self.chests.len() as i16);
-        let max_items = self
-            .chests
-            .iter()
-            .map(|c| c.contents.len())
-            .max()
-            .unwrap_or(0) as i16;
-        chests_writer.i16(max_items);
+        chests_writer.i16(self.chests_max_items);
         for chest in &self.chests {
             chests_writer.i32(chest.position.x);
             chests_writer.i32(chest.position.y);
