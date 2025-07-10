@@ -139,6 +139,19 @@ impl<'a> ByteReader<'a> {
         slice
     }
 
+    /// Returns a slice of bytes from the current offset without advancing the offset.
+    pub fn peek_bytes(&self, count: usize) -> &'a [u8] {
+        if self.offset + count > self.data.len() {
+            panic!(
+                "Attempted to peek {} bytes at offset {} but data length is {}",
+                count,
+                self.offset,
+                self.data.len()
+            );
+        }
+        &self.data[self.offset..self.offset + count]
+    }
+
     pub fn read_until(&mut self, address: usize) -> Vec<u8> {
         let end = std::cmp::min(address, self.data.len());
         if self.offset >= end {
