@@ -1471,51 +1471,51 @@ impl World {
         // a method named write_tiles_section
         self.write_tiles_section(tiles_writer);
 
-        // Print first column hex after writing
-        if !self.tile_bytes.is_empty() {
-            println!("=== First column (written) as hex ===");
-            for (i, byte) in self.tile_bytes[0].iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End first column (written) ===");
-            // Debug: print header info for first 10 tiles in first column (written)
-            println!("=== Written: First 10 tiles in first column ===");
-            let mut idx = 0;
-            let col = &self.tile_bytes[0];
-            let mut offset = 0;
-            while idx < 10 && offset < col.len() {
-                let mut headers = Vec::new();
-                let mut h = col[offset];
-                headers.push(h);
-                offset += 1;
-                if h & 0b_0000_0001 != 0 && offset < col.len() { // header2 active
-                    h = col[offset];
-                    headers.push(h);
-                    offset += 1;
-                    if h & 0b_0000_0001 != 0 && offset < col.len() { // header3 active
-                        h = col[offset];
-                        headers.push(h);
-                        offset += 1;
-                        if h & 0b_0000_0001 != 0 && offset < col.len() { // header4 active (1.4.4+)
-                            h = col[offset];
-                            headers.push(h);
-                            offset += 1;
-                        }
-                    }
-                }
-                print!("Tile {idx}: headers ({}): ", headers.len());
-                for b in &headers { print!("{:02X} ", b); }
-                println!();
-                // Skip rest of tile data (unknown length, so just skip 5 bytes for now)
-                offset += 5;
-                idx += 1;
-            }
-            println!("=== End written headers ===");
-        }
+        // // Print first column hex after writing
+        // if !self.tile_bytes.is_empty() {
+        //     println!("=== First column (written) as hex ===");
+        //     for (i, byte) in self.tile_bytes[0].iter().enumerate() {
+        //         print!("{:02X} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End first column (written) ===");
+        //     // Debug: print header info for first 10 tiles in first column (written)
+        //     println!("=== Written: First 10 tiles in first column ===");
+        //     let mut idx = 0;
+        //     let col = &self.tile_bytes[0];
+        //     let mut offset = 0;
+        //     while idx < 10 && offset < col.len() {
+        //         let mut headers = Vec::new();
+        //         let mut h = col[offset];
+        //         headers.push(h);
+        //         offset += 1;
+        //         if h & 0b_0000_0001 != 0 && offset < col.len() { // header2 active
+        //             h = col[offset];
+        //             headers.push(h);
+        //             offset += 1;
+        //             if h & 0b_0000_0001 != 0 && offset < col.len() { // header3 active
+        //                 h = col[offset];
+        //                 headers.push(h);
+        //                 offset += 1;
+        //                 if h & 0b_0000_0001 != 0 && offset < col.len() { // header4 active (1.4.4+)
+        //                     h = col[offset];
+        //                     headers.push(h);
+        //                     offset += 1;
+        //                 }
+        //             }
+        //         }
+        //         print!("Tile {idx}: headers ({}): ", headers.len());
+        //         for b in &headers { print!("{:02X} ", b); }
+        //         println!();
+        //         // Skip rest of tile data (unknown length, so just skip 5 bytes for now)
+        //         offset += 5;
+        //         idx += 1;
+        //     }
+        //     println!("=== End written headers ===");
+        // }
 
         // Section 4: Chests
         let chests_writer = &mut section_buffers[2];
