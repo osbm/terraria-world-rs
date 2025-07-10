@@ -37,7 +37,7 @@ fn test_world_roundtrip() {
             .expect(&format!("Failed to read world file: {}", file_name));
 
         // Save as WLD
-        let output_wld_path = format!("./{}.roundtrip.wld", file_name);
+        let output_wld_path = format!("./worlds/{}.roundtrip.wld", file_name);
         world
             .save_as_wld(&output_wld_path)
             .expect(&format!("Failed to save WLD for: {}", file_name));
@@ -89,8 +89,6 @@ fn test_world_roundtrip() {
             println!("✓ {}: OK (100%)", file_name);
         };
 
-        // Clean up temporary files
-        fs::remove_file(output_wld_path).ok();
     }
     if !failures.is_empty() {
         println!("\nSummary of roundtrip failures:");
