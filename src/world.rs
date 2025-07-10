@@ -338,7 +338,6 @@ impl World {
         let generator_version = r.u64();
         let uuid = r.uuid();
         let id = r.i32();
-        println!("after world id: {}", r.offset());
         let bounds_vec = vec![
             r.i32(), // left
             r.i32(), // right
@@ -535,7 +534,6 @@ impl World {
         let saved_slime_squire = r.bool();
         let moondial_is_running = r.bool();
         let moondial_cooldown = r.u8();
-        println!("File offset before tiles: {}", r.offset());
         // tiles
         let (width, height) = (world_width as usize, world_height as usize);
         let mut tile_bytes: Vec<Vec<u8>> = vec![Vec::new(); width]; // Each column will store its entire data
