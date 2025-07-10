@@ -41,6 +41,8 @@ fn test_world_roundtrip() {
         world
             .save_as_wld(&output_wld_path)
             .expect(&format!("Failed to save WLD for: {}", file_name));
+        println!("Saved roundtrip WLD to: {}", output_wld_path);
+        println!("World name: {}", world.world_name);
 
         // Read both files as bytes
         let orig_bytes = fs::read(&wld_file).expect("Failed to read original file bytes");
