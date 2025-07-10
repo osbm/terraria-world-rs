@@ -96,7 +96,7 @@ fn test_world_roundtrip() {
         println!("\nSummary of roundtrip failures:");
         for (file, idx, len, percent) in &failures {
             println!(
-                "  {}: first difference at byte {} / {} ({:.2}%)",
+                "  {}: first difference at byte {}. total bytes {}. The first  ({:.2}%) is correct.",
                 file, idx, len, percent
             );
         }
