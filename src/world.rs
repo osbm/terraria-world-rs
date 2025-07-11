@@ -545,9 +545,30 @@ impl World {
             &mut tile_bytes,
         );
 
+        // // Print last 10 bytes of tile data for empty world
+        // if world_name == "Blank World - Journey" {
+        //     println!("=== Last 10 bytes of tile data (read) ===");
+        //     let tile_data_end = r.offset();
+        //     println!("tile_data_end: {}", tile_data_end);
+        //     println!("pointers.chests: {}", pointers.chests);
+        //     if tile_data_end >= 10 {
+        //         // Get the last 10 bytes by slicing from the end
+        //         let last_10_bytes = r.slice_bytes(tile_data_end - 10, tile_data_end);
+        //         println!("{:02X?}", last_10_bytes);
+        //     } else {
+        //         // If less than 10 bytes, get all available bytes
+        //         let all_bytes = r.slice_bytes(0, tile_data_end);
+        //         println!("{:02X?}", all_bytes);
+        //     }
+        //     println!("=== End last 10 bytes of tile data (read) ===");
+        // }
+
+        let debug_chest_offset_before  = r.offset();
+
         // --- CHEST PARSING ---
         let chests_count = r.i16();
         let chests_max_items = r.i16();
+        println!("chests_max_items: {}", chests_max_items);
         let mut chests = Vec::with_capacity(chests_count as usize);
         for _ in 0..chests_count {
             let chest_x = r.i32();
@@ -578,6 +599,18 @@ impl World {
             });
         }
 
+
+        if world_name == "Blank World - Journey" {
+            let debug_chest_offset_after = r.offset();
+            // println!("File offset after chests: {}", r.offset());
+            println!("=== Chests section as hex ===");
+            // just the read bytes for chests
+            let chests_bytes = &r.peek_bytes(debug_chest_offset_after - debug_chest_offset_before);
+            println!("{:02X?}", chests_bytes);
+        }
+        println!("File offset after chests: {}", r.offset());
+
+
         // --- SIGN PARSING ---
         let debug_signs_offset_before = r.offset();
         let signs_count = r.i16();
@@ -594,6 +627,13 @@ impl World {
                 },
             });
         }
+        let debug_signs_offset_after = r.offset();
+        if world_name == "Blank World - Journey" {
+            println!("=== Signs section as hex ===");
+            let signs_bytes = &r.peek_bytes(debug_signs_offset_after - debug_signs_offset_before);
+            println!("{:02X?}", signs_bytes);
+        }
+        println!("File offset after signs: {}", r.offset());
 
         // Parse entities
         let mut npcs = Vec::new();
@@ -909,7 +949,7 @@ impl World {
             ));
         }
 
-        let world = Self {
+        let world = World { // World vs Self?
             version_integer,
             magic,
             savefile_type,
@@ -1101,54 +1141,9 @@ impl World {
             tile_bytes,
         };
 
-        // // Print first column hex after reading
-        // if !world.tile_bytes.is_empty() {
-        //     println!("=== First column (parsed) as hex ===");
-        //     for (i, byte) in world.tile_bytes[0].iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End first column (parsed) ===");
-        // }
-        // // Debug: print header info for first 10 tiles in first column (parsed)
-        // if !world.tile_bytes.is_empty() {
-        //     println!("=== Parsed: First 10 tiles in first column ===");
-        //     let mut idx = 0;
-        //     let col = &world.tile_bytes[0];
-        //     let mut offset = 0;
-        //     while idx < 10 && offset < col.len() {
-        //         // Read headers as Terraria does
-        //         let mut headers = Vec::new();
-        //         let mut h = col[offset];
-        //         headers.push(h);
-        //         offset += 1;
-        //         if h & 0b_0000_0001 != 0 && offset < col.len() { // header2 active
-        //             h = col[offset];
-        //             headers.push(h);
-        //             offset += 1;
-        //             if h & 0b_0000_0001 != 0 && offset < col.len() { // header3 active
-        //                 h = col[offset];
-        //                 headers.push(h);
-        //                 offset += 1;
-        //                 if h & 0b_0000_0001 != 0 && offset < col.len() { // header4 active (1.4.4+)
-        //                     h = col[offset];
-        //                     headers.push(h);
-        //                     offset += 1;
-        //                 }
-        //             }
-        //         }
-        //         print!("Tile {idx}: headers ({}): ", headers.len());
-        //         for b in &headers { print!("{:02X} ", b); }
-        //         println!();
-        //         // Skip rest of tile data (unknown length, so just skip 5 bytes for now)
-        //         offset += 5;
-        //         idx += 1;
-        //     }
-        //     println!("=== End parsed headers ===");
-        // }
+        if world.world_name == "Blank World - Journey" {
+            println!("CONSTRUCTOR: chests_max_items = {}", world.chests_max_items);
+        }
 
         Ok(world)
     }
@@ -1474,55 +1469,23 @@ impl World {
         // a method named write_tiles_section
         self.write_tiles_section(tiles_writer);
 
-        // // Print first column hex after writing
-        // if !self.tile_bytes.is_empty() {
-        //     println!("=== First column (written) as hex ===");
-        //     for (i, byte) in self.tile_bytes[0].iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End first column (written) ===");
-        //     // Debug: print header info for first 10 tiles in first column (written)
-        //     println!("=== Written: First 10 tiles in first column ===");
-        //     let mut idx = 0;
-        //     let col = &self.tile_bytes[0];
-        //     let mut offset = 0;
-        //     while idx < 10 && offset < col.len() {
-        //         let mut headers = Vec::new();
-        //         let mut h = col[offset];
-        //         headers.push(h);
-        //         offset += 1;
-        //         if h & 0b_0000_0001 != 0 && offset < col.len() { // header2 active
-        //             h = col[offset];
-        //             headers.push(h);
-        //             offset += 1;
-        //             if h & 0b_0000_0001 != 0 && offset < col.len() { // header3 active
-        //                 h = col[offset];
-        //                 headers.push(h);
-        //                 offset += 1;
-        //                 if h & 0b_0000_0001 != 0 && offset < col.len() { // header4 active (1.4.4+)
-        //                     h = col[offset];
-        //                     headers.push(h);
-        //                     offset += 1;
-        //                 }
-        //             }
-        //         }
-        //         print!("Tile {idx}: headers ({}): ", headers.len());
-        //         for b in &headers { print!("{:02X} ", b); }
-        //         println!();
-        //         // Skip rest of tile data (unknown length, so just skip 5 bytes for now)
-        //         offset += 5;
-        //         idx += 1;
-        //     }
-        //     println!("=== End written headers ===");
-        // }
+        // Print last 10 bytes of tile data for empty world
+        if self.world_name == "Blank World - Journey" {
+            println!("=== Last 10 bytes of tile data (write) ===");
+            let tile_data = tiles_writer.as_slice();
+            if tile_data.len() >= 10 {
+                let last_10_bytes = &tile_data[tile_data.len() - 10..];
+                println!("{:02X?}", last_10_bytes);
+            } else {
+                println!("{:02X?}", tile_data);
+            }
+            println!("=== End last 10 bytes of tile data (write) ===");
+        }
 
         // Section 4: Chests
         let chests_writer = &mut section_buffers[2];
         chests_writer.i16(self.chests.len() as i16);
+        println!("chests_max_items: {}", self.chests_max_items);
         chests_writer.i16(self.chests_max_items);
         for chest in &self.chests {
             chests_writer.i32(chest.position.x);
@@ -1539,6 +1502,20 @@ impl World {
             }
         }
 
+        // print hex values of chests section but only if the world name is
+        if self.world_name == "Blank World - Journey" {
+            println!("=== Chests section as hex ===");
+            for (i, byte) in chests_writer.as_slice().iter().enumerate() {
+                print!("{:02X?} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End chests section ===");
+
+        }
+
         // Section 5: Signs
         let signs_writer = &mut section_buffers[3];
         signs_writer.i16(self.signs.len() as i16);
@@ -1546,6 +1523,17 @@ impl World {
             signs_writer.string(&sign.text);
             signs_writer.i32(sign.position.x);
             signs_writer.i32(sign.position.y);
+        }
+        if self.world_name == "Blank World - Journey" {
+            println!("=== Signs section as hex ===");
+            for (i, byte) in signs_writer.as_slice().iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End signs section ===");
         }
 
         // Section 6: NPCs and Mobs
