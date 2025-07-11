@@ -1,0 +1,20 @@
+name: build and run rust project
+
+on:
+  push:
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  nix-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Nix
+        uses: cachix/install-nix-action@v27
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - name: Run nix run -L
+        run: nix run -L 
