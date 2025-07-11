@@ -926,6 +926,15 @@ impl World {
             }
         }
 
+        if world_name == "Blank World - Journey" {
+            println!("=== Journey Powers section as hex ===");
+            let journey_powers_bytes = r.slice_bytes(
+                pointers.journey_powers as usize,
+                pointers.footer as usize,
+            );
+            println!("{:02X?}", journey_powers_bytes);
+        }
+
         // Parse footer
         if !r.bool() {
             return Err(std::io::Error::new(
@@ -1716,6 +1725,19 @@ impl World {
             journey_powers_writer.bool(true);
         }
         journey_powers_writer.bool(false); // end of journey powers
+
+
+        if self.world_name == "Blank World - Journey" {
+            println!("=== Journey Powers section as hex ===");
+            for (i, byte) in journey_powers_writer.as_slice().iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End Journey Powers section ===");
+        }
 
         // Footer
         let footer_writer = &mut section_buffers[10];
