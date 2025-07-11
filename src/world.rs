@@ -605,7 +605,7 @@ impl World {
             // println!("File offset after chests: {}", r.offset());
             println!("=== Chests section as hex ===");
             // just the read bytes for chests
-            let chests_bytes = &r.peek_bytes(debug_chest_offset_after - debug_chest_offset_before);
+            let chests_bytes = r.slice_bytes(debug_chest_offset_before, debug_chest_offset_after);
             println!("{:02X?}", chests_bytes);
         }
         println!("File offset after chests: {}", r.offset());
@@ -630,7 +630,7 @@ impl World {
         let debug_signs_offset_after = r.offset();
         if world_name == "Blank World - Journey" {
             println!("=== Signs section as hex ===");
-            let signs_bytes = &r.peek_bytes(debug_signs_offset_after - debug_signs_offset_before);
+            let signs_bytes = r.slice_bytes(debug_signs_offset_before, debug_signs_offset_after);
             println!("{:02X?}", signs_bytes);
         }
         println!("File offset after signs: {}", r.offset());
