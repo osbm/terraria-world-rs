@@ -921,7 +921,7 @@ impl World {
                 12 => journey_powers.difficulty = r.f32(),
                 13 => journey_powers.freeze_biome_spread = r.bool(),
                 _ => {
-                    // println!("Unknown journey power ID: {}", power_id);
+                    println!("Unknown journey power ID: {} please open a issue at github.com/osbm/terraria-world-rs", power_id);
                 }
             }
         }
