@@ -633,7 +633,6 @@ impl World {
             let signs_bytes = r.slice_bytes(debug_signs_offset_before, debug_signs_offset_after);
             println!("{:02X?}", signs_bytes);
         }
-        println!("File offset after signs: {}", r.offset());
 
         // Parse entities
         let mut npcs = Vec::new();
