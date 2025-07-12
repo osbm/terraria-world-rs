@@ -606,7 +606,14 @@ impl World {
             println!("=== Chests section as hex ===");
             // just the read bytes for chests
             let chests_bytes = r.slice_bytes(debug_chest_offset_before, debug_chest_offset_after);
-            println!("{:02X?}", chests_bytes);
+            for (i, byte) in chests_bytes.iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End chests section ===");
         }
         println!("File offset after chests: {}", r.offset());
 
@@ -631,7 +638,14 @@ impl World {
         if world_name == "Blank World - Journey" {
             println!("=== Signs section as hex ===");
             let signs_bytes = r.slice_bytes(debug_signs_offset_before, debug_signs_offset_after);
-            println!("{:02X?}", signs_bytes);
+            for (i, byte) in signs_bytes.iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End signs section ===");
         }
 
         // Parse entities
@@ -887,6 +901,7 @@ impl World {
         }
 
         // Parse bestiary
+        let debug_bestiary_offset_before = r.offset();
         let bestiary_kills_count = r.i32();
         let mut bestiary_kills = std::collections::HashMap::new();
         for _ in 0..bestiary_kills_count {
@@ -908,6 +923,19 @@ impl World {
         }
 
         let bestiary = Bestiary::new(bestiary_kills, bestiary_sightings, bestiary_chats);
+        let debug_bestiary_offset_after = r.offset();
+        if world_name == "Blank World - Journey" {
+            println!("=== Bestiary section as hex ===");
+            let bestiary_bytes = r.slice_bytes(debug_bestiary_offset_before, debug_bestiary_offset_after);
+            for (i, byte) in bestiary_bytes.iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End Bestiary section ===");
+        }
 
         // Parse journey powers
         let mut journey_powers = JourneyPowers::new();
@@ -934,7 +962,14 @@ impl World {
                 pointers.journey_powers as usize,
                 pointers.footer as usize,
             );
-            println!("{:02X?}", journey_powers_bytes);
+            for (i, byte) in journey_powers_bytes.iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End Journey Powers section ===");
         }
 
         // Parse footer
@@ -1691,6 +1726,17 @@ impl World {
         bestiary_writer.i32(self.bestiary.chats.len() as i32);
         for c in &self.bestiary.chats {
             bestiary_writer.string(c);
+        }
+        if self.world_name == "Blank World - Journey" {
+            println!("=== Bestiary section as hex ===");
+            for (i, byte) in bestiary_writer.as_slice().iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End Bestiary section ===");
         }
 
         // Section 11: Journey Powers
