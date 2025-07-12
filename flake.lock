@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1751923969,
-        "narHash": "sha256-QNo234SxSB2lLavaT2d+g+Z2WB7o7w29vYkM6zfRLi4=",
+        "lastModified": 1752249768,
+        "narHash": "sha256-wKqMvhTqMgTKM/CdTH/ihq9eLZM95qpU0FG7cvTBFJg=",
         "owner": "nmattia",
         "repo": "naersk",
-        "rev": "0473954e399eec0081ee816f3430c17d1f7e5a42",
+        "rev": "35aa63738857c40f98ecb04db52887d664836e74",
         "type": "github"
       },
       "original": {
@@ -22,11 +22,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1751949589,
-        "narHash": "sha256-mgFxAPLWw0Kq+C8P3dRrZrOYEQXOtKuYVlo9xvPntt8=",
+        "lastModified": 1752012998,
+        "narHash": "sha256-Q82Ms+FQmgOBkdoSVm+FBpuFoeUAffNerR5yVV7SgT8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "9b008d60392981ad674e04016d25619281550a9d",
+        "rev": "2a2130494ad647f953593c4e84ea4df839fbd68c",
         "type": "github"
       },
       "original": {
@@ -46,11 +46,11 @@
     "terraria-worlds": {
       "flake": false,
       "locked": {
-        "lastModified": 1752067704,
-        "narHash": "sha256-W8PJzyRRClQARtvVzSVcFzek57JXCTOGSk5qmTbtVJ0=",
+        "lastModified": 1752363843,
+        "narHash": "sha256-MjeDikgo8bHJQCINm+pMAa1Mt52qmtKWw36ytNwvj28=",
         "owner": "osbm",
         "repo": "terraria-worlds",
-        "rev": "7cd407852288351d91ca2243c22ee5c416d5eff6",
+        "rev": "519518a9b3117336f0f60b01636da48990218b3c",
         "type": "github"
       },
       "original": {
