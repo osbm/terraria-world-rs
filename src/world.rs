@@ -903,11 +903,11 @@ impl World {
         // Parse bestiary
         let debug_bestiary_offset_before = r.offset();
         let bestiary_kills_count = r.i32();
-        let mut bestiary_kills = std::collections::HashMap::new();
+        let mut bestiary_kills = Vec::with_capacity(bestiary_kills_count as usize);
         for _ in 0..bestiary_kills_count {
             let entity = r.string(None);
             let kills = r.i32();
-            bestiary_kills.insert(entity, kills);
+            bestiary_kills.push((entity, kills));
         }
 
         let bestiary_sightings_count = r.i32();
