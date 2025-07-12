@@ -913,6 +913,8 @@ impl World {
         let mut journey_powers = JourneyPowers::new();
         while r.bool() {
             let power_id = r.i16();
+            // Record the order of power IDs
+            journey_powers.power_order.push(power_id);
             match power_id {
                 0 => journey_powers.freeze_time = r.bool(),
                 8 => journey_powers.time_rate = r.f32(),
@@ -1693,36 +1695,23 @@ impl World {
 
         // Section 11: Journey Powers
         let journey_powers_writer = &mut section_buffers[9];
-        // Write each power as a pair (id, value) in the same order as read
-        if self.journey_powers.freeze_time {
+        // Write each power as a pair (id, value) in the exact same order as read
+        for &power_id in &self.journey_powers.power_order {
             journey_powers_writer.bool(true);
-            journey_powers_writer.i16(0);
-            journey_powers_writer.bool(true);
-        }
-        if self.journey_powers.time_rate != 1.0 {
-            journey_powers_writer.bool(true);
-            journey_powers_writer.i16(8);
-            journey_powers_writer.f32(self.journey_powers.time_rate);
-        }
-        if self.journey_powers.freeze_rain {
-            journey_powers_writer.bool(true);
-            journey_powers_writer.i16(9);
-            journey_powers_writer.bool(true);
-        }
-        if self.journey_powers.freeze_wind {
-            journey_powers_writer.bool(true);
-            journey_powers_writer.i16(10);
-            journey_powers_writer.bool(true);
-        }
-        if self.journey_powers.difficulty != 1.0 {
-            journey_powers_writer.bool(true);
-            journey_powers_writer.i16(12);
-            journey_powers_writer.f32(self.journey_powers.difficulty);
-        }
-        if self.journey_powers.freeze_biome_spread {
-            journey_powers_writer.bool(true);
-            journey_powers_writer.i16(13);
-            journey_powers_writer.bool(true);
+            journey_powers_writer.i16(power_id);
+            match power_id {
+                0 => journey_powers_writer.bool(self.journey_powers.freeze_time),
+                8 => journey_powers_writer.f32(self.journey_powers.time_rate),
+                9 => journey_powers_writer.bool(self.journey_powers.freeze_rain),
+                10 => journey_powers_writer.bool(self.journey_powers.freeze_wind),
+                12 => journey_powers_writer.f32(self.journey_powers.difficulty),
+                13 => journey_powers_writer.bool(self.journey_powers.freeze_biome_spread),
+                _ => {
+                    // For unknown power IDs, we need to skip the value
+                    // This shouldn't happen in normal cases, but we need to handle it
+                    println!("Warning: Unknown journey power ID {} during writing", power_id);
+                }
+            }
         }
         journey_powers_writer.bool(false); // end of journey powers
 
