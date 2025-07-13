@@ -546,7 +546,7 @@ impl World {
         );
 
         // // Print last 10 bytes of tile data for empty world
-        // if world_name == "Blank World - Journey" {
+        // if world_name == "small_corruption" {
         //     println!("=== Last 10 bytes of tile data (read) ===");
         //     let tile_data_end = r.offset();
         //     println!("tile_data_end: {}", tile_data_end);
@@ -599,7 +599,7 @@ impl World {
         }
 
 
-        // if world_name == "Blank World - Journey" {
+        // if world_name == "small_corruption" {
         //     let debug_chest_offset_after = r.offset();
         //     // println!("File offset after chests: {}", r.offset());
         //     println!("=== Chests section as hex ===");
@@ -618,7 +618,7 @@ impl World {
 
 
         // --- SIGN PARSING ---
-        // let debug_signs_offset_before = r.offset();
+        let debug_signs_offset_before = r.offset();
         let signs_count = r.i16();
         let mut signs = Vec::with_capacity(signs_count as usize);
         for _ in 0..signs_count {
@@ -633,19 +633,19 @@ impl World {
                 },
             });
         }
-        // let debug_signs_offset_after = r.offset();
-        // if world_name == "Blank World - Journey" {
-        //     println!("=== Signs section as hex ===");
-        //     let signs_bytes = r.slice_bytes(debug_signs_offset_before, debug_signs_offset_after);
-        //     for (i, byte) in signs_bytes.iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End signs section ===");
-        // }
+        let debug_signs_offset_after = r.offset();
+        if world_name == "small_corruption" {
+            println!("=== Signs section as hex ===");
+            let signs_bytes = r.slice_bytes(debug_signs_offset_before, debug_signs_offset_after);
+            for (i, byte) in signs_bytes.iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End signs section ===");
+        }
 
         // Parse entities
         let mut npcs = Vec::new();
@@ -922,19 +922,19 @@ impl World {
         }
 
         let bestiary = Bestiary::new(bestiary_kills, bestiary_sightings, bestiary_chats);
-        // let debug_bestiary_offset_after = r.offset();
-        // if world_name == "Blank World - Journey" {
-        //     println!("=== Bestiary section as hex ===");
-        //     let bestiary_bytes = r.slice_bytes(debug_bestiary_offset_before, debug_bestiary_offset_after);
-        //     for (i, byte) in bestiary_bytes.iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End Bestiary section ===");
-        // }
+        let debug_bestiary_offset_after = r.offset();
+        if world_name == "small_corruption" {
+            println!("=== Bestiary section as hex ===");
+            let bestiary_bytes = r.slice_bytes(debug_bestiary_offset_before, debug_bestiary_offset_after);
+            for (i, byte) in bestiary_bytes.iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End Bestiary section ===");
+        }
 
         // Parse journey powers
         let mut journey_powers = JourneyPowers::new();
@@ -955,21 +955,21 @@ impl World {
             }
         }
 
-        // if world_name == "Blank World - Journey" {
-        //     println!("=== Journey Powers section as hex ===");
-        //     let journey_powers_bytes = r.slice_bytes(
-        //         pointers.journey_powers as usize,
-        //         pointers.footer as usize,
-        //     );
-        //     for (i, byte) in journey_powers_bytes.iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End Journey Powers section ===");
-        // }
+        if world_name == "small_corruption" {
+            println!("=== Journey Powers section as hex ===");
+            let journey_powers_bytes = r.slice_bytes(
+                pointers.journey_powers as usize,
+                pointers.footer as usize,
+            );
+            for (i, byte) in journey_powers_bytes.iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End Journey Powers section ===");
+        }
 
         // Parse footer
         if !r.bool() {
@@ -1530,7 +1530,7 @@ impl World {
         }
 
         // print hex values of chests section but only if the world name is
-        // if self.world_name == "Blank World - Journey" {
+        // if self.world_name == "small_corruption" {
         //     println!("=== Chests section as hex ===");
         //     for (i, byte) in chests_writer.as_slice().iter().enumerate() {
         //         print!("{:02X?} ", byte);
@@ -1551,17 +1551,17 @@ impl World {
             signs_writer.i32(sign.position.x);
             signs_writer.i32(sign.position.y);
         }
-        // if self.world_name == "Blank World - Journey" {
-        //     println!("=== Signs section as hex ===");
-        //     for (i, byte) in signs_writer.as_slice().iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End signs section ===");
-        // }
+        if self.world_name == "small_corruption" {
+            println!("=== Signs section as hex ===");
+            for (i, byte) in signs_writer.as_slice().iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End signs section ===");
+        }
 
         // Section 6: NPCs and Mobs
         let npcs_writer = &mut section_buffers[4];
@@ -1709,17 +1709,17 @@ impl World {
         for c in &self.bestiary.chats {
             bestiary_writer.string(c);
         }
-        // if self.world_name == "Blank World - Journey" {
-        //     println!("=== Bestiary section as hex ===");
-        //     for (i, byte) in bestiary_writer.as_slice().iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End Bestiary section ===");
-        // }
+        if self.world_name == "small_corruption" {
+            println!("=== Bestiary section as hex ===");
+            for (i, byte) in bestiary_writer.as_slice().iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End Bestiary section ===");
+        }
 
         // Section 11: Journey Powers
         let journey_powers_writer = &mut section_buffers[9];
@@ -1744,17 +1744,17 @@ impl World {
         journey_powers_writer.bool(false); // end of journey powers
 
 
-        // if self.world_name == "Blank World - Journey" {
-        //     println!("=== Journey Powers section as hex ===");
-        //     for (i, byte) in journey_powers_writer.as_slice().iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End Journey Powers section ===");
-        // }
+        if self.world_name == "small_corruption" {
+            println!("=== Journey Powers section as hex ===");
+            for (i, byte) in journey_powers_writer.as_slice().iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End Journey Powers section ===");
+        }
 
         // Footer
         let footer_writer = &mut section_buffers[10];
