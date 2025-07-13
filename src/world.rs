@@ -1277,10 +1277,20 @@ impl World {
         use crate::writer::ByteWriter;
         println!("Saving to {path}...");
 
-        // Create 11 separate buffers for each section
-        let mut section_buffers: Vec<ByteWriter> = vec![ByteWriter::new(); 11];
+        // Create all section writers
+        let world_header_writer = self.write_world_header_section();
+        let tiles_writer = self.write_tiles_section();
+        let chests_writer = self.write_chests_section();
+        let signs_writer = self.write_signs_section();
+        let npcs_writer = self.write_npcs_section();
+        let tile_entities_writer = self.write_tile_entities_section();
+        let pressure_plates_writer = self.write_pressure_plates_section();
+        let town_manager_writer = self.write_town_manager_section();
+        let bestiary_writer = self.write_bestiary_section();
+        let journey_powers_writer = self.write_journey_powers_section();
+        let footer_writer = self.write_footer_section();
 
-        // Section 1: File header
+        // Create header writer with placeholders
         let mut header_writer = ByteWriter::new();
         header_writer.i32(self.version_integer);
         header_writer.bytes(self.magic.as_bytes());
@@ -1294,525 +1304,78 @@ impl World {
             header_writer.u32(0);
         }
 
-        // Section 2: World header
-        let world_header_writer = &mut section_buffers[0];
-        world_header_writer.string(&self.world_name);
-        world_header_writer.string(&self.generator_seed);
-        world_header_writer.u64(self.generator_version);
-        world_header_writer.uuid(&self.uuid);
-        world_header_writer.i32(self.id);
-
-        // Write bounds_vec (left, right, top, bottom)
-        for v in &self.bounds_vec {
-            world_header_writer.i32(*v);
+        // Write tile_frame_important count and bits in the file header
+        let original_count = self.tile_frame_important.len() as i16;
+        header_writer.i16(original_count);
+        for chunk in self.tile_frame_important.chunks(8) {
+            header_writer.bits(chunk);
         }
-
-        // Write world_height, world_width, difficulty_value, flags, created_on, moon_style
-        world_header_writer.i32(self.world_height);
-        world_header_writer.i32(self.world_width);
-        world_header_writer.i32(self.difficulty_value);
-        world_header_writer.bool(self.is_drunk_world);
-        world_header_writer.bool(self.is_for_the_worthy);
-        world_header_writer.bool(self.is_tenth_anniversary);
-        world_header_writer.bool(self.is_the_constant);
-        world_header_writer.bool(self.is_bee_world);
-        world_header_writer.bool(self.is_upside_down);
-        world_header_writer.bool(self.is_trap_world);
-        world_header_writer.bool(self.is_zenith_world);
-        world_header_writer.datetime(&self.created_on);
-        world_header_writer.u8(self.moon_style);
-
-        // Write tree_style_seperators, tree_style_properties, moss_style_seperators, moss_style_properties
-        for v in &self.tree_style_seperators {
-            world_header_writer.i32(*v);
-        }
-        for v in &self.tree_style_properties {
-            world_header_writer.i32(*v);
-        }
-        for v in &self.moss_style_seperators {
-            world_header_writer.i32(*v);
-        }
-        for v in &self.moss_style_properties {
-            world_header_writer.i32(*v);
-        }
-
-        // Write background styles
-        world_header_writer.i32(self.snow_background_style);
-        world_header_writer.i32(self.jungle_background_style);
-        world_header_writer.i32(self.hell_background_style);
-
-        // Write spawn point, underground/cavern levels, time, day, moon, events, dungeon, world evil, boss flags, etc.
-        world_header_writer.i32(self.spawn_point_x);
-        world_header_writer.i32(self.spawn_point_y);
-        world_header_writer.f64(self.underground_level);
-        world_header_writer.f64(self.cavern_level);
-        world_header_writer.f64(self.current_time);
-        world_header_writer.bool(self.is_daytime);
-        world_header_writer.u32(self.moon_phase);
-        world_header_writer.bool(self.blood_moon);
-        world_header_writer.bool(self.eclipse);
-        world_header_writer.i32(self.dungeon_point_x);
-        world_header_writer.i32(self.dungeon_point_y);
-        world_header_writer.bool(self.world_evil_type);
-        world_header_writer.bool(self.defeated_eye_of_cthulhu);
-        world_header_writer.bool(self.defeated_eater_of_worlds);
-        world_header_writer.bool(self.defeated_skeletron);
-        world_header_writer.bool(self.defeated_queen_bee);
-        world_header_writer.bool(self.defeated_the_twins);
-        world_header_writer.bool(self.defeated_the_destroyer);
-        world_header_writer.bool(self.defeated_skeletron_prime);
-        world_header_writer.bool(self.defeated_any_mechanical_boss);
-        world_header_writer.bool(self.defeated_plantera);
-        world_header_writer.bool(self.defeated_golem);
-        world_header_writer.bool(self.defeated_king_slime);
-        world_header_writer.bool(self.saved_goblin_tinkerer);
-        world_header_writer.bool(self.saved_wizard);
-        world_header_writer.bool(self.saved_mechanic);
-        world_header_writer.bool(self.defeated_goblin_army);
-        world_header_writer.bool(self.defeated_clown);
-        world_header_writer.bool(self.defeated_frost_moon);
-        world_header_writer.bool(self.defeated_pirate_invasion);
-        world_header_writer.bool(self.shadow_orbs_smashed_at_least_once);
-        world_header_writer.bool(self.shadow_orbs_spawn_meteorite);
-        world_header_writer.u8(self.shadow_orbs_evil_boss_counter);
-        world_header_writer.i32(self.altars_smashed);
-        world_header_writer.bool(self.is_hardmode);
-        world_header_writer.bool(!self.party_is_doomed); // party_is_doomed is inverted
-        world_header_writer.i32(self.invasion_delay);
-        world_header_writer.i32(self.invasion_size);
-        world_header_writer.i32(self.invasion_type);
-        world_header_writer.f64(self.invasion_position);
-        world_header_writer.f64(self.time_left_slime_rain);
-        world_header_writer.u8(self.sundial_cooldown);
-        world_header_writer.bool(self.is_rain_active);
-        world_header_writer.i32(self.rain_time_left);
-        world_header_writer.f32(self.max_rain);
-        world_header_writer.i32(self.hardmode_ore_1);
-        world_header_writer.i32(self.hardmode_ore_2);
-        world_header_writer.i32(self.hardmode_ore_3);
-        world_header_writer.i8(self.forest_background);
-        world_header_writer.i8(self.corruption_background);
-        world_header_writer.i8(self.jungle_background);
-        world_header_writer.i8(self.snow_background);
-        world_header_writer.i8(self.hallow_background);
-        world_header_writer.i8(self.crimson_background);
-        world_header_writer.i8(self.desert_background);
-        world_header_writer.i8(self.ocean_background);
-        world_header_writer.i32(self.cloud_background);
-        world_header_writer.i16(self.cloud_number);
-        world_header_writer.f32(self.wind_speed);
-
-        // Angler quest completed by
-        world_header_writer.i32(self.angler_today_quest_completed_by.len() as i32);
-        for name in &self.angler_today_quest_completed_by {
-            world_header_writer.string(name);
-        }
-
-        // Angler and other NPCs
-        world_header_writer.bool(self.saved_angler);
-        world_header_writer.i32(self.angler_daily_quest_target);
-        world_header_writer.bool(self.saved_stylist);
-        world_header_writer.bool(self.saved_tax_collector);
-        world_header_writer.bool(self.saved_golfer);
-        world_header_writer.i32(self.invasion_size_start);
-        world_header_writer.i32(self.cultist_delay);
-
-        // Mob kills
-        world_header_writer.i16(self.mob_kills.len() as i16);
-        for v in &self.mob_kills {
-            world_header_writer.i32(*v);
-        }
-        world_header_writer.bool(self.sundial_is_running);
-        world_header_writer.bool(self.defeated_duke_fishron);
-        world_header_writer.bool(self.defeated_martian_madness);
-        world_header_writer.bool(self.defeated_lunatic_cultist);
-        world_header_writer.bool(self.deteated_moon_lord);
-        world_header_writer.bool(self.defeated_pumpking);
-        world_header_writer.bool(self.defeated_mourning_wood);
-        world_header_writer.bool(self.defeated_ice_queen);
-        world_header_writer.bool(self.defeated_santa_nk1);
-        world_header_writer.bool(self.defeated_everscream);
-        world_header_writer.bool(self.defeated_solar_pillar);
-        world_header_writer.bool(self.defeated_vortex_pillar);
-        world_header_writer.bool(self.defeated_nebula_pillar);
-        world_header_writer.bool(self.defeated_stardust_pillar);
-        world_header_writer.bool(self.lunar_events_pillars_present_solar);
-        world_header_writer.bool(self.lunar_events_pillars_present_vortex);
-        world_header_writer.bool(self.lunar_events_pillars_present_nebula);
-        world_header_writer.bool(self.lunar_events_pillars_present_stardust);
-        world_header_writer.bool(self.lunar_events_are_active);
-        world_header_writer.bool(self.party_center_active);
-        world_header_writer.bool(self.party_natural_active);
-        world_header_writer.i32(self.party_cooldown);
-        world_header_writer.i32(self.partying_npcs.len() as i32);
-        for v in &self.partying_npcs {
-            world_header_writer.i32(*v);
-        }
-        world_header_writer.bool(self.is_sandstorm_active);
-        world_header_writer.i32(self.sandstorm_time_left);
-        world_header_writer.f32(self.sandstorm_severity);
-        world_header_writer.f32(self.sandstorm_intended_severity);
-        world_header_writer.bool(self.saved_bartender);
-        world_header_writer.bool(self.old_ones_army_tier_1);
-        world_header_writer.bool(self.old_ones_army_tier_2);
-        world_header_writer.bool(self.old_ones_army_tier_3);
-        world_header_writer.i8(self.mushroom_background);
-        world_header_writer.i8(self.underworld_background);
-        world_header_writer.i8(self.forest_background_2);
-        world_header_writer.i8(self.forest_background_3);
-        world_header_writer.i8(self.forest_background_4);
-        world_header_writer.bool(self.combat_book_used);
-        world_header_writer.i32(self.lantern_nights_on_cooldown);
-        world_header_writer.bool(self.lantern_night_genuine);
-        world_header_writer.bool(self.lantern_night_manual);
-        world_header_writer.bool(self.next_night_is_lantern_night);
-        world_header_writer.i32(self.treetop_variants.len() as i32);
-        for v in &self.treetop_variants {
-            world_header_writer.i32(*v);
-        }
-        world_header_writer.bool(self.halloween_today);
-        world_header_writer.bool(self.christmas_today);
-        world_header_writer.i32(self.ore_1);
-        world_header_writer.i32(self.ore_2);
-        world_header_writer.i32(self.ore_3);
-        world_header_writer.i32(self.ore_4);
-        world_header_writer.bool(self.has_cat);
-        world_header_writer.bool(self.has_dog);
-        world_header_writer.bool(self.has_bunny);
-        world_header_writer.bool(self.defeated_empress_of_light);
-        world_header_writer.bool(self.defeated_queen_slime);
-        world_header_writer.bool(self.defeated_deerclops);
-        world_header_writer.bool(self.saved_slime_nerdy);
-        world_header_writer.bool(self.saved_merchant);
-        world_header_writer.bool(self.saved_demolitionist);
-        world_header_writer.bool(self.saved_party_girl);
-        world_header_writer.bool(self.saved_dye_trader);
-        world_header_writer.bool(self.saved_truffle);
-        world_header_writer.bool(self.saved_arms_dealer);
-        world_header_writer.bool(self.saved_nurse);
-        world_header_writer.bool(self.saved_princess);
-        world_header_writer.bool(self.combat_book_2_used);
-        world_header_writer.bool(self.peddler_satchel_used);
-        world_header_writer.bool(self.saved_slime_cool);
-        world_header_writer.bool(self.saved_slime_elder);
-        world_header_writer.bool(self.saved_slime_clumsy);
-        world_header_writer.bool(self.saved_slime_diva);
-        world_header_writer.bool(self.saved_slime_surly);
-        world_header_writer.bool(self.saved_slime_mystic);
-        world_header_writer.bool(self.saved_slime_squire);
-        world_header_writer.bool(self.moondial_is_running);
-        world_header_writer.u8(self.moondial_cooldown);
-
-        // Section 3: Tiles
-        let tiles_writer = &mut section_buffers[1];
-
-        // a method named write_tiles_section
-        self.write_tiles_section(tiles_writer);
-
-
-        // Section 4: Chests
-        let chests_writer = &mut section_buffers[2];
-        chests_writer.i16(self.chests.len() as i16);
-        chests_writer.i16(self.chests_max_items);
-        for chest in &self.chests {
-            chests_writer.i32(chest.position.x);
-            chests_writer.i32(chest.position.y);
-            chests_writer.string(&chest.name);
-            for item in &chest.contents {
-                if let Some(item) = item {
-                    chests_writer.i16(item.quantity);
-                    chests_writer.i32(item.type_id);
-                    chests_writer.u8(item.prefix);
-                } else {
-                    chests_writer.i16(0);
-                }
-            }
-        }
-
-        // print hex values of chests section but only if the world name is
-        // if self.world_name == "small_corruption" {
-        //     println!("=== Chests section as hex ===");
-        //     for (i, byte) in chests_writer.as_slice().iter().enumerate() {
-        //         print!("{:02X?} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End chests section ===");
-
-        // }
-
-        // Section 5: Signs
-        let signs_writer = &mut section_buffers[3];
-        signs_writer.i16(self.signs.len() as i16);
-        for sign in &self.signs {
-            signs_writer.string(&sign.text);
-            signs_writer.i32(sign.position.x);
-            signs_writer.i32(sign.position.y);
-        }
-        if self.world_name == "small_corruption" {
-            println!("=== Signs section as hex ===");
-            for (i, byte) in signs_writer.as_slice().iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End signs section ===");
-        }
-
-        // Section 6: NPCs and Mobs
-        let npcs_writer = &mut section_buffers[4];
-        npcs_writer.i32(self.shimmered_npcs.len() as i32);
-        for id in &self.shimmered_npcs {
-            npcs_writer.i32(*id);
-        }
-        // Write npcs
-        for npc in &self.npcs {
-            npcs_writer.bool(true); // presence flag
-            npcs_writer.i32(npc.type_.id());
-            npcs_writer.string(&npc.name);
-            npcs_writer.f32(npc.position.x as f32);
-            npcs_writer.f32(npc.position.y as f32);
-            npcs_writer.bool(false); // is_homeless (not tracked)
-            npcs_writer.i32(npc.home.x);
-            npcs_writer.i32(npc.home.y);
-            npcs_writer.bits(&[true, false, false, false, false, false, false, false]); // npc_flags (placeholder)
-            npcs_writer.i32(npc.variation_index);
-        }
-        npcs_writer.bool(false); // end of npcs
-                                 // Write mobs
-        for mob in &self.mobs {
-            npcs_writer.bool(true);
-            npcs_writer.i32(mob.type_.id());
-            npcs_writer.f32(mob.position.x as f32);
-            npcs_writer.f32(mob.position.y as f32);
-        }
-        npcs_writer.bool(false); // end of mobs
-
-        // Section 7: Tile Entities
-        let tile_entities_writer = &mut section_buffers[5];
-        tile_entities_writer.i32(self.tile_entities.len() as i32);
-        for te in &self.tile_entities {
-            let (te_type, extra) = match &te.extra {
-                Some(crate::world::TileEntityExtra::TargetDummy { .. }) => (0u8, &te.extra),
-                Some(crate::world::TileEntityExtra::ItemFrame { .. }) => (1u8, &te.extra),
-                Some(crate::world::TileEntityExtra::LogicSensor { .. }) => (2u8, &te.extra),
-                Some(crate::world::TileEntityExtra::Mannequin { .. }) => (3u8, &te.extra),
-                Some(crate::world::TileEntityExtra::WeaponRack { .. }) => (4u8, &te.extra),
-                Some(crate::world::TileEntityExtra::HatRack { .. }) => (5u8, &te.extra),
-                Some(crate::world::TileEntityExtra::Plate { .. }) => (6u8, &te.extra),
-                Some(crate::world::TileEntityExtra::Pylon) => (7u8, &te.extra),
-                None => (255u8, &te.extra),
-            };
-            tile_entities_writer.u8(te_type);
-            tile_entities_writer.i32(te.id);
-            tile_entities_writer.i16(te.position.x as i16);
-            tile_entities_writer.i16(te.position.y as i16);
-            match extra {
-                Some(crate::world::TileEntityExtra::TargetDummy { npc }) => {
-                    tile_entities_writer.i16(*npc);
-                }
-                Some(crate::world::TileEntityExtra::ItemFrame { item }) => {
-                    tile_entities_writer.i16(item.type_id as i16);
-                    tile_entities_writer.u8(item.prefix);
-                    tile_entities_writer.i16(item.quantity);
-                }
-                Some(crate::world::TileEntityExtra::LogicSensor {
-                    logic_check,
-                    enabled,
-                }) => {
-                    tile_entities_writer.u8(*logic_check);
-                    tile_entities_writer.bool(*enabled);
-                }
-                Some(crate::world::TileEntityExtra::Mannequin { items, dyes }) => {
-                    let item_flags: Vec<bool> = items.iter().map(|i| i.is_some()).collect();
-                    let dye_flags: Vec<bool> = dyes.iter().map(|i| i.is_some()).collect();
-                    tile_entities_writer.bits(&item_flags);
-                    tile_entities_writer.bits(&dye_flags);
-                    for (_i, item) in items.iter().enumerate() {
-                        if let Some(item) = item {
-                            tile_entities_writer.i16(item.type_id as i16);
-                            tile_entities_writer.u8(item.prefix);
-                            tile_entities_writer.i16(item.quantity);
-                        }
-                    }
-                    for (_i, dye) in dyes.iter().enumerate() {
-                        if let Some(dye) = dye {
-                            tile_entities_writer.i16(dye.type_id as i16);
-                            tile_entities_writer.u8(dye.prefix);
-                            tile_entities_writer.i16(dye.quantity);
-                        }
-                    }
-                }
-                Some(crate::world::TileEntityExtra::WeaponRack { item }) => {
-                    tile_entities_writer.i16(item.type_id as i16);
-                    tile_entities_writer.u8(item.prefix);
-                    tile_entities_writer.i16(item.quantity);
-                }
-                Some(crate::world::TileEntityExtra::HatRack { items, dyes }) => {
-                    let item_flags: Vec<bool> = items
-                        .iter()
-                        .chain(dyes.iter())
-                        .map(|i| i.is_some())
-                        .collect();
-                    tile_entities_writer.bits(&item_flags);
-                    for item in items.iter().chain(dyes.iter()) {
-                        if let Some(item) = item {
-                            tile_entities_writer.i16(item.type_id as i16);
-                            tile_entities_writer.u8(item.prefix);
-                            tile_entities_writer.i16(item.quantity);
-                        }
-                    }
-                }
-                Some(crate::world::TileEntityExtra::Plate { item }) => {
-                    tile_entities_writer.i16(item.type_id as i16);
-                    tile_entities_writer.u8(item.prefix);
-                    tile_entities_writer.i16(item.quantity);
-                }
-                Some(crate::world::TileEntityExtra::Pylon) => {}
-                None => {}
-            }
-        }
-
-        // Section 8: Pressure Plates
-        let pressure_plates_writer = &mut section_buffers[6];
-        pressure_plates_writer.i32(self.weighed_pressure_plates.len() as i32);
-        for plate in &self.weighed_pressure_plates {
-            pressure_plates_writer.i32(plate.position.x);
-            pressure_plates_writer.i32(plate.position.y);
-        }
-
-        // Section 9: Town Manager
-        let town_manager_writer = &mut section_buffers[7];
-        town_manager_writer.i32(self.rooms.len() as i32);
-        for room in &self.rooms {
-            town_manager_writer.i32(room.npc.id());
-            town_manager_writer.i32(room.position.x);
-            town_manager_writer.i32(room.position.y);
-        }
-
-        // Section 10: Bestiary
-        let bestiary_writer = &mut section_buffers[8];
-        bestiary_writer.i32(self.bestiary.kills.len() as i32);
-        for (entity, kills) in &self.bestiary.kills {
-            bestiary_writer.string(entity);
-            bestiary_writer.i32(*kills);
-        }
-        bestiary_writer.i32(self.bestiary.sightings.len() as i32);
-        for s in &self.bestiary.sightings {
-            bestiary_writer.string(s);
-        }
-        bestiary_writer.i32(self.bestiary.chats.len() as i32);
-        for c in &self.bestiary.chats {
-            bestiary_writer.string(c);
-        }
-        if self.world_name == "small_corruption" {
-            println!("=== Bestiary section as hex ===");
-            for (i, byte) in bestiary_writer.as_slice().iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End Bestiary section ===");
-        }
-
-        // Section 11: Journey Powers
-        let journey_powers_writer = &mut section_buffers[9];
-        // Write each power as a pair (id, value) in the exact same order as read
-        for &power_id in &self.journey_powers.power_order {
-            journey_powers_writer.bool(true);
-            journey_powers_writer.i16(power_id);
-            match power_id {
-                0 => journey_powers_writer.bool(self.journey_powers.freeze_time),
-                8 => journey_powers_writer.f32(self.journey_powers.time_rate),
-                9 => journey_powers_writer.bool(self.journey_powers.freeze_rain),
-                10 => journey_powers_writer.bool(self.journey_powers.freeze_wind),
-                12 => journey_powers_writer.f32(self.journey_powers.difficulty),
-                13 => journey_powers_writer.bool(self.journey_powers.freeze_biome_spread),
-                _ => {
-                    // For unknown power IDs, we need to skip the value
-                    // This shouldn't happen in normal cases, but we need to handle it
-                    println!("Warning: Unknown journey power ID {} during writing", power_id);
-                }
-            }
-        }
-        journey_powers_writer.bool(false); // end of journey powers
-
-
-        if self.world_name == "small_corruption" {
-            println!("=== Journey Powers section as hex ===");
-            for (i, byte) in journey_powers_writer.as_slice().iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End Journey Powers section ===");
-        }
-
-        // Footer
-        let footer_writer = &mut section_buffers[10];
-        footer_writer.bool(true);
-        footer_writer.string(&self.world_name);
-        footer_writer.i32(self.id);
 
         // Calculate section lengths and update pointers
         let mut current_offset = header_writer.offset() as u32;
-
-        // The header_writer already includes the tile_frame_important data, so we don't need to add it again
 
         // Update pointer vector with actual offsets
         let mut pointer_vector = Vec::new();
 
         // Section 0: World Header (starts after the fixed header)
         pointer_vector.push(current_offset);
-        current_offset += section_buffers[0].offset() as u32;
+        current_offset += world_header_writer.offset() as u32;
 
         // Section 1: Tiles
         pointer_vector.push(current_offset);
-        current_offset += section_buffers[1].offset() as u32;
+        current_offset += tiles_writer.offset() as u32;
 
         // Section 2: Chests
         pointer_vector.push(current_offset);
-        current_offset += section_buffers[2].offset() as u32;
+        current_offset += chests_writer.offset() as u32;
 
         // Section 3: Signs
         pointer_vector.push(current_offset);
-        current_offset += section_buffers[3].offset() as u32;
+        current_offset += signs_writer.offset() as u32;
 
         // Section 4: NPCs
         pointer_vector.push(current_offset);
-        current_offset += section_buffers[4].offset() as u32;
+        current_offset += npcs_writer.offset() as u32;
 
         // Section 5: Tile Entities
         pointer_vector.push(current_offset);
-        current_offset += section_buffers[5].offset() as u32;
+        current_offset += tile_entities_writer.offset() as u32;
 
         // Section 6: Pressure Plates
         pointer_vector.push(current_offset);
-        current_offset += section_buffers[6].offset() as u32;
+        current_offset += pressure_plates_writer.offset() as u32;
 
         // Section 7: Town Manager
         pointer_vector.push(current_offset);
-        current_offset += section_buffers[7].offset() as u32;
+        current_offset += town_manager_writer.offset() as u32;
 
         // Section 8: Bestiary
         pointer_vector.push(current_offset);
-        current_offset += section_buffers[8].offset() as u32;
+        current_offset += bestiary_writer.offset() as u32;
 
         // Section 9: Journey Powers
         pointer_vector.push(current_offset);
-        current_offset += section_buffers[9].offset() as u32;
+        current_offset += journey_powers_writer.offset() as u32;
 
         // Section 10: Footer
         pointer_vector.push(current_offset);
-        let _unused_offset = current_offset + section_buffers[10].offset() as u32;
+        let _unused_offset = current_offset + footer_writer.offset() as u32;
+
+        // Print section sizes from buffer lengths
+        println!("=== Section sizes from buffer lengths ===");
+        println!("Section 1 (File Header): {} bytes", header_writer.offset());
+        println!("Section 2 (World Header): {} bytes", world_header_writer.offset());
+        println!("Section 3 (Tiles): {} bytes", tiles_writer.offset());
+        println!("Section 4 (Chests): {} bytes", chests_writer.offset());
+        println!("Section 5 (Signs): {} bytes", signs_writer.offset());
+        println!("Section 6 (NPCs): {} bytes", npcs_writer.offset());
+        println!("Section 7 (Tile Entities): {} bytes", tile_entities_writer.offset());
+        println!("Section 8 (Pressure Plates): {} bytes", pressure_plates_writer.offset());
+        println!("Section 9 (Town Manager): {} bytes", town_manager_writer.offset());
+        println!("Section 10 (Beastiary): {} bytes", bestiary_writer.offset());
+        println!("Section 11 (Journey Powers): {} bytes", journey_powers_writer.offset());
+        println!("Section 12 (Footer): {} bytes", footer_writer.offset());
+        println!("=========================================");
 
         // Write the complete file
         let mut final_writer = ByteWriter::new();
@@ -1825,72 +1388,545 @@ impl World {
         final_writer.u64(self.is_favorite);
         final_writer.u16(self.pointer_count);
 
-        // Write updated pointer vector
-        // TODO: Revert to placeholder pointers after confirming world serialization/deserialization works correctly
         // Write actual pointer values from world object for debugging section sizes
         for &pointer in &self.pointer_vector {
             final_writer.u32(pointer);
         }
 
         // Write tile_frame_important count and bits in the file header
-        // We need to write the original count, not the actual array length
-        // The original count is what determines how many bytes to read
-        let original_count = self.tile_frame_important.len() as i16;
-        // println!("Writing tile_frame_important: count={}, actual_bits={}",
-        //  original_count, self.tile_frame_important.len());
         final_writer.i16(original_count);
         for chunk in self.tile_frame_important.chunks(8) {
             final_writer.bits(chunk);
         }
 
-        // Print section sizes from buffer lengths
-        println!("=== Section sizes from buffer lengths ===");
-        println!("Section 1 (File Header): {} bytes", header_writer.offset());
-        println!(
-            "Section 2 (World Header): {} bytes",
-            section_buffers[0].offset()
-        );
-        println!("Section 3 (Tiles): {} bytes", section_buffers[1].offset());
-        println!("Section 4 (Chests): {} bytes", section_buffers[2].offset());
-        println!("Section 5 (Signs): {} bytes", section_buffers[3].offset());
-        println!("Section 6 (NPCs): {} bytes", section_buffers[4].offset());
-        println!(
-            "Section 7 (Tile Entities): {} bytes",
-            section_buffers[5].offset()
-        );
-        println!(
-            "Section 8 (Pressure Plates): {} bytes",
-            section_buffers[6].offset()
-        );
-        println!(
-            "Section 9 (Town Manager): {} bytes",
-            section_buffers[7].offset()
-        );
-        println!(
-            "Section 10 (Beastiary): {} bytes",
-            section_buffers[8].offset()
-        );
-        println!(
-            "Section 11 (Journey Powers): {} bytes",
-            section_buffers[9].offset()
-        );
-        println!(
-            "Section 12 (Footer): {} bytes",
-            section_buffers[10].offset()
-        );
-        println!("=========================================");
-
         // Write all section buffers
-        for section_buffer in section_buffers {
-            final_writer.bytes(&section_buffer.into_inner());
-        }
+        final_writer.bytes(&world_header_writer.into_inner());
+        final_writer.bytes(&tiles_writer.into_inner());
+        final_writer.bytes(&chests_writer.into_inner());
+        final_writer.bytes(&signs_writer.into_inner());
+        final_writer.bytes(&npcs_writer.into_inner());
+        final_writer.bytes(&tile_entities_writer.into_inner());
+        final_writer.bytes(&pressure_plates_writer.into_inner());
+        final_writer.bytes(&town_manager_writer.into_inner());
+        final_writer.bytes(&bestiary_writer.into_inner());
+        final_writer.bytes(&journey_powers_writer.into_inner());
+        final_writer.bytes(&footer_writer.into_inner());
 
         // Write buffer to file
         let buffer = final_writer.into_inner();
         std::fs::write(path, buffer)?;
 
-
         Ok(())
+    }
+
+    fn write_world_header_section(&self) -> ByteWriter {
+        use crate::writer::ByteWriter;
+        let mut writer = ByteWriter::new();
+        
+        writer.string(&self.world_name);
+        writer.string(&self.generator_seed);
+        writer.u64(self.generator_version);
+        writer.uuid(&self.uuid);
+        writer.i32(self.id);
+
+        // Write bounds_vec (left, right, top, bottom)
+        for v in &self.bounds_vec {
+            writer.i32(*v);
+        }
+
+        // Write world_height, world_width, difficulty_value, flags, created_on, moon_style
+        writer.i32(self.world_height);
+        writer.i32(self.world_width);
+        writer.i32(self.difficulty_value);
+        writer.bool(self.is_drunk_world);
+        writer.bool(self.is_for_the_worthy);
+        writer.bool(self.is_tenth_anniversary);
+        writer.bool(self.is_the_constant);
+        writer.bool(self.is_bee_world);
+        writer.bool(self.is_upside_down);
+        writer.bool(self.is_trap_world);
+        writer.bool(self.is_zenith_world);
+        writer.datetime(&self.created_on);
+        writer.u8(self.moon_style);
+
+        // Write tree_style_seperators, tree_style_properties, moss_style_seperators, moss_style_properties
+        for v in &self.tree_style_seperators {
+            writer.i32(*v);
+        }
+        for v in &self.tree_style_properties {
+            writer.i32(*v);
+        }
+        for v in &self.moss_style_seperators {
+            writer.i32(*v);
+        }
+        for v in &self.moss_style_properties {
+            writer.i32(*v);
+        }
+
+        // Write background styles
+        writer.i32(self.snow_background_style);
+        writer.i32(self.jungle_background_style);
+        writer.i32(self.hell_background_style);
+
+        // Write spawn point, underground/cavern levels, time, day, moon, events, dungeon, world evil, boss flags, etc.
+        writer.i32(self.spawn_point_x);
+        writer.i32(self.spawn_point_y);
+        writer.f64(self.underground_level);
+        writer.f64(self.cavern_level);
+        writer.f64(self.current_time);
+        writer.bool(self.is_daytime);
+        writer.u32(self.moon_phase);
+        writer.bool(self.blood_moon);
+        writer.bool(self.eclipse);
+        writer.i32(self.dungeon_point_x);
+        writer.i32(self.dungeon_point_y);
+        writer.bool(self.world_evil_type);
+        writer.bool(self.defeated_eye_of_cthulhu);
+        writer.bool(self.defeated_eater_of_worlds);
+        writer.bool(self.defeated_skeletron);
+        writer.bool(self.defeated_queen_bee);
+        writer.bool(self.defeated_the_twins);
+        writer.bool(self.defeated_the_destroyer);
+        writer.bool(self.defeated_skeletron_prime);
+        writer.bool(self.defeated_any_mechanical_boss);
+        writer.bool(self.defeated_plantera);
+        writer.bool(self.defeated_golem);
+        writer.bool(self.defeated_king_slime);
+        writer.bool(self.saved_goblin_tinkerer);
+        writer.bool(self.saved_wizard);
+        writer.bool(self.saved_mechanic);
+        writer.bool(self.defeated_goblin_army);
+        writer.bool(self.defeated_clown);
+        writer.bool(self.defeated_frost_moon);
+        writer.bool(self.defeated_pirate_invasion);
+        writer.bool(self.shadow_orbs_smashed_at_least_once);
+        writer.bool(self.shadow_orbs_spawn_meteorite);
+        writer.u8(self.shadow_orbs_evil_boss_counter);
+        writer.i32(self.altars_smashed);
+        writer.bool(self.is_hardmode);
+        writer.bool(!self.party_is_doomed); // party_is_doomed is inverted
+        writer.i32(self.invasion_delay);
+        writer.i32(self.invasion_size);
+        writer.i32(self.invasion_type);
+        writer.f64(self.invasion_position);
+        writer.f64(self.time_left_slime_rain);
+        writer.u8(self.sundial_cooldown);
+        writer.bool(self.is_rain_active);
+        writer.i32(self.rain_time_left);
+        writer.f32(self.max_rain);
+        writer.i32(self.hardmode_ore_1);
+        writer.i32(self.hardmode_ore_2);
+        writer.i32(self.hardmode_ore_3);
+        writer.i8(self.forest_background);
+        writer.i8(self.corruption_background);
+        writer.i8(self.jungle_background);
+        writer.i8(self.snow_background);
+        writer.i8(self.hallow_background);
+        writer.i8(self.crimson_background);
+        writer.i8(self.desert_background);
+        writer.i8(self.ocean_background);
+        writer.i32(self.cloud_background);
+        writer.i16(self.cloud_number);
+        writer.f32(self.wind_speed);
+
+        // Angler quest completed by
+        writer.i32(self.angler_today_quest_completed_by.len() as i32);
+        for name in &self.angler_today_quest_completed_by {
+            writer.string(name);
+        }
+
+        // Angler and other NPCs
+        writer.bool(self.saved_angler);
+        writer.i32(self.angler_daily_quest_target);
+        writer.bool(self.saved_stylist);
+        writer.bool(self.saved_tax_collector);
+        writer.bool(self.saved_golfer);
+        writer.i32(self.invasion_size_start);
+        writer.i32(self.cultist_delay);
+
+        // Mob kills
+        writer.i16(self.mob_kills.len() as i16);
+        for v in &self.mob_kills {
+            writer.i32(*v);
+        }
+        writer.bool(self.sundial_is_running);
+        writer.bool(self.defeated_duke_fishron);
+        writer.bool(self.defeated_martian_madness);
+        writer.bool(self.defeated_lunatic_cultist);
+        writer.bool(self.deteated_moon_lord);
+        writer.bool(self.defeated_pumpking);
+        writer.bool(self.defeated_mourning_wood);
+        writer.bool(self.defeated_ice_queen);
+        writer.bool(self.defeated_santa_nk1);
+        writer.bool(self.defeated_everscream);
+        writer.bool(self.defeated_solar_pillar);
+        writer.bool(self.defeated_vortex_pillar);
+        writer.bool(self.defeated_nebula_pillar);
+        writer.bool(self.defeated_stardust_pillar);
+        writer.bool(self.lunar_events_pillars_present_solar);
+        writer.bool(self.lunar_events_pillars_present_vortex);
+        writer.bool(self.lunar_events_pillars_present_nebula);
+        writer.bool(self.lunar_events_pillars_present_stardust);
+        writer.bool(self.lunar_events_are_active);
+        writer.bool(self.party_center_active);
+        writer.bool(self.party_natural_active);
+        writer.i32(self.party_cooldown);
+        writer.i32(self.partying_npcs.len() as i32);
+        for v in &self.partying_npcs {
+            writer.i32(*v);
+        }
+        writer.bool(self.is_sandstorm_active);
+        writer.i32(self.sandstorm_time_left);
+        writer.f32(self.sandstorm_severity);
+        writer.f32(self.sandstorm_intended_severity);
+        writer.bool(self.saved_bartender);
+        writer.bool(self.old_ones_army_tier_1);
+        writer.bool(self.old_ones_army_tier_2);
+        writer.bool(self.old_ones_army_tier_3);
+        writer.i8(self.mushroom_background);
+        writer.i8(self.underworld_background);
+        writer.i8(self.forest_background_2);
+        writer.i8(self.forest_background_3);
+        writer.i8(self.forest_background_4);
+        writer.bool(self.combat_book_used);
+        writer.i32(self.lantern_nights_on_cooldown);
+        writer.bool(self.lantern_night_genuine);
+        writer.bool(self.lantern_night_manual);
+        writer.bool(self.next_night_is_lantern_night);
+        writer.i32(self.treetop_variants.len() as i32);
+        for v in &self.treetop_variants {
+            writer.i32(*v);
+        }
+        writer.bool(self.halloween_today);
+        writer.bool(self.christmas_today);
+        writer.i32(self.ore_1);
+        writer.i32(self.ore_2);
+        writer.i32(self.ore_3);
+        writer.i32(self.ore_4);
+        writer.bool(self.has_cat);
+        writer.bool(self.has_dog);
+        writer.bool(self.has_bunny);
+        writer.bool(self.defeated_empress_of_light);
+        writer.bool(self.defeated_queen_slime);
+        writer.bool(self.defeated_deerclops);
+        writer.bool(self.saved_slime_nerdy);
+        writer.bool(self.saved_merchant);
+        writer.bool(self.saved_demolitionist);
+        writer.bool(self.saved_party_girl);
+        writer.bool(self.saved_dye_trader);
+        writer.bool(self.saved_truffle);
+        writer.bool(self.saved_arms_dealer);
+        writer.bool(self.saved_nurse);
+        writer.bool(self.saved_princess);
+        writer.bool(self.combat_book_2_used);
+        writer.bool(self.peddler_satchel_used);
+        writer.bool(self.saved_slime_cool);
+        writer.bool(self.saved_slime_elder);
+        writer.bool(self.saved_slime_clumsy);
+        writer.bool(self.saved_slime_diva);
+        writer.bool(self.saved_slime_surly);
+        writer.bool(self.saved_slime_mystic);
+        writer.bool(self.saved_slime_squire);
+        writer.bool(self.moondial_is_running);
+        writer.u8(self.moondial_cooldown);
+
+        writer
+    }
+
+    fn write_tiles_section(&self) -> ByteWriter {
+        use crate::writer::ByteWriter;
+        let mut writer = ByteWriter::new();
+        
+        // Write tile data using the existing tile_bytes
+        for column_bytes in &self.tile_bytes {
+            writer.bytes(column_bytes);
+        }
+        
+        writer
+    }
+
+    fn write_chests_section(&self) -> ByteWriter {
+        use crate::writer::ByteWriter;
+        let mut writer = ByteWriter::new();
+        
+        writer.i16(self.chests.len() as i16);
+        writer.i16(self.chests_max_items);
+        for chest in &self.chests {
+            writer.i32(chest.position.x);
+            writer.i32(chest.position.y);
+            writer.string(&chest.name);
+            for item in &chest.contents {
+                if let Some(item) = item {
+                    writer.i16(item.quantity);
+                    writer.i32(item.type_id);
+                    writer.u8(item.prefix);
+                } else {
+                    writer.i16(0);
+                }
+            }
+        }
+        
+        writer
+    }
+
+    fn write_signs_section(&self) -> ByteWriter {
+        use crate::writer::ByteWriter;
+        let mut writer = ByteWriter::new();
+        
+        writer.i16(self.signs.len() as i16);
+        for sign in &self.signs {
+            writer.string(&sign.text);
+            writer.i32(sign.position.x);
+            writer.i32(sign.position.y);
+        }
+        
+        if self.world_name == "small_corruption" {
+            println!("=== Signs section as hex ===");
+            for (i, byte) in writer.as_slice().iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End signs section ===");
+        }
+        
+        writer
+    }
+
+    fn write_npcs_section(&self) -> ByteWriter {
+        use crate::writer::ByteWriter;
+        let mut writer = ByteWriter::new();
+        
+        writer.i32(self.shimmered_npcs.len() as i32);
+        for id in &self.shimmered_npcs {
+            writer.i32(*id);
+        }
+        // Write npcs
+        for npc in &self.npcs {
+            writer.bool(true); // presence flag
+            writer.i32(npc.type_.id());
+            writer.string(&npc.name);
+            writer.f32(npc.position.x as f32);
+            writer.f32(npc.position.y as f32);
+            writer.bool(false); // is_homeless (not tracked)
+            writer.i32(npc.home.x);
+            writer.i32(npc.home.y);
+            writer.bits(&[true, false, false, false, false, false, false, false]); // npc_flags (placeholder)
+            writer.i32(npc.variation_index);
+        }
+        writer.bool(false); // end of npcs
+        // Write mobs
+        for mob in &self.mobs {
+            writer.bool(true);
+            writer.i32(mob.type_.id());
+            writer.f32(mob.position.x as f32);
+            writer.f32(mob.position.y as f32);
+        }
+        writer.bool(false); // end of mobs
+        
+        writer
+    }
+
+    fn write_tile_entities_section(&self) -> ByteWriter {
+        use crate::writer::ByteWriter;
+        let mut writer = ByteWriter::new();
+        
+        writer.i32(self.tile_entities.len() as i32);
+        for te in &self.tile_entities {
+            let (te_type, extra) = match &te.extra {
+                Some(crate::world::TileEntityExtra::TargetDummy { .. }) => (0u8, &te.extra),
+                Some(crate::world::TileEntityExtra::ItemFrame { .. }) => (1u8, &te.extra),
+                Some(crate::world::TileEntityExtra::LogicSensor { .. }) => (2u8, &te.extra),
+                Some(crate::world::TileEntityExtra::Mannequin { .. }) => (3u8, &te.extra),
+                Some(crate::world::TileEntityExtra::WeaponRack { .. }) => (4u8, &te.extra),
+                Some(crate::world::TileEntityExtra::HatRack { .. }) => (5u8, &te.extra),
+                Some(crate::world::TileEntityExtra::Plate { .. }) => (6u8, &te.extra),
+                Some(crate::world::TileEntityExtra::Pylon) => (7u8, &te.extra),
+                None => (255u8, &te.extra),
+            };
+            writer.u8(te_type);
+            writer.i32(te.id);
+            writer.i16(te.position.x as i16);
+            writer.i16(te.position.y as i16);
+            match extra {
+                Some(crate::world::TileEntityExtra::TargetDummy { npc }) => {
+                    writer.i16(*npc);
+                }
+                Some(crate::world::TileEntityExtra::ItemFrame { item }) => {
+                    writer.i16(item.type_id as i16);
+                    writer.u8(item.prefix);
+                    writer.i16(item.quantity);
+                }
+                Some(crate::world::TileEntityExtra::LogicSensor {
+                    logic_check,
+                    enabled,
+                }) => {
+                    writer.u8(*logic_check);
+                    writer.bool(*enabled);
+                }
+                Some(crate::world::TileEntityExtra::Mannequin { items, dyes }) => {
+                    let item_flags: Vec<bool> = items.iter().map(|i| i.is_some()).collect();
+                    let dye_flags: Vec<bool> = dyes.iter().map(|i| i.is_some()).collect();
+                    writer.bits(&item_flags);
+                    writer.bits(&dye_flags);
+                    for (_i, item) in items.iter().enumerate() {
+                        if let Some(item) = item {
+                            writer.i16(item.type_id as i16);
+                            writer.u8(item.prefix);
+                            writer.i16(item.quantity);
+                        }
+                    }
+                    for (_i, dye) in dyes.iter().enumerate() {
+                        if let Some(dye) = dye {
+                            writer.i16(dye.type_id as i16);
+                            writer.u8(dye.prefix);
+                            writer.i16(dye.quantity);
+                        }
+                    }
+                }
+                Some(crate::world::TileEntityExtra::WeaponRack { item }) => {
+                    writer.i16(item.type_id as i16);
+                    writer.u8(item.prefix);
+                    writer.i16(item.quantity);
+                }
+                Some(crate::world::TileEntityExtra::HatRack { items, dyes }) => {
+                    let item_flags: Vec<bool> = items
+                        .iter()
+                        .chain(dyes.iter())
+                        .map(|i| i.is_some())
+                        .collect();
+                    writer.bits(&item_flags);
+                    for item in items.iter().chain(dyes.iter()) {
+                        if let Some(item) = item {
+                            writer.i16(item.type_id as i16);
+                            writer.u8(item.prefix);
+                            writer.i16(item.quantity);
+                        }
+                    }
+                }
+                Some(crate::world::TileEntityExtra::Plate { item }) => {
+                    writer.i16(item.type_id as i16);
+                    writer.u8(item.prefix);
+                    writer.i16(item.quantity);
+                }
+                Some(crate::world::TileEntityExtra::Pylon) => {}
+                None => {}
+            }
+        }
+        
+        writer
+    }
+
+    fn write_pressure_plates_section(&self) -> ByteWriter {
+        use crate::writer::ByteWriter;
+        let mut writer = ByteWriter::new();
+        
+        writer.i32(self.weighed_pressure_plates.len() as i32);
+        for plate in &self.weighed_pressure_plates {
+            writer.i32(plate.position.x);
+            writer.i32(plate.position.y);
+        }
+        
+        writer
+    }
+
+    fn write_town_manager_section(&self) -> ByteWriter {
+        use crate::writer::ByteWriter;
+        let mut writer = ByteWriter::new();
+        
+        writer.i32(self.rooms.len() as i32);
+        for room in &self.rooms {
+            writer.i32(room.npc.id());
+            writer.i32(room.position.x);
+            writer.i32(room.position.y);
+        }
+        
+        writer
+    }
+
+    fn write_bestiary_section(&self) -> ByteWriter {
+        use crate::writer::ByteWriter;
+        let mut writer = ByteWriter::new();
+        
+        writer.i32(self.bestiary.kills.len() as i32);
+        for (entity, kills) in &self.bestiary.kills {
+            writer.string(entity);
+            writer.i32(*kills);
+        }
+        writer.i32(self.bestiary.sightings.len() as i32);
+        for s in &self.bestiary.sightings {
+            writer.string(s);
+        }
+        writer.i32(self.bestiary.chats.len() as i32);
+        for c in &self.bestiary.chats {
+            writer.string(c);
+        }
+        
+        if self.world_name == "small_corruption" {
+            println!("=== Bestiary section as hex ===");
+            for (i, byte) in writer.as_slice().iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End Bestiary section ===");
+        }
+        
+        writer
+    }
+
+    fn write_journey_powers_section(&self) -> ByteWriter {
+        use crate::writer::ByteWriter;
+        let mut writer = ByteWriter::new();
+        
+        // Write each power as a pair (id, value) in the exact same order as read
+        for &power_id in &self.journey_powers.power_order {
+            writer.bool(true);
+            writer.i16(power_id);
+            match power_id {
+                0 => writer.bool(self.journey_powers.freeze_time),
+                8 => writer.f32(self.journey_powers.time_rate),
+                9 => writer.bool(self.journey_powers.freeze_rain),
+                10 => writer.bool(self.journey_powers.freeze_wind),
+                12 => writer.f32(self.journey_powers.difficulty),
+                13 => writer.bool(self.journey_powers.freeze_biome_spread),
+                _ => {
+                    // For unknown power IDs, we need to skip the value
+                    // This shouldn't happen in normal cases, but we need to handle it
+                    println!("Warning: Unknown journey power ID {} during writing", power_id);
+                }
+            }
+        }
+        writer.bool(false); // end of journey powers
+
+        if self.world_name == "small_corruption" {
+            println!("=== Journey Powers section as hex ===");
+            for (i, byte) in writer.as_slice().iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End Journey Powers section ===");
+        }
+        
+        writer
+    }
+
+    fn write_footer_section(&self) -> ByteWriter {
+        use crate::writer::ByteWriter;
+        let mut writer = ByteWriter::new();
+        
+        writer.bool(true);
+        writer.string(&self.world_name);
+        writer.i32(self.id);
+        
+        writer
     }
 
     fn read_tile_block(r: &mut ByteReader, tile_frame_important: &[bool]) -> (Tile, usize) {
@@ -2335,4 +2371,5 @@ impl World {
         self.tile_bytes.iter().map(|data| data.len()).collect()
     }
 }
+
 
