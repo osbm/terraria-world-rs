@@ -1367,20 +1367,22 @@ impl World {
         let _unused_offset = current_offset + footer_writer.offset() as u32;
 
         // Print section sizes from buffer lengths
-        println!("=== Section sizes from buffer lengths ===");
-        println!("Section 1 (File Header): {} bytes", header_writer.offset());
-        println!("Section 2 (World Header): {} bytes", world_header_writer.offset());
-        println!("Section 3 (Tiles): {} bytes", tiles_writer.offset());
-        println!("Section 4 (Chests): {} bytes", chests_writer.offset());
-        println!("Section 5 (Signs): {} bytes", signs_writer.offset());
-        println!("Section 6 (NPCs): {} bytes", npcs_writer.offset());
-        println!("Section 7 (Tile Entities): {} bytes", tile_entities_writer.offset());
-        println!("Section 8 (Pressure Plates): {} bytes", pressure_plates_writer.offset());
-        println!("Section 9 (Town Manager): {} bytes", town_manager_writer.offset());
-        println!("Section 10 (Beastiary): {} bytes", bestiary_writer.offset());
-        println!("Section 11 (Journey Powers): {} bytes", journey_powers_writer.offset());
-        println!("Section 12 (Footer): {} bytes", footer_writer.offset());
-        println!("=========================================");
+        if self.world_name == "small_corruption" {
+            println!("=== Section sizes from buffer lengths ===");
+            println!("Section 1 (File Header): {} bytes", header_writer.offset());
+            println!("Section 2 (World Header): {} bytes", world_header_writer.offset());
+            println!("Section 3 (Tiles): {} bytes", tiles_writer.offset());
+            println!("Section 4 (Chests): {} bytes", chests_writer.offset());
+            println!("Section 5 (Signs): {} bytes", signs_writer.offset());
+            println!("Section 6 (NPCs): {} bytes", npcs_writer.offset());
+            println!("Section 7 (Tile Entities): {} bytes", tile_entities_writer.offset());
+            println!("Section 8 (Pressure Plates): {} bytes", pressure_plates_writer.offset());
+            println!("Section 9 (Town Manager): {} bytes", town_manager_writer.offset());
+            println!("Section 10 (Beastiary): {} bytes", bestiary_writer.offset());
+            println!("Section 11 (Journey Powers): {} bytes", journey_powers_writer.offset());
+            println!("Section 12 (Footer): {} bytes", footer_writer.offset());
+            println!("=========================================");
+        }
 
         // Write the complete file
         let mut final_writer = ByteWriter::new();
