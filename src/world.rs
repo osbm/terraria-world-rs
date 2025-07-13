@@ -1658,6 +1658,18 @@ impl World {
                             } else {
                                 // Write the previous run
                                 let tile_bytes = self.serialize_tile_data(prev_tile);
+                                if x == 0 && self.world_name == "small_corruption" {
+                                    // Print first tile data comparison
+                                    println!("First tile data comparison:");
+                                    for (i, byte) in tile_bytes.iter().enumerate() {
+                                        print!("{:02X} ", byte);
+                                        if (i + 1) % 16 == 0 {
+                                            println!();
+                                        }
+                                    }
+                                    println!();
+                                }
+
                                 writer.bytes(&tile_bytes);
 
                                 // Write RLE count
