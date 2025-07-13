@@ -1698,6 +1698,110 @@ impl World {
             }
         }
         
+        // Print first column data comparison
+        if self.world_name == "small_corruption" {
+            println!("=== First Column Data Comparison ===");
+            
+            // Get the reconstructed data for the first column
+            let mut reconstructed_data = Vec::new();
+            if let Some(column) = self.tiles.tiles.get(0) {
+                let mut current_tile = None;
+                let mut count = 0;
+                
+                for y in 0..self.world_height as usize {
+                    if let Some(tile) = column.get(y) {
+                        if let Some(ref prev_tile) = current_tile {
+                            if self.tiles_equal(prev_tile, tile) {
+                                count += 1;
+                            } else {
+                                // Write the previous run
+                                let tile_bytes = self.serialize_tile_data(prev_tile);
+                                reconstructed_data.extend(tile_bytes);
+                                
+                                // Write RLE count
+                                if count > 1 {
+                                    if count <= 255 {
+                                        reconstructed_data.push((count - 1) as u8);
+                                    } else {
+                                        reconstructed_data.push(((count - 1) >> 8) as u8);
+                                        reconstructed_data.push((count - 1) as u8);
+                                    }
+                                }
+                                
+                                // Start new run
+                                current_tile = Some(tile.clone());
+                                count = 1;
+                            }
+                        } else {
+                            // First tile in column
+                            current_tile = Some(tile.clone());
+                            count = 1;
+                        }
+                    }
+                }
+                
+                // Write the last run in the column
+                if let Some(ref last_tile) = current_tile {
+                    let tile_bytes = self.serialize_tile_data(last_tile);
+                    reconstructed_data.extend(tile_bytes);
+                    
+                    // Write RLE count
+                    if count > 1 {
+                        if count <= 255 {
+                            reconstructed_data.push((count - 1) as u8);
+                        } else {
+                            reconstructed_data.push(((count - 1) >> 8) as u8);
+                            reconstructed_data.push((count - 1) as u8);
+                        }
+                    }
+                }
+            }
+            
+            // Get the original read data for the first column
+            let original_data = if let Some(column_bytes) = self.tile_bytes.get(0) {
+                column_bytes.as_slice()
+            } else {
+                &[]
+            };
+            
+            println!("Reconstructed first column data ({} bytes):", reconstructed_data.len());
+            for (i, byte) in reconstructed_data.iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            
+            println!("Original first column data ({} bytes):", original_data.len());
+            for (i, byte) in original_data.iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            
+            // Compare the two
+            if reconstructed_data == original_data {
+                println!("✅ First column data matches exactly!");
+            } else {
+                println!("❌ First column data does not match!");
+                println!("Reconstructed length: {}, Original length: {}", reconstructed_data.len(), original_data.len());
+                
+                // Find first difference
+                let min_len = std::cmp::min(reconstructed_data.len(), original_data.len());
+                for i in 0..min_len {
+                    if reconstructed_data[i] != original_data[i] {
+                        println!("First difference at byte {}: reconstructed={:02X}, original={:02X}", 
+                                i, reconstructed_data[i], original_data[i]);
+                        break;
+                    }
+                }
+            }
+            println!("=== End First Column Data Comparison ===");
+        }
+        
         writer
     }
 
