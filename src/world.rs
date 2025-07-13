@@ -1525,7 +1525,6 @@ impl World {
         // Section 4: Chests
         let chests_writer = &mut section_buffers[2];
         chests_writer.i16(self.chests.len() as i16);
-        println!("chests_max_items: {}", self.chests_max_items);
         chests_writer.i16(self.chests_max_items);
         for chest in &self.chests {
             chests_writer.i32(chest.position.x);
