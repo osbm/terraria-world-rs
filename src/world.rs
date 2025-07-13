@@ -2522,20 +2522,6 @@ impl World {
         block_equal && wall_equal && liquid_equal && wiring_equal
     }
 
-    /// Get the raw byte data for a specific column (for debugging RLE compression)
-    pub fn get_column_data(&self, column_idx: usize) -> Option<&[u8]> {
-        self.tile_bytes.get(column_idx).map(|data| data.as_slice())
-    }
-
-    /// Get the size of a specific column's data (for debugging RLE compression)
-    pub fn get_column_size(&self, column_idx: usize) -> Option<usize> {
-        self.tile_bytes.get(column_idx).map(|data| data.len())
-    }
-
-    /// Get all column sizes (for debugging RLE compression)
-    pub fn get_all_column_sizes(&self) -> Vec<usize> {
-        self.tile_bytes.iter().map(|data| data.len()).collect()
-    }
 }
 
 
