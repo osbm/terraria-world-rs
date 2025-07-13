@@ -2271,17 +2271,6 @@ impl World {
         out
     }
 
-    fn write_tiles_section(&mut self, writer: &mut ByteWriter) {
-        // Use the original tile data that was read from the file
-        // This ensures we preserve the exact byte representation
-        
-        for column_idx in 0..self.world_width as usize {
-            if column_idx < self.tile_bytes.len() {
-                writer.bytes(&self.tile_bytes[column_idx]);
-            }
-        }
-    }
-
     fn tiles_equal(&self, tile1: &Tile, tile2: &Tile) -> bool {
         // Check if two tiles are equal for RLE compression
         // This is a simplified comparison - you might need to adjust based on your needs
