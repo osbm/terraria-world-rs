@@ -1429,7 +1429,7 @@ impl World {
     fn write_world_header_section(&self) -> ByteWriter {
         use crate::writer::ByteWriter;
         let mut writer = ByteWriter::new();
-        
+
         writer.string(&self.world_name);
         writer.string(&self.generator_seed);
         writer.u64(self.generator_version);
@@ -1643,13 +1643,13 @@ impl World {
     fn write_tiles_section(&self) -> ByteWriter {
         use crate::writer::ByteWriter;
         let mut writer = ByteWriter::new();
-        
+
         // Write tile data using serialize_tile_data with RLE compression
         for x in 0..self.world_width as usize {
             if let Some(column) = self.tiles.tiles.get(x) {
                 let mut current_tile = None;
                 let mut count = 0;
-                
+
                 for y in 0..self.world_height as usize {
                     if let Some(tile) = column.get(y) {
                         if let Some(ref prev_tile) = current_tile {
@@ -1659,7 +1659,7 @@ impl World {
                                 // Write the previous run
                                 let tile_bytes = self.serialize_tile_data(prev_tile);
                                 writer.bytes(&tile_bytes);
-                                
+
                                 // Write RLE count
                                 if count > 1 {
                                     if count <= 255 {
@@ -1668,7 +1668,7 @@ impl World {
                                         writer.u16((count - 1) as u16);
                                     }
                                 }
-                                
+
                                 // Start new run
                                 current_tile = Some(tile.clone());
                                 count = 1;
@@ -1680,12 +1680,12 @@ impl World {
                         }
                     }
                 }
-                
+
                 // Write the last run in the column
                 if let Some(ref last_tile) = current_tile {
                     let tile_bytes = self.serialize_tile_data(last_tile);
                     writer.bytes(&tile_bytes);
-                    
+
                     // Write RLE count
                     if count > 1 {
                         if count <= 255 {
@@ -1697,17 +1697,17 @@ impl World {
                 }
             }
         }
-        
+
         // Print first column data comparison
         if self.world_name == "small_corruption" {
             println!("=== First Column Data Comparison ===");
-            
+
             // Get the reconstructed data for the first column
             let mut reconstructed_data = Vec::new();
             if let Some(column) = self.tiles.tiles.get(0) {
                 let mut current_tile = None;
                 let mut count = 0;
-                
+
                 for y in 0..self.world_height as usize {
                     if let Some(tile) = column.get(y) {
                         if let Some(ref prev_tile) = current_tile {
@@ -1717,7 +1717,7 @@ impl World {
                                 // Write the previous run
                                 let tile_bytes = self.serialize_tile_data(prev_tile);
                                 reconstructed_data.extend(tile_bytes);
-                                
+
                                 // Write RLE count
                                 if count > 1 {
                                     if count <= 255 {
@@ -1727,7 +1727,7 @@ impl World {
                                         reconstructed_data.push((count - 1) as u8);
                                     }
                                 }
-                                
+
                                 // Start new run
                                 current_tile = Some(tile.clone());
                                 count = 1;
@@ -1739,12 +1739,12 @@ impl World {
                         }
                     }
                 }
-                
+
                 // Write the last run in the column
                 if let Some(ref last_tile) = current_tile {
                     let tile_bytes = self.serialize_tile_data(last_tile);
                     reconstructed_data.extend(tile_bytes);
-                    
+
                     // Write RLE count
                     if count > 1 {
                         if count <= 255 {
@@ -1756,14 +1756,14 @@ impl World {
                     }
                 }
             }
-            
+
             // Get the original read data for the first column
             let original_data = if let Some(column_bytes) = self.tile_bytes.get(0) {
                 column_bytes.as_slice()
             } else {
                 &[]
             };
-            
+
             println!("Reconstructed first column data ({} bytes):", reconstructed_data.len());
             for (i, byte) in reconstructed_data.iter().enumerate() {
                 print!("{:02X} ", byte);
@@ -1772,7 +1772,7 @@ impl World {
                 }
             }
             println!();
-            
+
             println!("Original first column data ({} bytes):", original_data.len());
             for (i, byte) in original_data.iter().enumerate() {
                 print!("{:02X} ", byte);
@@ -1781,19 +1781,19 @@ impl World {
                 }
             }
             println!();
-            
+
             // Compare the two
             if reconstructed_data == original_data {
                 println!("✅ First column data matches exactly!");
             } else {
                 println!("❌ First column data does not match!");
                 println!("Reconstructed length: {}, Original length: {}", reconstructed_data.len(), original_data.len());
-                
+
                 // Find first difference
                 let min_len = std::cmp::min(reconstructed_data.len(), original_data.len());
                 for i in 0..min_len {
                     if reconstructed_data[i] != original_data[i] {
-                        println!("First difference at byte {}: reconstructed={:02X}, original={:02X}", 
+                        println!("First difference at byte {}: reconstructed={:02X}, original={:02X}",
                                 i, reconstructed_data[i], original_data[i]);
                         break;
                     }
@@ -1801,14 +1801,14 @@ impl World {
             }
             println!("=== End First Column Data Comparison ===");
         }
-        
+
         writer
     }
 
     fn write_chests_section(&self) -> ByteWriter {
         use crate::writer::ByteWriter;
         let mut writer = ByteWriter::new();
-        
+
         writer.i16(self.chests.len() as i16);
         writer.i16(self.chests_max_items);
         for chest in &self.chests {
@@ -1825,21 +1825,21 @@ impl World {
                 }
             }
         }
-        
+
         writer
     }
 
     fn write_signs_section(&self) -> ByteWriter {
         use crate::writer::ByteWriter;
         let mut writer = ByteWriter::new();
-        
+
         writer.i16(self.signs.len() as i16);
         for sign in &self.signs {
             writer.string(&sign.text);
             writer.i32(sign.position.x);
             writer.i32(sign.position.y);
         }
-        
+
         if self.world_name == "small_corruption" {
             println!("=== Signs section as hex ===");
             for (i, byte) in writer.as_slice().iter().enumerate() {
@@ -1851,14 +1851,14 @@ impl World {
             println!();
             println!("=== End signs section ===");
         }
-        
+
         writer
     }
 
     fn write_npcs_section(&self) -> ByteWriter {
         use crate::writer::ByteWriter;
         let mut writer = ByteWriter::new();
-        
+
         writer.i32(self.shimmered_npcs.len() as i32);
         for id in &self.shimmered_npcs {
             writer.i32(*id);
@@ -1885,14 +1885,14 @@ impl World {
             writer.f32(mob.position.y as f32);
         }
         writer.bool(false); // end of mobs
-        
+
         writer
     }
 
     fn write_tile_entities_section(&self) -> ByteWriter {
         use crate::writer::ByteWriter;
         let mut writer = ByteWriter::new();
-        
+
         writer.i32(self.tile_entities.len() as i32);
         for te in &self.tile_entities {
             let (te_type, extra) = match &te.extra {
@@ -1975,41 +1975,41 @@ impl World {
                 None => {}
             }
         }
-        
+
         writer
     }
 
     fn write_pressure_plates_section(&self) -> ByteWriter {
         use crate::writer::ByteWriter;
         let mut writer = ByteWriter::new();
-        
+
         writer.i32(self.weighed_pressure_plates.len() as i32);
         for plate in &self.weighed_pressure_plates {
             writer.i32(plate.position.x);
             writer.i32(plate.position.y);
         }
-        
+
         writer
     }
 
     fn write_town_manager_section(&self) -> ByteWriter {
         use crate::writer::ByteWriter;
         let mut writer = ByteWriter::new();
-        
+
         writer.i32(self.rooms.len() as i32);
         for room in &self.rooms {
             writer.i32(room.npc.id());
             writer.i32(room.position.x);
             writer.i32(room.position.y);
         }
-        
+
         writer
     }
 
     fn write_bestiary_section(&self) -> ByteWriter {
         use crate::writer::ByteWriter;
         let mut writer = ByteWriter::new();
-        
+
         writer.i32(self.bestiary.kills.len() as i32);
         for (entity, kills) in &self.bestiary.kills {
             writer.string(entity);
@@ -2023,7 +2023,7 @@ impl World {
         for c in &self.bestiary.chats {
             writer.string(c);
         }
-        
+
         if self.world_name == "small_corruption" {
             println!("=== Bestiary section as hex ===");
             for (i, byte) in writer.as_slice().iter().enumerate() {
@@ -2035,14 +2035,14 @@ impl World {
             println!();
             println!("=== End Bestiary section ===");
         }
-        
+
         writer
     }
 
     fn write_journey_powers_section(&self) -> ByteWriter {
         use crate::writer::ByteWriter;
         let mut writer = ByteWriter::new();
-        
+
         // Write each power as a pair (id, value) in the exact same order as read
         for &power_id in &self.journey_powers.power_order {
             writer.bool(true);
@@ -2074,18 +2074,18 @@ impl World {
             println!();
             println!("=== End Journey Powers section ===");
         }
-        
+
         writer
     }
 
     fn write_footer_section(&self) -> ByteWriter {
         use crate::writer::ByteWriter;
         let mut writer = ByteWriter::new();
-        
+
         writer.bool(true);
         writer.string(&self.world_name);
         writer.i32(self.id);
-        
+
         writer
     }
 
@@ -2397,13 +2397,13 @@ impl World {
                         header1 |= 0b_0000_1000; // water flag
                         has_flags3 = true;
                     }
-                    LiquidType::Lava => { 
+                    LiquidType::Lava => {
                         header1 |= 0b_0001_0000; // lava flag
                     }
-                    LiquidType::Honey => { 
+                    LiquidType::Honey => {
                         header1 |= 0b_0001_1000; // honey flag (both water and lava)
                     }
-                    _ => { 
+                    _ => {
                         header1 |= 0b_0000_1000; // water flag
                     }
                 }
@@ -2412,19 +2412,19 @@ impl World {
         }
 
         // Wiring handling
-        if tile.wiring.red { 
+        if tile.wiring.red {
             header2 |= 0b_0000_0010; // red wire
             has_flags2 = true;
         }
-        if tile.wiring.blue { 
+        if tile.wiring.blue {
             header2 |= 0b_0000_0100; // blue wire
             has_flags2 = true;
         }
-        if tile.wiring.green { 
+        if tile.wiring.green {
             header2 |= 0b_0000_1000; // green wire
             has_flags2 = true;
         }
-        if tile.wiring.yellow { 
+        if tile.wiring.yellow {
             header3 |= 0b_0010_0000; // yellow wire
             has_flags3 = true;
         }
