@@ -1509,18 +1509,6 @@ impl World {
         // a method named write_tiles_section
         self.write_tiles_section(tiles_writer);
 
-        // Print last 10 bytes of tile data for empty world
-        if self.world_name == "Blank World - Journey" {
-            println!("=== Last 10 bytes of tile data (write) ===");
-            let tile_data = tiles_writer.as_slice();
-            if tile_data.len() >= 10 {
-                let last_10_bytes = &tile_data[tile_data.len() - 10..];
-                println!("{:02X?}", last_10_bytes);
-            } else {
-                println!("{:02X?}", tile_data);
-            }
-            println!("=== End last 10 bytes of tile data (write) ===");
-        }
 
         // Section 4: Chests
         let chests_writer = &mut section_buffers[2];
@@ -1721,17 +1709,17 @@ impl World {
         for c in &self.bestiary.chats {
             bestiary_writer.string(c);
         }
-        if self.world_name == "Blank World - Journey" {
-            println!("=== Bestiary section as hex ===");
-            for (i, byte) in bestiary_writer.as_slice().iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End Bestiary section ===");
-        }
+        // if self.world_name == "Blank World - Journey" {
+        //     println!("=== Bestiary section as hex ===");
+        //     for (i, byte) in bestiary_writer.as_slice().iter().enumerate() {
+        //         print!("{:02X} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End Bestiary section ===");
+        // }
 
         // Section 11: Journey Powers
         let journey_powers_writer = &mut section_buffers[9];
@@ -1756,17 +1744,17 @@ impl World {
         journey_powers_writer.bool(false); // end of journey powers
 
 
-        if self.world_name == "Blank World - Journey" {
-            println!("=== Journey Powers section as hex ===");
-            for (i, byte) in journey_powers_writer.as_slice().iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End Journey Powers section ===");
-        }
+        // if self.world_name == "Blank World - Journey" {
+        //     println!("=== Journey Powers section as hex ===");
+        //     for (i, byte) in journey_powers_writer.as_slice().iter().enumerate() {
+        //         print!("{:02X} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End Journey Powers section ===");
+        // }
 
         // Footer
         let footer_writer = &mut section_buffers[10];
@@ -1901,12 +1889,6 @@ impl World {
         let buffer = final_writer.into_inner();
         std::fs::write(path, buffer)?;
 
-
-        println!("!");
-        println!("!");
-        println!("!");
-        println!("!");
-        println!("!");
 
         Ok(())
     }
