@@ -17,11 +17,12 @@ pub mod room;
 pub mod bestiary;
 pub mod journey_powers;
 pub mod error;
+pub mod enums;
 
 use self::tile::{
-    Block, BlockType, FrameImportantData, Liquid, LiquidType, RLEEncoding, Tile, TileMatrix, Wall,
-    WallType, Wiring,
+    FrameImportantData, Tile, TileMatrix,
 };
+use self::enums::{BlockType, WallType, LiquidType, RLEEncoding};
 use self::pointers::Pointers;
 use serde::{Deserialize, Serialize};
 
@@ -2132,10 +2133,13 @@ impl World {
         let liquid_type = Self::liquid_type_from_flags(&flags1, &flags3);
         let rle_compression = Self::rle_encoding_from_flags(&flags1);
         let block_shape = 0; // TODO: Implement proper shape parsing
-        let wiring = Self::wiring_from_flags(&flags2, &flags3);
+        let (red_wire, blue_wire, green_wire, yellow_wire) = Self::wiring_from_flags(&flags2, &flags3);
+
+        // Create tile with default values
+        let mut tile = Tile::new();
 
         // Parse block
-        let block = if has_block {
+        if has_block {
             let block_type = if has_extended_block_id {
                 BlockType::from(r.u16())
             } else {
@@ -2154,18 +2158,14 @@ impl World {
 
             let block_paint = if is_block_painted { Some(r.u8()) } else { None };
 
-            Some(Block::new(
-                block_type,
-                frame,
-                block_paint,
-                is_block_active,
-                block_shape,
-                is_block_illuminant,
-                is_block_echo,
-            ))
-        } else {
-            None
-        };
+            tile.block_type = Some(block_type);
+            tile.block_frame = frame;
+            tile.block_paint = block_paint;
+            tile.block_active = is_block_active;
+            tile.block_shape = block_shape;
+            tile.block_illuminant = is_block_illuminant;
+            tile.block_echo = is_block_echo;
+        }
 
         // Parse wall
         let wall_type_l = if has_wall { r.u8() } else { 0 };
@@ -2176,26 +2176,27 @@ impl World {
         };
 
         // Parse liquid
-        let liquid = if liquid_type != LiquidType::NoLiquid {
-            Some(Liquid::new(liquid_type, r.u8()))
-        } else {
-            None
-        };
+        if liquid_type != LiquidType::NoLiquid {
+            tile.liquid_type = liquid_type;
+            tile.liquid_amount = r.u8();
+        }
 
         // Parse wall, again
         let wall_type_g = if has_extended_wall_id { r.u8() } else { 0 };
 
-        let wall = if has_wall {
+        if has_wall {
             let wall_type = WallType::from((wall_type_g as u16) * 256 + (wall_type_l as u16));
-            Some(Wall::new(
-                wall_type,
-                wall_paint,
-                is_wall_illuminant,
-                is_wall_echo,
-            ))
-        } else {
-            None
-        };
+            tile.wall_type = Some(wall_type);
+            tile.wall_paint = wall_paint;
+            tile.wall_illuminant = is_wall_illuminant;
+            tile.wall_echo = is_wall_echo;
+        }
+
+        // Set wiring
+        tile.red_wire = red_wire;
+        tile.blue_wire = blue_wire;
+        tile.green_wire = green_wire;
+        tile.yellow_wire = yellow_wire;
 
         // Find RLE Compression multiplier
         let multiply_by = match rle_compression {
@@ -2204,8 +2205,6 @@ impl World {
             RLEEncoding::NoCompression => 1,
         };
 
-        // Create tile
-        let tile = Tile::new(block, wall, liquid, wiring);
         (tile, multiply_by)
     }
 
@@ -2234,13 +2233,13 @@ impl World {
         RLEEncoding::from(value)
     }
 
-    fn wiring_from_flags(flags2: &[bool], flags3: &[bool]) -> Wiring {
-        let red = flags2.get(1).unwrap_or(&false);
-        let blue = flags2.get(2).unwrap_or(&false);
-        let green = flags2.get(3).unwrap_or(&false);
-        let yellow = flags3.get(1).unwrap_or(&false);
+    fn wiring_from_flags(flags2: &[bool], flags3: &[bool]) -> (bool, bool, bool, bool) {
+        let red = *flags2.get(1).unwrap_or(&false);
+        let blue = *flags2.get(2).unwrap_or(&false);
+        let green = *flags2.get(3).unwrap_or(&false);
+        let yellow = *flags3.get(1).unwrap_or(&false);
 
-        Wiring::new(*red, *blue, *green, *yellow)
+        (red, blue, green, yellow)
     }
 
     fn create_tile_matrix(
@@ -2289,45 +2288,45 @@ impl World {
         let mut has_flags4 = false;
 
         // Block handling
-        if let Some(block) = &tile.block {
-            if block.is_active && block.type_.id() <= 520 && block.type_.id() != 423 {
+        if let Some(block_type) = &tile.block_type {
+            if tile.block_active && block_type.id() <= 520 && block_type.id() != 423 {
                 // Set has_block flag (bit 1)
                 header1 |= 0b_0000_0010;
 
                 // Check if we need extended block ID
-                if block.type_.id() > 255 {
+                if block_type.id() > 255 {
                     header1 |= 0b_0010_0000; // has_extended_block_id
                 }
 
                 // Write block type
-                data.push(block.type_.id() as u8); // low byte
-                if block.type_.id() > 255 {
-                    data.push((block.type_.id() >> 8) as u8); // high byte
+                data.push(block_type.id() as u8); // low byte
+                if block_type.id() > 255 {
+                    data.push((block_type.id() >> 8) as u8); // high byte
                 }
 
                 // Handle frame data
-                if let Some(frame) = &block.frame {
+                if let Some(frame) = &tile.block_frame {
                     data.push((frame.x & 0xFF) as u8);
                     data.push(((frame.x & 0xFF00) >> 8) as u8);
                     data.push((frame.y & 0xFF) as u8);
                     data.push(((frame.y & 0xFF00) >> 8) as u8);
-                } else if (block.type_.id() as usize) < self.tile_frame_important.len() && self.tile_frame_important[block.type_.id() as usize] {
+                } else if (block_type.id() as usize) < self.tile_frame_important.len() && self.tile_frame_important[block_type.id() as usize] {
                     data.push(0); data.push(0); data.push(0); data.push(0);
                 }
 
                 // Handle paint and illuminant
                 if self.version_integer < 269 {
-                    if let Some(paint) = block.paint {
-                        if paint != 0 || block.is_illuminant {
+                    if let Some(paint) = tile.block_paint {
+                        if paint != 0 || tile.block_illuminant {
                             let mut color = paint;
-                            if color == 0 && block.is_illuminant { color = 31; }
+                            if color == 0 && tile.block_illuminant { color = 31; }
                             header3 |= 0b_0000_1000; // is_block_painted
                             data.push(color);
                             has_flags3 = true;
                         }
                     }
                 } else {
-                    if let Some(paint) = block.paint {
+                    if let Some(paint) = tile.block_paint {
                         if paint != 0 && paint != 31 {
                             header3 |= 0b_0000_1000; // is_block_painted
                             data.push(paint);
@@ -2337,18 +2336,18 @@ impl World {
                 }
 
                 // Handle block active state (inverted in flags3)
-                if !block.is_active {
+                if !tile.block_active {
                     header3 |= 0b_0000_0100; // is_block_active (inverted)
                     has_flags3 = true;
                 }
 
                 // Handle echo and illuminant for version >= 269
                 if self.version_integer >= 269 {
-                    if block.is_echo {
+                    if tile.block_echo {
                         header4 |= 0b_0000_0010; // is_block_echo
                         has_flags4 = true;
                     }
-                    if block.is_illuminant || block.paint == Some(31) {
+                    if tile.block_illuminant || tile.block_paint == Some(31) {
                         header4 |= 0b_0000_1000; // is_block_illuminant
                         has_flags4 = true;
                     }
@@ -2357,26 +2356,26 @@ impl World {
         }
 
         // Wall handling
-        if let Some(wall) = &tile.wall {
-            if wall.type_.id() != 0 {
+        if let Some(wall_type) = &tile.wall_type {
+            if wall_type.id() != 0 {
                 header1 |= 0b_0000_0100; // has_wall
 
                 // Write wall type (low byte first)
-                data.push(wall.type_.id() as u8);
+                data.push(wall_type.id() as u8);
 
                 // Handle paint for walls
                 if self.version_integer < 269 {
-                    if let Some(paint) = wall.paint {
-                        if paint != 0 || wall.is_illuminant {
+                    if let Some(paint) = tile.wall_paint {
+                        if paint != 0 || tile.wall_illuminant {
                             let mut color = paint;
-                            if color == 0 && wall.is_illuminant { color = 31; }
+                            if color == 0 && tile.wall_illuminant { color = 31; }
                             header3 |= 0b_0001_0000; // is_wall_painted
                             data.push(color);
                             has_flags3 = true;
                         }
                     }
                 } else {
-                    if let Some(paint) = wall.paint {
+                    if let Some(paint) = tile.wall_paint {
                         if paint != 0 && paint != 31 {
                             header3 |= 0b_0001_0000; // is_wall_painted
                             data.push(paint);
@@ -2386,19 +2385,19 @@ impl World {
                 }
 
                 // Handle extended wall ID
-                if wall.type_.id() > 255 && self.version_integer >= 222 {
+                if wall_type.id() > 255 && self.version_integer >= 222 {
                     header3 |= 0b_0100_0000; // has_extended_wall_id
-                    data.push((wall.type_.id() >> 8) as u8); // high byte
+                    data.push((wall_type.id() >> 8) as u8); // high byte
                     has_flags3 = true;
                 }
 
                 // Handle echo and illuminant for version >= 269
                 if self.version_integer >= 269 {
-                    if wall.is_echo {
+                    if tile.wall_echo {
                         header4 |= 0b_0000_0100; // is_wall_echo
                         has_flags4 = true;
                     }
-                    if wall.is_illuminant || wall.paint == Some(31) {
+                    if tile.wall_illuminant || tile.wall_paint == Some(31) {
                         header4 |= 0b_0001_0000; // is_wall_illuminant
                         has_flags4 = true;
                     }
@@ -2407,49 +2406,47 @@ impl World {
         }
 
         // Liquid handling
-        if let Some(liquid) = &tile.liquid {
-            if liquid.volume != 0 && liquid.type_ != LiquidType::NoLiquid {
-                match liquid.type_ {
-                    LiquidType::Shimmer if self.version_integer >= 269 => {
-                        header3 |= 0b_1000_0000; // shimmer flag
-                        header1 |= 0b_0000_1000; // water flag
-                        has_flags3 = true;
-                    }
-                    LiquidType::Lava => {
-                        header1 |= 0b_0001_0000; // lava flag
-                    }
-                    LiquidType::Honey => {
-                        header1 |= 0b_0001_1000; // honey flag (both water and lava)
-                    }
-                    _ => {
-                        header1 |= 0b_0000_1000; // water flag
-                    }
+        if tile.liquid_amount != 0 && tile.liquid_type != LiquidType::NoLiquid {
+            match tile.liquid_type {
+                LiquidType::Shimmer if self.version_integer >= 269 => {
+                    header3 |= 0b_1000_0000; // shimmer flag
+                    header1 |= 0b_0000_1000; // water flag
+                    has_flags3 = true;
                 }
-                data.push(liquid.volume);
+                LiquidType::Lava => {
+                    header1 |= 0b_0001_0000; // lava flag
+                }
+                LiquidType::Honey => {
+                    header1 |= 0b_0001_1000; // honey flag (both water and lava)
+                }
+                _ => {
+                    header1 |= 0b_0000_1000; // water flag
+                }
             }
+            data.push(tile.liquid_amount);
         }
 
         // Wiring handling
-        if tile.wiring.red {
+        if tile.red_wire {
             header2 |= 0b_0000_0010; // red wire
             has_flags2 = true;
         }
-        if tile.wiring.blue {
+        if tile.blue_wire {
             header2 |= 0b_0000_0100; // blue wire
             has_flags2 = true;
         }
-        if tile.wiring.green {
+        if tile.green_wire {
             header2 |= 0b_0000_1000; // green wire
             has_flags2 = true;
         }
-        if tile.wiring.yellow {
+        if tile.yellow_wire {
             header3 |= 0b_0010_0000; // yellow wire
             has_flags3 = true;
         }
 
         // Block shape (brick style)
-        if let Some(block) = &tile.block {
-            let brick_style = (block.shape << 4) as u8;
+        if tile.block_type.is_some() {
+            let brick_style = (tile.block_shape << 4) as u8;
             header2 |= brick_style;
             if brick_style != 0 {
                 has_flags2 = true;
@@ -2490,46 +2487,29 @@ impl World {
         // This is a simplified comparison - you might need to adjust based on your needs
 
         // Compare blocks
-        let block_equal = match (&tile1.block, &tile2.block) {
-            (Some(b1), Some(b2)) => {
-                b1.type_.id() == b2.type_.id() &&
-                b1.is_active == b2.is_active &&
-                b1.shape == b2.shape &&
-                b1.paint == b2.paint &&
-                b1.is_illuminant == b2.is_illuminant &&
-                b1.is_echo == b2.is_echo &&
-                b1.frame == b2.frame
-            }
-            (None, None) => true,
-            _ => false,
-        };
+        let block_equal = tile1.block_type == tile2.block_type &&
+                         tile1.block_active == tile2.block_active &&
+                         tile1.block_shape == tile2.block_shape &&
+                         tile1.block_paint == tile2.block_paint &&
+                         tile1.block_illuminant == tile2.block_illuminant &&
+                         tile1.block_echo == tile2.block_echo &&
+                         tile1.block_frame == tile2.block_frame;
 
         // Compare walls
-        let wall_equal = match (&tile1.wall, &tile2.wall) {
-            (Some(w1), Some(w2)) => {
-                w1.type_.id() == w2.type_.id() &&
-                w1.paint == w2.paint &&
-                w1.is_illuminant == w2.is_illuminant &&
-                w1.is_echo == w2.is_echo
-            }
-            (None, None) => true,
-            _ => false,
-        };
+        let wall_equal = tile1.wall_type == tile2.wall_type &&
+                        tile1.wall_paint == tile2.wall_paint &&
+                        tile1.wall_illuminant == tile2.wall_illuminant &&
+                        tile1.wall_echo == tile2.wall_echo;
 
         // Compare liquids
-        let liquid_equal = match (&tile1.liquid, &tile2.liquid) {
-            (Some(l1), Some(l2)) => {
-                l1.type_ == l2.type_ && l1.volume == l2.volume
-            }
-            (None, None) => true,
-            _ => false,
-        };
+        let liquid_equal = tile1.liquid_type == tile2.liquid_type &&
+                          tile1.liquid_amount == tile2.liquid_amount;
 
         // Compare wiring
-        let wiring_equal = tile1.wiring.red == tile2.wiring.red &&
-                          tile1.wiring.blue == tile2.wiring.blue &&
-                          tile1.wiring.green == tile2.wiring.green &&
-                          tile1.wiring.yellow == tile2.wiring.yellow;
+        let wiring_equal = tile1.red_wire == tile2.red_wire &&
+                          tile1.blue_wire == tile2.blue_wire &&
+                          tile1.green_wire == tile2.green_wire &&
+                          tile1.yellow_wire == tile2.yellow_wire;
 
         block_equal && wall_equal && liquid_equal && wiring_equal
     }

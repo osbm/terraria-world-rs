@@ -3,6 +3,7 @@ use std::fs;
 use std::path::Path;
 use terraria_world_parser::world::World;
 use terraria_world_parser::world::tile_entity::TileEntityExtra;
+use terraria_world_parser::world::enums::LiquidType;
 
 /// Test utilities for integration tests
 mod test_utils {
@@ -141,21 +142,21 @@ mod test_utils {
 
         // Basic tile properties
         assert_eq!(
-            tile.block.is_some(),
+            tile.block_type.is_some(),
             tile_ref["has_block"].as_bool().unwrap(),
             "Block presence mismatch at ({}, {})",
             x,
             y
         );
         assert_eq!(
-            tile.wall.is_some(),
+            tile.wall_type.is_some(),
             tile_ref["has_wall"].as_bool().unwrap(),
             "Wall presence mismatch at ({}, {})",
             x,
             y
         );
         assert_eq!(
-            tile.liquid.is_some(),
+            tile.liquid_type != LiquidType::NoLiquid && tile.liquid_amount > 0,
             tile_ref["has_liquid"].as_bool().unwrap(),
             "Liquid presence mismatch at ({}, {})",
             x,
@@ -165,28 +166,28 @@ mod test_utils {
         // Validate wiring
         let wiring_ref = &tile_ref["wiring"];
         assert_eq!(
-            tile.wiring.red,
+            tile.red_wire,
             wiring_ref["red"].as_bool().unwrap(),
             "Red wiring mismatch at ({}, {})",
             x,
             y
         );
         assert_eq!(
-            tile.wiring.blue,
+            tile.blue_wire,
             wiring_ref["blue"].as_bool().unwrap(),
             "Blue wiring mismatch at ({}, {})",
             x,
             y
         );
         assert_eq!(
-            tile.wiring.green,
+            tile.green_wire,
             wiring_ref["green"].as_bool().unwrap(),
             "Green wiring mismatch at ({}, {})",
             x,
             y
         );
         assert_eq!(
-            tile.wiring.yellow,
+            tile.yellow_wire,
             wiring_ref["yellow"].as_bool().unwrap(),
             "Yellow wiring mismatch at ({}, {})",
             x,
@@ -194,38 +195,38 @@ mod test_utils {
         );
 
         // Validate block data
-        if let Some(block) = &tile.block {
+        if tile.block_type.is_some() {
             let block_ref = &tile_ref["block"];
             assert_eq!(
-                block.type_.id(),
+                tile.block_type.as_ref().unwrap().id(),
                 block_ref["type_id"].as_u64().unwrap() as u16,
                 "Block type mismatch at ({}, {})",
                 x,
                 y
             );
             assert_eq!(
-                block.is_active,
+                tile.block_active,
                 block_ref["is_active"].as_bool().unwrap(),
                 "Block active state mismatch at ({}, {})",
                 x,
                 y
             );
             assert_eq!(
-                block.paint.is_some(),
+                tile.block_paint.is_some(),
                 block_ref["has_paint"].as_bool().unwrap(),
                 "Block paint presence mismatch at ({}, {})",
                 x,
                 y
             );
             assert_eq!(
-                block.is_illuminant,
+                tile.block_illuminant,
                 block_ref["is_illuminant"].as_bool().unwrap(),
                 "Block illuminant state mismatch at ({}, {})",
                 x,
                 y
             );
             assert_eq!(
-                block.is_echo,
+                tile.block_echo,
                 block_ref["is_echo"].as_bool().unwrap(),
                 "Block echo state mismatch at ({}, {})",
                 x,
@@ -234,7 +235,7 @@ mod test_utils {
 
             if let Some(paint_id) = block_ref["paint_id"].as_u64() {
                 assert_eq!(
-                    block.paint.unwrap(),
+                    tile.block_paint.unwrap(),
                     paint_id as u8,
                     "Block paint ID mismatch at ({}, {})",
                     x,
@@ -244,12 +245,12 @@ mod test_utils {
 
             if let Some(frame_ref) = block_ref.get("frame") {
                 assert!(
-                    block.frame.is_some(),
+                    tile.block_frame.is_some(),
                     "Block frame missing at ({}, {})",
                     x,
                     y
                 );
-                let frame = block.frame.as_ref().unwrap();
+                let frame = tile.block_frame.as_ref().unwrap();
                 assert_eq!(
                     frame.x,
                     frame_ref["x"].as_u64().unwrap() as u16,
@@ -268,31 +269,31 @@ mod test_utils {
         }
 
         // Validate wall data
-        if let Some(wall) = &tile.wall {
+        if tile.wall_type.is_some() {
             let wall_ref = &tile_ref["wall"];
             assert_eq!(
-                wall.type_.id(),
+                tile.wall_type.as_ref().unwrap().id(),
                 wall_ref["type_id"].as_u64().unwrap() as u16,
                 "Wall type mismatch at ({}, {})",
                 x,
                 y
             );
             assert_eq!(
-                wall.paint.is_some(),
+                tile.wall_paint.is_some(),
                 wall_ref["has_paint"].as_bool().unwrap(),
                 "Wall paint presence mismatch at ({}, {})",
                 x,
                 y
             );
             assert_eq!(
-                wall.is_illuminant,
+                tile.wall_illuminant,
                 wall_ref["is_illuminant"].as_bool().unwrap(),
                 "Wall illuminant state mismatch at ({}, {})",
                 x,
                 y
             );
             assert_eq!(
-                wall.is_echo,
+                tile.wall_echo,
                 wall_ref["is_echo"].as_bool().unwrap(),
                 "Wall echo state mismatch at ({}, {})",
                 x,
@@ -301,7 +302,7 @@ mod test_utils {
 
             if let Some(paint_id) = wall_ref["paint_id"].as_u64() {
                 assert_eq!(
-                    wall.paint.unwrap(),
+                    tile.wall_paint.unwrap(),
                     paint_id as u8,
                     "Wall paint ID mismatch at ({}, {})",
                     x,
@@ -311,17 +312,17 @@ mod test_utils {
         }
 
         // Validate liquid data
-        if let Some(liquid) = &tile.liquid {
+        if tile.liquid_type != LiquidType::NoLiquid && tile.liquid_amount > 0 {
             let liquid_ref = &tile_ref["liquid"];
             assert_eq!(
-                liquid.type_ as u8,
+                tile.liquid_type as u8,
                 liquid_ref["type_id"].as_u64().unwrap() as u8,
                 "Liquid type mismatch at ({}, {})",
                 x,
                 y
             );
             assert_eq!(
-                liquid.volume,
+                tile.liquid_amount,
                 liquid_ref["volume"].as_u64().unwrap() as u8,
                 "Liquid volume mismatch at ({}, {})",
                 x,
