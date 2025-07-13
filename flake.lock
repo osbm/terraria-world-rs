@@ -46,11 +46,11 @@
     "terraria-worlds": {
       "flake": false,
       "locked": {
-        "lastModified": 1752363843,
-        "narHash": "sha256-MjeDikgo8bHJQCINm+pMAa1Mt52qmtKWw36ytNwvj28=",
+        "lastModified": 1752396790,
+        "narHash": "sha256-oIDIz1vUaPm3KlHE85dQvRICowpUibzWLFgu0FpeoBc=",
         "owner": "osbm",
         "repo": "terraria-worlds",
-        "rev": "519518a9b3117336f0f60b01636da48990218b3c",
+        "rev": "bc563d2c35f269d8d069b3ce7c7146143720df48",
         "type": "github"
       },
       "original": {
