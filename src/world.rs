@@ -1661,12 +1661,16 @@ impl World {
                                 writer.bytes(&tile_bytes);
 
                                 // Write RLE count
-                                if count > 1 {
-                                    if count <= 255 {
-                                        writer.u8((count - 1) as u8);
-                                    } else {
-                                        writer.u16((count - 1) as u16);
-                                    }
+                                if count <= 255 {
+                                    // reconstructed_data.push((count - 1) as u8);
+                                    writer.u8((count - 1) as u8);
+                                } else {
+                                    // Write as little-endian u16
+                                    let count_val = (count - 1) as u16;
+                                    // reconstructed_data.push((count_val & 0xFF) as u8);        // low byte
+                                    // reconstructed_data.push(((count_val >> 8) & 0xFF) as u8); // high byte
+                                    writer.u8((count_val & 0xFF) as u8);        // low byte
+                                    writer.u8(((count_val >> 8) & 0xFF) as u8); // high byte
                                 }
 
                                 // Start new run
@@ -1748,10 +1752,12 @@ impl World {
                     // Write RLE count
                     if count > 1 {
                         if count <= 255 {
-                            reconstructed_data.push((count - 1) as u8);
+                            writer.u8((count - 1) as u8);
                         } else {
-                            reconstructed_data.push(((count - 1) >> 8) as u8);
-                            reconstructed_data.push((count - 1) as u8);
+                            // Write as little-endian u16
+                            let count_val = (count - 1) as u16;
+                            writer.u8((count_val & 0xFF) as u8);        // low byte
+                            writer.u8(((count_val >> 8) & 0xFF) as u8); // high byte
                         }
                     }
                 }
