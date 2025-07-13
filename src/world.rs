@@ -568,7 +568,6 @@ impl World {
         // --- CHEST PARSING ---
         let chests_count = r.i16();
         let chests_max_items = r.i16();
-        println!("chests_max_items: {}", chests_max_items);
         let mut chests = Vec::with_capacity(chests_count as usize);
         for _ in 0..chests_count {
             let chest_x = r.i32();
