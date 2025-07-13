@@ -2069,24 +2069,29 @@ impl World {
         let mut header4 = 0u8;
         let mut data = Vec::new();
 
-        // ... existing logic to set header1, header2, header3, header4, and push tile data to data ...
-        // (copy from your current function, but don't push headers yet)
+        // Determine if we need additional headers
+        let mut has_flags2 = false;
+        let mut has_flags3 = false;
+        let mut has_flags4 = false;
 
-        // tile data
+        // Block handling
         if let Some(block) = &tile.block {
             if block.is_active && block.type_.id() <= 520 && block.type_.id() != 423 {
-                // activate bit[1]
+                // Set has_block flag (bit 1)
                 header1 |= 0b_0000_0010;
 
-                // save tile type as byte or int16
-                data.push(block.type_.id() as u8); // low byte
+                // Check if we need extended block ID
                 if block.type_.id() > 255 {
-                    // write high byte
-                    data.push((block.type_.id() >> 8) as u8);
-                    // set header1 bit[5] for int16 tile type
-                    header1 |= 0b_0010_0000;
+                    header1 |= 0b_0010_0000; // has_extended_block_id
                 }
 
+                // Write block type
+                data.push(block.type_.id() as u8); // low byte
+                if block.type_.id() > 255 {
+                    data.push((block.type_.id() >> 8) as u8); // high byte
+                }
+
+                // Handle frame data
                 if let Some(frame) = &block.frame {
                     data.push((frame.x & 0xFF) as u8);
                     data.push(((frame.x & 0xFF00) >> 8) as u8);
@@ -2096,94 +2101,168 @@ impl World {
                     data.push(0); data.push(0); data.push(0); data.push(0);
                 }
 
+                // Handle paint and illuminant
                 if self.version_integer < 269 {
                     if let Some(paint) = block.paint {
                         if paint != 0 || block.is_illuminant {
                             let mut color = paint;
                             if color == 0 && block.is_illuminant { color = 31; }
-                            header3 |= 0b_0000_1000;
+                            header3 |= 0b_0000_1000; // is_block_painted
                             data.push(color);
+                            has_flags3 = true;
                         }
                     }
                 } else {
                     if let Some(paint) = block.paint {
                         if paint != 0 && paint != 31 {
-                            header3 |= 0b_0000_1000;
+                            header3 |= 0b_0000_1000; // is_block_painted
                             data.push(paint);
+                            has_flags3 = true;
                         }
+                    }
+                }
+
+                // Handle block active state (inverted in flags3)
+                if !block.is_active {
+                    header3 |= 0b_0000_0100; // is_block_active (inverted)
+                    has_flags3 = true;
+                }
+
+                // Handle echo and illuminant for version >= 269
+                if self.version_integer >= 269 {
+                    if block.is_echo {
+                        header4 |= 0b_0000_0010; // is_block_echo
+                        has_flags4 = true;
+                    }
+                    if block.is_illuminant || block.paint == Some(31) {
+                        header4 |= 0b_0000_1000; // is_block_illuminant
+                        has_flags4 = true;
                     }
                 }
             }
         }
+
+        // Wall handling
         if let Some(wall) = &tile.wall {
-            if wall.type_.id() != 0 && wall.type_.id() <= 255 {
-                header1 |= 0b_0000_0100;
+            if wall.type_.id() != 0 {
+                header1 |= 0b_0000_0100; // has_wall
+
+                // Write wall type (low byte first)
                 data.push(wall.type_.id() as u8);
+
+                // Handle paint for walls
                 if self.version_integer < 269 {
                     if let Some(paint) = wall.paint {
                         if paint != 0 || wall.is_illuminant {
                             let mut color = paint;
                             if color == 0 && wall.is_illuminant { color = 31; }
-                            header3 |= 0b_0001_0000;
+                            header3 |= 0b_0001_0000; // is_wall_painted
                             data.push(color);
+                            has_flags3 = true;
                         }
                     }
                 } else {
                     if let Some(paint) = wall.paint {
                         if paint != 0 && paint != 31 {
-                            header3 |= 0b_0001_0000;
+                            header3 |= 0b_0001_0000; // is_wall_painted
                             data.push(paint);
+                            has_flags3 = true;
                         }
+                    }
+                }
+
+                // Handle extended wall ID
+                if wall.type_.id() > 255 && self.version_integer >= 222 {
+                    header3 |= 0b_0100_0000; // has_extended_wall_id
+                    data.push((wall.type_.id() >> 8) as u8); // high byte
+                    has_flags3 = true;
+                }
+
+                // Handle echo and illuminant for version >= 269
+                if self.version_integer >= 269 {
+                    if wall.is_echo {
+                        header4 |= 0b_0000_0100; // is_wall_echo
+                        has_flags4 = true;
+                    }
+                    if wall.is_illuminant || wall.paint == Some(31) {
+                        header4 |= 0b_0001_0000; // is_wall_illuminant
+                        has_flags4 = true;
                     }
                 }
             }
         }
+
+        // Liquid handling
         if let Some(liquid) = &tile.liquid {
             if liquid.volume != 0 && liquid.type_ != LiquidType::NoLiquid {
                 match liquid.type_ {
                     LiquidType::Shimmer if self.version_integer >= 269 => {
-                        header3 |= 0b_1000_0000;
-                        header1 |= 0b_0000_1000;
+                        header3 |= 0b_1000_0000; // shimmer flag
+                        header1 |= 0b_0000_1000; // water flag
+                        has_flags3 = true;
                     }
-                    LiquidType::Lava => { header1 |= 0b_0001_0000; }
-                    LiquidType::Honey => { header1 |= 0b_0001_1000; }
-                    _ => { header1 |= 0b_0000_1000; }
+                    LiquidType::Lava => { 
+                        header1 |= 0b_0001_0000; // lava flag
+                    }
+                    LiquidType::Honey => { 
+                        header1 |= 0b_0001_1000; // honey flag (both water and lava)
+                    }
+                    _ => { 
+                        header1 |= 0b_0000_1000; // water flag
+                    }
                 }
                 data.push(liquid.volume);
             }
         }
-        if tile.wiring.red { header2 |= 0b_0000_0010; }
-        if tile.wiring.blue { header2 |= 0b_0000_0100; }
-        if tile.wiring.green { header2 |= 0b_0000_1000; }
+
+        // Wiring handling
+        if tile.wiring.red { 
+            header2 |= 0b_0000_0010; // red wire
+            has_flags2 = true;
+        }
+        if tile.wiring.blue { 
+            header2 |= 0b_0000_0100; // blue wire
+            has_flags2 = true;
+        }
+        if tile.wiring.green { 
+            header2 |= 0b_0000_1000; // green wire
+            has_flags2 = true;
+        }
+        if tile.wiring.yellow { 
+            header3 |= 0b_0010_0000; // yellow wire
+            has_flags3 = true;
+        }
+
+        // Block shape (brick style)
         if let Some(block) = &tile.block {
             let brick_style = (block.shape << 4) as u8;
             header2 |= brick_style;
-        }
-        if tile.wiring.yellow { header3 |= 0b_0010_0000; }
-        if let Some(wall) = &tile.wall {
-            if wall.type_.id() > 255 && self.version_integer >= 222 {
-                header3 |= 0b_0100_0000;
-                data.push((wall.type_.id() >> 8) as u8);
+            if brick_style != 0 {
+                has_flags2 = true;
             }
         }
-        if self.version_integer >= 269 {
-            if let Some(block) = &tile.block { if block.is_echo { header4 |= 0b_0000_0010; } }
-            if let Some(wall) = &tile.wall { if wall.is_echo { header4 |= 0b_0000_0100; } }
-            if let Some(block) = &tile.block { if block.is_illuminant || block.paint == Some(31) { header4 |= 0b_0000_1000; } }
-            if let Some(wall) = &tile.wall { if wall.is_illuminant || wall.paint == Some(31) { header4 |= 0b_0001_0000; } }
-            if header4 != 0 { header3 |= 0b_0000_0001; }
-        }
-        if header3 != 0 { header2 |= 0b_0000_0001; }
-        if header2 != 0 { header1 |= 0b_0000_0001; }
 
-        // Now, push only as many headers as needed
+        // Set header flags
+        if has_flags4 {
+            header3 |= 0b_0000_0001; // has_flags4
+            has_flags3 = true;
+        }
+        if has_flags3 {
+            header2 |= 0b_0000_0001; // has_flags3
+            has_flags2 = true;
+        }
+        if has_flags2 {
+            header1 |= 0b_0000_0001; // has_flags2
+        }
+
+        // Build the output
         let mut out = Vec::new();
         out.push(header1);
-        if header1 & 0b_0000_0001 != 0 {
+        if has_flags2 {
             out.push(header2);
-            if header2 & 0b_0000_0001 != 0 {
+            if has_flags3 {
                 out.push(header3);
-                if self.version_integer >= 269 && header3 & 0b_0000_0001 != 0 {
+                if has_flags4 {
                     out.push(header4);
                 }
             }
@@ -2193,74 +2272,13 @@ impl World {
     }
 
     fn write_tiles_section(&mut self, writer: &mut ByteWriter) {
-        // The thing is that while we have every Tile in the memory
-        // The gamefile format Uses something called RLE Compression
-        // Which essentially just means in a column repeat the same tile
-
-        // But we will need to calculate If a tile will need to be repeated before getting it
-
+        // Use the original tile data that was read from the file
+        // This ensures we preserve the exact byte representation
+        
         for column_idx in 0..self.world_width as usize {
-            let mut column_data = Vec::new();
-            let mut row_idx = 0;
-
-            while row_idx < self.world_height as usize {
-                let current_tile = &self.tiles.tiles[column_idx][row_idx];
-
-                // Calculate RLE (Run Length Encoding) for this tile
-                let mut rle = 0;
-                let mut next_y = row_idx + 1;
-                let mut remaining_y = self.world_height as usize - row_idx - 1;
-
-                // Check how many consecutive identical tiles we have
-                while remaining_y > 0 && next_y < self.world_height as usize {
-                    let next_tile = &self.tiles.tiles[column_idx][next_y];
-
-                    // Check if tiles are equal (excluding special cases)
-                    if self.tiles_equal(current_tile, next_tile) {
-                        rle += 1;
-                        remaining_y -= 1;
-                        next_y += 1;
-                    } else {
-                        break;
-                    }
-                }
-
-                // Serialize the tile data first (without RLE)
-                let mut tile_data = self.serialize_tile_data(current_tile);
-
-                // Apply RLE compression if needed
-                if rle > 0 {
-                    // Set RLE encoding bits in header1 (bits 6-7)
-                    let header_index = 0; // header1 is always at index 0
-
-                    if rle <= 255 {
-                        // set bit[6] of header1 for byte size rle
-                        tile_data[header_index] |= 0b_0100_0000; // 64
-                        // Append RLE value at the end
-                        tile_data.push((rle & 0xFF) as u8);
-                    } else {
-                        // set bit[7] of header1 for int16 size rle
-                        tile_data[header_index] |= 0b_1000_0000; // 128
-                        // Append RLE value as u16 at the end
-                        tile_data.push((rle & 0xFF) as u8); // low byte
-                        tile_data.push(((rle & 0xFF00) >> 8) as u8); // high byte
-                    }
-                }
-
-                // Add the tile data to the column
-                column_data.extend_from_slice(&tile_data);
-
-                // Skip the tiles we've already processed
-                row_idx += rle + 1;
-            }
-
-            // Store the entire column data in tile_bytes
             if column_idx < self.tile_bytes.len() {
-                self.tile_bytes[column_idx] = column_data.clone();
+                writer.bytes(&self.tile_bytes[column_idx]);
             }
-
-            // Write the column data to the writer
-            writer.bytes(&column_data);
         }
     }
 
@@ -2328,3 +2346,4 @@ impl World {
         self.tile_bytes.iter().map(|data| data.len()).collect()
     }
 }
+
