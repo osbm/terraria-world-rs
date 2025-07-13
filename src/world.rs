@@ -1637,9 +1637,58 @@ impl World {
         use crate::writer::ByteWriter;
         let mut writer = ByteWriter::new();
         
-        // Write tile data using the existing tile_bytes
-        for column_bytes in &self.tile_bytes {
-            writer.bytes(column_bytes);
+        // Write tile data using serialize_tile_data with RLE compression
+        for x in 0..self.world_width as usize {
+            if let Some(column) = self.tiles.tiles.get(x) {
+                let mut current_tile = None;
+                let mut count = 0;
+                
+                for y in 0..self.world_height as usize {
+                    if let Some(tile) = column.get(y) {
+                        if let Some(ref prev_tile) = current_tile {
+                            if self.tiles_equal(prev_tile, tile) {
+                                count += 1;
+                            } else {
+                                // Write the previous run
+                                let tile_bytes = self.serialize_tile_data(prev_tile);
+                                writer.bytes(&tile_bytes);
+                                
+                                // Write RLE count
+                                if count > 1 {
+                                    if count <= 255 {
+                                        writer.u8((count - 1) as u8);
+                                    } else {
+                                        writer.u16((count - 1) as u16);
+                                    }
+                                }
+                                
+                                // Start new run
+                                current_tile = Some(tile.clone());
+                                count = 1;
+                            }
+                        } else {
+                            // First tile in column
+                            current_tile = Some(tile.clone());
+                            count = 1;
+                        }
+                    }
+                }
+                
+                // Write the last run in the column
+                if let Some(ref last_tile) = current_tile {
+                    let tile_bytes = self.serialize_tile_data(last_tile);
+                    writer.bytes(&tile_bytes);
+                    
+                    // Write RLE count
+                    if count > 1 {
+                        if count <= 255 {
+                            writer.u8((count - 1) as u8);
+                        } else {
+                            writer.u16((count - 1) as u16);
+                        }
+                    }
+                }
+            }
         }
         
         writer
