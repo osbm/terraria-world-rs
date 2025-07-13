@@ -600,26 +600,26 @@ impl World {
         }
 
 
-        if world_name == "Blank World - Journey" {
-            let debug_chest_offset_after = r.offset();
-            // println!("File offset after chests: {}", r.offset());
-            println!("=== Chests section as hex ===");
-            // just the read bytes for chests
-            let chests_bytes = r.slice_bytes(debug_chest_offset_before, debug_chest_offset_after);
-            for (i, byte) in chests_bytes.iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End chests section ===");
-        }
-        println!("File offset after chests: {}", r.offset());
+        // if world_name == "Blank World - Journey" {
+        //     let debug_chest_offset_after = r.offset();
+        //     // println!("File offset after chests: {}", r.offset());
+        //     println!("=== Chests section as hex ===");
+        //     // just the read bytes for chests
+        //     let chests_bytes = r.slice_bytes(debug_chest_offset_before, debug_chest_offset_after);
+        //     for (i, byte) in chests_bytes.iter().enumerate() {
+        //         print!("{:02X} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End chests section ===");
+        // }
+        // println!("File offset after chests: {}", r.offset());
 
 
         // --- SIGN PARSING ---
-        let debug_signs_offset_before = r.offset();
+        // let debug_signs_offset_before = r.offset();
         let signs_count = r.i16();
         let mut signs = Vec::with_capacity(signs_count as usize);
         for _ in 0..signs_count {
@@ -634,19 +634,19 @@ impl World {
                 },
             });
         }
-        let debug_signs_offset_after = r.offset();
-        if world_name == "Blank World - Journey" {
-            println!("=== Signs section as hex ===");
-            let signs_bytes = r.slice_bytes(debug_signs_offset_before, debug_signs_offset_after);
-            for (i, byte) in signs_bytes.iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End signs section ===");
-        }
+        // let debug_signs_offset_after = r.offset();
+        // if world_name == "Blank World - Journey" {
+        //     println!("=== Signs section as hex ===");
+        //     let signs_bytes = r.slice_bytes(debug_signs_offset_before, debug_signs_offset_after);
+        //     for (i, byte) in signs_bytes.iter().enumerate() {
+        //         print!("{:02X} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End signs section ===");
+        // }
 
         // Parse entities
         let mut npcs = Vec::new();
@@ -923,19 +923,19 @@ impl World {
         }
 
         let bestiary = Bestiary::new(bestiary_kills, bestiary_sightings, bestiary_chats);
-        let debug_bestiary_offset_after = r.offset();
-        if world_name == "Blank World - Journey" {
-            println!("=== Bestiary section as hex ===");
-            let bestiary_bytes = r.slice_bytes(debug_bestiary_offset_before, debug_bestiary_offset_after);
-            for (i, byte) in bestiary_bytes.iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End Bestiary section ===");
-        }
+        // let debug_bestiary_offset_after = r.offset();
+        // if world_name == "Blank World - Journey" {
+        //     println!("=== Bestiary section as hex ===");
+        //     let bestiary_bytes = r.slice_bytes(debug_bestiary_offset_before, debug_bestiary_offset_after);
+        //     for (i, byte) in bestiary_bytes.iter().enumerate() {
+        //         print!("{:02X} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End Bestiary section ===");
+        // }
 
         // Parse journey powers
         let mut journey_powers = JourneyPowers::new();
@@ -956,21 +956,21 @@ impl World {
             }
         }
 
-        if world_name == "Blank World - Journey" {
-            println!("=== Journey Powers section as hex ===");
-            let journey_powers_bytes = r.slice_bytes(
-                pointers.journey_powers as usize,
-                pointers.footer as usize,
-            );
-            for (i, byte) in journey_powers_bytes.iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End Journey Powers section ===");
-        }
+        // if world_name == "Blank World - Journey" {
+        //     println!("=== Journey Powers section as hex ===");
+        //     let journey_powers_bytes = r.slice_bytes(
+        //         pointers.journey_powers as usize,
+        //         pointers.footer as usize,
+        //     );
+        //     for (i, byte) in journey_powers_bytes.iter().enumerate() {
+        //         print!("{:02X} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End Journey Powers section ===");
+        // }
 
         // Parse footer
         if !r.bool() {
@@ -1185,10 +1185,6 @@ impl World {
             journey_powers,
             tile_bytes,
         };
-
-        if world.world_name == "Blank World - Journey" {
-            println!("CONSTRUCTOR: chests_max_items = {}", world.chests_max_items);
-        }
 
         Ok(world)
     }
