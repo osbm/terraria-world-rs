@@ -1281,7 +1281,6 @@ impl World {
 
     pub fn save_as_wld(&mut self, path: &str) -> std::io::Result<()> {
         use crate::writer::ByteWriter;
-        println!("Saving to {path}...");
 
         // Create all section writers
         let world_header_writer = self.write_world_header_section();
