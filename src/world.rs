@@ -1280,7 +1280,7 @@ impl World {
     }
 
     pub fn save_as_wld(&mut self, path: &str) -> std::io::Result<()> {
-        use crate::writer::ByteWriter;
+
 
         // Create all section writers
         let world_header_writer = self.write_world_header_section();
@@ -1427,7 +1427,7 @@ impl World {
     }
 
     fn write_world_header_section(&self) -> ByteWriter {
-        use crate::writer::ByteWriter;
+
         let mut writer = ByteWriter::new();
 
         writer.string(&self.world_name);
@@ -1641,7 +1641,7 @@ impl World {
     }
 
     fn write_tiles_section(&self) -> ByteWriter {
-        use crate::writer::ByteWriter;
+
         let mut writer = ByteWriter::new();
 
         // Write tile data using serialize_tile_data with RLE compression
@@ -1812,7 +1812,7 @@ impl World {
     }
 
     fn write_chests_section(&self) -> ByteWriter {
-        use crate::writer::ByteWriter;
+
         let mut writer = ByteWriter::new();
 
         writer.i16(self.chests.len() as i16);
@@ -1836,7 +1836,7 @@ impl World {
     }
 
     fn write_signs_section(&self) -> ByteWriter {
-        use crate::writer::ByteWriter;
+
         let mut writer = ByteWriter::new();
 
         writer.i16(self.signs.len() as i16);
@@ -1862,7 +1862,7 @@ impl World {
     }
 
     fn write_npcs_section(&self) -> ByteWriter {
-        use crate::writer::ByteWriter;
+
         let mut writer = ByteWriter::new();
 
         writer.i32(self.shimmered_npcs.len() as i32);
@@ -1896,7 +1896,7 @@ impl World {
     }
 
     fn write_tile_entities_section(&self) -> ByteWriter {
-        use crate::writer::ByteWriter;
+
         let mut writer = ByteWriter::new();
 
         writer.i32(self.tile_entities.len() as i32);
@@ -1986,7 +1986,7 @@ impl World {
     }
 
     fn write_pressure_plates_section(&self) -> ByteWriter {
-        use crate::writer::ByteWriter;
+
         let mut writer = ByteWriter::new();
 
         writer.i32(self.weighed_pressure_plates.len() as i32);
@@ -1999,7 +1999,7 @@ impl World {
     }
 
     fn write_town_manager_section(&self) -> ByteWriter {
-        use crate::writer::ByteWriter;
+
         let mut writer = ByteWriter::new();
 
         writer.i32(self.rooms.len() as i32);
@@ -2013,7 +2013,7 @@ impl World {
     }
 
     fn write_bestiary_section(&self) -> ByteWriter {
-        use crate::writer::ByteWriter;
+
         let mut writer = ByteWriter::new();
 
         writer.i32(self.bestiary.kills.len() as i32);
@@ -2046,7 +2046,7 @@ impl World {
     }
 
     fn write_journey_powers_section(&self) -> ByteWriter {
-        use crate::writer::ByteWriter;
+
         let mut writer = ByteWriter::new();
 
         // Write each power as a pair (id, value) in the exact same order as read
@@ -2085,7 +2085,7 @@ impl World {
     }
 
     fn write_footer_section(&self) -> ByteWriter {
-        use crate::writer::ByteWriter;
+
         let mut writer = ByteWriter::new();
 
         writer.bool(true);
