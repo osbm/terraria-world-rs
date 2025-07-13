@@ -1530,18 +1530,18 @@ impl World {
         }
 
         // print hex values of chests section but only if the world name is
-        if self.world_name == "Blank World - Journey" {
-            println!("=== Chests section as hex ===");
-            for (i, byte) in chests_writer.as_slice().iter().enumerate() {
-                print!("{:02X?} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End chests section ===");
+        // if self.world_name == "Blank World - Journey" {
+        //     println!("=== Chests section as hex ===");
+        //     for (i, byte) in chests_writer.as_slice().iter().enumerate() {
+        //         print!("{:02X?} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End chests section ===");
 
-        }
+        // }
 
         // Section 5: Signs
         let signs_writer = &mut section_buffers[3];
@@ -1551,17 +1551,17 @@ impl World {
             signs_writer.i32(sign.position.x);
             signs_writer.i32(sign.position.y);
         }
-        if self.world_name == "Blank World - Journey" {
-            println!("=== Signs section as hex ===");
-            for (i, byte) in signs_writer.as_slice().iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End signs section ===");
-        }
+        // if self.world_name == "Blank World - Journey" {
+        //     println!("=== Signs section as hex ===");
+        //     for (i, byte) in signs_writer.as_slice().iter().enumerate() {
+        //         print!("{:02X} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End signs section ===");
+        // }
 
         // Section 6: NPCs and Mobs
         let npcs_writer = &mut section_buffers[4];
