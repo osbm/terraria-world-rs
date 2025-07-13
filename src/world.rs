@@ -255,71 +255,7 @@ impl World {
         }
         let pointers = Pointers::from_vector(&pointer_vector); // create this only to use it during parsing
 
-        // Print section sizes from pointer table
-        println!("=== Section sizes from pointer table ===");
-        println!("Section 1 (File Header): {} bytes", pointers.world_header);
-        println!(
-            "Section 2 (World Header): {} bytes, starting at {}, ending at {}",
-            pointers.world_tiles - pointers.world_header,
-            pointers.world_header,
-            pointers.world_tiles
 
-        );
-        println!(
-            "Section 3 (Tiles): {} bytes, starting at {}, ending at {}",
-            pointers.chests - pointers.world_tiles,
-            pointers.world_tiles,
-            pointers.chests
-        );
-        println!(
-            "Section 4 (Chests): {} bytes, starting at {}, ending at {}",
-            pointers.signs - pointers.chests,
-            pointers.chests,
-            pointers.signs
-        );
-        println!(
-            "Section 5 (Signs): {} bytes, starting at {}, ending at {}",
-            pointers.npcs - pointers.signs,
-            pointers.signs,
-            pointers.npcs
-        );
-        println!(
-            "Section 6 (NPCs): {} bytes, starting at {}, ending at {}",
-            pointers.tile_entities - pointers.npcs,
-            pointers.npcs,
-            pointers.tile_entities
-        );
-        println!(
-            "Section 7 (Tile Entities): {} bytes, starting at {}, ending at {}",
-            pointers.pressure_plates - pointers.tile_entities,
-            pointers.tile_entities,
-            pointers.pressure_plates
-        );
-        println!(
-            "Section 8 (Pressure Plates): {} bytes, starting at {}, ending at {}",
-            pointers.town_manager - pointers.pressure_plates,
-            pointers.pressure_plates,
-            pointers.town_manager
-        );
-        println!(
-            "Section 9 (Town Manager): {} bytes, starting at {}, ending at {}",
-            pointers.bestiary - pointers.town_manager,
-            pointers.town_manager,
-            pointers.bestiary
-        );
-        println!(
-            "Section 10 (Beastiary): {} bytes, starting at {}, ending at {}",
-            pointers.journey_powers - pointers.bestiary,
-            pointers.bestiary,
-            pointers.journey_powers
-        );
-        println!(
-            "Section 11 (Journey Powers): {} bytes, starting at {}, ending at {}",
-            pointers.footer - pointers.journey_powers,
-            pointers.journey_powers,
-            pointers.footer
-        );
-        println!("========================================");
 
         // println!("File offset after reading pointers: {}", r.offset());
 
@@ -345,6 +281,76 @@ impl World {
             r.i32(), // top
             r.i32(), // bottom
         ];
+
+        // Print section sizes from pointer table
+        if world_name == "small_corruption" {
+            println!("=== Section sizes from pointer table ===");
+            println!("Section 1 (File Header): {} bytes", pointers.world_header);
+            println!(
+                "Section 2 (World Header): {} bytes, starting at {}, ending at {}",
+                pointers.world_tiles - pointers.world_header,
+                pointers.world_header,
+                pointers.world_tiles
+
+            );
+            println!(
+                "Section 3 (Tiles): {} bytes, starting at {}, ending at {}",
+                pointers.chests - pointers.world_tiles,
+                pointers.world_tiles,
+                pointers.chests
+            );
+            println!(
+                "Section 4 (Chests): {} bytes, starting at {}, ending at {}",
+                pointers.signs - pointers.chests,
+                pointers.chests,
+                pointers.signs
+            );
+            println!(
+                "Section 5 (Signs): {} bytes, starting at {}, ending at {}",
+                pointers.npcs - pointers.signs,
+                pointers.signs,
+                pointers.npcs
+            );
+            println!(
+                "Section 6 (NPCs): {} bytes, starting at {}, ending at {}",
+                pointers.tile_entities - pointers.npcs,
+                pointers.npcs,
+                pointers.tile_entities
+            );
+            println!(
+                "Section 7 (Tile Entities): {} bytes, starting at {}, ending at {}",
+                pointers.pressure_plates - pointers.tile_entities,
+                pointers.tile_entities,
+                pointers.pressure_plates
+            );
+            println!(
+                "Section 8 (Pressure Plates): {} bytes, starting at {}, ending at {}",
+                pointers.town_manager - pointers.pressure_plates,
+                pointers.pressure_plates,
+                pointers.town_manager
+            );
+            println!(
+                "Section 9 (Town Manager): {} bytes, starting at {}, ending at {}",
+                pointers.bestiary - pointers.town_manager,
+                pointers.town_manager,
+                pointers.bestiary
+            );
+            println!(
+                "Section 10 (Beastiary): {} bytes, starting at {}, ending at {}",
+                pointers.journey_powers - pointers.bestiary,
+                pointers.bestiary,
+                pointers.journey_powers
+            );
+            println!(
+                "Section 11 (Journey Powers): {} bytes, starting at {}, ending at {}",
+                pointers.footer - pointers.journey_powers,
+                pointers.journey_powers,
+                pointers.footer
+            );
+            println!("========================================");
+        }
+
+
         let world_height = r.i32();
         let world_width = r.i32();
         let difficulty_value = r.i32();
