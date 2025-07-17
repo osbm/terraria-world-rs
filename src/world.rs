@@ -2253,6 +2253,7 @@ impl World {
 
         for x in 0..width {
             let mut column = Vec::new();
+            let mut column_bytes = Vec::new();
             let start_offset = r.offset();
 
             while column.len() < height {
@@ -2267,9 +2268,6 @@ impl World {
             column_bytes.extend_from_slice(&column_data);
 
             tm.add_column(column);
-
-            // debug purposes
-            let mut column_bytes = Vec::new();
             tile_bytes[x] = column_bytes;
         }
         tm
