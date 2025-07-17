@@ -1766,7 +1766,7 @@ impl World {
                         } else {
                             // Write as little-endian u16
                             let count_val = (count - 1) as u16;
-                            writer.u8((count_val & 0xFF) as u8);        // low byte
+                            writer.u8((count_val & 0xFF) as u8); // low byte
                             writer.u8(((count_val >> 8) & 0xFF) as u8); // high byte
                         }
                     }
