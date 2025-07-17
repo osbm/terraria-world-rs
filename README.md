@@ -51,10 +51,10 @@ Tiles have upto 4 flag bytes before them.
     - 2.1: Has red wire
     - 2.2: Has blue wire
     - 2.3: Has green wire
-    - 2.4: For block shape calculation
-    - 2.5: For block shape calculation
-    - 2.6: For block shape calculation
-    - 2.7:
+    - 2.4: Used for block shape calculation
+    - 2.5: Used for block shape calculation
+    - 2.6: Used for block shape calculation
+    - 2.7: ????
 - Flag Byte 3
     - 3.0: Has Flag Byte 4
     - 3.1: Has yellow wire
@@ -65,7 +65,7 @@ Tiles have upto 4 flag bytes before them.
     - 3.6: Has extended wall id
     - 3.7: Has shimmer
 - Flag Byte 4
-    - 4.0:
+    - 4.0: (i believe this is being left empty for possible Flag Byte 5)
     - 4.1: Is block echo
     - 4.2: Is wall echo
     - 4.3: Is block Illuminated
