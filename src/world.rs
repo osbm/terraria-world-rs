@@ -256,8 +256,6 @@ impl World {
         }
         let pointers = Pointers::from_vector(&pointer_vector); // create this only to use it during parsing
 
-
-
         // println!("File offset after reading pointers: {}", r.offset());
 
         let tile_frame_important_count = r.i16();
@@ -292,7 +290,6 @@ impl World {
                 pointers.world_tiles - pointers.world_header,
                 pointers.world_header,
                 pointers.world_tiles
-
             );
             println!(
                 "Section 3 (Tiles): {} bytes, starting at {}, ending at {}",
@@ -350,7 +347,6 @@ impl World {
             );
             println!("========================================");
         }
-
 
         let world_height = r.i32();
         let world_width = r.i32();
@@ -570,7 +566,7 @@ impl World {
         //     println!("=== End last 10 bytes of tile data (read) ===");
         // }
 
-        let debug_chest_offset_before  = r.offset();
+        let debug_chest_offset_before = r.offset();
 
         // --- CHEST PARSING ---
         let chests_count = r.i16();
@@ -605,7 +601,6 @@ impl World {
             });
         }
 
-
         // if world_name == "small_corruption" {
         //     let debug_chest_offset_after = r.offset();
         //     // println!("File offset after chests: {}", r.offset());
@@ -622,7 +617,6 @@ impl World {
         //     println!("=== End chests section ===");
         // }
         // println!("File offset after chests: {}", r.offset());
-
 
         // --- SIGN PARSING ---
         let debug_signs_offset_before = r.offset();
@@ -1000,7 +994,8 @@ impl World {
             ));
         }
 
-        let world = World { // World vs Self?
+        let world = World {
+            // World vs Self?
             version_integer,
             magic,
             savefile_type,
@@ -1281,8 +1276,6 @@ impl World {
     }
 
     pub fn save_as_wld(&mut self, path: &str) -> std::io::Result<()> {
-
-
         // Create all section writers
         let world_header_writer = self.write_world_header_section();
         let tiles_writer = self.write_tiles_section();
@@ -1371,7 +1364,10 @@ impl World {
         if self.world_name == "small_corruption" {
             println!("=== Section sizes from buffer lengths ===");
             println!("Section 1 (File Header): {} bytes", header_writer.offset());
-            println!("Section 2 (World Header): {} bytes", world_header_writer.offset());
+            println!(
+                "Section 2 (World Header): {} bytes",
+                world_header_writer.offset()
+            );
             println!("Section 3 (Tiles): {} bytes", tiles_writer.offset());
             println!("Section 4 (Chests): {} bytes", chests_writer.offset());
             println!("Section 5 (Signs): {} bytes", signs_writer.offset());
@@ -1428,7 +1424,6 @@ impl World {
     }
 
     fn write_world_header_section(&self) -> ByteWriter {
-
         let mut writer = ByteWriter::new();
 
         writer.string(&self.world_name);
@@ -1642,7 +1637,6 @@ impl World {
     }
 
     fn write_tiles_section(&self) -> ByteWriter {
-
         let mut writer = ByteWriter::new();
 
         // Write tile data using serialize_tile_data with RLE compression
