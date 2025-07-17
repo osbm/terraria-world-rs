@@ -1832,7 +1832,6 @@ impl World {
     }
 
     fn write_chests_section(&self) -> ByteWriter {
-
         let mut writer = ByteWriter::new();
 
         writer.i16(self.chests.len() as i16);
@@ -1856,7 +1855,6 @@ impl World {
     }
 
     fn write_signs_section(&self) -> ByteWriter {
-
         let mut writer = ByteWriter::new();
 
         writer.i16(self.signs.len() as i16);
@@ -1882,7 +1880,6 @@ impl World {
     }
 
     fn write_npcs_section(&self) -> ByteWriter {
-
         let mut writer = ByteWriter::new();
 
         writer.i32(self.shimmered_npcs.len() as i32);
