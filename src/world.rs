@@ -1780,7 +1780,10 @@ impl World {
                 &[]
             };
 
-            println!("Reconstructed first column data ({} bytes):", reconstructed_data.len());
+            println!(
+                "Reconstructed first column data ({} bytes):",
+                reconstructed_data.len()
+            );
             for (i, byte) in reconstructed_data.iter().enumerate() {
                 print!("{:02X} ", byte);
                 if (i + 1) % 16 == 0 {
@@ -1789,7 +1792,10 @@ impl World {
             }
             println!();
 
-            println!("Original first column data ({} bytes):", original_data.len());
+            println!(
+                "Original first column data ({} bytes):",
+                original_data.len()
+            );
             for (i, byte) in original_data.iter().enumerate() {
                 print!("{:02X} ", byte);
                 if (i + 1) % 16 == 0 {
@@ -1803,7 +1809,11 @@ impl World {
                 println!("✅ First column data matches exactly!");
             } else {
                 println!("❌ First column data does not match!");
-                println!("Reconstructed length: {}, Original length: {}", reconstructed_data.len(), original_data.len());
+                println!(
+                    "Reconstructed length: {}, Original length: {}",
+                    reconstructed_data.len(),
+                    original_data.len()
+                );
 
                 // Find first difference
                 let min_len = std::cmp::min(reconstructed_data.len(), original_data.len());
