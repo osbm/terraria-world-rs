@@ -2,46 +2,42 @@ use crate::reader::ByteReader;
 use crate::writer::ByteWriter;
 
 // Module declarations
-pub mod tile;
-mod pointers;
-pub mod coordinates;
-pub mod item;
+pub mod bestiary;
 pub mod chest;
-pub mod sign;
+pub mod coordinates;
 pub mod entity;
-pub mod npc;
+pub mod enums;
+pub mod error;
+pub mod item;
+pub mod journey_powers;
 pub mod mob;
-pub mod tile_entity;
+pub mod npc;
+mod pointers;
 pub mod pressure_plate;
 pub mod room;
-pub mod bestiary;
-pub mod journey_powers;
-pub mod error;
-pub mod enums;
+pub mod sign;
+pub mod tile;
+pub mod tile_entity;
 
-use self::tile::{
-    FrameImportantData, Tile, TileMatrix,
-};
-use self::enums::{BlockType, WallType, LiquidType, RLEEncoding};
+use self::enums::{BlockType, LiquidType, RLEEncoding, WallType};
 use self::pointers::Pointers;
+use self::tile::{FrameImportantData, Tile, TileMatrix};
 use serde::{Deserialize, Serialize};
 
 // Import all the moved types from their submodules
-use crate::world::coordinates::Coordinates;
-use crate::world::item::ItemStack;
+use crate::world::bestiary::Bestiary;
 use crate::world::chest::Chest;
-use crate::world::sign::Sign;
+use crate::world::coordinates::Coordinates;
 use crate::world::entity::EntityType;
-use crate::world::npc::NPC;
+use crate::world::error::InvalidFooterError;
+use crate::world::item::ItemStack;
+use crate::world::journey_powers::JourneyPowers;
 use crate::world::mob::Mob;
-use crate::world::tile_entity::{TileEntity, TileEntityExtra};
+use crate::world::npc::NPC;
 use crate::world::pressure_plate::WeighedPressurePlate;
 use crate::world::room::Room;
-use crate::world::bestiary::Bestiary;
-use crate::world::journey_powers::JourneyPowers;
-use crate::world::error::InvalidFooterError;
-
-
+use crate::world::sign::Sign;
+use crate::world::tile_entity::{TileEntity, TileEntityExtra};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct World {
@@ -926,7 +922,8 @@ impl World {
         let debug_bestiary_offset_after = r.offset();
         if world_name == "small_corruption" {
             println!("=== Bestiary section as hex ===");
-            let bestiary_bytes = r.slice_bytes(debug_bestiary_offset_before, debug_bestiary_offset_after);
+            let bestiary_bytes =
+                r.slice_bytes(debug_bestiary_offset_before, debug_bestiary_offset_after);
             for (i, byte) in bestiary_bytes.iter().enumerate() {
                 print!("{:02X} ", byte);
                 if (i + 1) % 16 == 0 {
@@ -958,10 +955,8 @@ impl World {
 
         if world_name == "small_corruption" {
             println!("=== Journey Powers section as hex ===");
-            let journey_powers_bytes = r.slice_bytes(
-                pointers.journey_powers as usize,
-                pointers.footer as usize,
-            );
+            let journey_powers_bytes =
+                r.slice_bytes(pointers.journey_powers as usize, pointers.footer as usize);
             for (i, byte) in journey_powers_bytes.iter().enumerate() {
                 print!("{:02X} ", byte);
                 if (i + 1) % 16 == 0 {
@@ -1372,11 +1367,23 @@ impl World {
             println!("Section 4 (Chests): {} bytes", chests_writer.offset());
             println!("Section 5 (Signs): {} bytes", signs_writer.offset());
             println!("Section 6 (NPCs): {} bytes", npcs_writer.offset());
-            println!("Section 7 (Tile Entities): {} bytes", tile_entities_writer.offset());
-            println!("Section 8 (Pressure Plates): {} bytes", pressure_plates_writer.offset());
-            println!("Section 9 (Town Manager): {} bytes", town_manager_writer.offset());
+            println!(
+                "Section 7 (Tile Entities): {} bytes",
+                tile_entities_writer.offset()
+            );
+            println!(
+                "Section 8 (Pressure Plates): {} bytes",
+                pressure_plates_writer.offset()
+            );
+            println!(
+                "Section 9 (Town Manager): {} bytes",
+                town_manager_writer.offset()
+            );
             println!("Section 10 (Beastiary): {} bytes", bestiary_writer.offset());
-            println!("Section 11 (Journey Powers): {} bytes", journey_powers_writer.offset());
+            println!(
+                "Section 11 (Journey Powers): {} bytes",
+                journey_powers_writer.offset()
+            );
             println!("Section 12 (Footer): {} bytes", footer_writer.offset());
             println!("=========================================");
         }
@@ -1652,7 +1659,10 @@ impl World {
                                 count += 1;
                             } else {
                                 // Write the previous run
-                                let tile_bytes = prev_tile.serialize_tile_data(&self.tile_frame_important, self.version_integer);
+                                let tile_bytes = prev_tile.serialize_tile_data(
+                                    &self.tile_frame_important,
+                                    self.version_integer,
+                                );
                                 if x == 0 && self.world_name == "small_corruption" {
                                     // Print first tile data comparison
                                     println!("First tile data comparison:");
@@ -1676,7 +1686,7 @@ impl World {
                                     let count_val = (count - 1) as u16;
                                     // reconstructed_data.push((count_val & 0xFF) as u8);        // low byte
                                     // reconstructed_data.push(((count_val >> 8) & 0xFF) as u8); // high byte
-                                    writer.u8((count_val & 0xFF) as u8);        // low byte
+                                    writer.u8((count_val & 0xFF) as u8); // low byte
                                     writer.u8(((count_val >> 8) & 0xFF) as u8); // high byte
                                 }
 
@@ -1694,7 +1704,8 @@ impl World {
 
                 // Write the last run in the column
                 if let Some(ref last_tile) = current_tile {
-                    let tile_bytes = last_tile.serialize_tile_data(&self.tile_frame_important, self.version_integer);
+                    let tile_bytes = last_tile
+                        .serialize_tile_data(&self.tile_frame_important, self.version_integer);
                     writer.bytes(&tile_bytes);
 
                     // Write RLE count
@@ -1756,7 +1767,8 @@ impl World {
 
                 // Write the last run in the column
                 if let Some(ref last_tile) = current_tile {
-                    let tile_bytes = last_tile.serialize_tile_data(&self.tile_frame_important, self.version_integer);
+                    let tile_bytes = last_tile
+                        .serialize_tile_data(&self.tile_frame_important, self.version_integer);
                     reconstructed_data.extend(tile_bytes);
 
                     // Write RLE count
@@ -1819,8 +1831,10 @@ impl World {
                 let min_len = std::cmp::min(reconstructed_data.len(), original_data.len());
                 for i in 0..min_len {
                     if reconstructed_data[i] != original_data[i] {
-                        println!("First difference at byte {}: reconstructed={:02X}, original={:02X}",
-                                i, reconstructed_data[i], original_data[i]);
+                        println!(
+                            "First difference at byte {}: reconstructed={:02X}, original={:02X}",
+                            i, reconstructed_data[i], original_data[i]
+                        );
                         break;
                     }
                 }
@@ -2134,7 +2148,8 @@ impl World {
         let liquid_type = Self::liquid_type_from_flags(&flags1, &flags3);
         let rle_compression = Self::rle_encoding_from_flags(&flags1);
         let block_shape = 0; // TODO: Implement proper shape parsing
-        let (red_wire, blue_wire, green_wire, yellow_wire) = Self::wiring_from_flags(&flags2, &flags3);
+        let (red_wire, blue_wire, green_wire, yellow_wire) =
+            Self::wiring_from_flags(&flags2, &flags3);
 
         // Create tile with default values
         let mut tile = Tile::new();
