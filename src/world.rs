@@ -72,9 +72,9 @@ pub struct World {
     pub is_zenith_world: bool,
     pub created_on: String,
     pub moon_style: u8,
-    pub tree_style_seperators: Vec<i32>,
+    pub tree_style_separators: Vec<i32>,
     pub tree_style_properties: Vec<i32>,
-    pub moss_style_seperators: Vec<i32>,
+    pub moss_style_separators: Vec<i32>,
     pub moss_style_properties: Vec<i32>,
     pub snow_background_style: i32,
     pub jungle_background_style: i32,
@@ -367,9 +367,9 @@ impl World {
         // println!("File offset before date: {}", r.offset());
         let created_on = r.datetime();
         let moon_style = r.u8();
-        let tree_style_seperators = vec![r.i32(), r.i32(), r.i32()];
+        let tree_style_separators = vec![r.i32(), r.i32(), r.i32()];
         let tree_style_properties = vec![r.i32(), r.i32(), r.i32(), r.i32()];
-        let moss_style_seperators = vec![r.i32(), r.i32(), r.i32()];
+        let moss_style_separators = vec![r.i32(), r.i32(), r.i32()];
         let moss_style_properties = vec![r.i32(), r.i32(), r.i32(), r.i32()];
         let snow_background_style = r.i32();
         let jungle_background_style = r.i32();
@@ -1028,9 +1028,9 @@ impl World {
             is_zenith_world,
             created_on,
             moon_style,
-            tree_style_seperators,
+            tree_style_separators,
             tree_style_properties,
-            moss_style_seperators,
+            moss_style_separators,
             moss_style_properties,
             snow_background_style,
             jungle_background_style,
@@ -1457,14 +1457,14 @@ impl World {
         writer.datetime(&self.created_on);
         writer.u8(self.moon_style);
 
-        // Write tree_style_seperators, tree_style_properties, moss_style_seperators, moss_style_properties
-        for v in &self.tree_style_seperators {
+        // Write tree_style_separators, tree_style_properties, moss_style_separators, moss_style_properties
+        for v in &self.tree_style_separators {
             writer.i32(*v);
         }
         for v in &self.tree_style_properties {
             writer.i32(*v);
         }
-        for v in &self.moss_style_seperators {
+        for v in &self.moss_style_separators {
             writer.i32(*v);
         }
         for v in &self.moss_style_properties {
