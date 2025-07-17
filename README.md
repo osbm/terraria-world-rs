@@ -35,6 +35,47 @@ This is a bit too long i got lazy.
 
 All the information related to blocks, walls, liquids etc.
 
+Tiles have upto 4 flag bytes before them.
+
+- Flag Byte 1
+    - 1.0: Has Flag Byte 2
+    - 1.1: Has Block
+    - 1.2: Has Wall
+    - 1.3: Has water
+    - 1.4: Has lava (if 1.3 is also true it means the block has honey)
+    - 1.5: Has extended block id
+    - 1.6: Used For RLE calculation
+    - 1.7: Used For RLE calculation
+- Flag Byte 2
+    - 2.0: Has Flag Byte 3
+    - 2.1: Has red wire
+    - 2.2: Has blue wire
+    - 2.3: Has green wire
+    - 2.4: For block shape calculation
+    - 2.5: For block shape calculation
+    - 2.6: For block shape calculation
+    - 2.7:
+- Flag Byte 3
+    - 3.0: Has Flag Byte 4
+    - 3.1: Has yellow wire
+    - 3.2: Is Block Passive
+    - 3.3: Has block paint
+    - 3.4: Has wall paint
+    - 3.5: Has actuator
+    - 3.6: Has extended wall id
+    - 3.7: Has shimmer
+- Flag Byte 4
+    - 4.0:
+    - 4.1: Is block echo
+    - 4.2: Is wall echo
+    - 4.3: Is block Illuminated
+    - 4.4: Is wall Illuminated
+    - 4.5:
+    - 4.6:
+    - 4.7:
+
+
+
 ### 4. Chest Data
 
 All the information related to chests, their contents, and locations.
