@@ -562,7 +562,7 @@ impl World {
         //     println!("=== End last 10 bytes of tile data (read) ===");
         // }
 
-        let debug_chest_offset_before = r.offset();
+        // let debug_chest_offset_before = r.offset();
 
         // --- CHEST PARSING ---
         let chests_count = r.i16();
