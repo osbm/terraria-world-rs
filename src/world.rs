@@ -1903,7 +1903,7 @@ impl World {
             writer.i32(npc.variation_index);
         }
         writer.bool(false); // end of npcs
-        // Write mobs
+                            // Write mobs
         for mob in &self.mobs {
             writer.bool(true);
             writer.i32(mob.type_.id());
@@ -2006,7 +2006,6 @@ impl World {
     }
 
     fn write_pressure_plates_section(&self) -> ByteWriter {
-
         let mut writer = ByteWriter::new();
 
         writer.i32(self.weighed_pressure_plates.len() as i32);
@@ -2019,7 +2018,6 @@ impl World {
     }
 
     fn write_town_manager_section(&self) -> ByteWriter {
-
         let mut writer = ByteWriter::new();
 
         writer.i32(self.rooms.len() as i32);
@@ -2033,7 +2031,6 @@ impl World {
     }
 
     fn write_bestiary_section(&self) -> ByteWriter {
-
         let mut writer = ByteWriter::new();
 
         writer.i32(self.bestiary.kills.len() as i32);
@@ -2066,7 +2063,6 @@ impl World {
     }
 
     fn write_journey_powers_section(&self) -> ByteWriter {
-
         let mut writer = ByteWriter::new();
 
         // Write each power as a pair (id, value) in the exact same order as read
