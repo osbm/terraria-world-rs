@@ -1726,7 +1726,10 @@ impl World {
                                 count += 1;
                             } else {
                                 // Write the previous run
-                                let tile_bytes = prev_tile.serialize_tile_data(&self.tile_frame_important, self.version_integer);
+                                let tile_bytes = prev_tile.serialize_tile_data(
+                                    &self.tile_frame_important,
+                                    self.version_integer,
+                                );
                                 reconstructed_data.extend(tile_bytes);
 
                                 // Write RLE count
