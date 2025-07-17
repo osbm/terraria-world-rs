@@ -1916,7 +1916,6 @@ impl World {
     }
 
     fn write_tile_entities_section(&self) -> ByteWriter {
-
         let mut writer = ByteWriter::new();
 
         writer.i32(self.tile_entities.len() as i32);
@@ -2079,7 +2078,10 @@ impl World {
                 _ => {
                     // For unknown power IDs, we need to skip the value
                     // This shouldn't happen in normal cases, but we need to handle it
-                    println!("Warning: Unknown journey power ID {} during writing", power_id);
+                    println!(
+                        "Warning: Unknown journey power ID {} during writing",
+                        power_id
+                    );
                 }
             }
         }
@@ -2101,7 +2103,6 @@ impl World {
     }
 
     fn write_footer_section(&self) -> ByteWriter {
-
         let mut writer = ByteWriter::new();
 
         writer.bool(true);
@@ -2275,12 +2276,4 @@ impl World {
         }
         tm
     }
-
-
-
-
-
-
 }
-
-
