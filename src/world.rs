@@ -2,7 +2,7 @@ use crate::reader::ByteReader;
 use crate::writer::ByteWriter;
 
 // Debug configuration
-const DEBUG_WORLD_NAME: &str = "small_corruption";
+const DEBUG_WORLD_NAME: &str = "Blank World - Journey";
 
 // Module declarations
 pub mod bestiary;
