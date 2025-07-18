@@ -1650,203 +1650,36 @@ impl World {
     fn write_tiles_section(&self) -> ByteWriter {
         let mut writer = ByteWriter::new();
 
-        // Write tile data using serialize_tile_data with RLE compression
-        for x in 0..self.world_width as usize {
-            if let Some(column) = self.tiles.tiles.get(x) {
-                let mut current_tile: Option<Tile> = None;
-                let mut count = 0;
+        
+        for x in 0..self.world_width {
 
-                for y in 0..self.world_height as usize {
-                    if let Some(tile) = column.get(y) {
-                        if let Some(ref prev_tile) = current_tile {
-                            if prev_tile.tiles_equal(tile) {
-                                count += 1;
-                            } else {
-                                // Write the previous run
-                                let tile_bytes = prev_tile.serialize_tile_data(
-                                    &self.tile_frame_important,
-                                    self.version_integer,
-                                );
-                                if x == 0 && self.world_name == DEBUG_WORLD_NAME {
-                                    // Print first tile data comparison
-                                    println!("First tile data comparison:");
-                                    for (i, byte) in tile_bytes.iter().enumerate() {
-                                        print!("{:02X} ", byte);
-                                        if (i + 1) % 16 == 0 {
-                                            println!();
-                                        }
-                                    }
-                                    println!();
-                                }
-
-                                writer.bytes(&tile_bytes);
-
-                                // Write RLE count
-                                if count <= 255 {
-                                    // reconstructed_data.push((count - 1) as u8);
-                                    writer.u8((count - 1) as u8);
-                                } else {
-                                    // Write as little-endian u16
-                                    let count_val = (count - 1) as u16;
-                                    // reconstructed_data.push((count_val & 0xFF) as u8);        // low byte
-                                    // reconstructed_data.push(((count_val >> 8) & 0xFF) as u8); // high byte
-                                    writer.u8((count_val & 0xFF) as u8); // low byte
-                                    writer.u8(((count_val >> 8) & 0xFF) as u8); // high byte
-                                }
-
-                                // Start new run
-                                current_tile = Some(tile.clone());
-                                count = 1;
-                            }
-                        } else {
-                            // First tile in column
-                            current_tile = Some(tile.clone());
-                            count = 1;
-                        }
-                    }
-                }
-
-                // Write the last run in the column
-                if let Some(ref last_tile) = current_tile {
-                    let tile_bytes = last_tile
-                        .serialize_tile_data(&self.tile_frame_important, self.version_integer);
-                    writer.bytes(&tile_bytes);
-
-                    // Write RLE count
-                    if count > 1 {
-                        if count <= 255 {
-                            writer.u8((count - 1) as u8);
-                        } else {
-                            writer.u16((count - 1) as u16);
-                        }
-                    }
-                }
-            }
         }
 
-        // Print first column data comparison
-        if self.world_name == DEBUG_WORLD_NAME {
-            println!("=== First Column Data Comparison ===");
-
-            // Get the reconstructed data for the first column
-            let mut reconstructed_data = Vec::new();
-            if let Some(column) = self.tiles.tiles.get(0) {
-                let mut current_tile: Option<Tile> = None;
-                let mut count = 0;
-
-                for y in 0..self.world_height as usize {
-                    if let Some(tile) = column.get(y) {
-                        if let Some(ref prev_tile) = current_tile {
-                            if prev_tile.tiles_equal(tile) {
-                                count += 1;
-                            } else {
-                                // Write the previous run
-                                let tile_bytes = prev_tile.serialize_tile_data(
-                                    &self.tile_frame_important,
-                                    self.version_integer,
-                                );
-                                reconstructed_data.extend(tile_bytes);
-
-                                // Write RLE count
-                                if count > 1 {
-                                    if count <= 255 {
-                                        reconstructed_data.push((count - 1) as u8);
-                                    } else {
-                                        reconstructed_data.push(((count - 1) >> 8) as u8);
-                                        reconstructed_data.push((count - 1) as u8);
-                                    }
-                                }
-
-                                // Start new run
-                                current_tile = Some(tile.clone());
-                                count = 1;
-                            }
-                        } else {
-                            // First tile in column
-                            current_tile = Some(tile.clone());
-                            count = 1;
-                        }
-                    }
-                }
-
-                // Write the last run in the column
-                if let Some(ref last_tile) = current_tile {
-                    let tile_bytes = last_tile
-                        .serialize_tile_data(&self.tile_frame_important, self.version_integer);
-                    reconstructed_data.extend(tile_bytes);
-
-                    // Write RLE count
-                    if count > 1 {
-                        if count <= 255 {
-                            writer.u8((count - 1) as u8);
-                        } else {
-                            // Write as little-endian u16
-                            let count_val = (count - 1) as u16;
-                            writer.u8((count_val & 0xFF) as u8); // low byte
-                            writer.u8(((count_val >> 8) & 0xFF) as u8); // high byte
-                        }
-                    }
-                }
-            }
-
-            // Get the original read data for the first column
-            let original_data = if let Some(column_bytes) = self.tile_bytes.get(0) {
-                column_bytes.as_slice()
-            } else {
-                &[]
-            };
-
-            println!(
-                "Reconstructed first column data ({} bytes):",
-                reconstructed_data.len()
-            );
-            for (i, byte) in reconstructed_data.iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-
-            println!(
-                "Original first column data ({} bytes):",
-                original_data.len()
-            );
-            for (i, byte) in original_data.iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-
-            // Compare the two
-            if reconstructed_data == original_data {
-                println!("✅ First column data matches exactly!");
-            } else {
-                println!("❌ First column data does not match!");
-                println!(
-                    "Reconstructed length: {}, Original length: {}",
-                    reconstructed_data.len(),
-                    original_data.len()
-                );
-
-                // Find first difference
-                let min_len = std::cmp::min(reconstructed_data.len(), original_data.len());
-                for i in 0..min_len {
-                    if reconstructed_data[i] != original_data[i] {
-                        println!(
-                            "First difference at byte {}: reconstructed={:02X}, original={:02X}",
-                            i, reconstructed_data[i], original_data[i]
-                        );
-                        break;
-                    }
-                }
-            }
-            println!("=== End First Column Data Comparison ===");
-        }
 
         writer
+    }
+  
+    fn serialize_tile(tile: &Tile, repetition_count: usize) -> ByteWriter {
+        // First generate the tile flags and write them and add the tile data if needed
+
+        let mut tile_bytes = ByteWriter::new();
+
+        // First tile flag always exists
+
+        // - Flag Byte 1
+        //     - 1.0: Has Flag Byte 2
+        //     - 1.1: Has Block
+        //     - 1.2: Has Wall
+        //     - 1.3: Has water
+        //     - 1.4: Has lava (if 1.3 is also true it means the block has honey)
+        //     - 1.5: Has extended block id
+        //     - 1.6: Used For RLE calculation
+        //     - 1.7: Used For RLE calculation
+
+        let mut flags1 = 0 as u8;
+
+        
+    
     }
 
     fn write_chests_section(&self) -> ByteWriter {
