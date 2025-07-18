@@ -545,6 +545,7 @@ impl World {
             (width, height),
             &tile_frame_important,
             &mut tile_bytes,
+            &world_name,
         );
 
         // // Print last 10 bytes of tile data for empty world
@@ -2126,7 +2127,7 @@ impl World {
         writer
     }
 
-    fn read_tile_block(r: &mut ByteReader, tile_frame_important: &[bool]) -> (Tile, usize) {
+    fn read_tile_block(r: &mut ByteReader, tile_frame_important: &[bool], debug: bool) -> (Tile, usize) {
         let flags1 = r.bits();
         let has_flags2 = flags1[0];
         let flags2 = if has_flags2 { r.bits() } else { vec![false; 8] };
@@ -2134,6 +2135,14 @@ impl World {
         let flags3 = if has_flags3 { r.bits() } else { vec![false; 8] };
         let has_flags4 = flags3[0];
         let flags4 = if has_flags4 { r.bits() } else { vec![false; 8] };
+
+        if debug {
+            println!("flags1: {:?}", flags1);
+            println!("flags2: {:?}", flags2);
+            println!("flags3: {:?}", flags3);
+            println!("flags4: {:?}", flags4);
+        }
+
 
         let has_block = flags1[1];
         let has_extended_block_id = flags1[5];
@@ -2259,6 +2268,7 @@ impl World {
         world_size: (usize, usize),
         tile_frame_important: &[bool],
         tile_bytes: &mut Vec<Vec<u8>>,
+        world_name: &str,
     ) -> TileMatrix {
         let mut tm = TileMatrix::new();
         let (width, height) = world_size;
@@ -2268,8 +2278,20 @@ impl World {
             let mut column_bytes = Vec::new();
             let start_offset = r.offset();
 
+
+            let mut debug = false;
+            if x == 0 && world_name == DEBUG_WORLD_NAME {
+                debug = true; // Enable debug for the first column
+            }
+
             while column.len() < height {
-                let (tile, multiply_by) = Self::read_tile_block(r, tile_frame_important);
+                let (tile, multiply_by) = Self::read_tile_block(r, tile_frame_important, debug);
+                if debug {
+                    println!(
+                        "Read tile at ({}, {}): {:?} with multiply_by {}",
+                        x, column.len(), tile, multiply_by
+                    );
+                }
                 for _ in 0..multiply_by {
                     column.push(tile.clone());
                 }
