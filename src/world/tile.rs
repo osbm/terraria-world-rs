@@ -39,6 +39,7 @@ pub struct Tile {
     pub blue_wire: bool,
     pub green_wire: bool,
     pub yellow_wire: bool,
+    pub activator_wire: bool,
 }
 
 impl Tile {
@@ -61,6 +62,7 @@ impl Tile {
             blue_wire: false,
             green_wire: false,
             yellow_wire: false,
+            activator_wire: false,
         }
     }
 
@@ -101,7 +103,8 @@ impl Tile {
         let wiring_equal = self.red_wire == other.red_wire &&
                           self.blue_wire == other.blue_wire &&
                           self.green_wire == other.green_wire &&
-                          self.yellow_wire == other.yellow_wire;
+                          self.yellow_wire == other.yellow_wire &&
+                          self.activator_wire == other.activator_wire;
 
         block_equal && wall_equal && liquid_equal && wiring_equal
     }
@@ -276,7 +279,10 @@ impl Tile {
             header3 |= 0b_0010_0000; // yellow wire
             has_flags3 = true;
         }
-
+        if self.activator_wire {
+            header3 |= 0b_0000_0010; // activator wire
+            has_flags3 = true;
+        }
         // Block shape (brick style)
         if self.block_type.is_some() {
             let brick_style = (self.block_shape << 4) as u8;
@@ -320,7 +326,7 @@ impl std::fmt::Display for Tile {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "Tile {{ block: {:?}, wall: {:?}, liquid: {:?} ({}), wires: [R:{} B:{} G:{} Y:{}] }}",
+            "Tile {{ block: {:?}, wall: {:?}, liquid: {:?} ({}), wires: [R:{} B:{} G:{} Y:{} A:{}] }}",
             self.block_type,
             self.wall_type,
             self.liquid_type,
@@ -328,7 +334,8 @@ impl std::fmt::Display for Tile {
             self.red_wire,
             self.blue_wire,
             self.green_wire,
-            self.yellow_wire
+            self.yellow_wire,
+            self.activator_wire
         )
     }
 }

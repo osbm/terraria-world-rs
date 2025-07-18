@@ -2148,8 +2148,11 @@ impl World {
         let liquid_type = Self::liquid_type_from_flags(&flags1, &flags3);
         let rle_compression = Self::rle_encoding_from_flags(&flags1);
         let block_shape = 0; // TODO: Implement proper shape parsing
-        let (red_wire, blue_wire, green_wire, yellow_wire) =
-            Self::wiring_from_flags(&flags2, &flags3);
+        let red_wire = flags2[1];
+        let blue_wire = flags2[2];
+        let green_wire = flags2[3];
+        let yellow_wire = flags3[1];
+        let activator_wire = flags3[5];
 
         // Create tile with default values
         let mut tile = Tile::new();
@@ -2213,6 +2216,7 @@ impl World {
         tile.blue_wire = blue_wire;
         tile.green_wire = green_wire;
         tile.yellow_wire = yellow_wire;
+        tile.activator_wire = activator_wire;
 
         // Find RLE Compression multiplier
         let multiply_by = match rle_compression {
@@ -2247,15 +2251,6 @@ impl World {
         let flags17 = flags1.get(7).unwrap_or(&false);
         let value = (*flags17 as u8) * 2 + (*flags16 as u8);
         RLEEncoding::from(value)
-    }
-
-    fn wiring_from_flags(flags2: &[bool], flags3: &[bool]) -> (bool, bool, bool, bool) {
-        let red = *flags2.get(1).unwrap_or(&false);
-        let blue = *flags2.get(2).unwrap_or(&false);
-        let green = *flags2.get(3).unwrap_or(&false);
-        let yellow = *flags3.get(1).unwrap_or(&false);
-
-        (red, blue, green, yellow)
     }
 
     fn create_tile_matrix(
