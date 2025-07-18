@@ -1649,37 +1649,141 @@ impl World {
 
     fn write_tiles_section(&self) -> ByteWriter {
         let mut writer = ByteWriter::new();
+        let (width, height) = (self.world_width as usize, self.world_height as usize);
+        let tile_frame_important = &self.tile_frame_important;
+        let tiles = &self.tiles.tiles;
 
-        
-        for x in 0..self.world_width {
-
+        for x in 0..width {
+            let column = &tiles[x];
+            let mut y = 0;
+            while y < height {
+                // Find run length for RLE
+                let mut run_length = 1;
+                while y + run_length < height && column[y].tiles_equal(&column[y + run_length]) && run_length < 0x10000 {
+                    run_length += 1;
+                }
+                let tile_bytes = Self::serialize_tile(&column[y], run_length);
+                writer.bytes(&tile_bytes.into_inner());
+                y += run_length;
+            }
         }
-
-
         writer
     }
-  
+
     fn serialize_tile(tile: &Tile, repetition_count: usize) -> ByteWriter {
-        // First generate the tile flags and write them and add the tile data if needed
-
         let mut tile_bytes = ByteWriter::new();
+        // --- Flag Byte 1 ---
+        let mut flags1 = 0u8;
+        let mut flags2 = 0u8;
+        let mut flags3 = 0u8;
+        let mut flags4 = 0u8;
+        let mut has_flags2 = false;
+        let mut has_flags3 = false;
+        let mut has_flags4 = false;
 
-        // First tile flag always exists
+        // Block
+        let has_block = tile.has_block();
+        if has_block { flags1 |= 1 << 1; }
+        // Wall
+        let has_wall = tile.has_wall();
+        if has_wall { flags1 |= 1 << 2; }
+        // Liquid
+        let has_water = tile.liquid_type == LiquidType::Water && tile.liquid_amount > 0;
+        let has_lava = tile.liquid_type == LiquidType::Lava && tile.liquid_amount > 0;
+        let has_honey = tile.liquid_type == LiquidType::Honey && tile.liquid_amount > 0;
+        let has_shimmer = tile.liquid_type == LiquidType::Shimmer && tile.liquid_amount > 0;
+        if has_water || has_honey { flags1 |= 1 << 3; }
+        if has_lava || has_honey { flags1 |= 1 << 4; }
+        // Extended block id
+        let has_extended_block_id = has_block && tile.block_type.as_ref().map_or(false, |b| b.id() > 255);
+        if has_extended_block_id { flags1 |= 1 << 5; }
+        // RLE
+        let rle_val = if repetition_count > 0xFF { 2 } else if repetition_count > 1 { 1 } else { 0 };
+        flags1 |= (rle_val & 0x03) << 6;
 
-        // - Flag Byte 1
-        //     - 1.0: Has Flag Byte 2
-        //     - 1.1: Has Block
-        //     - 1.2: Has Wall
-        //     - 1.3: Has water
-        //     - 1.4: Has lava (if 1.3 is also true it means the block has honey)
-        //     - 1.5: Has extended block id
-        //     - 1.6: Used For RLE calculation
-        //     - 1.7: Used For RLE calculation
+        // --- Flag Byte 2 ---
+        // Wires
+        if tile.red_wire { flags2 |= 1 << 1; has_flags2 = true; }
+        if tile.blue_wire { flags2 |= 1 << 2; has_flags2 = true; }
+        if tile.green_wire { flags2 |= 1 << 3; has_flags2 = true; }
+        // If any flag2 bits set, set flag1.0
+        if has_flags2 { flags1 |= 1 << 0; }
 
-        let mut flags1 = 0 as u8;
+        // --- Flag Byte 3 ---
+        // Yellow wire
+        if tile.yellow_wire { flags3 |= 1 << 1; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        // Block inactive (active = !inactive)
+        if !tile.block_active { flags3 |= 1 << 2; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        // Block painted
+        if tile.block_paint.is_some() { flags3 |= 1 << 3; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        // Wall painted
+        if tile.wall_paint.is_some() { flags3 |= 1 << 4; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        // Actuator
+        if tile.activator_wire { flags3 |= 1 << 5; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        // Extended wall id
+        let has_extended_wall_id = has_wall && tile.wall_type.as_ref().map_or(false, |w| w.id() > 255);
+        if has_extended_wall_id { flags3 |= 1 << 6; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        // Shimmer liquid
+        if has_shimmer { flags3 |= 1 << 7; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        // If any flag3 bits set, set flag2.0
+        if has_flags3 { flags2 |= 1 << 0; }
 
-        
-    
+        // --- Flag Byte 4 ---
+        // Block echo
+        if tile.block_echo { flags4 |= 1 << 1; has_flags4 = true; has_flags3 = true; flags3 |= 1 << 0; }
+        // Wall echo
+        if tile.wall_echo { flags4 |= 1 << 2; has_flags4 = true; has_flags3 = true; flags3 |= 1 << 0; }
+        // Block illuminant
+        if tile.block_illuminant { flags4 |= 1 << 3; has_flags4 = true; has_flags3 = true; flags3 |= 1 << 0; }
+        // Wall illuminant
+        if tile.wall_illuminant { flags4 |= 1 << 4; has_flags4 = true; has_flags3 = true; flags3 |= 1 << 0; }
+        // If any flag4 bits set, set flag3.0
+        if has_flags4 { flags3 |= 1 << 0; }
+
+        // Write flag bytes
+        tile_bytes.u8(flags1);
+        if has_flags2 { tile_bytes.u8(flags2); }
+        if has_flags3 { tile_bytes.u8(flags3); }
+        if has_flags4 { tile_bytes.u8(flags4); }
+
+        // Block
+        if has_block {
+            let block_type = tile.block_type.unwrap();
+            if has_extended_block_id {
+                tile_bytes.u16(block_type.id());
+            } else {
+                tile_bytes.u8(block_type.id() as u8);
+            }
+            // Frame important
+            if tile.block_frame.is_some() {
+                let frame = tile.block_frame.as_ref().unwrap();
+                tile_bytes.u16(frame.x);
+                tile_bytes.u16(frame.y);
+            }
+            // Block paint
+            if let Some(paint) = tile.block_paint { tile_bytes.u8(paint); }
+        }
+        // Wall
+        if has_wall {
+            let wall_type = tile.wall_type.unwrap();
+            tile_bytes.u8((wall_type.id() & 0xFF) as u8);
+            if has_extended_wall_id {
+                tile_bytes.u8((wall_type.id() >> 8) as u8);
+            }
+            // Wall paint
+            if let Some(paint) = tile.wall_paint { tile_bytes.u8(paint); }
+        }
+        // Liquid
+        if has_water || has_lava || has_honey || has_shimmer {
+            tile_bytes.u8(tile.liquid_amount);
+        }
+        // RLE
+        match rle_val {
+            2 => tile_bytes.u16((repetition_count - 1) as u16),
+            1 => tile_bytes.u8((repetition_count - 1) as u8),
+            _ => {}
+        }
+        tile_bytes
     }
 
     fn write_chests_section(&self) -> ByteWriter {
