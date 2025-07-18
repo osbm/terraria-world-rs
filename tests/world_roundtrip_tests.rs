@@ -35,7 +35,7 @@ fn test_world_roundtrip() {
         // Read the original world
         let mut world = World::from_file(wld_file.to_str().unwrap())
             .expect(&format!("Failed to read world file: {}", file_name));
-
+        println!("World name: {}", world.world_name);
         // create the worlds directory if it doesn't exist
         fs::create_dir_all("./worlds").expect("Failed to create worlds directory");
 
