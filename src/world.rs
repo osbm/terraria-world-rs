@@ -2078,12 +2078,6 @@ impl World {
         let has_flags4 = flags3[0];
         let flags4 = if has_flags4 { r.bits() } else { vec![false; 8] };
 
-        if debug {
-            println!("flags1: {:?}", flags1);
-            println!("flags2: {:?}", flags2);
-            println!("flags3: {:?}", flags3);
-            println!("flags4: {:?}", flags4);
-        }
 
 
         let has_block = flags1[1];
@@ -2173,9 +2167,6 @@ impl World {
 
         // Find RLE Compression multiplier
         let rle_value = (flags1[7] as u8) * 2 + (flags1[6] as u8);
-        if debug {
-            println!("RLE VALUE {}", rle_value)
-        }
         let multiply_by = match rle_value {
             2 => r.u16() as usize + 1,
             1 => r.u8() as usize + 1,
@@ -2228,12 +2219,6 @@ impl World {
 
             while column.len() < height {
                 let (tile, multiply_by) = Self::read_tile_block(r, tile_frame_important, debug);
-                if debug {
-                    println!(
-                        "Read tile at ({}, {}): {:?} with multiply_by {}",
-                        x, column.len(), tile, multiply_by
-                    );
-                }
                 for _ in 0..multiply_by {
                     column.push(tile.clone());
                 }
