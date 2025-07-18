@@ -2104,6 +2104,12 @@ impl World {
         // Create tile with default values
         let mut tile = Tile::new();
 
+        // Always set shape and block flags, even for empty tiles
+        tile.block_shape = block_shape;
+        tile.block_active = is_block_active;
+        tile.block_illuminant = is_block_illuminant;
+        tile.block_echo = is_block_echo;
+
         // Parse block
         if has_block {
             let block_type = if has_extended_block_id {
@@ -2127,10 +2133,6 @@ impl World {
             tile.block_type = Some(block_type);
             tile.block_frame = frame;
             tile.block_paint = block_paint;
-            tile.block_active = is_block_active;
-            tile.block_shape = block_shape;
-            tile.block_illuminant = is_block_illuminant;
-            tile.block_echo = is_block_echo;
         }
 
         // Parse wall
