@@ -75,6 +75,18 @@ Tiles have upto 4 flag bytes before them.
     - 4.7:
 
 
+For example in the empty world, the first column is only 3 bytes (80 AF 04):
+
+- 80 = binary 1000 0000
+
+Flags are as follows:
+
+| 1.0 | 1.1 | 1.2 | 1.3 | 1.4 | 1.5 | 1.6 | 1.7 |
+|-----|-----|-----|-----|-----|-----|-----|-----|
+|  0  |  0  |  0  |  0  |  0  |  0  |  0  |  1  |
+
+Which means That there is no block no wall no 2nd other flag bytes are present and we need to read 2 bytes to learn how many times we need to repeat this tile. Which is (AF 04 = 1199) 1200 if you count the current tile. 
+
 
 ### 4. Chest Data
 
