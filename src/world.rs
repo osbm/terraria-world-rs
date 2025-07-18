@@ -1,6 +1,9 @@
 use crate::reader::ByteReader;
 use crate::writer::ByteWriter;
 
+// Debug configuration
+const DEBUG_WORLD_NAME: &str = "small_corruption";
+
 // Module declarations
 pub mod bestiary;
 pub mod chest;
@@ -278,7 +281,7 @@ impl World {
         ];
 
         // Print section sizes from pointer table
-        if world_name == "small_corruption" {
+        if world_name == DEBUG_WORLD_NAME {
             println!("=== Section sizes from pointer table ===");
             println!("Section 1 (File Header): {} bytes", pointers.world_header);
             println!(
@@ -545,7 +548,7 @@ impl World {
         );
 
         // // Print last 10 bytes of tile data for empty world
-        // if world_name == "small_corruption" {
+        // if world_name == DEBUG_WORLD_NAME {
         //     println!("=== Last 10 bytes of tile data (read) ===");
         //     let tile_data_end = r.offset();
         //     println!("tile_data_end: {}", tile_data_end);
@@ -597,7 +600,7 @@ impl World {
             });
         }
 
-        // if world_name == "small_corruption" {
+        // if world_name == DEBUG_WORLD_NAME {
         //     let debug_chest_offset_after = r.offset();
         //     // println!("File offset after chests: {}", r.offset());
         //     println!("=== Chests section as hex ===");
@@ -631,7 +634,7 @@ impl World {
             });
         }
         let debug_signs_offset_after = r.offset();
-        if world_name == "small_corruption" {
+        if world_name == DEBUG_WORLD_NAME {
             println!("=== Signs section as hex ===");
             let signs_bytes = r.slice_bytes(debug_signs_offset_before, debug_signs_offset_after);
             for (i, byte) in signs_bytes.iter().enumerate() {
@@ -920,7 +923,7 @@ impl World {
 
         let bestiary = Bestiary::new(bestiary_kills, bestiary_sightings, bestiary_chats);
         let debug_bestiary_offset_after = r.offset();
-        if world_name == "small_corruption" {
+        if world_name == DEBUG_WORLD_NAME {
             println!("=== Bestiary section as hex ===");
             let bestiary_bytes =
                 r.slice_bytes(debug_bestiary_offset_before, debug_bestiary_offset_after);
@@ -953,7 +956,7 @@ impl World {
             }
         }
 
-        if world_name == "small_corruption" {
+        if world_name == DEBUG_WORLD_NAME {
             println!("=== Journey Powers section as hex ===");
             let journey_powers_bytes =
                 r.slice_bytes(pointers.journey_powers as usize, pointers.footer as usize);
@@ -1356,7 +1359,7 @@ impl World {
         let _unused_offset = current_offset + footer_writer.offset() as u32;
 
         // Print section sizes from buffer lengths
-        if self.world_name == "small_corruption" {
+        if self.world_name == DEBUG_WORLD_NAME {
             println!("=== Section sizes from buffer lengths ===");
             println!("Section 1 (File Header): {} bytes", header_writer.offset());
             println!(
@@ -1663,7 +1666,7 @@ impl World {
                                     &self.tile_frame_important,
                                     self.version_integer,
                                 );
-                                if x == 0 && self.world_name == "small_corruption" {
+                                if x == 0 && self.world_name == DEBUG_WORLD_NAME {
                                     // Print first tile data comparison
                                     println!("First tile data comparison:");
                                     for (i, byte) in tile_bytes.iter().enumerate() {
@@ -1721,7 +1724,7 @@ impl World {
         }
 
         // Print first column data comparison
-        if self.world_name == "small_corruption" {
+        if self.world_name == DEBUG_WORLD_NAME {
             println!("=== First Column Data Comparison ===");
 
             // Get the reconstructed data for the first column
@@ -1878,7 +1881,7 @@ impl World {
             writer.i32(sign.position.y);
         }
 
-        if self.world_name == "small_corruption" {
+        if self.world_name == DEBUG_WORLD_NAME {
             println!("=== Signs section as hex ===");
             for (i, byte) in writer.as_slice().iter().enumerate() {
                 print!("{:02X} ", byte);
@@ -2057,7 +2060,7 @@ impl World {
             writer.string(c);
         }
 
-        if self.world_name == "small_corruption" {
+        if self.world_name == DEBUG_WORLD_NAME {
             println!("=== Bestiary section as hex ===");
             for (i, byte) in writer.as_slice().iter().enumerate() {
                 print!("{:02X} ", byte);
@@ -2098,7 +2101,7 @@ impl World {
         }
         writer.bool(false); // end of journey powers
 
-        if self.world_name == "small_corruption" {
+        if self.world_name == DEBUG_WORLD_NAME {
             println!("=== Journey Powers section as hex ===");
             for (i, byte) in writer.as_slice().iter().enumerate() {
                 print!("{:02X} ", byte);
