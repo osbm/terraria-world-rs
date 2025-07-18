@@ -111,19 +111,54 @@ impl Tile {
 }
 impl std::fmt::Display for Tile {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "Tile {{ block: {:?}, wall: {:?}, liquid: {:?} ({}), wires: [R:{} B:{} G:{} Y:{} A:{}] }}",
-            self.block_type,
-            self.wall_type,
-            self.liquid_type,
-            self.liquid_amount,
-            self.red_wire,
-            self.blue_wire,
-            self.green_wire,
-            self.yellow_wire,
-            self.activator_wire
-        )
+        // Block representation
+        let block = if let Some(block_type) = &self.block_type {
+            let paint = self.block_paint.map(|p| format!("[{}]", p)).unwrap_or_default();
+            let frame = self.block_frame.as_ref()
+                .map(|f| format!("({},{})", f.x, f.y))
+                .unwrap_or_default();
+            let active = if !self.block_active { "!" } else { "" };
+            let illum = if self.block_illuminant { "✨" } else { "" };
+            let echo = if self.block_echo { "🔊" } else { "" };
+            format!("{}{}{}{}{}{}", block_type, paint, frame, active, illum, echo)
+        } else {
+            "·".to_string()
+        };
+
+        // Wall representation
+        let wall = if let Some(wall_type) = &self.wall_type {
+            let paint = self.wall_paint.map(|p| format!("[{}]", p)).unwrap_or_default();
+            let illum = if self.wall_illuminant { "✨" } else { "" };
+            let echo = if self.wall_echo { "🔊" } else { "" };
+            format!("|{}{}{}{}|", wall_type, paint, illum, echo)
+        } else {
+            " ".to_string()
+        };
+
+        // Liquid representation
+        let liquid = if self.has_liquid() {
+            let symbol = match self.liquid_type {
+                LiquidType::Water => "💧",
+                LiquidType::Lava => "🔥",
+                LiquidType::Honey => "🍯",
+                LiquidType::Shimmer => "✨",
+                LiquidType::NoLiquid => "",
+            };
+            format!("{}{}", symbol, self.liquid_amount)
+        } else {
+            " ".to_string()
+        };
+
+        // Wire representation
+        let wires = [
+            if self.red_wire { "🔴" } else { "" },
+            if self.blue_wire { "🔵" } else { "" },
+            if self.green_wire { "🟢" } else { "" },
+            if self.yellow_wire { "🟡" } else { "" },
+            if self.activator_wire { "⚡" } else { "" },
+        ].join("");
+
+        write!(f, "{} {} {} {}", block, wall, liquid, wires)
     }
 }
 
