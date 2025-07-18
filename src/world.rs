@@ -2094,7 +2094,7 @@ impl World {
         let is_wall_illuminant = flags4[4];
 
         let liquid_type = Self::liquid_type_from_flags(&flags1, &flags3);
-        let block_shape = (flags2[4] as u8) * 4 + (flags2[5] as u8) * 2 + (flags2[6] as u8);
+        let block_shape = (flags2[6] as u8) * 4 + (flags2[5] as u8) * 2 + (flags2[4] as u8);
         let red_wire = flags2[1];
         let blue_wire = flags2[2];
         let green_wire = flags2[3];
