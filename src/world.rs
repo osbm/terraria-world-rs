@@ -2,7 +2,7 @@ use crate::reader::ByteReader;
 use crate::writer::ByteWriter;
 
 // Debug configuration
-const DEBUG_WORLD_NAME: &str = "Blank World - Journey";
+const DEBUG_WORLD_NAME: &str = "small_corruption";
 
 // Module declarations
 pub mod bestiary;
@@ -1706,6 +1706,11 @@ impl World {
         if tile.red_wire { flags2 |= 1 << 1; has_flags2 = true; }
         if tile.blue_wire { flags2 |= 1 << 2; has_flags2 = true; }
         if tile.green_wire { flags2 |= 1 << 3; has_flags2 = true; }
+        // Block shape (bits 4,5,6)
+        let shape = tile.block_shape & 0x07;
+        if (shape & 0b001) != 0 { flags2 |= 1 << 4; has_flags2 = true; }
+        if (shape & 0b010) != 0 { flags2 |= 1 << 5; has_flags2 = true; }
+        if (shape & 0b100) != 0 { flags2 |= 1 << 6; has_flags2 = true; }
         // If any flag2 bits set, set flag1.0
         if has_flags2 { flags1 |= 1 << 0; }
 
@@ -2095,7 +2100,7 @@ impl World {
         let is_wall_illuminant = flags4[4];
 
         let liquid_type = Self::liquid_type_from_flags(&flags1, &flags3);
-        let block_shape = 0; // TODO: Implement proper shape parsing
+        let block_shape = (flags2[4] as u8) * 4 + (flags2[5] as u8) * 2 + (flags2[6] as u8);
         let red_wire = flags2[1];
         let blue_wire = flags2[2];
         let green_wire = flags2[3];
