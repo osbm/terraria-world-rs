@@ -1692,7 +1692,7 @@ impl World {
         let has_lava = tile.liquid_type == LiquidType::Lava && tile.liquid_amount > 0;
         let has_honey = tile.liquid_type == LiquidType::Honey && tile.liquid_amount > 0;
         let has_shimmer = tile.liquid_type == LiquidType::Shimmer && tile.liquid_amount > 0;
-        if has_water || has_honey { flags1 |= 1 << 3; }
+        if has_water || has_honey || has_shimmer { flags1 |= 1 << 3; }  // Set water bit for shimmer too
         if has_lava || has_honey { flags1 |= 1 << 4; }
         // Extended block id
         let has_extended_block_id = has_block && tile.block_type.as_ref().map_or(false, |b| b.id() > 255);
@@ -1711,8 +1711,6 @@ impl World {
         if (shape & 0b001) != 0 { flags2 |= 1 << 4; has_flags2 = true; }
         if (shape & 0b010) != 0 { flags2 |= 1 << 5; has_flags2 = true; }
         if (shape & 0b100) != 0 { flags2 |= 1 << 6; has_flags2 = true; }
-        // If any flag2 bits set, set flag1.0
-        if has_flags2 { flags1 |= 1 << 0; }
 
         // --- Flag Byte 3 ---
         // Yellow wire
@@ -1745,6 +1743,8 @@ impl World {
         // If any flag4 bits set, set flag3.0
         if has_flags4 { flags3 |= 1 << 0; }
 
+        // Now set Flag 1.0 (has Flag Byte 2) after all Flag Byte 2 logic is complete
+        if has_flags2 { flags1 |= 1 << 0; }
         // Write flag bytes
         tile_bytes.u8(flags1);
         if has_flags2 { tile_bytes.u8(flags2); }
