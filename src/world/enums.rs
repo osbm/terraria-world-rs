@@ -94,23 +94,6 @@ impl std::fmt::Display for WallType {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub enum RLEEncoding {
-    NoCompression = 0,
-    SingleByte = 1,
-    DoubleByte = 2,
-}
-
-impl From<u8> for RLEEncoding {
-    fn from(value: u8) -> Self {
-        match value {
-            0 => RLEEncoding::NoCompression,
-            1 => RLEEncoding::SingleByte,
-            2 => RLEEncoding::DoubleByte,
-            _ => RLEEncoding::NoCompression,
-        }
-    }
-}
 
 static BLOCK_TYPE_NAMES: Lazy<HashMap<u16, &'static str>> = Lazy::new(|| {
     let mut map = HashMap::new();

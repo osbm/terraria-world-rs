@@ -22,7 +22,7 @@ pub mod sign;
 pub mod tile;
 pub mod tile_entity;
 
-use self::enums::{BlockType, LiquidType, RLEEncoding, WallType};
+use self::enums::{BlockType, LiquidType, WallType};
 use self::pointers::Pointers;
 use self::tile::{FrameImportantData, Tile, TileMatrix};
 use serde::{Deserialize, Serialize};
@@ -2149,7 +2149,6 @@ impl World {
         let is_wall_illuminant = flags4[4];
 
         let liquid_type = Self::liquid_type_from_flags(&flags1, &flags3);
-        let rle_compression = Self::rle_encoding_from_flags(&flags1);
         let block_shape = 0; // TODO: Implement proper shape parsing
         let red_wire = flags2[1];
         let blue_wire = flags2[2];
@@ -2222,10 +2221,15 @@ impl World {
         tile.activator_wire = activator_wire;
 
         // Find RLE Compression multiplier
-        let multiply_by = match rle_compression {
-            RLEEncoding::DoubleByte => r.u16() as usize + 1,
-            RLEEncoding::SingleByte => r.u8() as usize + 1,
-            RLEEncoding::NoCompression => 1,
+        let rle_value = (flags1[7] as u8) * 2 + (flags1[6] as u8);
+        if debug {
+            println!("RLE VALUE {}", rle_value)
+        }
+        let multiply_by = match rle_value {
+            2 => r.u16() as usize + 1,
+            1 => r.u8() as usize + 1,
+            0 => 1,
+            _ => 1 // i am not sure if it can be anything else
         };
 
         (tile, multiply_by)
@@ -2249,12 +2253,6 @@ impl World {
         }
     }
 
-    fn rle_encoding_from_flags(flags1: &[bool]) -> RLEEncoding {
-        let flags16 = flags1.get(6).unwrap_or(&false);
-        let flags17 = flags1.get(7).unwrap_or(&false);
-        let value = (*flags17 as u8) * 2 + (*flags16 as u8);
-        RLEEncoding::from(value)
-    }
 
     fn create_tile_matrix(
         r: &mut ByteReader,
