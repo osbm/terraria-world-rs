@@ -2,7 +2,7 @@ use crate::reader::ByteReader;
 use crate::writer::ByteWriter;
 
 // Debug configuration
-const DEBUG_WORLD_NAME: &str = "Blank World - Journey";
+const DEBUG_WORLD_NAME: &str = "almost empty world";
 
 // Module declarations
 pub mod bestiary;
@@ -1649,204 +1649,146 @@ impl World {
 
     fn write_tiles_section(&self) -> ByteWriter {
         let mut writer = ByteWriter::new();
+        let (width, height) = (self.world_width as usize, self.world_height as usize);
+        let tile_frame_important = &self.tile_frame_important;
+        let tiles = &self.tiles.tiles;
 
-        // Write tile data using serialize_tile_data with RLE compression
-        for x in 0..self.world_width as usize {
-            if let Some(column) = self.tiles.tiles.get(x) {
-                let mut current_tile: Option<Tile> = None;
-                let mut count = 0;
-
-                for y in 0..self.world_height as usize {
-                    if let Some(tile) = column.get(y) {
-                        if let Some(ref prev_tile) = current_tile {
-                            if prev_tile.tiles_equal(tile) {
-                                count += 1;
-                            } else {
-                                // Write the previous run
-                                let tile_bytes = prev_tile.serialize_tile_data(
-                                    &self.tile_frame_important,
-                                    self.version_integer,
-                                );
-                                if x == 0 && self.world_name == DEBUG_WORLD_NAME {
-                                    // Print first tile data comparison
-                                    println!("First tile data comparison:");
-                                    for (i, byte) in tile_bytes.iter().enumerate() {
-                                        print!("{:02X} ", byte);
-                                        if (i + 1) % 16 == 0 {
-                                            println!();
-                                        }
-                                    }
-                                    println!();
-                                }
-
-                                writer.bytes(&tile_bytes);
-
-                                // Write RLE count
-                                if count <= 255 {
-                                    // reconstructed_data.push((count - 1) as u8);
-                                    writer.u8((count - 1) as u8);
-                                } else {
-                                    // Write as little-endian u16
-                                    let count_val = (count - 1) as u16;
-                                    // reconstructed_data.push((count_val & 0xFF) as u8);        // low byte
-                                    // reconstructed_data.push(((count_val >> 8) & 0xFF) as u8); // high byte
-                                    writer.u8((count_val & 0xFF) as u8); // low byte
-                                    writer.u8(((count_val >> 8) & 0xFF) as u8); // high byte
-                                }
-
-                                // Start new run
-                                current_tile = Some(tile.clone());
-                                count = 1;
-                            }
-                        } else {
-                            // First tile in column
-                            current_tile = Some(tile.clone());
-                            count = 1;
-                        }
-                    }
+        for x in 0..width {
+            let column = &tiles[x];
+            let mut y = 0;
+            while y < height {
+                // Find run length for RLE
+                let mut run_length = 1;
+                while y + run_length < height && column[y].tiles_equal(&column[y + run_length]) && run_length < 0x10000 {
+                    run_length += 1;
                 }
-
-                // Write the last run in the column
-                if let Some(ref last_tile) = current_tile {
-                    let tile_bytes = last_tile
-                        .serialize_tile_data(&self.tile_frame_important, self.version_integer);
-                    writer.bytes(&tile_bytes);
-
-                    // Write RLE count
-                    if count > 1 {
-                        if count <= 255 {
-                            writer.u8((count - 1) as u8);
-                        } else {
-                            writer.u16((count - 1) as u16);
-                        }
-                    }
-                }
+                let tile_bytes = Self::serialize_tile(&column[y], run_length);
+                writer.bytes(&tile_bytes.into_inner());
+                y += run_length;
             }
         }
-
-        // Print first column data comparison
-        if self.world_name == DEBUG_WORLD_NAME {
-            println!("=== First Column Data Comparison ===");
-
-            // Get the reconstructed data for the first column
-            let mut reconstructed_data = Vec::new();
-            if let Some(column) = self.tiles.tiles.get(0) {
-                let mut current_tile: Option<Tile> = None;
-                let mut count = 0;
-
-                for y in 0..self.world_height as usize {
-                    if let Some(tile) = column.get(y) {
-                        if let Some(ref prev_tile) = current_tile {
-                            if prev_tile.tiles_equal(tile) {
-                                count += 1;
-                            } else {
-                                // Write the previous run
-                                let tile_bytes = prev_tile.serialize_tile_data(
-                                    &self.tile_frame_important,
-                                    self.version_integer,
-                                );
-                                reconstructed_data.extend(tile_bytes);
-
-                                // Write RLE count
-                                if count > 1 {
-                                    if count <= 255 {
-                                        reconstructed_data.push((count - 1) as u8);
-                                    } else {
-                                        reconstructed_data.push(((count - 1) >> 8) as u8);
-                                        reconstructed_data.push((count - 1) as u8);
-                                    }
-                                }
-
-                                // Start new run
-                                current_tile = Some(tile.clone());
-                                count = 1;
-                            }
-                        } else {
-                            // First tile in column
-                            current_tile = Some(tile.clone());
-                            count = 1;
-                        }
-                    }
-                }
-
-                // Write the last run in the column
-                if let Some(ref last_tile) = current_tile {
-                    let tile_bytes = last_tile
-                        .serialize_tile_data(&self.tile_frame_important, self.version_integer);
-                    reconstructed_data.extend(tile_bytes);
-
-                    // Write RLE count
-                    if count > 1 {
-                        if count <= 255 {
-                            writer.u8((count - 1) as u8);
-                        } else {
-                            // Write as little-endian u16
-                            let count_val = (count - 1) as u16;
-                            writer.u8((count_val & 0xFF) as u8); // low byte
-                            writer.u8(((count_val >> 8) & 0xFF) as u8); // high byte
-                        }
-                    }
-                }
-            }
-
-            // Get the original read data for the first column
-            let original_data = if let Some(column_bytes) = self.tile_bytes.get(0) {
-                column_bytes.as_slice()
-            } else {
-                &[]
-            };
-
-            println!(
-                "Reconstructed first column data ({} bytes):",
-                reconstructed_data.len()
-            );
-            for (i, byte) in reconstructed_data.iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-
-            println!(
-                "Original first column data ({} bytes):",
-                original_data.len()
-            );
-            for (i, byte) in original_data.iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-
-            // Compare the two
-            if reconstructed_data == original_data {
-                println!("✅ First column data matches exactly!");
-            } else {
-                println!("❌ First column data does not match!");
-                println!(
-                    "Reconstructed length: {}, Original length: {}",
-                    reconstructed_data.len(),
-                    original_data.len()
-                );
-
-                // Find first difference
-                let min_len = std::cmp::min(reconstructed_data.len(), original_data.len());
-                for i in 0..min_len {
-                    if reconstructed_data[i] != original_data[i] {
-                        println!(
-                            "First difference at byte {}: reconstructed={:02X}, original={:02X}",
-                            i, reconstructed_data[i], original_data[i]
-                        );
-                        break;
-                    }
-                }
-            }
-            println!("=== End First Column Data Comparison ===");
-        }
-
         writer
+    }
+
+    fn serialize_tile(tile: &Tile, repetition_count: usize) -> ByteWriter {
+        let mut tile_bytes = ByteWriter::new();
+        // --- Flag Byte 1 ---
+        let mut flags1 = 0u8;
+        let mut flags2 = 0u8;
+        let mut flags3 = 0u8;
+        let mut flags4 = 0u8;
+        let mut has_flags2 = false;
+        let mut has_flags3 = false;
+        let mut has_flags4 = false;
+
+        // Block
+        let has_block = tile.has_block();
+        if has_block { flags1 |= 1 << 1; }
+        // Wall
+        let has_wall = tile.has_wall();
+        if has_wall { flags1 |= 1 << 2; }
+        // Liquid
+        let has_water = tile.liquid_type == LiquidType::Water && tile.liquid_amount > 0;
+        let has_lava = tile.liquid_type == LiquidType::Lava && tile.liquid_amount > 0;
+        let has_honey = tile.liquid_type == LiquidType::Honey && tile.liquid_amount > 0;
+        let has_shimmer = tile.liquid_type == LiquidType::Shimmer && tile.liquid_amount > 0;
+        if has_water || has_honey { flags1 |= 1 << 3; }
+        if has_lava || has_honey { flags1 |= 1 << 4; }
+        // Extended block id
+        let has_extended_block_id = has_block && tile.block_type.as_ref().map_or(false, |b| b.id() > 255);
+        if has_extended_block_id { flags1 |= 1 << 5; }
+        // RLE
+        let rle_val = if repetition_count > 0xFF { 2 } else if repetition_count > 1 { 1 } else { 0 };
+        flags1 |= (rle_val & 0x03) << 6;
+
+        // --- Flag Byte 2 ---
+        // Wires
+        if tile.red_wire { flags2 |= 1 << 1; has_flags2 = true; }
+        if tile.blue_wire { flags2 |= 1 << 2; has_flags2 = true; }
+        if tile.green_wire { flags2 |= 1 << 3; has_flags2 = true; }
+        // Block shape (bits 4,5,6)
+        let shape = tile.block_shape & 0x07;
+        if (shape & 0b001) != 0 { flags2 |= 1 << 4; has_flags2 = true; }
+        if (shape & 0b010) != 0 { flags2 |= 1 << 5; has_flags2 = true; }
+        if (shape & 0b100) != 0 { flags2 |= 1 << 6; has_flags2 = true; }
+        // If any flag2 bits set, set flag1.0
+        if has_flags2 { flags1 |= 1 << 0; }
+
+        // --- Flag Byte 3 ---
+        // Yellow wire
+        if tile.yellow_wire { flags3 |= 1 << 1; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        // Block inactive (active = !inactive)
+        if !tile.block_active { flags3 |= 1 << 2; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        // Block painted
+        if tile.block_paint.is_some() { flags3 |= 1 << 3; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        // Wall painted
+        if tile.wall_paint.is_some() { flags3 |= 1 << 4; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        // Actuator
+        if tile.activator_wire { flags3 |= 1 << 5; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        // Extended wall id
+        let has_extended_wall_id = has_wall && tile.wall_type.as_ref().map_or(false, |w| w.id() > 255);
+        if has_extended_wall_id { flags3 |= 1 << 6; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        // Shimmer liquid
+        if has_shimmer { flags3 |= 1 << 7; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        // If any flag3 bits set, set flag2.0
+        if has_flags3 { flags2 |= 1 << 0; }
+
+        // --- Flag Byte 4 ---
+        // Block echo
+        if tile.block_echo { flags4 |= 1 << 1; has_flags4 = true; has_flags3 = true; flags3 |= 1 << 0; }
+        // Wall echo
+        if tile.wall_echo { flags4 |= 1 << 2; has_flags4 = true; has_flags3 = true; flags3 |= 1 << 0; }
+        // Block illuminant
+        if tile.block_illuminant { flags4 |= 1 << 3; has_flags4 = true; has_flags3 = true; flags3 |= 1 << 0; }
+        // Wall illuminant
+        if tile.wall_illuminant { flags4 |= 1 << 4; has_flags4 = true; has_flags3 = true; flags3 |= 1 << 0; }
+        // If any flag4 bits set, set flag3.0
+        if has_flags4 { flags3 |= 1 << 0; }
+
+        // Write flag bytes
+        tile_bytes.u8(flags1);
+        if has_flags2 { tile_bytes.u8(flags2); }
+        if has_flags3 { tile_bytes.u8(flags3); }
+        if has_flags4 { tile_bytes.u8(flags4); }
+
+        // Block
+        if has_block {
+            let block_type = tile.block_type.unwrap();
+            if has_extended_block_id {
+                tile_bytes.u16(block_type.id());
+            } else {
+                tile_bytes.u8(block_type.id() as u8);
+            }
+            // Frame important
+            if tile.block_frame.is_some() {
+                let frame = tile.block_frame.as_ref().unwrap();
+                tile_bytes.u16(frame.x);
+                tile_bytes.u16(frame.y);
+            }
+            // Block paint
+            if let Some(paint) = tile.block_paint { tile_bytes.u8(paint); }
+        }
+        // Wall
+        if has_wall {
+            let wall_type = tile.wall_type.unwrap();
+            tile_bytes.u8((wall_type.id() & 0xFF) as u8);
+            if has_extended_wall_id {
+                tile_bytes.u8((wall_type.id() >> 8) as u8);
+            }
+            // Wall paint
+            if let Some(paint) = tile.wall_paint { tile_bytes.u8(paint); }
+        }
+        // Liquid
+        if has_water || has_lava || has_honey || has_shimmer {
+            tile_bytes.u8(tile.liquid_amount);
+        }
+        // RLE
+        match rle_val {
+            2 => tile_bytes.u16((repetition_count - 1) as u16),
+            1 => tile_bytes.u8((repetition_count - 1) as u8),
+            _ => {}
+        }
+        tile_bytes
     }
 
     fn write_chests_section(&self) -> ByteWriter {
@@ -2136,12 +2078,6 @@ impl World {
         let has_flags4 = flags3[0];
         let flags4 = if has_flags4 { r.bits() } else { vec![false; 8] };
 
-        if debug {
-            println!("flags1: {:?}", flags1);
-            println!("flags2: {:?}", flags2);
-            println!("flags3: {:?}", flags3);
-            println!("flags4: {:?}", flags4);
-        }
 
 
         let has_block = flags1[1];
@@ -2158,7 +2094,7 @@ impl World {
         let is_wall_illuminant = flags4[4];
 
         let liquid_type = Self::liquid_type_from_flags(&flags1, &flags3);
-        let block_shape = 0; // TODO: Implement proper shape parsing
+        let block_shape = (flags2[6] as u8) * 4 + (flags2[5] as u8) * 2 + (flags2[4] as u8);
         let red_wire = flags2[1];
         let blue_wire = flags2[2];
         let green_wire = flags2[3];
@@ -2231,9 +2167,6 @@ impl World {
 
         // Find RLE Compression multiplier
         let rle_value = (flags1[7] as u8) * 2 + (flags1[6] as u8);
-        if debug {
-            println!("RLE VALUE {}", rle_value)
-        }
         let multiply_by = match rle_value {
             2 => r.u16() as usize + 1,
             1 => r.u8() as usize + 1,
@@ -2286,12 +2219,6 @@ impl World {
 
             while column.len() < height {
                 let (tile, multiply_by) = Self::read_tile_block(r, tile_frame_important, debug);
-                if debug {
-                    println!(
-                        "Read tile at ({}, {}): {:?} with multiply_by {}",
-                        x, column.len(), tile, multiply_by
-                    );
-                }
                 for _ in 0..multiply_by {
                     column.push(tile.clone());
                 }
