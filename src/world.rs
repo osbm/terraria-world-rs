@@ -1698,7 +1698,7 @@ impl World {
         let has_extended_block_id = has_block && tile.block_type.as_ref().map_or(false, |b| b.id() > 255);
         if has_extended_block_id { flags1 |= 1 << 5; }
         // RLE
-        let rle_val = if repetition_count > 0xFF { 2 } else if repetition_count > 1 { 1 } else { 0 };
+        let rle_val = if repetition_count - 1 > 0xFF { 2 } else if repetition_count > 1 { 1 } else { 0 };
         flags1 |= (rle_val & 0x03) << 6;
 
         // --- Flag Byte 2 ---
