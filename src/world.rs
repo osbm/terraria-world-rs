@@ -1647,7 +1647,6 @@ impl World {
     fn write_tiles_section(&self) -> ByteWriter {
         let mut writer = ByteWriter::new();
         let (width, height) = (self.world_width as usize, self.world_height as usize);
-        let tile_frame_important = &self.tile_frame_important;
         let tiles = &self.tiles.tiles;
 
         for x in 0..width {
