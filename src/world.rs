@@ -658,8 +658,8 @@ impl World {
                 y: r.f32() as i32,
             };
             // println!("NPC {}: position = {:?} at offset {}", _npc_index, npc_position, r.offset());
-            let _is_homeless = r.bool();
             // println!("NPC {}: is_homeless = {} at offset {}", _npc_index, _is_homeless, r.offset());
+            let is_homeless = r.bool();
             let npc_home = Coordinates {
                 x: r.i32(),
                 y: r.i32(),
@@ -679,6 +679,7 @@ impl World {
                 npc_type,
                 npc_name,
                 npc_position,
+                is_homeless,
                 npc_home,
                 npc_variation_index,
             );
@@ -1849,7 +1850,7 @@ impl World {
             writer.string(&npc.name);
             writer.f32(npc.position.x as f32);
             writer.f32(npc.position.y as f32);
-            writer.bool(false); // is_homeless (not tracked)
+            writer.bool(npc.is_homeless);
             writer.i32(npc.home.x);
             writer.i32(npc.home.y);
             writer.bits(&[true, false, false, false, false, false, false, false]); // npc_flags (placeholder)
