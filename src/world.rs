@@ -548,24 +548,6 @@ impl World {
             &world_name,
         );
 
-        // // Print last 10 bytes of tile data for empty world
-        // if world_name == DEBUG_WORLD_NAME {
-        //     println!("=== Last 10 bytes of tile data (read) ===");
-        //     let tile_data_end = r.offset();
-        //     println!("tile_data_end: {}", tile_data_end);
-        //     println!("pointers.chests: {}", pointers.chests);
-        //     if tile_data_end >= 10 {
-        //         // Get the last 10 bytes by slicing from the end
-        //         let last_10_bytes = r.slice_bytes(tile_data_end - 10, tile_data_end);
-        //         println!("{:02X?}", last_10_bytes);
-        //     } else {
-        //         // If less than 10 bytes, get all available bytes
-        //         let all_bytes = r.slice_bytes(0, tile_data_end);
-        //         println!("{:02X?}", all_bytes);
-        //     }
-        //     println!("=== End last 10 bytes of tile data (read) ===");
-        // }
-
         // let debug_chest_offset_before = r.offset();
 
         // --- CHEST PARSING ---
