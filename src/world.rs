@@ -635,6 +635,7 @@ impl World {
         let mut mobs = Vec::new();
 
         // Parse shimmered NPCs
+        let debug_npcs_offset_before = r.offset();
         let shimmered_npcs_count = r.i32();
         // println!("shimmered_npcs_count: {} at offset {}", shimmered_npcs_count, r.offset());
         let mut shimmered_npcs = Vec::with_capacity(shimmered_npcs_count as usize);
@@ -701,6 +702,20 @@ impl World {
             mobs.push(mob);
             // println!("Mob {}: end at offset {}", _mob_index, r.offset());
             _mob_index += 1;
+        }
+
+        let debug_npcs_offset_after = r.offset();
+        if world_name == DEBUG_WORLD_NAME {
+            println!("=== NPCs section as hex ===");
+            let npcs_bytes = r.slice_bytes(debug_npcs_offset_before, debug_npcs_offset_after);
+            for (i, byte) in npcs_bytes.iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End NPCs section ===");
         }
 
         // Parse tile entities
@@ -1850,6 +1865,18 @@ impl World {
             writer.f32(mob.position.y as f32);
         }
         writer.bool(false); // end of mobs
+
+        if self.world_name == DEBUG_WORLD_NAME {
+            println!("=== NPCs section as hex ===");
+            for (i, byte) in writer.as_slice().iter().enumerate() {
+                print!("{:02X} ", byte);
+                if (i + 1) % 16 == 0 {
+                    println!();
+                }
+            }
+            println!();
+            println!("=== End NPCs section ===");
+        }
 
         writer
     }
