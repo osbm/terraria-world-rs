@@ -460,7 +460,6 @@ impl World {
         let moondial_cooldown = r.u8();
         // tiles
         let (width, height) = (world_width as usize, world_height as usize);
-        let mut tile_bytes: Vec<Vec<u8>> = vec![Vec::new(); width]; // Each column will store its entire data
         let tiles = Self::create_tile_matrix(
             &mut r,
             (width, height),
