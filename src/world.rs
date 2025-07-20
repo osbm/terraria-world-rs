@@ -247,18 +247,13 @@ impl World {
         let is_favorite = r.u64();
 
         let pointer_count = r.u16();
-        // println!("Pointer count: {}", pointer_count);
-        // println!("File offset after reading pointer count: {}", r.offset());
         let mut pointer_vector = vec![];
         for _ in 0..pointer_count {
             pointer_vector.push(r.u32());
         }
         let pointers = Pointers::from_vector(&pointer_vector); // create this only to use it during parsing
 
-        // println!("File offset after reading pointers: {}", r.offset());
-
         let tile_frame_important_count = r.i16();
-        // println!("Reading tile_frame_important: count={}", tile_frame_important_count);
         let tile_frame_important_size = (tile_frame_important_count + 7) / 8;
         let mut tile_frame_important = vec![];
         for _ in 0..tile_frame_important_size {
@@ -280,78 +275,10 @@ impl World {
             r.i32(), // bottom
         ];
 
-        // Print section sizes from pointer table
-        if world_name == DEBUG_WORLD_NAME {
-            println!("=== Section sizes from pointer table ===");
-            println!("Section 1 (File Header): {} bytes", pointers.world_header);
-            println!(
-                "Section 2 (World Header): {} bytes, starting at {}, ending at {}",
-                pointers.world_tiles - pointers.world_header,
-                pointers.world_header,
-                pointers.world_tiles
-            );
-            println!(
-                "Section 3 (Tiles): {} bytes, starting at {}, ending at {}",
-                pointers.chests - pointers.world_tiles,
-                pointers.world_tiles,
-                pointers.chests
-            );
-            println!(
-                "Section 4 (Chests): {} bytes, starting at {}, ending at {}",
-                pointers.signs - pointers.chests,
-                pointers.chests,
-                pointers.signs
-            );
-            println!(
-                "Section 5 (Signs): {} bytes, starting at {}, ending at {}",
-                pointers.npcs - pointers.signs,
-                pointers.signs,
-                pointers.npcs
-            );
-            println!(
-                "Section 6 (NPCs): {} bytes, starting at {}, ending at {}",
-                pointers.tile_entities - pointers.npcs,
-                pointers.npcs,
-                pointers.tile_entities
-            );
-            println!(
-                "Section 7 (Tile Entities): {} bytes, starting at {}, ending at {}",
-                pointers.pressure_plates - pointers.tile_entities,
-                pointers.tile_entities,
-                pointers.pressure_plates
-            );
-            println!(
-                "Section 8 (Pressure Plates): {} bytes, starting at {}, ending at {}",
-                pointers.town_manager - pointers.pressure_plates,
-                pointers.pressure_plates,
-                pointers.town_manager
-            );
-            println!(
-                "Section 9 (Town Manager): {} bytes, starting at {}, ending at {}",
-                pointers.bestiary - pointers.town_manager,
-                pointers.town_manager,
-                pointers.bestiary
-            );
-            println!(
-                "Section 10 (Beastiary): {} bytes, starting at {}, ending at {}",
-                pointers.journey_powers - pointers.bestiary,
-                pointers.bestiary,
-                pointers.journey_powers
-            );
-            println!(
-                "Section 11 (Journey Powers): {} bytes, starting at {}, ending at {}",
-                pointers.footer - pointers.journey_powers,
-                pointers.journey_powers,
-                pointers.footer
-            );
-            println!("========================================");
-        }
-
         let world_height = r.i32();
         let world_width = r.i32();
         let difficulty_value = r.i32();
         let is_drunk_world = r.bool();
-        // println!("File offset after reading world data: {}", r.offset());
         let is_for_the_worthy = r.bool();
         let is_tenth_anniversary = r.bool();
         let is_the_constant = r.bool();
@@ -359,7 +286,6 @@ impl World {
         let is_upside_down = r.bool();
         let is_trap_world = r.bool();
         let is_zenith_world = r.bool();
-        // println!("File offset before date: {}", r.offset());
         let created_on = r.datetime();
         let moon_style = r.u8();
         let tree_style_separators = vec![r.i32(), r.i32(), r.i32()];
@@ -548,8 +474,6 @@ impl World {
             &world_name,
         );
 
-        // let debug_chest_offset_before = r.offset();
-
         // --- CHEST PARSING ---
         let chests_count = r.i16();
         let chests_max_items = r.i16();
@@ -583,23 +507,6 @@ impl World {
             });
         }
 
-        // if world_name == DEBUG_WORLD_NAME {
-        //     let debug_chest_offset_after = r.offset();
-        //     // println!("File offset after chests: {}", r.offset());
-        //     println!("=== Chests section as hex ===");
-        //     // just the read bytes for chests
-        //     let chests_bytes = r.slice_bytes(debug_chest_offset_before, debug_chest_offset_after);
-        //     for (i, byte) in chests_bytes.iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End chests section ===");
-        // }
-        // println!("File offset after chests: {}", r.offset());
-
         // --- SIGN PARSING ---
         let debug_signs_offset_before = r.offset();
         let signs_count = r.i16();
@@ -616,45 +523,23 @@ impl World {
                 },
             });
         }
-        let debug_signs_offset_after = r.offset();
-        // if world_name == DEBUG_WORLD_NAME {
-        //     println!("=== Signs section as hex ===");
-        //     let signs_bytes = r.slice_bytes(debug_signs_offset_before, debug_signs_offset_after);
-        //     for (i, byte) in signs_bytes.iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End signs section ===");
-        // }
-
         // Parse entities
         let mut npcs = Vec::new();
         let mut mobs = Vec::new();
 
         // Parse shimmered NPCs
-        let debug_npcs_offset_before = r.offset();
         let shimmered_npcs_count = r.i32();
-        // println!("shimmered_npcs_count: {} at offset {}", shimmered_npcs_count, r.offset());
         let mut shimmered_npcs = Vec::with_capacity(shimmered_npcs_count as usize);
         for _i in 0..shimmered_npcs_count {
             let npc_id = r.i32();
-            // println!("shimmered_npcs[{}]: {} at offset {}", _i, npc_id, r.offset());
             shimmered_npcs.push(npc_id);
         }
 
         // Parse NPCs
         let mut _npc_index = 0;
         while r.bool() {
-            // println!("NPC {}: start at offset {}", _npc_index, r.offset());
             let npc_type = EntityType::from(r.i32());
-            // println!("NPC {}: type = {:?} at offset {}", _npc_index, npc_type, r.offset());
             let npc_name = r.string(None);
-            // println!("NPC {}: name = '{}' at offset {}", _npc_index, npc_name, r.offset());
-            // println!("NPC {}: position = {:?} at offset {}", _npc_index, npc_position, r.offset());
-            // println!("NPC {}: is_homeless = {} at offset {}", _npc_index, _is_homeless, r.offset());
             let npc_position_x = r.f32();
             let npc_position_y = r.f32();
             let is_homeless = r.bool();
@@ -662,17 +547,11 @@ impl World {
                 x: r.i32(),
                 y: r.i32(),
             };
-
-            // println!("NPC {}: home = {:?} at offset {}", _npc_index, npc_home, r.offset());
-
             let npc_flags = r.bits();
-            // println!("NPC {}: flags = {:?} at offset {}", _npc_index, npc_flags, r.offset());
             let npc_variation_index = r.i32();
             if !npc_flags[0] {
                 let _npc_variation_index = 0i32;
             }
-            // println!("NPC {}: variation_index = {} at offset {}", _npc_index, npc_variation_index, r.offset());
-
             let npc = NPC::new(
                 npc_type,
                 npc_name,
@@ -683,43 +562,21 @@ impl World {
                 npc_variation_index,
             );
             npcs.push(npc);
-            // println!("NPC {}: end at offset {}", _npc_index, r.offset());
             _npc_index += 1;
         }
 
         // Parse mobs
-        let mut _mob_index = 0;
         while r.bool() {
-            // println!("Mob {}: start at offset {}", _mob_index, r.offset());
             let mob_type = EntityType::from(r.i32());
-            // println!("Mob {}: type = {:?} at offset {}", _mob_index, mob_type, r.offset());
             let mob_position_x = r.f32();
             let mob_position_y = r.f32();
-
-            // println!("Mob {}: position = {:?} at offset {}", _mob_index, mob_position, r.offset());
             let mob = Mob::new(
                 mob_type,
                 mob_position_x,
                 mob_position_y
             );
             mobs.push(mob);
-            // println!("Mob {}: end at offset {}", _mob_index, r.offset());
-            _mob_index += 1;
         }
-
-        let debug_npcs_offset_after = r.offset();
-        // if world_name == DEBUG_WORLD_NAME {
-        //     println!("=== NPCs section as hex ===");
-        //     let npcs_bytes = r.slice_bytes(debug_npcs_offset_before, debug_npcs_offset_after);
-        //     for (i, byte) in npcs_bytes.iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End NPCs section ===");
-        // }
 
         // Parse tile entities
         let tile_entities_count = r.i32();
@@ -923,21 +780,6 @@ impl World {
         }
 
         let bestiary = Bestiary::new(bestiary_kills, bestiary_sightings, bestiary_chats);
-        let debug_bestiary_offset_after = r.offset();
-        // if world_name == DEBUG_WORLD_NAME {
-        //     println!("=== Bestiary section as hex ===");
-        //     let bestiary_bytes =
-        //         r.slice_bytes(debug_bestiary_offset_before, debug_bestiary_offset_after);
-        //     for (i, byte) in bestiary_bytes.iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End Bestiary section ===");
-        // }
-
         // Parse journey powers
         let mut journey_powers = JourneyPowers::new();
         while r.bool() {
@@ -956,20 +798,6 @@ impl World {
                 }
             }
         }
-
-        // if world_name == DEBUG_WORLD_NAME {
-        //     println!("=== Journey Powers section as hex ===");
-        //     let journey_powers_bytes =
-        //         r.slice_bytes(pointers.journey_powers as usize, pointers.footer as usize);
-        //     for (i, byte) in journey_powers_bytes.iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End Journey Powers section ===");
-        // }
 
         // Parse footer
         if !r.bool() {
@@ -1358,39 +1186,6 @@ impl World {
         // Section 10: Footer
         pointer_vector.push(current_offset);
         let _unused_offset = current_offset + footer_writer.offset() as u32;
-
-        // Print section sizes from buffer lengths
-        if self.world_name == DEBUG_WORLD_NAME {
-            println!("=== Section sizes from buffer lengths ===");
-            println!("Section 1 (File Header): {} bytes", header_writer.offset());
-            println!(
-                "Section 2 (World Header): {} bytes",
-                world_header_writer.offset()
-            );
-            println!("Section 3 (Tiles): {} bytes", tiles_writer.offset());
-            println!("Section 4 (Chests): {} bytes", chests_writer.offset());
-            println!("Section 5 (Signs): {} bytes", signs_writer.offset());
-            println!("Section 6 (NPCs): {} bytes", npcs_writer.offset());
-            println!(
-                "Section 7 (Tile Entities): {} bytes",
-                tile_entities_writer.offset()
-            );
-            println!(
-                "Section 8 (Pressure Plates): {} bytes",
-                pressure_plates_writer.offset()
-            );
-            println!(
-                "Section 9 (Town Manager): {} bytes",
-                town_manager_writer.offset()
-            );
-            println!("Section 10 (Beastiary): {} bytes", bestiary_writer.offset());
-            println!(
-                "Section 11 (Journey Powers): {} bytes",
-                journey_powers_writer.offset()
-            );
-            println!("Section 12 (Footer): {} bytes", footer_writer.offset());
-            println!("=========================================");
-        }
 
         // Write the complete file
         let mut final_writer = ByteWriter::new();
@@ -1850,18 +1645,6 @@ impl World {
             writer.i32(sign.position.y);
         }
 
-        // if self.world_name == DEBUG_WORLD_NAME {
-        //     println!("=== Signs section as hex ===");
-        //     for (i, byte) in writer.as_slice().iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End signs section ===");
-        // }
-
         writer
     }
 
@@ -1894,19 +1677,6 @@ impl World {
             writer.f32(mob.position_y);
         }
         writer.bool(false); // end of mobs
-
-        // if self.world_name == DEBUG_WORLD_NAME {
-        //     println!("=== NPCs section as hex ===");
-        //     for (i, byte) in writer.as_slice().iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End NPCs section ===");
-        // }
-
         writer
     }
 
@@ -2007,7 +1777,6 @@ impl World {
             writer.i32(plate.position.x);
             writer.i32(plate.position.y);
         }
-
         writer
     }
 
@@ -2041,18 +1810,6 @@ impl World {
             writer.string(c);
         }
 
-        // if self.world_name == DEBUG_WORLD_NAME {
-        //     println!("=== Bestiary section as hex ===");
-        //     for (i, byte) in writer.as_slice().iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End Bestiary section ===");
-        // }
-
         writer
     }
 
@@ -2081,29 +1838,14 @@ impl World {
             }
         }
         writer.bool(false); // end of journey powers
-
-        // if self.world_name == DEBUG_WORLD_NAME {
-        //     println!("=== Journey Powers section as hex ===");
-        //     for (i, byte) in writer.as_slice().iter().enumerate() {
-        //         print!("{:02X} ", byte);
-        //         if (i + 1) % 16 == 0 {
-        //             println!();
-        //         }
-        //     }
-        //     println!();
-        //     println!("=== End Journey Powers section ===");
-        // }
-
         writer
     }
 
     fn write_footer_section(&self) -> ByteWriter {
         let mut writer = ByteWriter::new();
-
         writer.bool(true);
         writer.string(&self.world_name);
         writer.i32(self.id);
-
         writer
     }
 
@@ -2250,12 +1992,6 @@ impl World {
             let mut column = Vec::new();
             let mut column_bytes = Vec::new();
             let start_offset = r.offset();
-
-
-            let mut debug = false;
-            if x == 0 && world_name == DEBUG_WORLD_NAME {
-                debug = true; // Enable debug for the first column
-            }
 
             while column.len() < height {
                 let (tile, multiply_by) = Self::read_tile_block(r, tile_frame_important, debug);
