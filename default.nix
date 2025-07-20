@@ -1,21 +1,22 @@
 # default.nix
-{ lib
-, naersk
-# , stdenv
-# , clangStdenv
-# , hostPlatform
-, targetPlatform
-, pkg-config
-, libiconv
-, rustfmt
-, cargo
-, rustc
-, python312
-, terraria-worlds
-, lihzahrd
-, rustPackages
-  # , llvmPackages # Optional
-  # , protobuf     # Optional
+{
+  lib,
+  naersk,
+  # , stdenv
+  # , clangStdenv
+  # , hostPlatform
+  targetPlatform,
+  pkg-config,
+  libiconv,
+  rustfmt,
+  cargo,
+  rustc,
+  python312,
+  terraria-worlds,
+  lihzahrd,
+  rustPackages,
+# , llvmPackages # Optional
+# , protobuf     # Optional
 }:
 
 let
@@ -37,7 +38,10 @@ naersk.lib."${targetPlatform.system}".buildPackage {
       lihzahrd
     ]))
   ];
-  checkInputs = [ cargo rustc ];
+  checkInputs = [
+    cargo
+    rustc
+  ];
 
   doCheck = true;
   CARGO_BUILD_INCREMENTAL = "false";

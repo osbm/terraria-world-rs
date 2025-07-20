@@ -9,10 +9,20 @@
     terraria-worlds.flake = false;
   };
 
-  outputs = { self, nixpkgs, naersk, terraria-worlds }:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      naersk,
+      terraria-worlds,
+    }:
     let
       cargoToml = (builtins.fromTOML (builtins.readFile ./Cargo.toml));
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+      ];
       forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
     in
     {
@@ -23,7 +33,8 @@
         };
       };
 
-      packages = forAllSystems (system:
+      packages = forAllSystems (
+        system:
         let
           pkgs = import nixpkgs {
             inherit system;
@@ -34,7 +45,7 @@
         in
         {
           "${cargoToml.package.name}" = pkgs."${cargoToml.package.name}";
-           lihzahrd = pkgs.python312Packages.buildPythonPackage rec {
+          lihzahrd = pkgs.python312Packages.buildPythonPackage rec {
             pname = "lihzahrd";
             version = "3.1.1";
             src = pkgs.fetchFromGitHub {
@@ -57,15 +68,19 @@
               license = licenses.eupl12;
             };
           };
-        });
+        }
+      );
 
+      defaultPackage = forAllSystems (
+        system:
+        (import nixpkgs {
+          inherit system;
+          overlays = [ self.overlay ];
+        })."${cargoToml.package.name}"
+      );
 
-      defaultPackage = forAllSystems (system: (import nixpkgs {
-        inherit system;
-        overlays = [ self.overlay ];
-      })."${cargoToml.package.name}");
-
-      checks = forAllSystems (system:
+      checks = forAllSystems (
+        system:
         let
           pkgs = import nixpkgs {
             inherit system;
@@ -75,17 +90,24 @@
           };
         in
         {
-          format = pkgs.runCommand "check-format"
-            {
-              buildInputs = with pkgs; [ rustfmt cargo ];
-            } ''
-            ${pkgs.rustfmt}/bin/cargo-fmt fmt --manifest-path ${./.}/Cargo.toml -- --check
-            ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt --check ${./.}
-            touch $out # it worked!
-          '';
+          format =
+            pkgs.runCommand "check-format"
+              {
+                buildInputs = with pkgs; [
+                  rustfmt
+                  cargo
+                ];
+              }
+              ''
+                ${pkgs.rustfmt}/bin/cargo-fmt fmt --manifest-path ${./.}/Cargo.toml -- --check
+                ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt --check ${./.}
+                touch $out # it worked!
+              '';
           "${cargoToml.package.name}" = pkgs."${cargoToml.package.name}";
-        });
-      devShell = forAllSystems (system:
+        }
+      );
+      devShell = forAllSystems (
+        system:
         let
           pkgs = import nixpkgs {
             inherit system;
@@ -107,6 +129,7 @@
           LIBCLANG_PATH = "${pkgs.llvmPackages.libclang.lib}/lib";
           TEST_WORLDS_DIR = "${terraria-worlds}";
 
-        });
+        }
+      );
     };
 }
