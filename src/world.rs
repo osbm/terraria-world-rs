@@ -1708,6 +1708,12 @@ impl World {
         if (shape & 0b001) != 0 { flags2 |= 1 << 4; has_flags2 = true; }
         if (shape & 0b010) != 0 { flags2 |= 1 << 5; has_flags2 = true; }
         if (shape & 0b100) != 0 { flags2 |= 1 << 6; has_flags2 = true; }
+        // Wall illuminant triggers flag2
+        if tile.wall_illuminant {
+            has_flags2 = true;
+            has_flags3 = true;
+            has_flags4 = true;
+        }
 
         // --- Flag Byte 3 ---
         // Yellow wire
