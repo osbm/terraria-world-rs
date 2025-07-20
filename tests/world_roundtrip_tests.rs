@@ -1,5 +1,5 @@
 use std::fs;
-use terraria_world_parser::world::World;
+use terraria_world::world::World;
 
 #[test]
 fn test_world_roundtrip() {

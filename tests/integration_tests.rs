@@ -1,9 +1,9 @@
 use serde_json::Value;
 use std::fs;
 use std::path::Path;
-use terraria_world_parser::world::enums::LiquidType;
-use terraria_world_parser::world::tile_entity::TileEntityExtra;
-use terraria_world_parser::world::World;
+use terraria_world::world::enums::LiquidType;
+use terraria_world::world::tile_entity::TileEntityExtra;
+use terraria_world::world::World;
 
 /// Test utilities for integration tests
 mod test_utils {
@@ -134,7 +134,7 @@ mod test_utils {
 
     /// Validate individual tile data
     pub fn validate_tile(
-        tile: &terraria_world_parser::world::tile::Tile,
+        tile: &terraria_world::world::tile::Tile,
         tile_ref: &Value,
     ) -> Result<(), String> {
         let x = tile_ref["position"]["x"].as_u64().unwrap() as usize;
@@ -335,7 +335,7 @@ mod test_utils {
 
     /// Validate NPC data against reference
     pub fn validate_npc(
-        npc: &terraria_world_parser::world::npc::NPC,
+        npc: &terraria_world::world::npc::NPC,
         npc_ref: &Value,
     ) -> Result<(), String> {
         assert_eq!(
@@ -382,7 +382,7 @@ mod test_utils {
 
     /// Validate mob data against reference
     pub fn validate_mob(
-        mob: &terraria_world_parser::world::mob::Mob,
+        mob: &terraria_world::world::mob::Mob,
         mob_ref: &Value,
     ) -> Result<(), String> {
         assert_eq!(
