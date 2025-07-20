@@ -13,6 +13,7 @@
 , python312
 , terraria-worlds
 , lihzahrd
+, rustPackages
   # , llvmPackages # Optional
   # , protobuf     # Optional
 }:
@@ -29,6 +30,7 @@ naersk.lib."${targetPlatform.system}".buildPackage {
     pkg-config
     cargo
     rustc
+    rustPackages.clippy
     libiconv
     (python312.withPackages (python-pkgs: [
       python-pkgs.pip
