@@ -12,7 +12,6 @@ pub mod item;
 pub mod journey_powers;
 pub mod mob;
 pub mod npc;
-mod pointers;
 pub mod pressure_plate;
 pub mod room;
 pub mod sign;
@@ -20,7 +19,6 @@ pub mod tile;
 pub mod tile_entity;
 
 use self::enums::{BlockType, LiquidType, WallType};
-use self::pointers::Pointers;
 use self::tile::{FrameImportantData, Tile, TileMatrix};
 use serde::{Deserialize, Serialize};
 
@@ -45,8 +43,6 @@ pub struct World {
     pub savefile_type: u8,
     pub revision: u32,
     pub is_favorite: u64,
-    pub pointer_count: u16,
-    pub pointer_vector: Vec<u32>,
     pub tile_frame_important: Vec<bool>,
     pub world_name: String,
     pub generator_seed: String,
@@ -253,7 +249,6 @@ impl World {
         for _ in 0..pointer_count {
             pointer_vector.push(r.u32());
         }
-        let pointers = Pointers::from_vector(&pointer_vector); // create this only to use it during parsing
 
         let tile_frame_important_count = r.i16();
         let tile_frame_important_size = (tile_frame_important_count + 7) / 8;
@@ -263,6 +258,12 @@ impl World {
             tile_frame_important.extend(current_bits);
         }
         tile_frame_important.truncate(tile_frame_important_count as usize);
+
+        if r.offset() as u32 != pointer_vector[0] {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                "Pointer mismatch after file header. Please open an issue at https://github.com/osbm/terraria-world-rs/issues"));
+        }
 
         let world_name = r.string(None);
         let generator_seed = r.string(None);
@@ -464,6 +465,13 @@ impl World {
         let saved_slime_squire = r.bool();
         let moondial_is_running = r.bool();
         let moondial_cooldown = r.u8();
+
+        if r.offset() as u32 != pointer_vector[1] {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                "Pointer mismatch after world header section. Please open an issue at https://github.com/osbm/terraria-world-rs/issues"));
+        }
+
         // tiles
         let (width, height) = (world_width as usize, world_height as usize);
         let tiles = Self::create_tile_matrix(
@@ -471,6 +479,12 @@ impl World {
             (width, height),
             &tile_frame_important,
         );
+
+        if r.offset() as u32 != pointer_vector[2] {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                "Pointer mismatch after tiles section. Please open an issue at https://github.com/osbm/terraria-world-rs/issues"));
+        }
 
         // --- CHEST PARSING ---
         let chests_count = r.i16();
@@ -505,6 +519,12 @@ impl World {
             });
         }
 
+        if r.offset() as u32 != pointer_vector[3] {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                "Pointer mismatch after chests section. Please open an issue at https://github.com/osbm/terraria-world-rs/issues"));
+        }
+
         // --- SIGN PARSING ---
         let signs_count = r.i16();
         let mut signs = Vec::with_capacity(signs_count as usize);
@@ -520,6 +540,13 @@ impl World {
                 },
             });
         }
+
+        if r.offset() as u32 != pointer_vector[4] {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                "Pointer mismatch after signs section. Please open an issue at https://github.com/osbm/terraria-world-rs/issues"));
+        }
+
         // Parse entities
         let mut npcs = Vec::new();
         let mut mobs = Vec::new();
@@ -573,6 +600,12 @@ impl World {
                 mob_position_y
             );
             mobs.push(mob);
+        }
+
+        if r.offset() as u32 != pointer_vector[5] {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                "Pointer mismatch after NPCs and mobs section. Please open an issue at https://github.com/osbm/terraria-world-rs/issues"));
         }
 
         // Parse tile entities
@@ -730,6 +763,12 @@ impl World {
             tile_entities.push(tile_entity);
         }
 
+        if r.offset() as u32 != pointer_vector[6] {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                "Pointer mismatch after tile entities section. Please open an issue at https://github.com/osbm/terraria-world-rs/issues"));
+        }
+
         // Parse weighed pressure plates
         let weighed_pressure_plates_count = r.i32();
         let mut weighed_pressure_plates =
@@ -742,6 +781,12 @@ impl World {
             weighed_pressure_plates.push(WeighedPressurePlate::new(position));
         }
 
+        if r.offset() as u32 != pointer_vector[7] {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                "Pointer mismatch after weighed pressure plates section. Please open an issue at https://github.com/osbm/terraria-world-rs/issues"));
+        }
+
         // Parse town manager (rooms)
         let rooms_count = r.i32();
         let mut rooms = Vec::with_capacity(rooms_count as usize);
@@ -752,6 +797,12 @@ impl World {
                 y: r.i32(),
             };
             rooms.push(Room::new(npc, position));
+        }
+
+        if r.offset() as u32 != pointer_vector[8] {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                "Pointer mismatch after rooms section. Please open an issue at https://github.com/osbm/terraria-world-rs/issues"));
         }
 
         // Parse bestiary
@@ -776,6 +827,13 @@ impl World {
         }
 
         let bestiary = Bestiary::new(bestiary_kills, bestiary_sightings, bestiary_chats);
+
+        if r.offset() as u32 != pointer_vector[9] {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                "Pointer mismatch after bestiary section. Please open an issue at https://github.com/osbm/terraria-world-rs/issues"));
+        }
+
         // Parse journey powers
         let mut journey_powers = JourneyPowers::new();
         while r.bool() {
@@ -793,6 +851,12 @@ impl World {
                     println!("Unknown journey power ID: {} please open a issue at github.com/osbm/terraria-world-rs", power_id);
                 }
             }
+        }
+
+        if r.offset() as u32 != pointer_vector[10] {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                "Pointer mismatch after journey powers section. Please open an issue at https://github.com/osbm/terraria-world-rs/issues"));
         }
 
         // Parse footer
@@ -823,8 +887,6 @@ impl World {
             savefile_type,
             revision,
             is_favorite,
-            pointer_count,
-            pointer_vector,
             tile_frame_important,
             world_name,
             generator_seed,
@@ -1068,10 +1130,6 @@ impl World {
         };
     }
 
-    pub fn pointers(&self) -> Pointers {
-        Pointers::from_vector(&self.pointer_vector)
-    }
-
     pub fn difficulty(&self) -> &str {
         match self.difficulty_value {
             0 => "Classic",
@@ -1117,10 +1175,10 @@ impl World {
         header_writer.u8(self.savefile_type);
         header_writer.u32(self.revision);
         header_writer.u64(self.is_favorite);
-        header_writer.u16(self.pointer_count);
+        header_writer.u16(11); // 11 sections
 
         // Write placeholder pointers (will be updated later)
-        for _ in 0..self.pointer_count {
+        for _ in 0..11 {
             header_writer.u32(0);
         }
 
@@ -1190,10 +1248,10 @@ impl World {
         final_writer.u8(self.savefile_type);
         final_writer.u32(self.revision);
         final_writer.u64(self.is_favorite);
-        final_writer.u16(self.pointer_count);
+        final_writer.u16(pointer_vector.len() as u16);
 
         // Write actual pointer values from world object for debugging section sizes
-        for &pointer in &self.pointer_vector {
+        for pointer in pointer_vector {
             final_writer.u32(pointer);
         }
 
