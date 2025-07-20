@@ -1975,7 +1975,7 @@ impl World {
         let mut tm = TileMatrix::new();
         let (width, height) = world_size;
 
-        for x in 0..width {
+        for _ in 0..width {
             let mut column = Vec::new();
             let mut column_bytes = Vec::new();
             let start_offset = r.offset();
