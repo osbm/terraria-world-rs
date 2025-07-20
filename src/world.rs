@@ -1874,8 +1874,8 @@ impl World {
             writer.bool(true); // presence flag
             writer.i32(npc.type_.id());
             writer.string(&npc.name);
-            writer.f32(npc.position.x as f32);
-            writer.f32(npc.position.y as f32);
+            writer.f32(npc.position_x);
+            writer.f32(npc.position_y);
             writer.bool(npc.is_homeless);
             writer.i32(npc.home.x);
             writer.i32(npc.home.y);
