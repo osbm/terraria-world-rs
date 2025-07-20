@@ -693,12 +693,15 @@ impl World {
             // println!("Mob {}: start at offset {}", _mob_index, r.offset());
             let mob_type = EntityType::from(r.i32());
             // println!("Mob {}: type = {:?} at offset {}", _mob_index, mob_type, r.offset());
-            let mob_position = Coordinates {
-                x: r.f32() as i32,
-                y: r.f32() as i32,
-            };
+            let mob_position_x = r.f32();
+            let mob_position_y = r.f32();
+
             // println!("Mob {}: position = {:?} at offset {}", _mob_index, mob_position, r.offset());
-            let mob = Mob::new(mob_type, mob_position);
+            let mob = Mob::new(
+                mob_type,
+                mob_position_x,
+                mob_position_y
+            );
             mobs.push(mob);
             // println!("Mob {}: end at offset {}", _mob_index, r.offset());
             _mob_index += 1;
@@ -1887,8 +1890,8 @@ impl World {
         for mob in &self.mobs {
             writer.bool(true);
             writer.i32(mob.type_.id());
-            writer.f32(mob.position.x as f32);
-            writer.f32(mob.position.y as f32);
+            writer.f32(mob.position_x);
+            writer.f32(mob.position_y);
         }
         writer.bool(false); // end of mobs
 

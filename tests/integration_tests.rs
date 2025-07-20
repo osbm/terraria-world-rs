@@ -391,13 +391,13 @@ mod test_utils {
             "Mob type mismatch"
         );
         assert_eq!(
-            mob.position.x,
-            mob_ref["position"]["x"].as_i64().unwrap() as i32,
+            mob.position_x,
+            mob_ref["position"]["x"].as_f64().unwrap() as f32,
             "Mob position X mismatch"
         );
         assert_eq!(
-            mob.position.y,
-            mob_ref["position"]["y"].as_i64().unwrap() as i32,
+            mob.position_y,
+            mob_ref["position"]["y"].as_f64().unwrap() as f32,
             "Mob position Y mismatch"
         );
         Ok(())
