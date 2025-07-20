@@ -1,4 +1,4 @@
-name: build and run rust project
+name: build and test rust library
 
 on:
   push:
@@ -16,5 +16,5 @@ jobs:
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
-      - name: Run nix run -L
-        run: nix run -L 
+      - name: Run nix build -L
+        run: nix build -L 
