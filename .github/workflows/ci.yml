@@ -1,14 +1,18 @@
 ---
-name: build and test rust library
+name: Build, test and publish the rust library
 on:
   push:
+    branches: [main]
+    tags: [v*]
   pull_request:
     branches: [main]
 jobs:
   tests:
+    name: Run tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
       - name: Set up Nix
         uses: cachix/install-nix-action@v27
         with:
@@ -17,9 +21,11 @@ jobs:
       - name: Run build
         run: nix develop --command cargo test --all-features --verbose
   clippy:
+    name: Run Clippy
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
       - name: Set up Nix
         uses: cachix/install-nix-action@v27
         with:
