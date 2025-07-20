@@ -349,13 +349,13 @@ mod test_utils {
             "NPC name mismatch"
         );
         assert_eq!(
-            npc.position.x,
-            npc_ref["position"]["x"].as_i64().unwrap() as i32,
+            npc.position_x,
+            npc_ref["position"]["x"].as_f64().unwrap() as f32,
             "NPC position X mismatch"
         );
         assert_eq!(
-            npc.position.y,
-            npc_ref["position"]["y"].as_i64().unwrap() as i32,
+            npc.position_y,
+            npc_ref["position"]["y"].as_f64().unwrap() as f32,
             "NPC position Y mismatch"
         );
         assert_eq!(

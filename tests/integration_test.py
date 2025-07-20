@@ -128,7 +128,7 @@ def parse_world_file(world_file: str) -> Dict[str, Any]:
                 npc_data = {
                     "type_id": npc.type.value if hasattr(npc.type, 'value') else int(npc.type),
                     "name": npc.name,
-                    "position": {"x": npc.position.x, "y": npc.position.y},
+                    "position": {"x": npc.position_x, "y": npc.position_y},
                     "home": None if npc.home is None else {"x": npc.home.x, "y": npc.home.y},
                     "variation_index": npc.variation_index,
                 }

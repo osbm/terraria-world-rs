@@ -653,12 +653,10 @@ impl World {
             // println!("NPC {}: type = {:?} at offset {}", _npc_index, npc_type, r.offset());
             let npc_name = r.string(None);
             // println!("NPC {}: name = '{}' at offset {}", _npc_index, npc_name, r.offset());
-            let npc_position = Coordinates {
-                x: r.f32() as i32,
-                y: r.f32() as i32,
-            };
             // println!("NPC {}: position = {:?} at offset {}", _npc_index, npc_position, r.offset());
             // println!("NPC {}: is_homeless = {} at offset {}", _npc_index, _is_homeless, r.offset());
+            let npc_position_x = r.f32();
+            let npc_position_y = r.f32();
             let is_homeless = r.bool();
             let npc_home = Coordinates {
                 x: r.i32(),
@@ -678,7 +676,8 @@ impl World {
             let npc = NPC::new(
                 npc_type,
                 npc_name,
-                npc_position,
+                npc_position_x,
+                npc_position_y,
                 is_homeless,
                 npc_home,
                 npc_variation_index,
