@@ -1707,7 +1707,7 @@ impl World {
         let shape = tile.block_shape & 0x07;
         if (shape & 0b001) != 0 { flags2 |= 1 << 4; has_flags2 = true; }
         if (shape & 0b010) != 0 { flags2 |= 1 << 5; has_flags2 = true; }
-        if (shape & 0b100) != 0 { flags2 |= 1 << 6; has_flags2 = true; }
+        if (shape & 0b100) != 0 { flags2 |= 1 << 6; has_flags2 = true; }        
 
         // --- Flag Byte 3 ---
         // Yellow wire
