@@ -121,6 +121,9 @@
           buildInputs = with pkgs; [
             rustfmt
             nixpkgs-fmt
+            rustPackages.clippy
+            yamlfix
+            black
             (pkgs.python312.withPackages (python-pkgs: [
               python-pkgs.pip
               self.outputs.packages.${system}.lihzahrd
