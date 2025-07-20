@@ -42,7 +42,6 @@ use crate::world::tile_entity::{TileEntity, TileEntityExtra};
 #[derive(Debug, Serialize, Deserialize)]
 pub struct World {
     pub version_integer: i32,
-    pub magic: String,
     pub savefile_type: u8,
     pub revision: u32,
     pub is_favorite: u64,
@@ -237,7 +236,14 @@ impl World {
         let mut r = ByteReader::new(&bytes);
 
         let version_integer = r.i32();
+
         let magic = String::from_utf8_lossy(r.bytes(7)).to_string();
+        if magic != "relogic" {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidData,
+                "Invalid magic string in the file header. Please open an issue at https://github.com/osbm/terraria-world-rs/issues"));
+        }
+
         let savefile_type = r.u8();
         let revision = r.u32();
         let is_favorite = r.u64();
@@ -814,7 +820,6 @@ impl World {
         let world = World {
             // World vs Self?
             version_integer,
-            magic,
             savefile_type,
             revision,
             is_favorite,
@@ -1108,7 +1113,7 @@ impl World {
         // Create header writer with placeholders
         let mut header_writer = ByteWriter::new();
         header_writer.i32(self.version_integer);
-        header_writer.bytes(self.magic.as_bytes());
+        header_writer.bytes("relogic".as_bytes());
         header_writer.u8(self.savefile_type);
         header_writer.u32(self.revision);
         header_writer.u64(self.is_favorite);
@@ -1181,7 +1186,7 @@ impl World {
 
         // Write header with updated pointers
         final_writer.i32(self.version_integer);
-        final_writer.bytes(self.magic.as_bytes());
+        final_writer.bytes("relogic".as_bytes());
         final_writer.u8(self.savefile_type);
         final_writer.u32(self.revision);
         final_writer.u64(self.is_favorite);
