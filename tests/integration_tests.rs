@@ -1,9 +1,9 @@
 use serde_json::Value;
 use std::fs;
 use std::path::Path;
-use terraria_world_parser::world::World;
-use terraria_world_parser::world::tile_entity::TileEntityExtra;
 use terraria_world_parser::world::enums::LiquidType;
+use terraria_world_parser::world::tile_entity::TileEntityExtra;
+use terraria_world_parser::world::World;
 
 /// Test utilities for integration tests
 mod test_utils {

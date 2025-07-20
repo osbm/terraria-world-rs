@@ -8,4 +8,4 @@ impl std::fmt::Display for InvalidFooterError {
     }
 }
 
-impl std::error::Error for InvalidFooterError {} 
+impl std::error::Error for InvalidFooterError {}

@@ -17,4 +17,4 @@ impl From<i32> for EntityType {
     fn from(value: i32) -> Self {
         Self(value)
     }
-} 
+}

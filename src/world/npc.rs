@@ -1,6 +1,6 @@
-use serde::{Deserialize, Serialize};
 use super::coordinates::Coordinates;
 use super::entity::EntityType;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NPC {

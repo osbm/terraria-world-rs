@@ -24,4 +24,4 @@ impl JourneyPowers {
             power_order: Vec::new(),
         }
     }
-} 
+}

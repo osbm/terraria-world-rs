@@ -278,7 +278,12 @@ impl<'a> ByteReader<'a> {
 
     pub fn slice_bytes(&self, start: usize, end: usize) -> Vec<u8> {
         if start > end || end > self.data.len() {
-            panic!("Invalid slice range: {}..{} (data len {})", start, end, self.data.len());
+            panic!(
+                "Invalid slice range: {}..{} (data len {})",
+                start,
+                end,
+                self.data.len()
+            );
         }
         self.data[start..end].to_vec()
     }

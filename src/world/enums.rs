@@ -1,6 +1,6 @@
-use std::collections::HashMap;
 use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum LiquidType {
@@ -93,7 +93,6 @@ impl std::fmt::Display for WallType {
         write!(f, "{}", self.name())
     }
 }
-
 
 static BLOCK_TYPE_NAMES: Lazy<HashMap<u16, &'static str>> = Lazy::new(|| {
     let mut map = HashMap::new();

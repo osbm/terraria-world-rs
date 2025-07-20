@@ -474,11 +474,7 @@ impl World {
 
         // tiles
         let (width, height) = (world_width as usize, world_height as usize);
-        let tiles = Self::create_tile_matrix(
-            &mut r,
-            (width, height),
-            &tile_frame_important,
-        );
+        let tiles = Self::create_tile_matrix(&mut r, (width, height), &tile_frame_important);
 
         if r.offset() as u32 != pointer_vector[2] {
             return Err(std::io::Error::new(
@@ -594,11 +590,7 @@ impl World {
             let mob_type = EntityType::from(r.i32());
             let mob_position_x = r.f32();
             let mob_position_y = r.f32();
-            let mob = Mob::new(
-                mob_type,
-                mob_position_x,
-                mob_position_y
-            );
+            let mob = Mob::new(mob_type, mob_position_x, mob_position_y);
             mobs.push(mob);
         }
 
@@ -1505,7 +1497,10 @@ impl World {
             while y < height {
                 // Find run length for RLE
                 let mut run_length = 1;
-                while y + run_length < height && column[y].tiles_equal(&column[y + run_length]) && run_length < 0x10000 {
+                while y + run_length < height
+                    && column[y].tiles_equal(&column[y + run_length])
+                    && run_length < 0x10000
+                {
                     run_length += 1;
                 }
                 let tile_bytes = Self::serialize_tile(&column[y], run_length);
@@ -1529,53 +1524,126 @@ impl World {
 
         // Block
         let has_block = tile.has_block();
-        if has_block { flags1 |= 1 << 1; }
+        if has_block {
+            flags1 |= 1 << 1;
+        }
         // Wall
         let has_wall = tile.has_wall();
-        if has_wall { flags1 |= 1 << 2; }
+        if has_wall {
+            flags1 |= 1 << 2;
+        }
         // Liquid
         let has_water = tile.liquid_type == LiquidType::Water && tile.liquid_amount > 0;
         let has_lava = tile.liquid_type == LiquidType::Lava && tile.liquid_amount > 0;
         let has_honey = tile.liquid_type == LiquidType::Honey && tile.liquid_amount > 0;
         let has_shimmer = tile.liquid_type == LiquidType::Shimmer && tile.liquid_amount > 0;
-        if has_water || has_honey || has_shimmer { flags1 |= 1 << 3; }  // Set water bit for shimmer too
-        if has_lava || has_honey { flags1 |= 1 << 4; }
+        if has_water || has_honey || has_shimmer {
+            flags1 |= 1 << 3;
+        } // Set water bit for shimmer too
+        if has_lava || has_honey {
+            flags1 |= 1 << 4;
+        }
         // Extended block id
-        let has_extended_block_id = has_block && tile.block_type.as_ref().map_or(false, |b| b.id() > 255);
-        if has_extended_block_id { flags1 |= 1 << 5; }
+        let has_extended_block_id =
+            has_block && tile.block_type.as_ref().map_or(false, |b| b.id() > 255);
+        if has_extended_block_id {
+            flags1 |= 1 << 5;
+        }
         // RLE
-        let rle_val = if repetition_count - 1 > 0xFF { 2 } else if repetition_count > 1 { 1 } else { 0 };
+        let rle_val = if repetition_count - 1 > 0xFF {
+            2
+        } else if repetition_count > 1 {
+            1
+        } else {
+            0
+        };
         flags1 |= (rle_val & 0x03) << 6;
 
         // --- Flag Byte 2 ---
         // Wires
-        if tile.red_wire { flags2 |= 1 << 1; has_flags2 = true; }
-        if tile.blue_wire { flags2 |= 1 << 2; has_flags2 = true; }
-        if tile.green_wire { flags2 |= 1 << 3; has_flags2 = true; }
+        if tile.red_wire {
+            flags2 |= 1 << 1;
+            has_flags2 = true;
+        }
+        if tile.blue_wire {
+            flags2 |= 1 << 2;
+            has_flags2 = true;
+        }
+        if tile.green_wire {
+            flags2 |= 1 << 3;
+            has_flags2 = true;
+        }
         // Block shape (bits 4,5,6)
         let shape = tile.block_shape & 0x07;
-        if (shape & 0b001) != 0 { flags2 |= 1 << 4; has_flags2 = true; }
-        if (shape & 0b010) != 0 { flags2 |= 1 << 5; has_flags2 = true; }
-        if (shape & 0b100) != 0 { flags2 |= 1 << 6; has_flags2 = true; }        
+        if (shape & 0b001) != 0 {
+            flags2 |= 1 << 4;
+            has_flags2 = true;
+        }
+        if (shape & 0b010) != 0 {
+            flags2 |= 1 << 5;
+            has_flags2 = true;
+        }
+        if (shape & 0b100) != 0 {
+            flags2 |= 1 << 6;
+            has_flags2 = true;
+        }
 
         // --- Flag Byte 3 ---
         // Yellow wire
-        if tile.yellow_wire { flags3 |= 1 << 1; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        if tile.yellow_wire {
+            flags3 |= 1 << 1;
+            has_flags3 = true;
+            has_flags2 = true;
+            flags2 |= 1 << 0;
+        }
         // Block inactive (active = !inactive)
-        if !tile.block_active { flags3 |= 1 << 2; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        if !tile.block_active {
+            flags3 |= 1 << 2;
+            has_flags3 = true;
+            has_flags2 = true;
+            flags2 |= 1 << 0;
+        }
         // Block painted
-        if tile.block_paint.is_some() { flags3 |= 1 << 3; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        if tile.block_paint.is_some() {
+            flags3 |= 1 << 3;
+            has_flags3 = true;
+            has_flags2 = true;
+            flags2 |= 1 << 0;
+        }
         // Wall painted
-        if tile.wall_paint.is_some() { flags3 |= 1 << 4; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        if tile.wall_paint.is_some() {
+            flags3 |= 1 << 4;
+            has_flags3 = true;
+            has_flags2 = true;
+            flags2 |= 1 << 0;
+        }
         // Actuator
-        if tile.activator_wire { flags3 |= 1 << 5; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        if tile.activator_wire {
+            flags3 |= 1 << 5;
+            has_flags3 = true;
+            has_flags2 = true;
+            flags2 |= 1 << 0;
+        }
         // Extended wall id
-        let has_extended_wall_id = has_wall && tile.wall_type.as_ref().map_or(false, |w| w.id() > 255);
-        if has_extended_wall_id { flags3 |= 1 << 6; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        let has_extended_wall_id =
+            has_wall && tile.wall_type.as_ref().map_or(false, |w| w.id() > 255);
+        if has_extended_wall_id {
+            flags3 |= 1 << 6;
+            has_flags3 = true;
+            has_flags2 = true;
+            flags2 |= 1 << 0;
+        }
         // Shimmer liquid
-        if has_shimmer { flags3 |= 1 << 7; has_flags3 = true; has_flags2 = true; flags2 |= 1 << 0; }
+        if has_shimmer {
+            flags3 |= 1 << 7;
+            has_flags3 = true;
+            has_flags2 = true;
+            flags2 |= 1 << 0;
+        }
         // If any flag3 bits set, set flag2.0
-        if has_flags3 { flags2 |= 1 << 0; }
+        if has_flags3 {
+            flags2 |= 1 << 0;
+        }
 
         // --- Flag Byte 4 ---
         // Block echo
@@ -1611,18 +1679,30 @@ impl World {
             flags3 |= 1 << 0;
         }
         // If any flag4 bits set, set flag3.0
-        if has_flags4 { flags3 |= 1 << 0; }
+        if has_flags4 {
+            flags3 |= 1 << 0;
+        }
 
         // If any flag3 bits set, set flag2.0
-        if has_flags3 { flags2 |= 1 << 0; }
+        if has_flags3 {
+            flags2 |= 1 << 0;
+        }
 
         // Now set Flag 1.0 (has Flag Byte 2) after all Flag Byte 2 logic is complete
-        if has_flags2 { flags1 |= 1 << 0; }
+        if has_flags2 {
+            flags1 |= 1 << 0;
+        }
         // Write flag bytes
         tile_bytes.u8(flags1);
-        if has_flags2 { tile_bytes.u8(flags2); }
-        if has_flags3 { tile_bytes.u8(flags3); }
-        if has_flags4 { tile_bytes.u8(flags4); }
+        if has_flags2 {
+            tile_bytes.u8(flags2);
+        }
+        if has_flags3 {
+            tile_bytes.u8(flags3);
+        }
+        if has_flags4 {
+            tile_bytes.u8(flags4);
+        }
 
         // Block
         if has_block {
@@ -1639,7 +1719,9 @@ impl World {
                 tile_bytes.u16(frame.y);
             }
             // Block paint
-            if let Some(paint) = tile.block_paint { tile_bytes.u8(paint); }
+            if let Some(paint) = tile.block_paint {
+                tile_bytes.u8(paint);
+            }
         }
         // Wall
         if has_wall {
@@ -1649,7 +1731,9 @@ impl World {
                 tile_bytes.u8((wall_type.id() >> 8) as u8);
             }
             // Wall paint
-            if let Some(paint) = tile.wall_paint { tile_bytes.u8(paint); }
+            if let Some(paint) = tile.wall_paint {
+                tile_bytes.u8(paint);
+            }
         }
         // Liquid
         if has_water || has_lava || has_honey || has_shimmer {
@@ -1910,8 +1994,6 @@ impl World {
         let has_flags4 = flags3[0];
         let flags4 = if has_flags4 { r.bits() } else { vec![false; 8] };
 
-
-
         let has_block = flags1[1];
         let has_extended_block_id = flags1[5];
         let is_block_painted = flags3[3];
@@ -2005,7 +2087,7 @@ impl World {
             2 => r.u16() as usize + 1,
             1 => r.u8() as usize + 1,
             0 => 1,
-            _ => 1 // i am not sure if it can be anything else
+            _ => 1, // i am not sure if it can be anything else
         };
 
         (tile, multiply_by)
@@ -2028,7 +2110,6 @@ impl World {
             LiquidType::NoLiquid
         }
     }
-
 
     fn create_tile_matrix(
         r: &mut ByteReader,

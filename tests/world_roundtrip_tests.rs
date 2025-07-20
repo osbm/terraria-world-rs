@@ -90,7 +90,6 @@ fn test_world_roundtrip() {
         } else {
             println!("✓ {}: OK (100%)", file_name);
         };
-
     }
     if !failures.is_empty() {
         println!("\nSummary of roundtrip failures:");

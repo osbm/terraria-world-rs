@@ -1,4 +1,3 @@
-
 #[derive(Clone)]
 pub struct ByteWriter {
     buffer: Vec<u8>,

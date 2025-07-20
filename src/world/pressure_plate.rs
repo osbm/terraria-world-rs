@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use super::coordinates::Coordinates;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WeighedPressurePlate {
@@ -10,4 +10,4 @@ impl WeighedPressurePlate {
     pub fn new(position: Coordinates) -> Self {
         Self { position }
     }
-} 
+}
