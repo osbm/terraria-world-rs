@@ -617,18 +617,18 @@ impl World {
             });
         }
         let debug_signs_offset_after = r.offset();
-        if world_name == DEBUG_WORLD_NAME {
-            println!("=== Signs section as hex ===");
-            let signs_bytes = r.slice_bytes(debug_signs_offset_before, debug_signs_offset_after);
-            for (i, byte) in signs_bytes.iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End signs section ===");
-        }
+        // if world_name == DEBUG_WORLD_NAME {
+        //     println!("=== Signs section as hex ===");
+        //     let signs_bytes = r.slice_bytes(debug_signs_offset_before, debug_signs_offset_after);
+        //     for (i, byte) in signs_bytes.iter().enumerate() {
+        //         print!("{:02X} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End signs section ===");
+        // }
 
         // Parse entities
         let mut npcs = Vec::new();
@@ -706,18 +706,18 @@ impl World {
         }
 
         let debug_npcs_offset_after = r.offset();
-        if world_name == DEBUG_WORLD_NAME {
-            println!("=== NPCs section as hex ===");
-            let npcs_bytes = r.slice_bytes(debug_npcs_offset_before, debug_npcs_offset_after);
-            for (i, byte) in npcs_bytes.iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End NPCs section ===");
-        }
+        // if world_name == DEBUG_WORLD_NAME {
+        //     println!("=== NPCs section as hex ===");
+        //     let npcs_bytes = r.slice_bytes(debug_npcs_offset_before, debug_npcs_offset_after);
+        //     for (i, byte) in npcs_bytes.iter().enumerate() {
+        //         print!("{:02X} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End NPCs section ===");
+        // }
 
         // Parse tile entities
         let tile_entities_count = r.i32();
@@ -922,19 +922,19 @@ impl World {
 
         let bestiary = Bestiary::new(bestiary_kills, bestiary_sightings, bestiary_chats);
         let debug_bestiary_offset_after = r.offset();
-        if world_name == DEBUG_WORLD_NAME {
-            println!("=== Bestiary section as hex ===");
-            let bestiary_bytes =
-                r.slice_bytes(debug_bestiary_offset_before, debug_bestiary_offset_after);
-            for (i, byte) in bestiary_bytes.iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End Bestiary section ===");
-        }
+        // if world_name == DEBUG_WORLD_NAME {
+        //     println!("=== Bestiary section as hex ===");
+        //     let bestiary_bytes =
+        //         r.slice_bytes(debug_bestiary_offset_before, debug_bestiary_offset_after);
+        //     for (i, byte) in bestiary_bytes.iter().enumerate() {
+        //         print!("{:02X} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End Bestiary section ===");
+        // }
 
         // Parse journey powers
         let mut journey_powers = JourneyPowers::new();
@@ -955,19 +955,19 @@ impl World {
             }
         }
 
-        if world_name == DEBUG_WORLD_NAME {
-            println!("=== Journey Powers section as hex ===");
-            let journey_powers_bytes =
-                r.slice_bytes(pointers.journey_powers as usize, pointers.footer as usize);
-            for (i, byte) in journey_powers_bytes.iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End Journey Powers section ===");
-        }
+        // if world_name == DEBUG_WORLD_NAME {
+        //     println!("=== Journey Powers section as hex ===");
+        //     let journey_powers_bytes =
+        //         r.slice_bytes(pointers.journey_powers as usize, pointers.footer as usize);
+        //     for (i, byte) in journey_powers_bytes.iter().enumerate() {
+        //         print!("{:02X} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End Journey Powers section ===");
+        // }
 
         // Parse footer
         if !r.bool() {
@@ -1821,17 +1821,17 @@ impl World {
             writer.i32(sign.position.y);
         }
 
-        if self.world_name == DEBUG_WORLD_NAME {
-            println!("=== Signs section as hex ===");
-            for (i, byte) in writer.as_slice().iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End signs section ===");
-        }
+        // if self.world_name == DEBUG_WORLD_NAME {
+        //     println!("=== Signs section as hex ===");
+        //     for (i, byte) in writer.as_slice().iter().enumerate() {
+        //         print!("{:02X} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End signs section ===");
+        // }
 
         writer
     }
@@ -1866,17 +1866,17 @@ impl World {
         }
         writer.bool(false); // end of mobs
 
-        if self.world_name == DEBUG_WORLD_NAME {
-            println!("=== NPCs section as hex ===");
-            for (i, byte) in writer.as_slice().iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End NPCs section ===");
-        }
+        // if self.world_name == DEBUG_WORLD_NAME {
+        //     println!("=== NPCs section as hex ===");
+        //     for (i, byte) in writer.as_slice().iter().enumerate() {
+        //         print!("{:02X} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End NPCs section ===");
+        // }
 
         writer
     }
@@ -2012,17 +2012,17 @@ impl World {
             writer.string(c);
         }
 
-        if self.world_name == DEBUG_WORLD_NAME {
-            println!("=== Bestiary section as hex ===");
-            for (i, byte) in writer.as_slice().iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End Bestiary section ===");
-        }
+        // if self.world_name == DEBUG_WORLD_NAME {
+        //     println!("=== Bestiary section as hex ===");
+        //     for (i, byte) in writer.as_slice().iter().enumerate() {
+        //         print!("{:02X} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End Bestiary section ===");
+        // }
 
         writer
     }
@@ -2053,17 +2053,17 @@ impl World {
         }
         writer.bool(false); // end of journey powers
 
-        if self.world_name == DEBUG_WORLD_NAME {
-            println!("=== Journey Powers section as hex ===");
-            for (i, byte) in writer.as_slice().iter().enumerate() {
-                print!("{:02X} ", byte);
-                if (i + 1) % 16 == 0 {
-                    println!();
-                }
-            }
-            println!();
-            println!("=== End Journey Powers section ===");
-        }
+        // if self.world_name == DEBUG_WORLD_NAME {
+        //     println!("=== Journey Powers section as hex ===");
+        //     for (i, byte) in writer.as_slice().iter().enumerate() {
+        //         print!("{:02X} ", byte);
+        //         if (i + 1) % 16 == 0 {
+        //             println!();
+        //         }
+        //     }
+        //     println!();
+        //     println!("=== End Journey Powers section ===");
+        // }
 
         writer
     }
