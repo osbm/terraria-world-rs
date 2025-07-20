@@ -1,9 +1,6 @@
 use crate::reader::ByteReader;
 use crate::writer::ByteWriter;
 
-// Debug configuration
-const DEBUG_WORLD_NAME: &str = "Aiw";
-
 // Module declarations
 pub mod bestiary;
 pub mod chest;
@@ -232,7 +229,6 @@ pub struct World {
     pub rooms: Vec<Room>,
     pub bestiary: Bestiary,
     pub journey_powers: JourneyPowers,
-    pub tile_bytes: Vec<Vec<u8>>, // Each Vec<u8> represents the entire column data
 }
 
 impl World {
@@ -260,7 +256,6 @@ impl World {
             let current_bits = r.bits();
             tile_frame_important.extend(current_bits);
         }
-        // Truncate to the exact count since we read full bytes but only need specific number of bits
         tile_frame_important.truncate(tile_frame_important_count as usize);
 
         let world_name = r.string(None);
@@ -470,8 +465,6 @@ impl World {
             &mut r,
             (width, height),
             &tile_frame_important,
-            &mut tile_bytes,
-            &world_name,
         );
 
         // --- CHEST PARSING ---
@@ -508,7 +501,6 @@ impl World {
         }
 
         // --- SIGN PARSING ---
-        let debug_signs_offset_before = r.offset();
         let signs_count = r.i16();
         let mut signs = Vec::with_capacity(signs_count as usize);
         for _ in 0..signs_count {
@@ -758,7 +750,6 @@ impl World {
         }
 
         // Parse bestiary
-        let debug_bestiary_offset_before = r.offset();
         let bestiary_kills_count = r.i32();
         let mut bestiary_kills = Vec::with_capacity(bestiary_kills_count as usize);
         for _ in 0..bestiary_kills_count {
@@ -1011,7 +1002,6 @@ impl World {
             rooms,
             bestiary,
             journey_powers,
-            tile_bytes,
         };
 
         Ok(world)
@@ -1849,7 +1839,7 @@ impl World {
         writer
     }
 
-    fn read_tile_block(r: &mut ByteReader, tile_frame_important: &[bool], debug: bool) -> (Tile, usize) {
+    fn read_tile_block(r: &mut ByteReader, tile_frame_important: &[bool]) -> (Tile, usize) {
         let flags1 = r.bits();
         let has_flags2 = flags1[0];
         let flags2 = if has_flags2 { r.bits() } else { vec![false; 8] };
@@ -1982,8 +1972,6 @@ impl World {
         r: &mut ByteReader,
         world_size: (usize, usize),
         tile_frame_important: &[bool],
-        tile_bytes: &mut Vec<Vec<u8>>,
-        world_name: &str,
     ) -> TileMatrix {
         let mut tm = TileMatrix::new();
         let (width, height) = world_size;
@@ -1994,7 +1982,7 @@ impl World {
             let start_offset = r.offset();
 
             while column.len() < height {
-                let (tile, multiply_by) = Self::read_tile_block(r, tile_frame_important, debug);
+                let (tile, multiply_by) = Self::read_tile_block(r, tile_frame_important);
                 for _ in 0..multiply_by {
                     column.push(tile.clone());
                 }
@@ -2005,7 +1993,6 @@ impl World {
             column_bytes.extend_from_slice(&column_data);
 
             tm.add_column(column);
-            tile_bytes[x] = column_bytes;
         }
         tm
     }
