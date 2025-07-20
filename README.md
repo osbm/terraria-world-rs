@@ -1,6 +1,6 @@
 # Terraria World Parser
 
-This is a simple terraria world parser library for the rust ecosystem.
+This is a terraria world parser library for the rust ecosystem.
 
 ## World File Format Documentation
 
