@@ -1708,12 +1708,6 @@ impl World {
         if (shape & 0b001) != 0 { flags2 |= 1 << 4; has_flags2 = true; }
         if (shape & 0b010) != 0 { flags2 |= 1 << 5; has_flags2 = true; }
         if (shape & 0b100) != 0 { flags2 |= 1 << 6; has_flags2 = true; }
-        // Wall illuminant triggers flag2
-        if tile.wall_illuminant {
-            has_flags2 = true;
-            has_flags3 = true;
-            has_flags4 = true;
-        }
 
         // --- Flag Byte 3 ---
         // Yellow wire
@@ -1736,15 +1730,42 @@ impl World {
 
         // --- Flag Byte 4 ---
         // Block echo
-        if tile.block_echo { flags4 |= 1 << 1; has_flags4 = true; has_flags3 = true; flags3 |= 1 << 0; }
+        if tile.block_echo {
+            flags4 |= 1 << 1;
+            has_flags4 = true;
+            has_flags3 = true;
+            has_flags2 = true;
+            flags3 |= 1 << 0;
+        }
         // Wall echo
-        if tile.wall_echo { flags4 |= 1 << 2; has_flags4 = true; has_flags3 = true; flags3 |= 1 << 0; }
+        if tile.wall_echo {
+            flags4 |= 1 << 2;
+            has_flags4 = true;
+            has_flags3 = true;
+            has_flags2 = true;
+            flags3 |= 1 << 0;
+        }
         // Block illuminant
-        if tile.block_illuminant { flags4 |= 1 << 3; has_flags4 = true; has_flags3 = true; flags3 |= 1 << 0; }
+        if tile.block_illuminant {
+            flags4 |= 1 << 3;
+            has_flags4 = true;
+            has_flags3 = true;
+            has_flags2 = true;
+            flags3 |= 1 << 0;
+        }
         // Wall illuminant
-        if tile.wall_illuminant { flags4 |= 1 << 4; has_flags4 = true; has_flags3 = true; flags3 |= 1 << 0; }
+        if tile.wall_illuminant {
+            flags4 |= 1 << 4;
+            has_flags4 = true;
+            has_flags3 = true;
+            has_flags2 = true;
+            flags3 |= 1 << 0;
+        }
         // If any flag4 bits set, set flag3.0
         if has_flags4 { flags3 |= 1 << 0; }
+
+        // If any flag3 bits set, set flag2.0
+        if has_flags3 { flags2 |= 1 << 0; }
 
         // Now set Flag 1.0 (has Flag Byte 2) after all Flag Byte 2 logic is complete
         if has_flags2 { flags1 |= 1 << 0; }
