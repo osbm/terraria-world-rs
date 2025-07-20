@@ -5,7 +5,6 @@ use crate::writer::ByteWriter;
 pub mod bestiary;
 pub mod chest;
 pub mod coordinates;
-pub mod entity;
 pub mod enums;
 pub mod error;
 pub mod item;
@@ -26,7 +25,6 @@ use serde::{Deserialize, Serialize};
 use crate::world::bestiary::Bestiary;
 use crate::world::chest::Chest;
 use crate::world::coordinates::Coordinates;
-use crate::world::entity::EntityType;
 use crate::world::error::InvalidFooterError;
 use crate::world::item::ItemStack;
 use crate::world::journey_powers::JourneyPowers;
@@ -558,7 +556,7 @@ impl World {
         // Parse NPCs
         let mut _npc_index = 0;
         while r.bool() {
-            let npc_type = EntityType::from(r.i32());
+            let npc_type = r.i32();
             let npc_name = r.string(None);
             let npc_position_x = r.f32();
             let npc_position_y = r.f32();
@@ -587,7 +585,7 @@ impl World {
 
         // Parse mobs
         while r.bool() {
-            let mob_type = EntityType::from(r.i32());
+            let mob_type = r.i32();
             let mob_position_x = r.f32();
             let mob_position_y = r.f32();
             let mob = Mob::new(mob_type, mob_position_x, mob_position_y);
@@ -783,7 +781,7 @@ impl World {
         let rooms_count = r.i32();
         let mut rooms = Vec::with_capacity(rooms_count as usize);
         for _ in 0..rooms_count {
-            let npc = EntityType::from(r.i32());
+            let npc = r.i32();
             let position = Coordinates {
                 x: r.i32(),
                 y: r.i32(),
@@ -1794,7 +1792,7 @@ impl World {
         // Write npcs
         for npc in &self.npcs {
             writer.bool(true); // presence flag
-            writer.i32(npc.type_.id());
+            writer.i32(npc.type_);
             writer.string(&npc.name);
             writer.f32(npc.position_x);
             writer.f32(npc.position_y);
@@ -1808,7 +1806,7 @@ impl World {
                             // Write mobs
         for mob in &self.mobs {
             writer.bool(true);
-            writer.i32(mob.type_.id());
+            writer.i32(mob.type_);
             writer.f32(mob.position_x);
             writer.f32(mob.position_y);
         }
@@ -1921,7 +1919,7 @@ impl World {
 
         writer.i32(self.rooms.len() as i32);
         for room in &self.rooms {
-            writer.i32(room.npc.id());
+            writer.i32(room.npc);
             writer.i32(room.position.x);
             writer.i32(room.position.y);
         }

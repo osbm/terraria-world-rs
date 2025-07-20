@@ -1,10 +1,9 @@
 use super::coordinates::Coordinates;
-use super::entity::EntityType;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NPC {
-    pub type_: EntityType,
+    pub type_: i32,
     pub name: String,
     pub position_x: f32,
     pub position_y: f32,
@@ -15,7 +14,7 @@ pub struct NPC {
 
 impl NPC {
     pub fn new(
-        type_: EntityType,
+        type_: i32,
         name: String,
         position_x: f32,
         position_y: f32,

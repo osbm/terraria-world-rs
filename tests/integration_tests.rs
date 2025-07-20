@@ -339,7 +339,7 @@ mod test_utils {
         npc_ref: &Value,
     ) -> Result<(), String> {
         assert_eq!(
-            npc.type_.id(),
+            npc.type_,
             npc_ref["type_id"].as_i64().unwrap() as i32,
             "NPC type mismatch"
         );
@@ -386,7 +386,7 @@ mod test_utils {
         mob_ref: &Value,
     ) -> Result<(), String> {
         assert_eq!(
-            mob.type_.id(),
+            mob.type_,
             mob_ref["type_id"].as_i64().unwrap() as i32,
             "Mob type mismatch"
         );
@@ -1165,7 +1165,7 @@ fn test_town_manager_parsing() {
             println!(
                 "  Room {}: NPC type {}, position ({}, {})",
                 i,
-                room.npc.id(),
+                room.npc,
                 room.position.x,
                 room.position.y
             );
