@@ -18,16 +18,16 @@ from typing import Dict, Any, List, Optional
 def parse_world_file(world_file: str) -> Dict[str, Any]:
     """
     Parse a Terraria world file using lihzahrd and return structured data.
-    
+
     Args:
         world_file: Path to the .wld file
-        
+
     Returns:
         Dictionary containing parsed world data
     """
     try:
         world = lihzahrd.World.create_from_file(world_file)
-        
+
         # Extract metadata
         metadata = {
             "version": str(world.version),
@@ -48,10 +48,10 @@ def parse_world_file(world_file: str) -> Dict[str, Any]:
             "underground_level": world.underground_level,
             "cavern_level": world.cavern_level,
         }
-        
+
         # Extract sample tiles for comparison
         sample_tiles = []
-        if hasattr(world.tiles, 'tiles') and world.tiles.tiles:
+        if hasattr(world.tiles, "tiles") and world.tiles.tiles:
             # Sample tiles from different areas of the world
             sample_positions = [
                 (0, 0),  # Top-left
@@ -63,16 +63,20 @@ def parse_world_file(world_file: str) -> Dict[str, Any]:
                 (world.spawn_point.x, world.spawn_point.y),  # Spawn point
                 (world.dungeon_point.x, world.dungeon_point.y),  # Dungeon point
             ]
-            
+
             for x, y in sample_positions:
-                if (x < len(world.tiles.tiles) and 
-                    y < len(world.tiles.tiles[x]) if world.tiles.tiles[x] else False):
+                if (
+                    x < len(world.tiles.tiles) and y < len(world.tiles.tiles[x])
+                    if world.tiles.tiles[x]
+                    else False
+                ):
                     tile = world.tiles.tiles[x][y]
                     tile_data = extract_tile_data(tile, x, y)
                     sample_tiles.append(tile_data)
-            
+
             # Also sample some random tiles for better coverage
             import random
+
             random.seed(42)  # For reproducible results
             for _ in range(10):
                 x = random.randint(0, min(len(world.tiles.tiles) - 1, 100))
@@ -81,83 +85,103 @@ def parse_world_file(world_file: str) -> Dict[str, Any]:
                     tile = world.tiles.tiles[x][y]
                     tile_data = extract_tile_data(tile, x, y)
                     sample_tiles.append(tile_data)
-        
+
         # Extract chests
         chests = []
-        if hasattr(world, 'chests') and world.chests:
+        if hasattr(world, "chests") and world.chests:
             for chest in world.chests:
                 chest_data = {
                     "position": {"x": chest.position.x, "y": chest.position.y},
                     "name": chest.name,
-                    "contents": []
+                    "contents": [],
                 }
                 for item in chest.contents:
                     if item is not None:
                         type_id = None
-                        if hasattr(item, 'type') and item.type is not None:
-                            type_id = item.type.value if hasattr(item.type, 'value') else int(item.type)
+                        if hasattr(item, "type") and item.type is not None:
+                            type_id = (
+                                item.type.value
+                                if hasattr(item.type, "value")
+                                else int(item.type)
+                            )
                         prefix = None
-                        if hasattr(item, 'prefix') and item.prefix is not None:
-                            prefix = item.prefix.value if hasattr(item.prefix, 'value') else int(item.prefix)
-                        chest_data["contents"].append({
-                            "quantity": item.quantity,
-                            "type_id": type_id,
-                            "prefix": prefix
-                        })
+                        if hasattr(item, "prefix") and item.prefix is not None:
+                            prefix = (
+                                item.prefix.value
+                                if hasattr(item.prefix, "value")
+                                else int(item.prefix)
+                            )
+                        chest_data["contents"].append(
+                            {
+                                "quantity": item.quantity,
+                                "type_id": type_id,
+                                "prefix": prefix,
+                            }
+                        )
                     else:
                         chest_data["contents"].append(None)
                 chests.append(chest_data)
-        
+
         # Extract signs
         signs = []
-        if hasattr(world, 'signs') and world.signs:
+        if hasattr(world, "signs") and world.signs:
             for sign in world.signs:
                 sign_data = {
                     "text": sign.text,
-                    "position": {"x": sign.position.x, "y": sign.position.y}
+                    "position": {"x": sign.position.x, "y": sign.position.y},
                 }
                 signs.append(sign_data)
-        
+
         # Extract entities
         npcs = []
         mobs = []
         shimmered_npcs = []
-        
-        if hasattr(world, 'npcs') and world.npcs:
+
+        if hasattr(world, "npcs") and world.npcs:
             for npc in world.npcs:
                 npc_data = {
-                    "type_id": npc.type.value if hasattr(npc.type, 'value') else int(npc.type),
+                    "type_id": (
+                        npc.type.value if hasattr(npc.type, "value") else int(npc.type)
+                    ),
                     "name": npc.name,
                     "position": {"x": npc.position_x, "y": npc.position_y},
-                    "home": None if npc.home is None else {"x": npc.home.x, "y": npc.home.y},
+                    "home": (
+                        None if npc.home is None else {"x": npc.home.x, "y": npc.home.y}
+                    ),
                     "variation_index": npc.variation_index,
                 }
                 npcs.append(npc_data)
-        
-        if hasattr(world, 'mobs') and world.mobs:
+
+        if hasattr(world, "mobs") and world.mobs:
             for mob in world.mobs:
                 mob_data = {
-                    "type_id": mob.type.value if hasattr(mob.type, 'value') else int(mob.type),
+                    "type_id": (
+                        mob.type.value if hasattr(mob.type, "value") else int(mob.type)
+                    ),
                     "position": {"x": mob.position.x, "y": mob.position.y},
                 }
                 mobs.append(mob_data)
-        
-        if hasattr(world, 'shimmered_npcs') and world.shimmered_npcs:
+
+        if hasattr(world, "shimmered_npcs") and world.shimmered_npcs:
             shimmered_npcs = list(world.shimmered_npcs)
-        
+
         return {
             "metadata": metadata,
             "tiles": {
                 "sample_tiles": sample_tiles,
-                "total_tiles": sum(len(col) for col in world.tiles.tiles) if hasattr(world.tiles, 'tiles') else 0
+                "total_tiles": (
+                    sum(len(col) for col in world.tiles.tiles)
+                    if hasattr(world.tiles, "tiles")
+                    else 0
+                ),
             },
             "chests": chests,
             "signs": signs,
             "npcs": npcs,
             "mobs": mobs,
-            "shimmered_npcs": shimmered_npcs
+            "shimmered_npcs": shimmered_npcs,
         }
-        
+
     except Exception as e:
         raise RuntimeError(f"Failed to parse world file {world_file}: {e}")
 
@@ -165,12 +189,12 @@ def parse_world_file(world_file: str) -> Dict[str, Any]:
 def extract_tile_data(tile, x: int, y: int) -> Dict[str, Any]:
     """
     Extract detailed tile data for comparison.
-    
+
     Args:
         tile: lihzahrd Tile object
         x: X coordinate
         y: Y coordinate
-        
+
     Returns:
         Dictionary containing tile data
     """
@@ -184,9 +208,9 @@ def extract_tile_data(tile, x: int, y: int) -> Dict[str, Any]:
             "blue": tile.wiring.blue,
             "green": tile.wiring.green,
             "yellow": tile.wiring.yellow,
-        }
+        },
     }
-    
+
     # Extract block data
     if tile.block:
         block_data = {
@@ -196,18 +220,15 @@ def extract_tile_data(tile, x: int, y: int) -> Dict[str, Any]:
             "is_illuminant": tile.block.is_illuminant,
             "is_echo": tile.block.is_echo,
         }
-        
+
         if tile.block.paint is not None:
             block_data["paint_id"] = tile.block.paint.value
-        
+
         if tile.block.frame is not None:
-            block_data["frame"] = {
-                "x": tile.block.frame.x,
-                "y": tile.block.frame.y
-            }
-        
+            block_data["frame"] = {"x": tile.block.frame.x, "y": tile.block.frame.y}
+
         tile_data["block"] = block_data
-    
+
     # Extract wall data
     if tile.wall:
         wall_data = {
@@ -216,12 +237,12 @@ def extract_tile_data(tile, x: int, y: int) -> Dict[str, Any]:
             "is_illuminant": tile.wall.is_illuminant,
             "is_echo": tile.wall.is_echo,
         }
-        
+
         if tile.wall.paint is not None:
             wall_data["paint_id"] = tile.wall.paint.value
-        
+
         tile_data["wall"] = wall_data
-    
+
     # Extract liquid data
     if tile.liquid:
         liquid_data = {
@@ -229,17 +250,17 @@ def extract_tile_data(tile, x: int, y: int) -> Dict[str, Any]:
             "volume": tile.liquid.volume,
         }
         tile_data["liquid"] = liquid_data
-    
+
     return tile_data
 
 
 def find_world_files(directory: str = ".") -> List[str]:
     """
     Find all .wld files in the given directory.
-    
+
     Args:
         directory: Directory to search in
-        
+
     Returns:
         List of .wld file paths
     """
@@ -254,32 +275,27 @@ def main():
         description="Generate reference data for terraria-world-parser-rust integration tests"
     )
     parser.add_argument(
-        "world_file", 
-        nargs="?", 
-        help="Path to .wld file to parse (if not provided, searches for .wld files in current directory)"
+        "world_file",
+        nargs="?",
+        help="Path to .wld file to parse (if not provided, searches for .wld files in current directory)",
     )
     parser.add_argument(
-        "-o", "--output", 
-        help="Output JSON file path (default: {world_file}.lihzahrd_reference.json)"
+        "-o",
+        "--output",
+        help="Output JSON file path (default: {world_file}.lihzahrd_reference.json)",
     )
     parser.add_argument(
-        "--all", 
-        action="store_true", 
-        help="Process all .wld files in current directory"
+        "--all", action="store_true", help="Process all .wld files in current directory"
     )
-    parser.add_argument(
-        "--verbose", "-v", 
-        action="store_true", 
-        help="Verbose output"
-    )
-    
+    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
+
     args = parser.parse_args()
-    
+
     if args.verbose:
         print(f"lihzahrd version: {lihzahrd.__version__}")
-    
+
     world_files = []
-    
+
     if args.all:
         world_files = find_world_files()
         if not world_files:
@@ -295,51 +311,56 @@ def main():
         common_names = [
             "small_corruption.wld",
             "small_crimson.wld",
-            "medium_corruption.wld", 
+            "medium_corruption.wld",
             "medium_crimson.wld",
             "large_corruption.wld",
             "large_crimson.wld",
         ]
-        
+
         for name in common_names:
             if os.path.exists(name):
                 world_files.append(name)
                 break
-        
+
         if not world_files:
-            print("No world files found. Please specify a .wld file or use --all to process all .wld files.")
+            print(
+                "No world files found. Please specify a .wld file or use --all to process all .wld files."
+            )
             sys.exit(1)
-    
+
     for world_file in world_files:
         print(f"Processing world file: {world_file}")
-        
+
         try:
             # Parse the world file
             world_data = parse_world_file(world_file)
-            
+
             # Determine output file
             if args.output:
                 output_file = args.output
             else:
                 output_file = f"{world_file}.lihzahrd_reference.json"
-            
+
             # Write reference data
-            with open(output_file, 'w') as f:
+            with open(output_file, "w") as f:
                 json.dump(world_data, f, indent=2)
-            
+
             print(f"Reference data written to: {output_file}")
             print(f"World: {world_data['metadata']['name']}")
-            print(f"Size: {world_data['metadata']['size']['width']}x{world_data['metadata']['size']['height']}")
+            print(
+                f"Size: {world_data['metadata']['size']['width']}x{world_data['metadata']['size']['height']}"
+            )
             print(f"Sample tiles: {len(world_data['tiles']['sample_tiles'])}")
             print(f"Total tiles: {world_data['tiles']['total_tiles']}")
             print(f"NPCs: {len(world_data['npcs'])}")
             print(f"Mobs: {len(world_data['mobs'])}")
             print(f"Shimmered NPCs: {len(world_data['shimmered_npcs'])}")
-            
+
         except Exception as e:
             print(f"Error processing {world_file}: {e}")
             if args.verbose:
                 import traceback
+
                 traceback.print_exc()
             sys.exit(1)
 
