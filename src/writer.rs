@@ -187,7 +187,7 @@ impl ByteWriter {
         } else {
             write_default_date(
                 self,
-                &format!("Failed to parse datetime '{}'", datetime_str),
+                &format!("Failed to parse datetime '{datetime_str}'")
             );
         }
     }
