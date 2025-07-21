@@ -185,10 +185,7 @@ impl ByteWriter {
             let raw = (0b10u64 << 62) | (net_ticks & 0x3FFF_FFFF_FFFF_FFFF);
             self.u64(raw);
         } else {
-            write_default_date(
-                self,
-                &format!("Failed to parse datetime '{datetime_str}'")
-            );
+            write_default_date(self, &format!("Failed to parse datetime '{datetime_str}'"));
         }
     }
     pub fn as_slice(&self) -> &[u8] {

@@ -17,7 +17,7 @@ pub mod sign;
 pub mod tile;
 pub mod tile_entity;
 
-use self::enums::{LiquidType};
+use self::enums::LiquidType;
 use self::tile::{FrameImportantData, Tile, TileMatrix};
 use serde::{Deserialize, Serialize};
 
@@ -1544,8 +1544,7 @@ impl World {
             flags1 |= 1 << 4;
         }
         // Extended block id
-        let has_extended_block_id =
-            has_block && tile.block_id > 255;
+        let has_extended_block_id = has_block && tile.block_id > 255;
         if has_extended_block_id {
             flags1 |= 1 << 5;
         }
@@ -1625,8 +1624,7 @@ impl World {
             flags2 |= 1 << 0;
         }
         // Extended wall id
-        let has_extended_wall_id =
-            has_wall && tile.wall_id > 255;
+        let has_extended_wall_id = has_wall && tile.wall_id > 255;
         if has_extended_wall_id {
             flags3 |= 1 << 6;
             has_flags3 = true;

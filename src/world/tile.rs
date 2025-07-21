@@ -1,6 +1,6 @@
-use crate::world::enums::{LiquidType};
-use serde::{Deserialize, Serialize};
+use crate::world::enums::LiquidType;
 use crate::world::enums::{BLOCK_TYPE_NAMES, WALL_TYPE_NAMES};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FrameImportantData {
@@ -158,7 +158,12 @@ impl std::fmt::Display for Tile {
             let echo = if self.block_echo { "🔊" } else { "" };
             format!(
                 "{}{}{}{}{}{}",
-                self.get_block_name(), paint, frame, active, illum, echo
+                self.get_block_name(),
+                paint,
+                frame,
+                active,
+                illum,
+                echo
             )
         } else {
             "·".to_string()

@@ -1164,10 +1164,7 @@ fn test_town_manager_parsing() {
         for (i, room) in world.rooms.iter().take(5).enumerate() {
             println!(
                 "  Room {}: NPC type {}, position ({}, {})",
-                i,
-                room.npc,
-                room.position.x,
-                room.position.y
+                i, room.npc, room.position.x, room.position.y
             );
         }
         if world.rooms.len() > 5 {
