@@ -78,9 +78,7 @@ impl Tile {
         self.liquid_type != LiquidType::NoLiquid && self.liquid_amount > 0
     }
 
-    /// Check if two tiles are equal for RLE compression
     pub fn tiles_equal(&self, other: &Tile) -> bool {
-        // Compare blocks
         let block_equal = self.block_type == other.block_type
             && self.block_active == other.block_active
             && self.block_shape == other.block_shape
@@ -88,24 +86,17 @@ impl Tile {
             && self.block_illuminant == other.block_illuminant
             && self.block_echo == other.block_echo
             && self.block_frame == other.block_frame;
-
-        // Compare walls
         let wall_equal = self.wall_type == other.wall_type
             && self.wall_paint == other.wall_paint
             && self.wall_illuminant == other.wall_illuminant
             && self.wall_echo == other.wall_echo;
-
-        // Compare liquids
         let liquid_equal =
             self.liquid_type == other.liquid_type && self.liquid_amount == other.liquid_amount;
-
-        // Compare wiring
         let wiring_equal = self.red_wire == other.red_wire
             && self.blue_wire == other.blue_wire
             && self.green_wire == other.green_wire
             && self.yellow_wire == other.yellow_wire
             && self.activator_wire == other.activator_wire;
-
         block_equal && wall_equal && liquid_equal && wiring_equal
     }
 }
