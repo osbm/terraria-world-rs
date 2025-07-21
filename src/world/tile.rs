@@ -1,5 +1,6 @@
-use crate::world::enums::{BlockType, LiquidType, WallType};
+use crate::world::enums::{LiquidType};
 use serde::{Deserialize, Serialize};
+use crate::world::enums::{BLOCK_TYPE_NAMES, WALL_TYPE_NAMES};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FrameImportantData {
@@ -16,7 +17,7 @@ impl FrameImportantData {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tile {
     // Block attributes
-    pub block_type: Option<BlockType>,
+    pub block_id: u16,
     pub block_frame: Option<FrameImportantData>,
     pub block_paint: Option<u8>,
     pub block_active: bool,
@@ -25,7 +26,7 @@ pub struct Tile {
     pub block_echo: bool,
 
     // Wall attributes
-    pub wall_type: Option<WallType>,
+    pub wall_id: u16,
     pub wall_paint: Option<u8>,
     pub wall_illuminant: bool,
     pub wall_echo: bool,
@@ -45,14 +46,14 @@ pub struct Tile {
 impl Tile {
     pub fn new() -> Self {
         Self {
-            block_type: None,
+            block_id: u16::MAX,
             block_frame: None,
             block_paint: None,
             block_active: true,
             block_shape: 0,
             block_illuminant: false,
             block_echo: false,
-            wall_type: None,
+            wall_id: u16::MAX,
             wall_paint: None,
             wall_illuminant: false,
             wall_echo: false,
@@ -66,12 +67,50 @@ impl Tile {
         }
     }
 
+    pub fn get_block_name(&self) -> &'static str {
+        if let Some(name) = BLOCK_TYPE_NAMES.get(&self.block_id) {
+            name
+        } else {
+            "Unknown Block"
+        }
+    }
+
+    pub fn set_block_name(&mut self, name: &str) {
+        if !BLOCK_TYPE_NAMES.values().any(|&n| n == name) {
+            panic!("Block name '{}' not found in BLOCK_TYPE_NAMES", name);
+        }
+        self.block_id = BLOCK_TYPE_NAMES
+            .iter()
+            .find(|&(_, &v)| v == name)
+            .map(|(&k, _)| k)
+            .unwrap_or(u16::MAX);
+    }
+
+    pub fn get_wall_name(&self) -> &'static str {
+        if let Some(name) = WALL_TYPE_NAMES.get(&self.wall_id) {
+            name
+        } else {
+            "Unknown Wall"
+        }
+    }
+
+    pub fn set_wall_name(&mut self, name: &str) {
+        if !WALL_TYPE_NAMES.values().any(|&n| n == name) {
+            panic!("Wall name '{}' not found in WALL_TYPE_NAMES", name);
+        }
+        self.wall_id = WALL_TYPE_NAMES
+            .iter()
+            .find(|&(_, &v)| v == name)
+            .map(|(&k, _)| k)
+            .unwrap_or(u16::MAX);
+    }
+
     pub fn has_block(&self) -> bool {
-        self.block_type.is_some()
+        self.block_id != u16::MAX
     }
 
     pub fn has_wall(&self) -> bool {
-        self.wall_type.is_some()
+        self.wall_id != u16::MAX
     }
 
     pub fn has_liquid(&self) -> bool {
@@ -79,14 +118,14 @@ impl Tile {
     }
 
     pub fn tiles_equal(&self, other: &Tile) -> bool {
-        let block_equal = self.block_type == other.block_type
+        let block_equal = self.block_id == other.block_id
             && self.block_active == other.block_active
             && self.block_shape == other.block_shape
             && self.block_paint == other.block_paint
             && self.block_illuminant == other.block_illuminant
             && self.block_echo == other.block_echo
             && self.block_frame == other.block_frame;
-        let wall_equal = self.wall_type == other.wall_type
+        let wall_equal = self.wall_id == other.wall_id
             && self.wall_paint == other.wall_paint
             && self.wall_illuminant == other.wall_illuminant
             && self.wall_echo == other.wall_echo;
@@ -104,7 +143,7 @@ impl Tile {
 impl std::fmt::Display for Tile {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // Block representation
-        let block = if let Some(block_type) = &self.block_type {
+        let block = if self.has_block() {
             let paint = self
                 .block_paint
                 .map(|p| format!("[{}]", p))
@@ -119,21 +158,21 @@ impl std::fmt::Display for Tile {
             let echo = if self.block_echo { "🔊" } else { "" };
             format!(
                 "{}{}{}{}{}{}",
-                block_type, paint, frame, active, illum, echo
+                self.get_block_name(), paint, frame, active, illum, echo
             )
         } else {
             "·".to_string()
         };
 
         // Wall representation
-        let wall = if let Some(wall_type) = &self.wall_type {
+        let wall = if self.has_wall() {
             let paint = self
                 .wall_paint
                 .map(|p| format!("[{}]", p))
                 .unwrap_or_default();
             let illum = if self.wall_illuminant { "✨" } else { "" };
             let echo = if self.wall_echo { "🔊" } else { "" };
-            format!("|{}{}{}{}|", wall_type, paint, illum, echo)
+            format!("|{}{}{}{}|", self.get_wall_name(), paint, illum, echo)
         } else {
             " ".to_string()
         };

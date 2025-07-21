@@ -17,7 +17,7 @@ pub mod sign;
 pub mod tile;
 pub mod tile_entity;
 
-use self::enums::{BlockType, LiquidType, WallType};
+use self::enums::{LiquidType};
 use self::tile::{FrameImportantData, Tile, TileMatrix};
 use serde::{Deserialize, Serialize};
 
@@ -1235,10 +1235,12 @@ impl World {
         // Write header with updated pointers
         final_writer.i32(self.version_integer);
         final_writer.bytes("relogic".as_bytes());
+        // print the current offset for debugging
         final_writer.u8(self.savefile_type);
         final_writer.u32(self.revision);
         final_writer.u64(self.is_favorite);
         final_writer.u16(pointer_vector.len() as u16);
+        println!("Current offset after header: {}", final_writer.offset());
 
         // Write actual pointer values from world object for debugging section sizes
         for pointer in pointer_vector {
@@ -1543,7 +1545,7 @@ impl World {
         }
         // Extended block id
         let has_extended_block_id =
-            has_block && tile.block_type.as_ref().map_or(false, |b| b.id() > 255);
+            has_block && tile.block_id > 255;
         if has_extended_block_id {
             flags1 |= 1 << 5;
         }
@@ -1624,7 +1626,7 @@ impl World {
         }
         // Extended wall id
         let has_extended_wall_id =
-            has_wall && tile.wall_type.as_ref().map_or(false, |w| w.id() > 255);
+            has_wall && tile.wall_id > 255;
         if has_extended_wall_id {
             flags3 |= 1 << 6;
             has_flags3 = true;
@@ -1704,11 +1706,10 @@ impl World {
 
         // Block
         if has_block {
-            let block_type = tile.block_type.unwrap();
             if has_extended_block_id {
-                tile_bytes.u16(block_type.id());
+                tile_bytes.u16(tile.block_id);
             } else {
-                tile_bytes.u8(block_type.id() as u8);
+                tile_bytes.u8(tile.block_id as u8);
             }
             // Frame important
             if tile.block_frame.is_some() {
@@ -1723,10 +1724,9 @@ impl World {
         }
         // Wall
         if has_wall {
-            let wall_type = tile.wall_type.unwrap();
-            tile_bytes.u8((wall_type.id() & 0xFF) as u8);
+            tile_bytes.u8((tile.wall_id & 0xFF) as u8);
             if has_extended_wall_id {
-                tile_bytes.u8((wall_type.id() >> 8) as u8);
+                tile_bytes.u8((tile.wall_id >> 8) as u8);
             }
             // Wall paint
             if let Some(paint) = tile.wall_paint {
@@ -2024,14 +2024,14 @@ impl World {
 
         // Parse block
         if has_block {
-            let block_type = if has_extended_block_id {
-                BlockType::from(r.u16())
+            let block_id = if has_extended_block_id {
+                r.u16()
             } else {
-                BlockType::from(r.u8() as u16)
+                r.u8() as u16
             };
 
             let frame = if tile_frame_important
-                .get(block_type.id() as usize)
+                .get(block_id as usize)
                 .copied()
                 .unwrap_or(false)
             {
@@ -2042,13 +2042,13 @@ impl World {
 
             let block_paint = if is_block_painted { Some(r.u8()) } else { None };
 
-            tile.block_type = Some(block_type);
+            tile.block_id = block_id;
             tile.block_frame = frame;
             tile.block_paint = block_paint;
         }
 
         // Parse wall
-        let wall_type_l = if has_wall { r.u8() } else { 0 };
+        let wall_id_l = if has_wall { r.u8() } else { 0 };
         let wall_paint = if has_wall && is_wall_painted {
             Some(r.u8())
         } else {
@@ -2062,11 +2062,11 @@ impl World {
         }
 
         // Parse wall, again
-        let wall_type_g = if has_extended_wall_id { r.u8() } else { 0 };
+        let wall_id_g = if has_extended_wall_id { r.u8() } else { 0 };
 
         if has_wall {
-            let wall_type = WallType::from((wall_type_g as u16) * 256 + (wall_type_l as u16));
-            tile.wall_type = Some(wall_type);
+            let wall_id = (wall_id_g as u16) * 256 + (wall_id_l as u16);
+            tile.wall_id = wall_id;
             tile.wall_paint = wall_paint;
             tile.wall_illuminant = is_wall_illuminant;
             tile.wall_echo = is_wall_echo;

@@ -142,14 +142,14 @@ mod test_utils {
 
         // Basic tile properties
         assert_eq!(
-            tile.block_type.is_some(),
+            tile.has_block(),
             tile_ref["has_block"].as_bool().unwrap(),
             "Block presence mismatch at ({}, {})",
             x,
             y
         );
         assert_eq!(
-            tile.wall_type.is_some(),
+            tile.has_wall(),
             tile_ref["has_wall"].as_bool().unwrap(),
             "Wall presence mismatch at ({}, {})",
             x,
@@ -195,10 +195,10 @@ mod test_utils {
         );
 
         // Validate block data
-        if tile.block_type.is_some() {
+        if tile.has_block() {
             let block_ref = &tile_ref["block"];
             assert_eq!(
-                tile.block_type.as_ref().unwrap().id(),
+                tile.block_id,
                 block_ref["type_id"].as_u64().unwrap() as u16,
                 "Block type mismatch at ({}, {})",
                 x,
@@ -269,10 +269,10 @@ mod test_utils {
         }
 
         // Validate wall data
-        if tile.wall_type.is_some() {
+        if tile.has_wall() {
             let wall_ref = &tile_ref["wall"];
             assert_eq!(
-                tile.wall_type.as_ref().unwrap().id(),
+                tile.wall_id,
                 wall_ref["type_id"].as_u64().unwrap() as u16,
                 "Wall type mismatch at ({}, {})",
                 x,
