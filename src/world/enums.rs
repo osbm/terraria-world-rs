@@ -59,6 +59,12 @@ impl From<u16> for BlockType {
     }
 }
 
+impl std::fmt::Display for BlockType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.name())
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct WallType(u16);
 
@@ -82,7 +88,13 @@ impl From<u16> for WallType {
     }
 }
 
-pub static BLOCK_TYPE_NAMES: Lazy<HashMap<u16, &'static str>> = Lazy::new(|| {
+impl std::fmt::Display for WallType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.name())
+    }
+}
+
+static BLOCK_TYPE_NAMES: Lazy<HashMap<u16, &'static str>> = Lazy::new(|| {
     let mut map = HashMap::new();
     // Add the most common block types for fast lookup
     map.insert(u16::MAX, "EMPTY");
