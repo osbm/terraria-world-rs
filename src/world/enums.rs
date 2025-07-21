@@ -59,12 +59,6 @@ impl From<u16> for BlockType {
     }
 }
 
-impl std::fmt::Display for BlockType {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.name())
-    }
-}
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct WallType(u16);
 
@@ -85,12 +79,6 @@ impl WallType {
 impl From<u16> for WallType {
     fn from(value: u16) -> Self {
         Self(value)
-    }
-}
-
-impl std::fmt::Display for WallType {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.name())
     }
 }
 
