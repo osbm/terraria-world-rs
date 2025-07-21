@@ -1133,12 +1133,3 @@ static WALL_TYPE_NAMES: Lazy<HashMap<u16, &'static str>> = Lazy::new(|| {
     map.insert(346, "RAINBOW_MOSS_BLOCK_WALL");
     map
 });
-
-static LIQUID_TYPE_NAMES: Lazy<HashMap<u16, &'static str>> = Lazy::new(|| {
-    let mut map = HashMap::new();
-    map.insert(0, "NONE");
-    map.insert(1, "WATER");
-    map.insert(2, "LAVA");
-    map.insert(3, "HONEY");
-    map
-});
