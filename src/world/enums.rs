@@ -85,6 +85,7 @@ impl From<u16> for WallType {
 static BLOCK_TYPE_NAMES: Lazy<HashMap<u16, &'static str>> = Lazy::new(|| {
     let mut map = HashMap::new();
     // Add the most common block types for fast lookup
+    map.insert(u16::MAX, "EMPTY");
     map.insert(0, "DIRT");
     map.insert(1, "STONE");
     map.insert(2, "GRASS");
@@ -784,6 +785,7 @@ static BLOCK_TYPE_NAMES: Lazy<HashMap<u16, &'static str>> = Lazy::new(|| {
 static WALL_TYPE_NAMES: Lazy<HashMap<u16, &'static str>> = Lazy::new(|| {
     let mut map = HashMap::new();
     // Add the most common wall types for fast lookup
+    map.insert(u16::MAX, "EMPTY");
     map.insert(0, "NONE");
     map.insert(1, "STONE");
     map.insert(2, "DIRT_UNSAFE");
