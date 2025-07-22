@@ -218,7 +218,7 @@ dependencies = [
 
 [[package]]
 name = "terraria-world"
-version = "1.0.8"
+version = "1.0.9"
 dependencies = [
  "chrono",
  "once_cell",
