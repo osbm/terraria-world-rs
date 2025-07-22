@@ -496,20 +496,14 @@ fn test_world_parsing_against_lihzahrd() {
             let x = tile_ref["position"]["x"].as_u64().unwrap() as usize;
             let y = tile_ref["position"]["y"].as_u64().unwrap() as usize;
 
-            if let Some(tile) = world.tiles.get_tile(x, y) {
-                if let Err(e) = validate_tile(tile, tile_ref) {
-                    panic!(
-                        "Tile validation failed for {} at ({}, {}): {}",
-                        world_file, x, y, e
-                    );
-                }
-                validated_tiles += 1;
-            } else {
-                eprintln!(
-                    "Warning: Tile not found at ({}, {}) in {}",
-                    x, y, world_file
+            let tile = &world.tiles.tiles[x][y];
+            if let Err(e) = validate_tile(tile, tile_ref) {
+                panic!(
+                    "Tile validation failed for {} at ({}, {}): {}",
+                    world_file, x, y, e
                 );
             }
+            validated_tiles += 1;
         }
 
         println!(
@@ -648,9 +642,9 @@ fn test_world_parsing_basic_functionality() {
         let mut accessible_tiles = 0;
         for x in 0..std::cmp::min(10, world.world_width as usize) {
             for y in 0..std::cmp::min(10, world.world_height as usize) {
-                if world.tiles.get_tile(x, y).is_some() {
-                    accessible_tiles += 1;
-                }
+                // Direct bracket indexing, always in bounds
+                let _ = &world.tiles.tiles[x][y];
+                accessible_tiles += 1;
             }
         }
 

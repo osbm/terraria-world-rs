@@ -231,10 +231,6 @@ impl TileMatrix {
             self.size.1 = self.tiles[0].len();
         }
     }
-
-    pub fn get_tile(&self, x: usize, y: usize) -> Option<&Tile> {
-        self.tiles.get(x)?.get(y)
-    }
 }
 
 impl Default for TileMatrix {
