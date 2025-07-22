@@ -124,6 +124,7 @@
             rustPackages.clippy
             yamlfix
             black
+            mdbook
             (pkgs.python312.withPackages (python-pkgs: [
               python-pkgs.pip
               self.outputs.packages.${system}.lihzahrd
