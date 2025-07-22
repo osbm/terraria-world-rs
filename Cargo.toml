@@ -9,6 +9,7 @@ repository = "https://github.com/osbm/terraria-world-parser-rust"
 documentation = "https://osbm.dev/terraria-world-rs"
 keywords = ["terraria", "world", "parser", "game"]
 categories = ["game-development", "parsing"]
+exclude = ["docs/", "*.nix", ".github"]
 
 [dependencies]
 chrono = "0.4.41"
