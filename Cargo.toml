@@ -6,6 +6,7 @@ authors = ["osbm <osbm@osbm.dev>"]
 description = "A simple Terraria world file (.wld) parser library"
 license = "MIT"
 repository = "https://github.com/osbm/terraria-world-parser-rust"
+documentation = "https://osbm.dev/terraria-world-rs"
 keywords = ["terraria", "world", "parser", "game"]
 categories = ["game-development", "parsing"]
 
