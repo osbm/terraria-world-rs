@@ -14,5 +14,5 @@ fn main() {
     let world = World::from_file(wld_path).expect("Failed to load world file");
 
     // print the very first tile
-    println!("{:?}", world.tiles.get_tile(0, 0).unwrap());
+    println!("{:?}", world.get_corruption_stats());
 }

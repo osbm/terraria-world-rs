@@ -1130,10 +1130,92 @@ impl World {
         }
     }
 
-    pub fn remove_corruption(self) -> Self {
-        println!("Removing corruption...");
-        // raise unimplemented error
-        unimplemented!("Corruption removal is not implemented yet.");
+    // there is 3 types of corruption:
+    // 0 - Corruption
+    // 1 - Crimson
+    // 2 - Hallow
+    // and game tells us how many of each block is the percentage of the world
+    // like your world is 4% corrupted, 2% crimson, and 1% hallowed
+    pub fn get_corruption_stats(&self) -> (f32, f32, f32) {
+        // https://terraria.wiki.gg/wiki/Dryad#World_status
+        let mut corruption_count = 0;
+        let mut crimson_count = 0;
+        let mut hallow_count = 0;
+        let mut total_nonempty_tiles = 0;
+
+        let corruption_blocks = [
+            "CORRUPT_ICE",
+            "CORRUPT_HARDENED_SAND",
+            "CORRUPT_SANDSTONE",
+            "CORRUPT_VINES",
+            "CRIMSON_JUNGLE_GRASS",
+            "CORRUPT_GRASS",
+            "EBONSTONE",
+            "EBONSAND",
+            "EBONWOOD",
+        ];
+
+        let crimson_blocks = [
+            "CRIMSON_HARDENED_SAND",
+            "CRIMSON_HARDENED_SANDSTONE",
+            "CRIMSON_VINES",
+            "CRIMSTONE",
+            "CRIMSAND",
+            "CRIMTANE_THORNS",
+            "CRIMSON_JUNGLE_GRASS",
+            "FLESH_ICE",
+            "FLESH_WEEDS",
+            "FLESH_GRASS",
+        ];
+
+        let hallow_blocks = [
+            "HALLOWED_ICE",
+            "HALLOW_HARDENED_SAND",
+            "HALLOW_SANDSTONE",
+            "PEARLSAND",
+            "PEARLSTONE",
+            "GOLF_GRASS_HALLOWED",
+            "HALLOWED_GRASS",
+            "HALLOWED_PLANTS",
+            "HALLOWED_PLANTS2",
+            "HALLOWED_VINES",
+        ];
+
+        let solid_blocks = [
+            "STONE",
+            "GRASS",
+            // "DIRT",
+            "ICE",
+            "JUNGLE_GRASS",
+            "MOWED_GOLF_GRASS",
+        ];
+
+        for x in 0..self.world_width as usize {
+            for y in 0..self.world_height as usize {
+                let tile = &self.tiles.tiles[x][y];
+                let block_name = tile.get_block_name();
+
+                if corruption_blocks.contains(&block_name) {
+                    corruption_count += 1;
+                } else if crimson_blocks.contains(&block_name) {
+                    crimson_count += 1;
+                } else if hallow_blocks.contains(&block_name) {
+                    hallow_count += 1;
+                }
+
+                if solid_blocks.contains(&block_name) {
+                    total_nonempty_tiles += 1;
+                }
+            }
+        }
+        total_nonempty_tiles += corruption_count + hallow_count + crimson_count;
+
+        (
+            corruption_count as f32 * 100.0 / total_nonempty_tiles as f32,
+            crimson_count as f32 * 100.0 / total_nonempty_tiles as f32,
+            hallow_count as f32 * 100.0 / total_nonempty_tiles as f32,
+        )
+
     }
 
     pub fn read_from_json(path: &str) -> std::io::Result<Self> {
