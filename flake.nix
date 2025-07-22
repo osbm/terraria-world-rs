@@ -68,6 +68,17 @@
               license = licenses.eupl12;
             };
           };
+          documentation = pkgs.stdenv.mkDerivation {
+            pname = "terraria-world-docs";
+            version = cargoToml.package.version;
+            src = ./docs;
+            buildInputs = with pkgs; [
+              mdbook
+            ];
+            buildPhase = ''
+              mdbook build --dest-dir $out
+            '';
+          };
         }
       );
 
