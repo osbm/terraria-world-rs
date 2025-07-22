@@ -1215,7 +1215,6 @@ impl World {
             crimson_count as f32 * 100.0 / total_nonempty_tiles as f32,
             hallow_count as f32 * 100.0 / total_nonempty_tiles as f32,
         )
-
     }
 
     pub fn read_from_json(path: &str) -> std::io::Result<Self> {
