@@ -36,64 +36,6 @@ impl std::fmt::Display for LiquidType {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub struct BlockType(u16);
-
-impl BlockType {
-    pub fn new(id: u16) -> Self {
-        Self(id)
-    }
-
-    pub fn id(&self) -> u16 {
-        self.0
-    }
-
-    pub fn name(&self) -> &'static str {
-        BLOCK_TYPE_NAMES.get(&self.0).unwrap_or(&"UNKNOWN")
-    }
-}
-
-impl From<u16> for BlockType {
-    fn from(value: u16) -> Self {
-        Self(value)
-    }
-}
-
-impl std::fmt::Display for BlockType {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.name())
-    }
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub struct WallType(u16);
-
-impl WallType {
-    pub fn new(id: u16) -> Self {
-        Self(id)
-    }
-
-    pub fn id(&self) -> u16 {
-        self.0
-    }
-
-    pub fn name(&self) -> &'static str {
-        WALL_TYPE_NAMES.get(&self.0).unwrap_or(&"UNKNOWN")
-    }
-}
-
-impl From<u16> for WallType {
-    fn from(value: u16) -> Self {
-        Self(value)
-    }
-}
-
-impl std::fmt::Display for WallType {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.name())
-    }
-}
-
 pub static BLOCK_TYPE_NAMES: Lazy<HashMap<u16, &'static str>> = Lazy::new(|| {
     let mut map = HashMap::new();
     // Add the most common block types for fast lookup
