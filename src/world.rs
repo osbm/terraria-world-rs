@@ -141,14 +141,14 @@ pub struct World {
 }
 
 impl World {
-    pub fn new(world_name: String, world_size: String, difficulty: String) -> Self {
-        let (world_width, world_height) = match world_size.as_str() {
+    pub fn new(world_name: &str, world_size: &str, difficulty: &str) -> Self {
+        let (world_width, world_height) = match world_size {
             "small" => (4200, 1200),
             "medium" => (6400, 1800),
             "large" => (8400, 2400),
             _ => panic!("Invalid world size. Options are: small, medium, large"),
         };
-        let difficulty_value = match difficulty.as_str() {
+        let difficulty_value = match difficulty {
             "journey" => 3,
             "classic" => 0,
             "expert" => 1,
@@ -161,7 +161,7 @@ impl World {
             revision: 1,
             is_favorite: 0,
             tile_frame_important: Vec::new(),
-            world_name,
+            world_name: world_name.to_string(),
             generator_seed: "osbm/terraria-world-rs".to_string(),
             generator_version: 0,
             uuid: Uuid::new_v4().to_string(),
