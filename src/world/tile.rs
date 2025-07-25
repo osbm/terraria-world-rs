@@ -233,8 +233,9 @@ impl TileMatrix {
     }
 }
 
-impl Default for TileMatrix {
-    fn default() -> Self {
-        Self::new()
+impl std::fmt::Display for TileMatrix {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // just print the matrix size
+        write!(f, "TileMatrix ({}x{})", self.size.0, self.size.1)
     }
 }
