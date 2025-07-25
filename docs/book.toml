@@ -2,6 +2,7 @@
 title = "Terraria World Library"
 authors = ["osbm"]
 description = "A Rust library for reading and writing Terraria world files."
+language = "en"
 
 [output.html]
 git-repository-url = "https://github.com/osbm/terraria-world-rs"
