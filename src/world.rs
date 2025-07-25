@@ -183,7 +183,7 @@ impl World {
             is_upside_down: false,
             is_trap_world: false,
             is_zenith_world: false,
-            created_on: chrono::Utc::now().to_rfc3339(),
+            created_on: chrono::Utc::now().format("%Y-%m-%d %H:%M:%S%.f").to_string(),
             game_progression: GameProgression::default(),
             saved_npcs: SavedNPCs::default(),
             environment: WorldEnvironment::default(),
