@@ -1126,7 +1126,7 @@ impl World {
             1 => "Expert",
             2 => "Master",
             3 => "Journey",
-            _ => "Unknown",
+            _ => "Invalid difficulty",
         }
     }
 
