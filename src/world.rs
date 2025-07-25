@@ -1,3 +1,6 @@
+use rand::Rng;
+use uuid::Uuid;
+
 use crate::reader::ByteReader;
 use crate::writer::ByteWriter;
 
@@ -36,7 +39,158 @@ use crate::world::sign::Sign;
 use crate::world::tile_entity::{TileEntity, TileEntityExtra};
 
 #[derive(Debug, Serialize, Deserialize)]
+pub struct GameProgression {
+    // Boss defeats
+    pub defeated_eye_of_cthulhu: bool,
+    pub defeated_eater_of_worlds: bool,
+    pub defeated_skeletron: bool,
+    pub defeated_queen_bee: bool,
+    pub defeated_the_twins: bool,
+    pub defeated_the_destroyer: bool,
+    pub defeated_skeletron_prime: bool,
+    pub defeated_any_mechanical_boss: bool,
+    pub defeated_plantera: bool,
+    pub defeated_golem: bool,
+    pub defeated_king_slime: bool,
+    pub defeated_duke_fishron: bool,
+    pub defeated_martian_madness: bool,
+    pub defeated_lunatic_cultist: bool,
+    pub defeated_moon_lord: bool,
+    pub defeated_pumpking: bool,
+    pub defeated_mourning_wood: bool,
+    pub defeated_ice_queen: bool,
+    pub defeated_santa_nk1: bool,
+    pub defeated_everscream: bool,
+    pub defeated_empress_of_light: bool,
+    pub defeated_queen_slime: bool,
+    pub defeated_deerclops: bool,
+
+    // Pillars
+    pub defeated_solar_pillar: bool,
+    pub defeated_vortex_pillar: bool,
+    pub defeated_nebula_pillar: bool,
+    pub defeated_stardust_pillar: bool,
+    pub lunar_events_pillars_present_solar: bool,
+    pub lunar_events_pillars_present_vortex: bool,
+    pub lunar_events_pillars_present_nebula: bool,
+    pub lunar_events_pillars_present_stardust: bool,
+    pub lunar_events_are_active: bool,
+
+    // Events
+    pub defeated_goblin_army: bool,
+    pub defeated_clown: bool,
+    pub defeated_frost_moon: bool,
+    pub defeated_pirate_invasion: bool,
+
+    // Game state
+    pub is_hardmode: bool,
+    pub shadow_orbs_smashed_at_least_once: bool,
+    pub shadow_orbs_spawn_meteorite: bool,
+    pub shadow_orbs_evil_boss_counter: u8,
+    pub altars_smashed: i32,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SavedNPCs {
+    pub saved_goblin_tinkerer: bool,
+    pub saved_wizard: bool,
+    pub saved_mechanic: bool,
+    pub saved_angler: bool,
+    pub saved_stylist: bool,
+    pub saved_tax_collector: bool,
+    pub saved_golfer: bool,
+    pub saved_bartender: bool,
+    pub saved_slime_nerdy: bool,
+    pub saved_merchant: bool,
+    pub saved_demolitionist: bool,
+    pub saved_party_girl: bool,
+    pub saved_dye_trader: bool,
+    pub saved_truffle: bool,
+    pub saved_arms_dealer: bool,
+    pub saved_nurse: bool,
+    pub saved_princess: bool,
+    pub saved_slime_cool: bool,
+    pub saved_slime_elder: bool,
+    pub saved_slime_clumsy: bool,
+    pub saved_slime_diva: bool,
+    pub saved_slime_surly: bool,
+    pub saved_slime_mystic: bool,
+    pub saved_slime_squire: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct WorldEnvironment {
+    pub moon_style: u8,
+    pub tree_style_separators: Vec<i32>,
+    pub tree_style_properties: Vec<i32>,
+    pub moss_style_separators: Vec<i32>,
+    pub moss_style_properties: Vec<i32>,
+    pub snow_background_style: i32,
+    pub jungle_background_style: i32,
+    pub hell_background_style: i32,
+    pub forest_background: i8,
+    pub corruption_background: i8,
+    pub jungle_background: i8,
+    pub snow_background: i8,
+    pub hallow_background: i8,
+    pub crimson_background: i8,
+    pub desert_background: i8,
+    pub ocean_background: i8,
+    pub mushroom_background: i8,
+    pub underworld_background: i8,
+    pub forest_background_2: i8,
+    pub forest_background_3: i8,
+    pub forest_background_4: i8,
+    pub cloud_background: i32,
+    pub cloud_number: i16,
+    pub wind_speed: f32,
+    pub treetop_variants: Vec<i32>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct WeatherAndEvents {
+    pub current_time: f64,
+    pub is_daytime: bool,
+    pub moon_phase: u32,
+    pub blood_moon: bool,
+    pub eclipse: bool,
+    pub is_rain_active: bool,
+    pub rain_time_left: i32,
+    pub max_rain: f32,
+    pub is_sandstorm_active: bool,
+    pub sandstorm_time_left: i32,
+    pub sandstorm_severity: f32,
+    pub sandstorm_intended_severity: f32,
+    pub halloween_today: bool,
+    pub christmas_today: bool,
+    pub party_center_active: bool,
+    pub party_natural_active: bool,
+    pub party_cooldown: i32,
+    pub partying_npcs: Vec<i32>,
+    pub party_is_doomed: bool,
+    pub lantern_nights_on_cooldown: i32,
+    pub lantern_night_genuine: bool,
+    pub lantern_night_manual: bool,
+    pub next_night_is_lantern_night: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct InvasionData {
+    pub invasion_delay: i32,
+    pub invasion_size: i32,
+    pub invasion_type: i32,
+    pub invasion_position: f64,
+    pub invasion_size_start: i32,
+    pub cultist_delay: i32,
+    pub time_left_slime_rain: f64,
+    pub old_ones_army_tier_1: bool,
+    pub old_ones_army_tier_2: bool,
+    pub old_ones_army_tier_3: bool,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct World {
+    // Core world info
     pub version_integer: i32,
     pub savefile_type: u8,
     pub revision: u32,
@@ -51,6 +205,8 @@ pub struct World {
     pub world_height: i32,
     pub world_width: i32,
     pub difficulty_value: i32,
+
+    // World modifiers
     pub is_drunk_world: bool,
     pub is_for_the_worthy: bool,
     pub is_tenth_anniversary: bool,
@@ -60,156 +216,54 @@ pub struct World {
     pub is_trap_world: bool,
     pub is_zenith_world: bool,
     pub created_on: String,
-    pub moon_style: u8,
-    pub tree_style_separators: Vec<i32>,
-    pub tree_style_properties: Vec<i32>,
-    pub moss_style_separators: Vec<i32>,
-    pub moss_style_properties: Vec<i32>,
-    pub snow_background_style: i32,
-    pub jungle_background_style: i32,
-    pub hell_background_style: i32,
+
+    // Grouped data
+    pub game_progression: GameProgression,
+    pub saved_npcs: SavedNPCs,
+    pub environment: WorldEnvironment,
+    pub weather_events: WeatherAndEvents,
+    pub invasions: InvasionData,
+
+    // Spawn and level data
     pub spawn_point_x: i32,
     pub spawn_point_y: i32,
     pub underground_level: f64,
     pub cavern_level: f64,
-    pub current_time: f64,
-    pub is_daytime: bool,
-    pub moon_phase: u32,
-    pub blood_moon: bool,
-    pub eclipse: bool,
     pub dungeon_point_x: i32,
     pub dungeon_point_y: i32,
     pub world_evil_type: bool,
-    pub defeated_eye_of_cthulhu: bool,
-    pub defeated_eater_of_worlds: bool,
-    pub defeated_skeletron: bool,
-    pub defeated_queen_bee: bool,
-    pub defeated_the_twins: bool,
-    pub defeated_the_destroyer: bool,
-    pub defeated_skeletron_prime: bool,
-    pub defeated_any_mechanical_boss: bool,
-    pub defeated_plantera: bool,
-    pub defeated_golem: bool,
-    pub defeated_king_slime: bool,
-    pub saved_goblin_tinkerer: bool,
-    pub saved_wizard: bool,
-    pub saved_mechanic: bool,
-    pub defeated_goblin_army: bool,
-    pub defeated_clown: bool,
-    pub defeated_frost_moon: bool,
-    pub defeated_pirate_invasion: bool,
-    pub shadow_orbs_smashed_at_least_once: bool,
-    pub shadow_orbs_spawn_meteorite: bool,
-    pub shadow_orbs_evil_boss_counter: u8,
-    pub altars_smashed: i32,
-    pub is_hardmode: bool,
-    pub party_is_doomed: bool,
-    pub invasion_delay: i32,
-    pub invasion_size: i32,
-    pub invasion_type: i32,
-    pub invasion_position: f64,
-    pub time_left_slime_rain: f64,
-    pub sundial_cooldown: u8,
-    pub is_rain_active: bool,
-    pub rain_time_left: i32,
-    pub max_rain: f32,
+
+    // Hardmode ores and misc
     pub hardmode_ore_1: i32,
     pub hardmode_ore_2: i32,
     pub hardmode_ore_3: i32,
-    pub forest_background: i8,
-    pub corruption_background: i8,
-    pub jungle_background: i8,
-    pub snow_background: i8,
-    pub hallow_background: i8,
-    pub crimson_background: i8,
-    pub desert_background: i8,
-    pub ocean_background: i8,
-    pub cloud_background: i32,
-    pub cloud_number: i16,
-    pub wind_speed: f32,
-    pub angler_today_quest_completed_by: Vec<String>,
-    pub saved_angler: bool,
-    pub angler_daily_quest_target: i32,
-    pub saved_stylist: bool,
-    pub saved_tax_collector: bool,
-    pub saved_golfer: bool,
-    pub invasion_size_start: i32,
-    pub cultist_delay: i32,
-    pub mob_kills: Vec<i32>,
-    pub sundial_is_running: bool,
-    pub defeated_duke_fishron: bool,
-    pub defeated_martian_madness: bool,
-    pub defeated_lunatic_cultist: bool,
-    pub deteated_moon_lord: bool,
-    pub defeated_pumpking: bool,
-    pub defeated_mourning_wood: bool,
-    pub defeated_ice_queen: bool,
-    pub defeated_santa_nk1: bool,
-    pub defeated_everscream: bool,
-    pub defeated_solar_pillar: bool,
-    pub defeated_vortex_pillar: bool,
-    pub defeated_nebula_pillar: bool,
-    pub defeated_stardust_pillar: bool,
-    pub lunar_events_pillars_present_solar: bool, // TODO find a better name
-    pub lunar_events_pillars_present_vortex: bool,
-    pub lunar_events_pillars_present_nebula: bool,
-    pub lunar_events_pillars_present_stardust: bool,
-    pub lunar_events_are_active: bool,
-    pub party_center_active: bool,
-    pub party_natural_active: bool,
-    pub party_cooldown: i32,
-    pub partying_npcs: Vec<i32>,
-    pub is_sandstorm_active: bool,
-    pub sandstorm_time_left: i32,
-    pub sandstorm_severity: f32,
-    pub sandstorm_intended_severity: f32,
-    pub saved_bartender: bool,
-    pub old_ones_army_tier_1: bool,
-    pub old_ones_army_tier_2: bool,
-    pub old_ones_army_tier_3: bool,
-    pub mushroom_background: i8,
-    pub underworld_background: i8,
-    pub forest_background_2: i8,
-    pub forest_background_3: i8,
-    pub forest_background_4: i8,
-    pub combat_book_used: bool,
-    pub lantern_nights_on_cooldown: i32,
-    pub lantern_night_genuine: bool,
-    pub lantern_night_manual: bool,
-    pub next_night_is_lantern_night: bool,
-    pub treetop_variants: Vec<i32>,
-    pub halloween_today: bool,
-    pub christmas_today: bool,
     pub ore_1: i32,
     pub ore_2: i32,
     pub ore_3: i32,
     pub ore_4: i32,
+
+    // Pets and items
     pub has_cat: bool,
     pub has_dog: bool,
     pub has_bunny: bool,
-    pub defeated_empress_of_light: bool,
-    pub defeated_queen_slime: bool,
-    pub defeated_deerclops: bool,
-    pub saved_slime_nerdy: bool,
-    pub saved_merchant: bool,
-    pub saved_demolitionist: bool,
-    pub saved_party_girl: bool,
-    pub saved_dye_trader: bool,
-    pub saved_truffle: bool,
-    pub saved_arms_dealer: bool,
-    pub saved_nurse: bool,
-    pub saved_princess: bool,
+    pub combat_book_used: bool,
     pub combat_book_2_used: bool,
     pub peddler_satchel_used: bool,
-    pub saved_slime_cool: bool,
-    pub saved_slime_elder: bool,
-    pub saved_slime_clumsy: bool,
-    pub saved_slime_diva: bool,
-    pub saved_slime_surly: bool,
-    pub saved_slime_mystic: bool,
-    pub saved_slime_squire: bool,
+
+    // Angler quest data
+    pub angler_today_quest_completed_by: Vec<String>,
+    pub angler_daily_quest_target: i32,
+
+    // Mob data
+    pub mob_kills: Vec<i32>,
+
+    // Sundial and moondial
+    pub sundial_cooldown: u8,
+    pub sundial_is_running: bool,
     pub moondial_is_running: bool,
     pub moondial_cooldown: u8,
+
+    // World content
     pub tiles: TileMatrix,
     pub chests_max_items: i16,
     pub chests: Vec<Chest>,
@@ -381,7 +435,7 @@ impl World {
         let defeated_duke_fishron = r.bool();
         let defeated_martian_madness = r.bool();
         let defeated_lunatic_cultist = r.bool();
-        let deteated_moon_lord = r.bool();
+        let defeated_moon_lord = r.bool();
         let defeated_pumpking = r.bool();
         let defeated_mourning_wood = r.bool();
         let defeated_ice_queen = r.bool();
@@ -871,8 +925,145 @@ impl World {
             ));
         }
 
+        let game_progression = GameProgression {
+            defeated_eye_of_cthulhu,
+            defeated_eater_of_worlds,
+            defeated_skeletron,
+            defeated_queen_bee,
+            defeated_the_twins,
+            defeated_the_destroyer,
+            defeated_skeletron_prime,
+            defeated_any_mechanical_boss,
+            defeated_plantera,
+            defeated_golem,
+            defeated_king_slime,
+            defeated_duke_fishron,
+            defeated_martian_madness,
+            defeated_lunatic_cultist,
+            defeated_moon_lord: defeated_moon_lord,
+            defeated_pumpking,
+            defeated_mourning_wood,
+            defeated_ice_queen,
+            defeated_santa_nk1,
+            defeated_everscream,
+            defeated_empress_of_light,
+            defeated_queen_slime,
+            defeated_deerclops,
+            defeated_solar_pillar,
+            defeated_vortex_pillar,
+            defeated_nebula_pillar,
+            defeated_stardust_pillar,
+            lunar_events_pillars_present_solar,
+            lunar_events_pillars_present_vortex,
+            lunar_events_pillars_present_nebula,
+            lunar_events_pillars_present_stardust,
+            lunar_events_are_active,
+            defeated_goblin_army,
+            defeated_clown,
+            defeated_frost_moon,
+            defeated_pirate_invasion,
+            is_hardmode,
+            shadow_orbs_smashed_at_least_once,
+            shadow_orbs_spawn_meteorite,
+            shadow_orbs_evil_boss_counter,
+            altars_smashed,
+        };
+
+        let saved_npcs = SavedNPCs {
+            saved_goblin_tinkerer,
+            saved_wizard,
+            saved_mechanic,
+            saved_angler,
+            saved_stylist,
+            saved_tax_collector,
+            saved_golfer,
+            saved_bartender,
+            saved_slime_nerdy,
+            saved_merchant,
+            saved_demolitionist,
+            saved_party_girl,
+            saved_dye_trader,
+            saved_truffle,
+            saved_arms_dealer,
+            saved_nurse,
+            saved_princess,
+            saved_slime_cool,
+            saved_slime_elder,
+            saved_slime_clumsy,
+            saved_slime_diva,
+            saved_slime_surly,
+            saved_slime_mystic,
+            saved_slime_squire,
+        };
+
+        let environment = WorldEnvironment {
+            moon_style,
+            tree_style_separators,
+            tree_style_properties,
+            moss_style_separators,
+            moss_style_properties,
+            snow_background_style,
+            jungle_background_style,
+            hell_background_style,
+            forest_background,
+            corruption_background,
+            jungle_background,
+            snow_background,
+            hallow_background,
+            crimson_background,
+            desert_background,
+            ocean_background,
+            mushroom_background,
+            underworld_background,
+            forest_background_2,
+            forest_background_3,
+            forest_background_4,
+            cloud_background,
+            cloud_number,
+            wind_speed,
+            treetop_variants,
+        };
+
+        let weather_events = WeatherAndEvents {
+            current_time,
+            is_daytime,
+            moon_phase,
+            blood_moon,
+            eclipse,
+            is_rain_active,
+            rain_time_left,
+            max_rain,
+            is_sandstorm_active,
+            sandstorm_time_left,
+            sandstorm_severity,
+            sandstorm_intended_severity,
+            halloween_today,
+            christmas_today,
+            party_center_active,
+            party_natural_active,
+            party_cooldown,
+            partying_npcs,
+            party_is_doomed,
+            lantern_nights_on_cooldown,
+            lantern_night_genuine,
+            lantern_night_manual,
+            next_night_is_lantern_night,
+        };
+
+        let invasions = InvasionData {
+            invasion_delay,
+            invasion_size,
+            invasion_type,
+            invasion_position,
+            invasion_size_start,
+            cultist_delay,
+            time_left_slime_rain,
+            old_ones_army_tier_1,
+            old_ones_army_tier_2,
+            old_ones_army_tier_3,
+        };
+
         let world = World {
-            // World vs Self?
             version_integer,
             savefile_type,
             revision,
@@ -896,126 +1087,21 @@ impl World {
             is_trap_world,
             is_zenith_world,
             created_on,
-            moon_style,
-            tree_style_separators,
-            tree_style_properties,
-            moss_style_separators,
-            moss_style_properties,
-            snow_background_style,
-            jungle_background_style,
-            hell_background_style,
+            game_progression,
+            saved_npcs,
+            environment,
+            weather_events,
+            invasions,
             spawn_point_x,
             spawn_point_y,
             underground_level,
             cavern_level,
-            current_time,
-            is_daytime,
-            moon_phase,
-            blood_moon,
-            eclipse,
             dungeon_point_x,
             dungeon_point_y,
             world_evil_type,
-            defeated_eye_of_cthulhu,
-            defeated_eater_of_worlds,
-            defeated_skeletron,
-            defeated_queen_bee,
-            defeated_the_twins,
-            defeated_the_destroyer,
-            defeated_skeletron_prime,
-            defeated_any_mechanical_boss,
-            defeated_plantera,
-            defeated_golem,
-            defeated_king_slime,
-            saved_goblin_tinkerer,
-            saved_wizard,
-            saved_mechanic,
-            defeated_goblin_army,
-            defeated_clown,
-            defeated_frost_moon,
-            defeated_pirate_invasion,
-            shadow_orbs_smashed_at_least_once,
-            shadow_orbs_spawn_meteorite,
-            shadow_orbs_evil_boss_counter,
-            altars_smashed,
-            is_hardmode,
-            party_is_doomed,
-            invasion_delay,
-            invasion_size,
-            invasion_type,
-            invasion_position,
-            time_left_slime_rain,
-            sundial_cooldown,
-            is_rain_active,
-            rain_time_left,
-            max_rain,
             hardmode_ore_1,
             hardmode_ore_2,
             hardmode_ore_3,
-            forest_background,
-            corruption_background,
-            jungle_background,
-            snow_background,
-            hallow_background,
-            crimson_background,
-            desert_background,
-            ocean_background,
-            cloud_background,
-            cloud_number,
-            wind_speed,
-            angler_today_quest_completed_by,
-            saved_angler,
-            angler_daily_quest_target,
-            saved_stylist,
-            saved_tax_collector,
-            saved_golfer,
-            invasion_size_start,
-            cultist_delay,
-            mob_kills,
-            sundial_is_running,
-            defeated_duke_fishron,
-            defeated_martian_madness,
-            defeated_lunatic_cultist,
-            deteated_moon_lord,
-            defeated_pumpking,
-            defeated_mourning_wood,
-            defeated_ice_queen,
-            defeated_santa_nk1,
-            defeated_everscream,
-            defeated_solar_pillar,
-            defeated_vortex_pillar,
-            defeated_nebula_pillar,
-            defeated_stardust_pillar,
-            lunar_events_pillars_present_solar,
-            lunar_events_pillars_present_vortex,
-            lunar_events_pillars_present_nebula,
-            lunar_events_pillars_present_stardust,
-            lunar_events_are_active,
-            party_center_active,
-            party_natural_active,
-            party_cooldown,
-            partying_npcs,
-            is_sandstorm_active,
-            sandstorm_time_left,
-            sandstorm_severity,
-            sandstorm_intended_severity,
-            saved_bartender,
-            old_ones_army_tier_1,
-            old_ones_army_tier_2,
-            old_ones_army_tier_3,
-            mushroom_background,
-            underworld_background,
-            forest_background_2,
-            forest_background_3,
-            forest_background_4,
-            combat_book_used,
-            lantern_nights_on_cooldown,
-            lantern_night_genuine,
-            lantern_night_manual,
-            next_night_is_lantern_night,
-            treetop_variants,
-            halloween_today,
-            christmas_today,
             ore_1,
             ore_2,
             ore_3,
@@ -1023,27 +1109,14 @@ impl World {
             has_cat,
             has_dog,
             has_bunny,
-            defeated_empress_of_light,
-            defeated_queen_slime,
-            defeated_deerclops,
-            saved_slime_nerdy,
-            saved_merchant,
-            saved_demolitionist,
-            saved_party_girl,
-            saved_dye_trader,
-            saved_truffle,
-            saved_arms_dealer,
-            saved_nurse,
-            saved_princess,
+            combat_book_used,
             combat_book_2_used,
             peddler_satchel_used,
-            saved_slime_cool,
-            saved_slime_elder,
-            saved_slime_clumsy,
-            saved_slime_diva,
-            saved_slime_surly,
-            saved_slime_mystic,
-            saved_slime_squire,
+            angler_today_quest_completed_by,
+            angler_daily_quest_target,
+            mob_kills,
+            sundial_cooldown,
+            sundial_is_running,
             moondial_is_running,
             moondial_cooldown,
             tiles,
@@ -1381,87 +1454,87 @@ impl World {
         writer.bool(self.is_trap_world);
         writer.bool(self.is_zenith_world);
         writer.datetime(&self.created_on);
-        writer.u8(self.moon_style);
+        writer.u8(self.environment.moon_style);
 
         // Write tree_style_separators, tree_style_properties, moss_style_separators, moss_style_properties
-        for v in &self.tree_style_separators {
+        for v in &self.environment.tree_style_separators {
             writer.i32(*v);
         }
-        for v in &self.tree_style_properties {
+        for v in &self.environment.tree_style_properties {
             writer.i32(*v);
         }
-        for v in &self.moss_style_separators {
+        for v in &self.environment.moss_style_separators {
             writer.i32(*v);
         }
-        for v in &self.moss_style_properties {
+        for v in &self.environment.moss_style_properties {
             writer.i32(*v);
         }
 
         // Write background styles
-        writer.i32(self.snow_background_style);
-        writer.i32(self.jungle_background_style);
-        writer.i32(self.hell_background_style);
+        writer.i32(self.environment.snow_background_style);
+        writer.i32(self.environment.jungle_background_style);
+        writer.i32(self.environment.hell_background_style);
 
         // Write spawn point, underground/cavern levels, time, day, moon, events, dungeon, world evil, boss flags, etc.
         writer.i32(self.spawn_point_x);
         writer.i32(self.spawn_point_y);
         writer.f64(self.underground_level);
         writer.f64(self.cavern_level);
-        writer.f64(self.current_time);
-        writer.bool(self.is_daytime);
-        writer.u32(self.moon_phase);
-        writer.bool(self.blood_moon);
-        writer.bool(self.eclipse);
+        writer.f64(self.weather_events.current_time);
+        writer.bool(self.weather_events.is_daytime);
+        writer.u32(self.weather_events.moon_phase);
+        writer.bool(self.weather_events.blood_moon);
+        writer.bool(self.weather_events.eclipse);
         writer.i32(self.dungeon_point_x);
         writer.i32(self.dungeon_point_y);
         writer.bool(self.world_evil_type);
-        writer.bool(self.defeated_eye_of_cthulhu);
-        writer.bool(self.defeated_eater_of_worlds);
-        writer.bool(self.defeated_skeletron);
-        writer.bool(self.defeated_queen_bee);
-        writer.bool(self.defeated_the_twins);
-        writer.bool(self.defeated_the_destroyer);
-        writer.bool(self.defeated_skeletron_prime);
-        writer.bool(self.defeated_any_mechanical_boss);
-        writer.bool(self.defeated_plantera);
-        writer.bool(self.defeated_golem);
-        writer.bool(self.defeated_king_slime);
-        writer.bool(self.saved_goblin_tinkerer);
-        writer.bool(self.saved_wizard);
-        writer.bool(self.saved_mechanic);
-        writer.bool(self.defeated_goblin_army);
-        writer.bool(self.defeated_clown);
-        writer.bool(self.defeated_frost_moon);
-        writer.bool(self.defeated_pirate_invasion);
-        writer.bool(self.shadow_orbs_smashed_at_least_once);
-        writer.bool(self.shadow_orbs_spawn_meteorite);
-        writer.u8(self.shadow_orbs_evil_boss_counter);
-        writer.i32(self.altars_smashed);
-        writer.bool(self.is_hardmode);
-        writer.bool(!self.party_is_doomed); // party_is_doomed is inverted
-        writer.i32(self.invasion_delay);
-        writer.i32(self.invasion_size);
-        writer.i32(self.invasion_type);
-        writer.f64(self.invasion_position);
-        writer.f64(self.time_left_slime_rain);
+        writer.bool(self.game_progression.defeated_eye_of_cthulhu);
+        writer.bool(self.game_progression.defeated_eater_of_worlds);
+        writer.bool(self.game_progression.defeated_skeletron);
+        writer.bool(self.game_progression.defeated_queen_bee);
+        writer.bool(self.game_progression.defeated_the_twins);
+        writer.bool(self.game_progression.defeated_the_destroyer);
+        writer.bool(self.game_progression.defeated_skeletron_prime);
+        writer.bool(self.game_progression.defeated_any_mechanical_boss);
+        writer.bool(self.game_progression.defeated_plantera);
+        writer.bool(self.game_progression.defeated_golem);
+        writer.bool(self.game_progression.defeated_king_slime);
+        writer.bool(self.saved_npcs.saved_goblin_tinkerer);
+        writer.bool(self.saved_npcs.saved_wizard);
+        writer.bool(self.saved_npcs.saved_mechanic);
+        writer.bool(self.game_progression.defeated_goblin_army);
+        writer.bool(self.game_progression.defeated_clown);
+        writer.bool(self.game_progression.defeated_frost_moon);
+        writer.bool(self.game_progression.defeated_pirate_invasion);
+        writer.bool(self.game_progression.shadow_orbs_smashed_at_least_once);
+        writer.bool(self.game_progression.shadow_orbs_spawn_meteorite);
+        writer.u8(self.game_progression.shadow_orbs_evil_boss_counter);
+        writer.i32(self.game_progression.altars_smashed);
+        writer.bool(self.game_progression.is_hardmode);
+        writer.bool(!self.weather_events.party_is_doomed); // party_is_doomed is inverted
+        writer.i32(self.invasions.invasion_delay);
+        writer.i32(self.invasions.invasion_size);
+        writer.i32(self.invasions.invasion_type);
+        writer.f64(self.invasions.invasion_position);
+        writer.f64(self.invasions.time_left_slime_rain);
         writer.u8(self.sundial_cooldown);
-        writer.bool(self.is_rain_active);
-        writer.i32(self.rain_time_left);
-        writer.f32(self.max_rain);
+        writer.bool(self.weather_events.is_rain_active);
+        writer.i32(self.weather_events.rain_time_left);
+        writer.f32(self.weather_events.max_rain);
         writer.i32(self.hardmode_ore_1);
         writer.i32(self.hardmode_ore_2);
         writer.i32(self.hardmode_ore_3);
-        writer.i8(self.forest_background);
-        writer.i8(self.corruption_background);
-        writer.i8(self.jungle_background);
-        writer.i8(self.snow_background);
-        writer.i8(self.hallow_background);
-        writer.i8(self.crimson_background);
-        writer.i8(self.desert_background);
-        writer.i8(self.ocean_background);
-        writer.i32(self.cloud_background);
-        writer.i16(self.cloud_number);
-        writer.f32(self.wind_speed);
+        writer.i8(self.environment.forest_background);
+        writer.i8(self.environment.corruption_background);
+        writer.i8(self.environment.jungle_background);
+        writer.i8(self.environment.snow_background);
+        writer.i8(self.environment.hallow_background);
+        writer.i8(self.environment.crimson_background);
+        writer.i8(self.environment.desert_background);
+        writer.i8(self.environment.ocean_background);
+        writer.i32(self.environment.cloud_background);
+        writer.i16(self.environment.cloud_number);
+        writer.f32(self.environment.wind_speed);
 
         // Angler quest completed by
         writer.i32(self.angler_today_quest_completed_by.len() as i32);
@@ -1470,13 +1543,13 @@ impl World {
         }
 
         // Angler and other NPCs
-        writer.bool(self.saved_angler);
+        writer.bool(self.saved_npcs.saved_angler);
         writer.i32(self.angler_daily_quest_target);
-        writer.bool(self.saved_stylist);
-        writer.bool(self.saved_tax_collector);
-        writer.bool(self.saved_golfer);
-        writer.i32(self.invasion_size_start);
-        writer.i32(self.cultist_delay);
+        writer.bool(self.saved_npcs.saved_stylist);
+        writer.bool(self.saved_npcs.saved_tax_collector);
+        writer.bool(self.saved_npcs.saved_golfer);
+        writer.i32(self.invasions.invasion_size_start);
+        writer.i32(self.invasions.cultist_delay);
 
         // Mob kills
         writer.i16(self.mob_kills.len() as i16);
@@ -1484,55 +1557,55 @@ impl World {
             writer.i32(*v);
         }
         writer.bool(self.sundial_is_running);
-        writer.bool(self.defeated_duke_fishron);
-        writer.bool(self.defeated_martian_madness);
-        writer.bool(self.defeated_lunatic_cultist);
-        writer.bool(self.deteated_moon_lord);
-        writer.bool(self.defeated_pumpking);
-        writer.bool(self.defeated_mourning_wood);
-        writer.bool(self.defeated_ice_queen);
-        writer.bool(self.defeated_santa_nk1);
-        writer.bool(self.defeated_everscream);
-        writer.bool(self.defeated_solar_pillar);
-        writer.bool(self.defeated_vortex_pillar);
-        writer.bool(self.defeated_nebula_pillar);
-        writer.bool(self.defeated_stardust_pillar);
-        writer.bool(self.lunar_events_pillars_present_solar);
-        writer.bool(self.lunar_events_pillars_present_vortex);
-        writer.bool(self.lunar_events_pillars_present_nebula);
-        writer.bool(self.lunar_events_pillars_present_stardust);
-        writer.bool(self.lunar_events_are_active);
-        writer.bool(self.party_center_active);
-        writer.bool(self.party_natural_active);
-        writer.i32(self.party_cooldown);
-        writer.i32(self.partying_npcs.len() as i32);
-        for v in &self.partying_npcs {
+        writer.bool(self.game_progression.defeated_duke_fishron);
+        writer.bool(self.game_progression.defeated_martian_madness);
+        writer.bool(self.game_progression.defeated_lunatic_cultist);
+        writer.bool(self.game_progression.defeated_moon_lord);
+        writer.bool(self.game_progression.defeated_pumpking);
+        writer.bool(self.game_progression.defeated_mourning_wood);
+        writer.bool(self.game_progression.defeated_ice_queen);
+        writer.bool(self.game_progression.defeated_santa_nk1);
+        writer.bool(self.game_progression.defeated_everscream);
+        writer.bool(self.game_progression.defeated_solar_pillar);
+        writer.bool(self.game_progression.defeated_vortex_pillar);
+        writer.bool(self.game_progression.defeated_nebula_pillar);
+        writer.bool(self.game_progression.defeated_stardust_pillar);
+        writer.bool(self.game_progression.lunar_events_pillars_present_solar);
+        writer.bool(self.game_progression.lunar_events_pillars_present_vortex);
+        writer.bool(self.game_progression.lunar_events_pillars_present_nebula);
+        writer.bool(self.game_progression.lunar_events_pillars_present_stardust);
+        writer.bool(self.game_progression.lunar_events_are_active);
+        writer.bool(self.weather_events.party_center_active);
+        writer.bool(self.weather_events.party_natural_active);
+        writer.i32(self.weather_events.party_cooldown);
+        writer.i32(self.weather_events.partying_npcs.len() as i32);
+        for v in &self.weather_events.partying_npcs {
             writer.i32(*v);
         }
-        writer.bool(self.is_sandstorm_active);
-        writer.i32(self.sandstorm_time_left);
-        writer.f32(self.sandstorm_severity);
-        writer.f32(self.sandstorm_intended_severity);
-        writer.bool(self.saved_bartender);
-        writer.bool(self.old_ones_army_tier_1);
-        writer.bool(self.old_ones_army_tier_2);
-        writer.bool(self.old_ones_army_tier_3);
-        writer.i8(self.mushroom_background);
-        writer.i8(self.underworld_background);
-        writer.i8(self.forest_background_2);
-        writer.i8(self.forest_background_3);
-        writer.i8(self.forest_background_4);
+        writer.bool(self.weather_events.is_sandstorm_active);
+        writer.i32(self.weather_events.sandstorm_time_left);
+        writer.f32(self.weather_events.sandstorm_severity);
+        writer.f32(self.weather_events.sandstorm_intended_severity);
+        writer.bool(self.saved_npcs.saved_bartender);
+        writer.bool(self.invasions.old_ones_army_tier_1);
+        writer.bool(self.invasions.old_ones_army_tier_2);
+        writer.bool(self.invasions.old_ones_army_tier_3);
+        writer.i8(self.environment.mushroom_background);
+        writer.i8(self.environment.underworld_background);
+        writer.i8(self.environment.forest_background_2);
+        writer.i8(self.environment.forest_background_3);
+        writer.i8(self.environment.forest_background_4);
         writer.bool(self.combat_book_used);
-        writer.i32(self.lantern_nights_on_cooldown);
-        writer.bool(self.lantern_night_genuine);
-        writer.bool(self.lantern_night_manual);
-        writer.bool(self.next_night_is_lantern_night);
-        writer.i32(self.treetop_variants.len() as i32);
-        for v in &self.treetop_variants {
+        writer.i32(self.weather_events.lantern_nights_on_cooldown);
+        writer.bool(self.weather_events.lantern_night_genuine);
+        writer.bool(self.weather_events.lantern_night_manual);
+        writer.bool(self.weather_events.next_night_is_lantern_night);
+        writer.i32(self.environment.treetop_variants.len() as i32);
+        for v in &self.environment.treetop_variants {
             writer.i32(*v);
         }
-        writer.bool(self.halloween_today);
-        writer.bool(self.christmas_today);
+        writer.bool(self.weather_events.halloween_today);
+        writer.bool(self.weather_events.christmas_today);
         writer.i32(self.ore_1);
         writer.i32(self.ore_2);
         writer.i32(self.ore_3);
@@ -1540,27 +1613,27 @@ impl World {
         writer.bool(self.has_cat);
         writer.bool(self.has_dog);
         writer.bool(self.has_bunny);
-        writer.bool(self.defeated_empress_of_light);
-        writer.bool(self.defeated_queen_slime);
-        writer.bool(self.defeated_deerclops);
-        writer.bool(self.saved_slime_nerdy);
-        writer.bool(self.saved_merchant);
-        writer.bool(self.saved_demolitionist);
-        writer.bool(self.saved_party_girl);
-        writer.bool(self.saved_dye_trader);
-        writer.bool(self.saved_truffle);
-        writer.bool(self.saved_arms_dealer);
-        writer.bool(self.saved_nurse);
-        writer.bool(self.saved_princess);
+        writer.bool(self.game_progression.defeated_empress_of_light);
+        writer.bool(self.game_progression.defeated_queen_slime);
+        writer.bool(self.game_progression.defeated_deerclops);
+        writer.bool(self.saved_npcs.saved_slime_nerdy);
+        writer.bool(self.saved_npcs.saved_merchant);
+        writer.bool(self.saved_npcs.saved_demolitionist);
+        writer.bool(self.saved_npcs.saved_party_girl);
+        writer.bool(self.saved_npcs.saved_dye_trader);
+        writer.bool(self.saved_npcs.saved_truffle);
+        writer.bool(self.saved_npcs.saved_arms_dealer);
+        writer.bool(self.saved_npcs.saved_nurse);
+        writer.bool(self.saved_npcs.saved_princess);
         writer.bool(self.combat_book_2_used);
         writer.bool(self.peddler_satchel_used);
-        writer.bool(self.saved_slime_cool);
-        writer.bool(self.saved_slime_elder);
-        writer.bool(self.saved_slime_clumsy);
-        writer.bool(self.saved_slime_diva);
-        writer.bool(self.saved_slime_surly);
-        writer.bool(self.saved_slime_mystic);
-        writer.bool(self.saved_slime_squire);
+        writer.bool(self.saved_npcs.saved_slime_cool);
+        writer.bool(self.saved_npcs.saved_slime_elder);
+        writer.bool(self.saved_npcs.saved_slime_clumsy);
+        writer.bool(self.saved_npcs.saved_slime_diva);
+        writer.bool(self.saved_npcs.saved_slime_surly);
+        writer.bool(self.saved_npcs.saved_slime_mystic);
+        writer.bool(self.saved_npcs.saved_slime_squire);
         writer.bool(self.moondial_is_running);
         writer.u8(self.moondial_cooldown);
 

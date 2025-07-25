@@ -46,7 +46,7 @@ mod test_utils {
             "World height mismatch"
         );
         assert_eq!(
-            world.is_hardmode,
+            world.game_progression.is_hardmode,
             metadata["is_hardmode"].as_bool().unwrap(),
             "Hardmode flag mismatch"
         );
