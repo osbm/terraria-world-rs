@@ -136,6 +136,7 @@
             yamlfix
             black
             mdbook
+            git-cliff
             (pkgs.python312.withPackages (python-pkgs: [
               python-pkgs.pip
               self.outputs.packages.${system}.lihzahrd
