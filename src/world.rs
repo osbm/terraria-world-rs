@@ -1932,7 +1932,7 @@ impl World {
                 Some(crate::world::TileEntityExtra::HatRack { .. }) => (5u8, &te.extra),
                 Some(crate::world::TileEntityExtra::Plate { .. }) => (6u8, &te.extra),
                 Some(crate::world::TileEntityExtra::Pylon) => (7u8, &te.extra),
-                None => (255u8, &te.extra),
+                _ => (255u8, &te.extra),
             };
             writer.u8(te_type);
             writer.i32(te.id);
@@ -2000,7 +2000,7 @@ impl World {
                     writer.i16(item.quantity);
                 }
                 Some(crate::world::TileEntityExtra::Pylon) => {}
-                None => {}
+                _ => {}
             }
         }
 
