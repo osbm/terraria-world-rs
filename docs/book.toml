@@ -1,2 +1,8 @@
 [book]
 title = "Terraria World Library"
+authors = ["osbm"]
+description = "A Rust library for reading and writing Terraria world files."
+
+[output.html]
+git-repository-url = "https://github.com/osbm/terraria-world-rs"
+edit-url-template = "https://github.com/osbm/terraria-world-rs/edit/main/docs/{path}"
