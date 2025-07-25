@@ -52,7 +52,7 @@ jobs:
   generate-changelog:
     name: Generate Changelog
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    # if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     outputs:
       changelog: ${{ steps.git-cliff.outputs.content }}
     steps:
@@ -61,12 +61,16 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+      - name: get git debug info
+        run: git remote -v
       - name: Generate CHANGELOG
         uses: orhun/git-cliff-action@v4
         id: git-cliff
         with:
-          args: -vv --latest --strip header
+          args: --verbose --latest
           github_token: ${{ github.token }}
+      - name: Print the changelog
+        run: cat "${{ steps.git-cliff.outputs.changelog }}"
   release:
     name: Release
     needs: [tests, generate-changelog]
