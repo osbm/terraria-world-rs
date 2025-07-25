@@ -217,10 +217,10 @@ pub struct TileMatrix {
 }
 
 impl TileMatrix {
-    pub fn new() -> Self {
+    pub fn new(size: (usize, usize)) -> Self {
         Self {
-            tiles: Vec::new(),
-            size: (0, 0),
+            tiles: vec![vec![Tile::new(); size.1]; size.0],
+            size,
         }
     }
 

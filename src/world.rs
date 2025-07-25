@@ -216,7 +216,7 @@ impl World {
             sundial_is_running: false,
             moondial_is_running: false,
             moondial_cooldown: 0,
-            tiles: TileMatrix::new(),
+            tiles: TileMatrix::new((world_width as usize, world_height as usize)),
             chests_max_items: 0,
             chests: Vec::new(),
             signs: Vec::new(),
@@ -2218,7 +2218,7 @@ impl World {
         world_size: (usize, usize),
         tile_frame_important: &[bool],
     ) -> TileMatrix {
-        let mut tm = TileMatrix::new();
+        let mut tm = TileMatrix::new((0, 0));
         let (width, height) = world_size;
 
         for _ in 0..width {
