@@ -4,6 +4,9 @@ authors = ["osbm"]
 description = "A Rust library for reading and writing Terraria world files."
 language = "en"
 
+[build]
+extra-watch-dirs = ["../data"]
+
 [output.html]
 git-repository-url = "https://github.com/osbm/terraria-world-rs"
 edit-url-template = "https://github.com/osbm/terraria-world-rs/edit/main/docs/{path}"
