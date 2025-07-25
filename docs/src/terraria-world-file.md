@@ -6,26 +6,26 @@ Terraria world files (.wld) are structured into 11 distinct sections, each conta
 
 ### 1. File Header
 
-| Variable Name | Bytes | Data Type | Possible Values | Explanation |
-|---------------|-------|-----------|-----------------|-------------|
-| `version_integer` | 4 | i32 | 279 (1.4.4.9), 278 (1.4.4.8), etc. | Terraria version number |
-| `magic` | 7 | String |"relogic" | Magic string identifier |
-| `savefile_type` | 1 | u8 | 0 | File type identifier |
-| `revision` | 4 | u32 | 0 | Revision number |
-| `is_favorite` | 8 | u64 | 0 or 1 | Whether world is marked as favorite (Why so big?) |
-| `pointer_count` | 2 | u16 | 11 | Number of section pointers. This seems to be constant on all 1.4.4.9 worlds |
-| `pointer_vector` | `pointer_count` * 4 | Vec\<u32> | Depends on the worlds contents | Vector of section pointers, a map for this file |
-| `tile_frame_important_count` | 2 | i16 | ?? | Number of bits for the tile_frame_important vector |
-| `tile_frame_important` | ceil(`tile_frame_important_count`/8) | Vec\<bool> | ?? | ?? |
+| Field | Type | Description |
+|-------|------|-------------|
+| `version_integer` | i32 | Terraria version (279 for 1.4.4.9, 278 for 1.4.4.8, etc.) |
+| `magic` | String | Magic identifier: "relogic" |
+| `savefile_type` | u8 | File type identifier (0) |
+| `revision` | u32 | Revision number (0) |
+| `is_favorite` | u64 | World favorite status (0 or 1) |
+| `pointer_count` | u16 | Number of section pointers (11 for 1.4.4.9) |
+| `pointer_vector` | Vec\<u32> | Section pointer map |
+| `tile_frame_important_count` | i16 | Bits for tile_frame_important vector |
+| `tile_frame_important` | Vec\<bool> | Tile frame importance data |
 
 
 ### 2. World Header
 
 The world metadata. Defeated bosses, biome styles,
 
-| Variable Name | Bytes | Data Type | Possible Values | Explanation |
-|---------------|-------|-----------|-----------------|-------------|
-| `world_name` | length of string | String | * | Name of the world |
+| Field | Type | Description |
+|-------|------|-------------|
+| `world_name` | String | Name of the world |
 
 This is a bit too long i got lazy.
 
