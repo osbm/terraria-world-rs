@@ -20,10 +20,7 @@ mod test_utils {
     pub fn assert_approx_eq(actual: f64, expected: f64, tolerance: f64) {
         assert!(
             (actual - expected).abs() < tolerance,
-            "Expected {} to be within {} of {}",
-            actual,
-            tolerance,
-            expected
+            "Expected {actual} to be within {tolerance} of {expected}"
         );
     }
 
@@ -65,7 +62,7 @@ mod test_utils {
 
         for (flag_name, actual_value) in flags {
             let expected_value = metadata[flag_name].as_bool().unwrap();
-            assert_eq!(actual_value, expected_value, "{} flag mismatch", flag_name);
+            assert_eq!(actual_value, expected_value, "{flag_name} flag mismatch");
         }
 
         // Spawn and dungeon points
@@ -144,23 +141,17 @@ mod test_utils {
         assert_eq!(
             tile.has_block(),
             tile_ref["has_block"].as_bool().unwrap(),
-            "Block presence mismatch at ({}, {})",
-            x,
-            y
+            "Block presence mismatch at ({x}, {y})"
         );
         assert_eq!(
             tile.has_wall(),
             tile_ref["has_wall"].as_bool().unwrap(),
-            "Wall presence mismatch at ({}, {})",
-            x,
-            y
+            "Wall presence mismatch at ({x}, {y})"
         );
         assert_eq!(
             tile.liquid_type != LiquidType::NoLiquid && tile.liquid_amount > 0,
             tile_ref["has_liquid"].as_bool().unwrap(),
-            "Liquid presence mismatch at ({}, {})",
-            x,
-            y
+            "Liquid presence mismatch at ({x}, {y})"
         );
 
         // Validate wiring
@@ -168,30 +159,22 @@ mod test_utils {
         assert_eq!(
             tile.red_wire,
             wiring_ref["red"].as_bool().unwrap(),
-            "Red wiring mismatch at ({}, {})",
-            x,
-            y
+            "Red wiring mismatch at ({x}, {y})"
         );
         assert_eq!(
             tile.blue_wire,
             wiring_ref["blue"].as_bool().unwrap(),
-            "Blue wiring mismatch at ({}, {})",
-            x,
-            y
+            "Blue wiring mismatch at ({x}, {y})"
         );
         assert_eq!(
             tile.green_wire,
             wiring_ref["green"].as_bool().unwrap(),
-            "Green wiring mismatch at ({}, {})",
-            x,
-            y
+            "Green wiring mismatch at ({x}, {y})"
         );
         assert_eq!(
             tile.yellow_wire,
             wiring_ref["yellow"].as_bool().unwrap(),
-            "Yellow wiring mismatch at ({}, {})",
-            x,
-            y
+            "Yellow wiring mismatch at ({x}, {y})"
         );
 
         // Validate block data
@@ -200,70 +183,52 @@ mod test_utils {
             assert_eq!(
                 tile.block_id,
                 block_ref["type_id"].as_u64().unwrap() as u16,
-                "Block type mismatch at ({}, {})",
-                x,
-                y
+                "Block type mismatch at ({x}, {y})"
             );
             assert_eq!(
                 tile.block_active,
                 block_ref["is_active"].as_bool().unwrap(),
-                "Block active state mismatch at ({}, {})",
-                x,
-                y
+                "Block active state mismatch at ({x}, {y})"
             );
             assert_eq!(
                 tile.block_paint.is_some(),
                 block_ref["has_paint"].as_bool().unwrap(),
-                "Block paint presence mismatch at ({}, {})",
-                x,
-                y
+                "Block paint presence mismatch at ({x}, {y})"
             );
             assert_eq!(
                 tile.block_illuminant,
                 block_ref["is_illuminant"].as_bool().unwrap(),
-                "Block illuminant state mismatch at ({}, {})",
-                x,
-                y
+                "Block illuminant state mismatch at ({x}, {y})"
             );
             assert_eq!(
                 tile.block_echo,
                 block_ref["is_echo"].as_bool().unwrap(),
-                "Block echo state mismatch at ({}, {})",
-                x,
-                y
+                "Block echo state mismatch at ({x}, {y})"
             );
 
             if let Some(paint_id) = block_ref["paint_id"].as_u64() {
                 assert_eq!(
                     tile.block_paint.unwrap(),
                     paint_id as u8,
-                    "Block paint ID mismatch at ({}, {})",
-                    x,
-                    y
+                    "Block paint ID mismatch at ({x}, {y})"
                 );
             }
 
             if let Some(frame_ref) = block_ref.get("frame") {
                 assert!(
                     tile.block_frame.is_some(),
-                    "Block frame missing at ({}, {})",
-                    x,
-                    y
+                    "Block frame missing at ({x}, {y})"
                 );
                 let frame = tile.block_frame.as_ref().unwrap();
                 assert_eq!(
                     frame.x,
                     frame_ref["x"].as_u64().unwrap() as u16,
-                    "Block frame X mismatch at ({}, {})",
-                    x,
-                    y
+                    "Block frame X mismatch at ({x}, {y})"
                 );
                 assert_eq!(
                     frame.y,
                     frame_ref["y"].as_u64().unwrap() as u16,
-                    "Block frame Y mismatch at ({}, {})",
-                    x,
-                    y
+                    "Block frame Y mismatch at ({x}, {y})"
                 );
             }
         }
@@ -274,39 +239,29 @@ mod test_utils {
             assert_eq!(
                 tile.wall_id,
                 wall_ref["type_id"].as_u64().unwrap() as u16,
-                "Wall type mismatch at ({}, {})",
-                x,
-                y
+                "Wall type mismatch at ({x}, {y})"
             );
             assert_eq!(
                 tile.wall_paint.is_some(),
                 wall_ref["has_paint"].as_bool().unwrap(),
-                "Wall paint presence mismatch at ({}, {})",
-                x,
-                y
+                "Wall paint presence mismatch at ({x}, {y})"
             );
             assert_eq!(
                 tile.wall_illuminant,
                 wall_ref["is_illuminant"].as_bool().unwrap(),
-                "Wall illuminant state mismatch at ({}, {})",
-                x,
-                y
+                "Wall illuminant state mismatch at ({x}, {y})"
             );
             assert_eq!(
                 tile.wall_echo,
                 wall_ref["is_echo"].as_bool().unwrap(),
-                "Wall echo state mismatch at ({}, {})",
-                x,
-                y
+                "Wall echo state mismatch at ({x}, {y})"
             );
 
             if let Some(paint_id) = wall_ref["paint_id"].as_u64() {
                 assert_eq!(
                     tile.wall_paint.unwrap(),
                     paint_id as u8,
-                    "Wall paint ID mismatch at ({}, {})",
-                    x,
-                    y
+                    "Wall paint ID mismatch at ({x}, {y})"
                 );
             }
         }
@@ -317,16 +272,12 @@ mod test_utils {
             assert_eq!(
                 tile.liquid_type as u8,
                 liquid_ref["type_id"].as_u64().unwrap() as u8,
-                "Liquid type mismatch at ({}, {})",
-                x,
-                y
+                "Liquid type mismatch at ({x}, {y})"
             );
             assert_eq!(
                 tile.liquid_amount,
                 liquid_ref["volume"].as_u64().unwrap() as u8,
-                "Liquid volume mismatch at ({}, {})",
-                x,
-                y
+                "Liquid volume mismatch at ({x}, {y})"
             );
         }
 
@@ -435,7 +386,7 @@ fn test_world_parsing_against_lihzahrd() {
     }
 
     for world_file in world_files {
-        println!("Testing world file: {}", world_file);
+        println!("Testing world file: {world_file}");
 
         let reference_file = format!(
             "{}.lihzahrd_reference.json",
@@ -445,8 +396,7 @@ fn test_world_parsing_against_lihzahrd() {
         // Skip if reference file doesn't exist
         if !Path::new(&reference_file).exists() {
             eprintln!(
-                "Reference file {} not found. Run the Python integration test first.",
-                reference_file
+                "Reference file {reference_file} not found. Run the Python integration test first."
             );
             continue;
         }
@@ -456,8 +406,7 @@ fn test_world_parsing_against_lihzahrd() {
             Ok(w) => w,
             Err(e) => {
                 eprintln!(
-                    "Failed to parse world {} with Rust implementation: {}",
-                    world_file, e
+                    "Failed to parse world {world_file} with Rust implementation: {e}"
                 );
                 continue;
             }
@@ -468,8 +417,7 @@ fn test_world_parsing_against_lihzahrd() {
             Ok(data) => data,
             Err(e) => {
                 eprintln!(
-                    "Failed to load reference data from {}: {}",
-                    reference_file, e
+                    "Failed to load reference data from {reference_file}: {e}"
                 );
                 continue;
             }
@@ -477,14 +425,13 @@ fn test_world_parsing_against_lihzahrd() {
 
         // Validate world metadata
         if let Err(e) = validate_world_metadata(&world, &reference_data["metadata"]) {
-            panic!("World metadata validation failed for {}: {}", world_file, e);
+            panic!("World metadata validation failed for {world_file}: {e}");
         }
 
         // Validate tile frame important array
         if let Err(e) = validate_tile_frame_important(&world, &reference_data["metadata"]) {
             panic!(
-                "Tile frame important validation failed for {}: {}",
-                world_file, e
+                "Tile frame important validation failed for {world_file}: {e}"
             );
         }
 
@@ -499,16 +446,14 @@ fn test_world_parsing_against_lihzahrd() {
             let tile = &world.tiles.tiles[x][y];
             if let Err(e) = validate_tile(tile, tile_ref) {
                 panic!(
-                    "Tile validation failed for {} at ({}, {}): {}",
-                    world_file, x, y, e
+                    "Tile validation failed for {world_file} at ({x}, {y}): {e}"
                 );
             }
             validated_tiles += 1;
         }
 
         println!(
-            "Successfully validated {} tiles for {}",
-            validated_tiles, world_file
+            "Successfully validated {validated_tiles} tiles for {world_file}"
         );
 
         // Validate entities
@@ -516,14 +461,12 @@ fn test_world_parsing_against_lihzahrd() {
         assert_eq!(
             world.npcs.len(),
             ref_npcs.len(),
-            "NPC count mismatch for {}",
-            world_file
+            "NPC count mismatch for {world_file}"
         );
         for (i, (npc, ref_npc)) in world.npcs.iter().zip(ref_npcs.iter()).enumerate() {
             if let Err(e) = validate_npc(npc, ref_npc) {
                 panic!(
-                    "NPC validation failed for {} at index {}: {}",
-                    world_file, i, e
+                    "NPC validation failed for {world_file} at index {i}: {e}"
                 );
             }
         }
@@ -532,14 +475,12 @@ fn test_world_parsing_against_lihzahrd() {
         assert_eq!(
             world.mobs.len(),
             ref_mobs.len(),
-            "Mob count mismatch for {}",
-            world_file
+            "Mob count mismatch for {world_file}"
         );
         for (i, (mob, ref_mob)) in world.mobs.iter().zip(ref_mobs.iter()).enumerate() {
             if let Err(e) = validate_mob(mob, ref_mob) {
                 panic!(
-                    "Mob validation failed for {} at index {}: {}",
-                    world_file, i, e
+                    "Mob validation failed for {world_file} at index {i}: {e}"
                 );
             }
         }
@@ -548,8 +489,7 @@ fn test_world_parsing_against_lihzahrd() {
         assert_eq!(
             world.shimmered_npcs.len(),
             ref_shimmered_npcs.len(),
-            "Shimmered NPC count mismatch for {}",
-            world_file
+            "Shimmered NPC count mismatch for {world_file}"
         );
         for (i, (shimmered_npc, ref_shimmered_npc)) in world
             .shimmered_npcs
@@ -560,9 +500,7 @@ fn test_world_parsing_against_lihzahrd() {
             assert_eq!(
                 *shimmered_npc,
                 ref_shimmered_npc.as_i64().unwrap() as i32,
-                "Shimmered NPC {} mismatch for {}",
-                i,
-                world_file
+                "Shimmered NPC {i} mismatch for {world_file}"
             );
         }
 
@@ -586,12 +524,12 @@ fn test_world_parsing_basic_functionality() {
     }
 
     for world_file in world_files {
-        println!("Testing basic functionality for: {}", world_file);
+        println!("Testing basic functionality for: {world_file}");
 
         let world = match World::from_file(&world_file) {
             Ok(w) => w,
             Err(e) => {
-                eprintln!("Failed to parse world {}: {}", world_file, e);
+                eprintln!("Failed to parse world {world_file}: {e}");
                 continue;
             }
         };
@@ -653,8 +591,7 @@ fn test_world_parsing_basic_functionality() {
             "Should be able to access at least some tiles"
         );
         println!(
-            "Successfully accessed {} tiles for {}",
-            accessible_tiles, world_file
+            "Successfully accessed {accessible_tiles} tiles for {world_file}"
         );
     }
 }
@@ -670,14 +607,13 @@ fn test_tile_frame_important_consistency() {
 
     for world_file in world_files {
         println!(
-            "Testing tile frame important consistency for: {}",
-            world_file
+            "Testing tile frame important consistency for: {world_file}"
         );
 
         let world = match World::from_file(&world_file) {
             Ok(w) => w,
             Err(e) => {
-                eprintln!("Failed to parse world {}: {}", world_file, e);
+                eprintln!("Failed to parse world {world_file}: {e}");
                 continue;
             }
         };
@@ -723,8 +659,7 @@ fn test_world_file_validation() {
             let result = World::from_file(invalid_file);
             assert!(
                 result.is_err(),
-                "Should fail to parse invalid file: {}",
-                invalid_file
+                "Should fail to parse invalid file: {invalid_file}"
             );
         }
     }
@@ -737,8 +672,7 @@ fn test_world_file_validation() {
         let result = World::from_file(test_invalid_file);
         assert!(
             result.is_err(),
-            "Should fail to parse invalid world file: {}",
-            test_invalid_file
+            "Should fail to parse invalid world file: {test_invalid_file}"
         );
     }
 }
@@ -752,15 +686,14 @@ fn test_chests_against_lihzahrd() {
         return;
     }
     for world_file in world_files {
-        println!("Testing chests for world file: {}", world_file);
+        println!("Testing chests for world file: {world_file}");
         let reference_file = format!(
             "{}.lihzahrd_reference.json",
             world_file.trim_end_matches(".wld")
         );
         if !Path::new(&reference_file).exists() {
             eprintln!(
-                "Reference file {} not found. Run the Python integration test first.",
-                reference_file
+                "Reference file {reference_file} not found. Run the Python integration test first."
             );
             continue;
         }
@@ -768,8 +701,7 @@ fn test_chests_against_lihzahrd() {
             Ok(w) => w,
             Err(e) => {
                 eprintln!(
-                    "Failed to parse world {} with Rust implementation: {}",
-                    world_file, e
+                    "Failed to parse world {world_file} with Rust implementation: {e}"
                 );
                 continue;
             }
@@ -778,8 +710,7 @@ fn test_chests_against_lihzahrd() {
             Ok(data) => data,
             Err(e) => {
                 eprintln!(
-                    "Failed to load reference data from {}: {}",
-                    reference_file, e
+                    "Failed to load reference data from {reference_file}: {e}"
                 );
                 continue;
             }
@@ -788,34 +719,29 @@ fn test_chests_against_lihzahrd() {
         assert_eq!(
             world.chests.len(),
             ref_chests.len(),
-            "Chest count mismatch for {}",
-            world_file
+            "Chest count mismatch for {world_file}"
         );
         for (i, (chest, ref_chest)) in world.chests.iter().zip(ref_chests.iter()).enumerate() {
             assert_eq!(
                 chest.position.x,
                 ref_chest["position"]["x"].as_i64().unwrap() as i32,
-                "Chest {} x position mismatch",
-                i
+                "Chest {i} x position mismatch"
             );
             assert_eq!(
                 chest.position.y,
                 ref_chest["position"]["y"].as_i64().unwrap() as i32,
-                "Chest {} y position mismatch",
-                i
+                "Chest {i} y position mismatch"
             );
             assert_eq!(
                 chest.name,
                 ref_chest["name"].as_str().unwrap(),
-                "Chest {} name mismatch",
-                i
+                "Chest {i} name mismatch"
             );
             let ref_contents = ref_chest["contents"].as_array().unwrap();
             assert_eq!(
                 chest.contents.len(),
                 ref_contents.len(),
-                "Chest {} contents length mismatch",
-                i
+                "Chest {i} contents length mismatch"
             );
             for (j, (item, ref_item)) in chest.contents.iter().zip(ref_contents.iter()).enumerate()
             {
@@ -825,26 +751,20 @@ fn test_chests_against_lihzahrd() {
                         assert_eq!(
                             item.quantity,
                             obj["quantity"].as_i64().unwrap() as i16,
-                            "Chest {} item {} quantity mismatch",
-                            i,
-                            j
+                            "Chest {i} item {j} quantity mismatch"
                         );
                         assert_eq!(
                             item.type_id,
                             obj["type_id"].as_i64().unwrap() as i32,
-                            "Chest {} item {} type_id mismatch",
-                            i,
-                            j
+                            "Chest {i} item {j} type_id mismatch"
                         );
                         assert_eq!(
                             item.prefix,
                             obj["prefix"].as_u64().unwrap() as u8,
-                            "Chest {} item {} prefix mismatch",
-                            i,
-                            j
+                            "Chest {i} item {j} prefix mismatch"
                         );
                     }
-                    (_, _) => panic!("Chest {} item {}: Rust None but Python not null", i, j),
+                    (_, _) => panic!("Chest {i} item {j}: Rust None but Python not null"),
                 }
             }
         }
@@ -865,15 +785,14 @@ fn test_entities_against_lihzahrd() {
         return;
     }
     for world_file in world_files {
-        println!("Testing entities for world file: {}", world_file);
+        println!("Testing entities for world file: {world_file}");
         let reference_file = format!(
             "{}.lihzahrd_reference.json",
             world_file.trim_end_matches(".wld")
         );
         if !Path::new(&reference_file).exists() {
             eprintln!(
-                "Reference file {} not found. Run the Python integration test first.",
-                reference_file
+                "Reference file {reference_file} not found. Run the Python integration test first."
             );
             continue;
         }
@@ -881,8 +800,7 @@ fn test_entities_against_lihzahrd() {
             Ok(w) => w,
             Err(e) => {
                 eprintln!(
-                    "Failed to parse world {} with Rust implementation: {}",
-                    world_file, e
+                    "Failed to parse world {world_file} with Rust implementation: {e}"
                 );
                 continue;
             }
@@ -891,8 +809,7 @@ fn test_entities_against_lihzahrd() {
             Ok(data) => data,
             Err(e) => {
                 eprintln!(
-                    "Failed to load reference data from {}: {}",
-                    reference_file, e
+                    "Failed to load reference data from {reference_file}: {e}"
                 );
                 continue;
             }
@@ -903,14 +820,12 @@ fn test_entities_against_lihzahrd() {
         assert_eq!(
             world.npcs.len(),
             ref_npcs.len(),
-            "NPC count mismatch for {}",
-            world_file
+            "NPC count mismatch for {world_file}"
         );
         for (i, (npc, ref_npc)) in world.npcs.iter().zip(ref_npcs.iter()).enumerate() {
             if let Err(e) = validate_npc(npc, ref_npc) {
                 panic!(
-                    "NPC validation failed for {} at index {}: {}",
-                    world_file, i, e
+                    "NPC validation failed for {world_file} at index {i}: {e}"
                 );
             }
         }
@@ -920,14 +835,12 @@ fn test_entities_against_lihzahrd() {
         assert_eq!(
             world.mobs.len(),
             ref_mobs.len(),
-            "Mob count mismatch for {}",
-            world_file
+            "Mob count mismatch for {world_file}"
         );
         for (i, (mob, ref_mob)) in world.mobs.iter().zip(ref_mobs.iter()).enumerate() {
             if let Err(e) = validate_mob(mob, ref_mob) {
                 panic!(
-                    "Mob validation failed for {} at index {}: {}",
-                    world_file, i, e
+                    "Mob validation failed for {world_file} at index {i}: {e}"
                 );
             }
         }
@@ -937,8 +850,7 @@ fn test_entities_against_lihzahrd() {
         assert_eq!(
             world.shimmered_npcs.len(),
             ref_shimmered_npcs.len(),
-            "Shimmered NPC count mismatch for {}",
-            world_file
+            "Shimmered NPC count mismatch for {world_file}"
         );
         for (i, (shimmered_npc, ref_shimmered_npc)) in world
             .shimmered_npcs
@@ -949,9 +861,7 @@ fn test_entities_against_lihzahrd() {
             assert_eq!(
                 *shimmered_npc,
                 ref_shimmered_npc.as_i64().unwrap() as i32,
-                "Shimmered NPC {} mismatch for {}",
-                i,
-                world_file
+                "Shimmered NPC {i} mismatch for {world_file}"
             );
         }
 
@@ -990,9 +900,9 @@ fn test_tile_entity_parsing() {
     }
     for wld_file in wld_files {
         let file_name = wld_file.file_name().unwrap().to_str().unwrap();
-        println!("Testing tile entities for: {}", file_name);
+        println!("Testing tile entities for: {file_name}");
         let world = World::from_file(wld_file.to_str().unwrap())
-            .expect(&format!("Failed to read world file: {}", file_name));
+            .unwrap_or_else(|_| panic!("Failed to read world file: {file_name}"));
         println!("Found {} tile entities", world.tile_entities.len());
         // Basic assertion: tile entities count should be non-negative (always true for Vec)
         // assert!(world.tile_entities.len() >= 0); // This is always true for Vec
@@ -1014,14 +924,14 @@ fn test_tile_entity_parsing() {
         }
         println!("Tile entity type counts: {{");
         for (type_str, count) in &type_counts {
-            println!("  {}: {}", type_str, count);
+            println!("  {type_str}: {count}");
         }
         println!("}}\n");
         // Optionally, check the first tile entity for expected fields
         if let Some(first) = world.tile_entities.first() {
             match &first.extra {
                 Some(TileEntityExtra::TargetDummy { npc }) => {
-                    println!("First tile entity is TargetDummy with npc: {}", npc);
+                    println!("First tile entity is TargetDummy with npc: {npc}");
                 }
                 Some(TileEntityExtra::ItemFrame { item }) => {
                     println!(
@@ -1034,8 +944,7 @@ fn test_tile_entity_parsing() {
                     enabled,
                 }) => {
                     println!(
-                        "First tile entity is LogicSensor with logic_check: {}, enabled: {}",
-                        logic_check, enabled
+                        "First tile entity is LogicSensor with logic_check: {logic_check}, enabled: {enabled}"
                     );
                 }
                 Some(TileEntityExtra::Mannequin { items, dyes }) => {
@@ -1100,9 +1009,9 @@ fn test_weighed_pressure_plates_parsing() {
     }
     for wld_file in wld_files {
         let file_name = wld_file.file_name().unwrap().to_str().unwrap();
-        println!("Testing weighed pressure plates for: {}", file_name);
+        println!("Testing weighed pressure plates for: {file_name}");
         let world = World::from_file(wld_file.to_str().unwrap())
-            .expect(&format!("Failed to read world file: {}", file_name));
+            .unwrap_or_else(|_| panic!("Failed to read world file: {file_name}"));
         println!(
             "Found {} weighed pressure plates",
             world.weighed_pressure_plates.len()
@@ -1148,9 +1057,9 @@ fn test_town_manager_parsing() {
     }
     for wld_file in wld_files {
         let file_name = wld_file.file_name().unwrap().to_str().unwrap();
-        println!("Testing town manager (rooms) for: {}", file_name);
+        println!("Testing town manager (rooms) for: {file_name}");
         let world = World::from_file(wld_file.to_str().unwrap())
-            .expect(&format!("Failed to read world file: {}", file_name));
+            .unwrap_or_else(|_| panic!("Failed to read world file: {file_name}"));
         println!("Found {} rooms", world.rooms.len());
         // Basic assertion: rooms count should be non-negative (always true for Vec)
         // assert!(world.rooms.len() >= 0); // This is always true for Vec
@@ -1193,9 +1102,9 @@ fn test_bestiary_parsing() {
     }
     for wld_file in wld_files {
         let file_name = wld_file.file_name().unwrap().to_str().unwrap();
-        println!("Testing bestiary for: {}", file_name);
+        println!("Testing bestiary for: {file_name}");
         let world = World::from_file(wld_file.to_str().unwrap())
-            .expect(&format!("Failed to read world file: {}", file_name));
+            .unwrap_or_else(|_| panic!("Failed to read world file: {file_name}"));
         println!("Bestiary stats:");
         println!("  Kills: {} entries", world.bestiary.kills.len());
         println!("  Sightings: {} entries", world.bestiary.sightings.len());
@@ -1205,9 +1114,9 @@ fn test_bestiary_parsing() {
         let mut kill_iter = world.bestiary.kills.iter().take(5);
         if let Some((entity, kills)) = kill_iter.next() {
             println!("  Sample kills:");
-            println!("    {}: {}", entity, kills);
+            println!("    {entity}: {kills}");
             for (entity, kills) in kill_iter {
-                println!("    {}: {}", entity, kills);
+                println!("    {entity}: {kills}");
             }
         }
 
@@ -1215,7 +1124,7 @@ fn test_bestiary_parsing() {
         if !world.bestiary.sightings.is_empty() {
             println!("  Sample sightings:");
             for entity in world.bestiary.sightings.iter().take(5) {
-                println!("    {}", entity);
+                println!("    {entity}");
             }
         }
 
@@ -1223,7 +1132,7 @@ fn test_bestiary_parsing() {
         if !world.bestiary.chats.is_empty() {
             println!("  Sample chats:");
             for entity in world.bestiary.chats.iter().take(5) {
-                println!("    {}", entity);
+                println!("    {entity}");
             }
         }
         println!();
@@ -1257,9 +1166,9 @@ fn test_journey_powers_parsing() {
     }
     for wld_file in wld_files {
         let file_name = wld_file.file_name().unwrap().to_str().unwrap();
-        println!("Testing journey powers for: {}", file_name);
+        println!("Testing journey powers for: {file_name}");
         let world = World::from_file(wld_file.to_str().unwrap())
-            .expect(&format!("Failed to read world file: {}", file_name));
+            .unwrap_or_else(|_| panic!("Failed to read world file: {file_name}"));
         println!("Journey powers:");
         println!("  Freeze time: {}", world.journey_powers.freeze_time);
         println!("  Time rate: {}", world.journey_powers.time_rate);
