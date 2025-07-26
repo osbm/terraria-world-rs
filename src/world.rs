@@ -892,7 +892,7 @@ impl World {
             defeated_duke_fishron,
             defeated_martian_madness,
             defeated_lunatic_cultist,
-            defeated_moon_lord: defeated_moon_lord,
+            defeated_moon_lord,
             defeated_pumpking,
             defeated_mourning_wood,
             defeated_ice_queen,
