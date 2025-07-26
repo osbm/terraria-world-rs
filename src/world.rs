@@ -9,21 +9,21 @@ pub mod bestiary;
 pub mod chest;
 pub mod coordinates;
 pub mod enums;
+pub mod environment;
 pub mod error;
+pub mod game_progression;
+pub mod invasions;
 pub mod item;
 pub mod journey_powers;
 pub mod mob;
 pub mod npc;
 pub mod pressure_plate;
 pub mod room;
+pub mod saved_npcs;
 pub mod sign;
 pub mod tile;
 pub mod tile_entity;
-pub mod game_progression;
-pub mod saved_npcs;
-pub mod environment;
 pub mod weather_events;
-pub mod invasions;
 
 use self::enums::LiquidType;
 use self::tile::{FrameImportantData, Tile, TileMatrix};
@@ -33,22 +33,20 @@ use serde::{Deserialize, Serialize};
 use crate::world::bestiary::Bestiary;
 use crate::world::chest::Chest;
 use crate::world::coordinates::Coordinates;
+use crate::world::environment::WorldEnvironment;
 use crate::world::error::InvalidFooterError;
+use crate::world::game_progression::GameProgression;
+use crate::world::invasions::InvasionData;
 use crate::world::item::ItemStack;
 use crate::world::journey_powers::JourneyPowers;
 use crate::world::mob::Mob;
 use crate::world::npc::NPC;
 use crate::world::pressure_plate::WeighedPressurePlate;
 use crate::world::room::Room;
+use crate::world::saved_npcs::SavedNPCs;
 use crate::world::sign::Sign;
 use crate::world::tile_entity::{TileEntity, TileEntityExtra};
-use crate::world::game_progression::GameProgression;
-use crate::world::saved_npcs::SavedNPCs;
-use crate::world::environment::WorldEnvironment;
 use crate::world::weather_events::WeatherAndEvents;
-use crate::world::invasions::InvasionData;
-
-
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct World {
@@ -166,12 +164,7 @@ impl World {
             generator_version: 0,
             uuid: Uuid::new_v4().to_string(),
             id: rand::rng().random_range(1..=i32::MAX),
-            bounds_vec: vec![
-                0,
-                world_width * 16,
-                0,
-                world_height * 16,
-            ],
+            bounds_vec: vec![0, world_width * 16, 0, world_height * 16],
             world_height,
             world_width,
             difficulty_value,
@@ -183,7 +176,9 @@ impl World {
             is_upside_down: false,
             is_trap_world: false,
             is_zenith_world: false,
-            created_on: chrono::Utc::now().format("%Y-%m-%d %H:%M:%S%.f").to_string(),
+            created_on: chrono::Utc::now()
+                .format("%Y-%m-%d %H:%M:%S%.f")
+                .to_string(),
             game_progression: GameProgression::default(),
             saved_npcs: SavedNPCs::default(),
             environment: WorldEnvironment::default(),
@@ -1983,7 +1978,6 @@ impl World {
                         writer.i16(item.type_id as i16);
                         writer.u8(item.prefix);
                         writer.i16(item.quantity);
-
                     }
                 }
                 Some(crate::world::TileEntityExtra::Plate { item }) => {

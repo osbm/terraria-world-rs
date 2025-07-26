@@ -18,13 +18,11 @@ fn main() {
     // println!("World Environment: {:#?}", world.environment);
     // println!("Weather and Events: {:#?}", world.weather_events);
     // println!("Invasion Data: {:#?}", world.invasions);
-// use std::env;
-
+    // use std::env;
 
     let mut world2 = World::new("example_world", "large", "classic");
 
-    world2.save_as_wld("example_world2.wld").expect("Failed to save world");
-
-    }
-
-
+    world2
+        .save_as_wld("example_world2.wld")
+        .expect("Failed to save world");
+}

@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct GameProgression {
     // Boss defeats
     pub defeated_eye_of_cthulhu: bool,

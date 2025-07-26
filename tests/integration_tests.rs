@@ -405,9 +405,7 @@ fn test_world_parsing_against_lihzahrd() {
         let world = match World::from_file(&world_file) {
             Ok(w) => w,
             Err(e) => {
-                eprintln!(
-                    "Failed to parse world {world_file} with Rust implementation: {e}"
-                );
+                eprintln!("Failed to parse world {world_file} with Rust implementation: {e}");
                 continue;
             }
         };
@@ -416,9 +414,7 @@ fn test_world_parsing_against_lihzahrd() {
         let reference_data = match load_reference_data(&reference_file) {
             Ok(data) => data,
             Err(e) => {
-                eprintln!(
-                    "Failed to load reference data from {reference_file}: {e}"
-                );
+                eprintln!("Failed to load reference data from {reference_file}: {e}");
                 continue;
             }
         };
@@ -430,9 +426,7 @@ fn test_world_parsing_against_lihzahrd() {
 
         // Validate tile frame important array
         if let Err(e) = validate_tile_frame_important(&world, &reference_data["metadata"]) {
-            panic!(
-                "Tile frame important validation failed for {world_file}: {e}"
-            );
+            panic!("Tile frame important validation failed for {world_file}: {e}");
         }
 
         // Validate sample tiles
@@ -445,16 +439,12 @@ fn test_world_parsing_against_lihzahrd() {
 
             let tile = &world.tiles.tiles[x][y];
             if let Err(e) = validate_tile(tile, tile_ref) {
-                panic!(
-                    "Tile validation failed for {world_file} at ({x}, {y}): {e}"
-                );
+                panic!("Tile validation failed for {world_file} at ({x}, {y}): {e}");
             }
             validated_tiles += 1;
         }
 
-        println!(
-            "Successfully validated {validated_tiles} tiles for {world_file}"
-        );
+        println!("Successfully validated {validated_tiles} tiles for {world_file}");
 
         // Validate entities
         let ref_npcs = reference_data["npcs"].as_array().unwrap();
@@ -465,9 +455,7 @@ fn test_world_parsing_against_lihzahrd() {
         );
         for (i, (npc, ref_npc)) in world.npcs.iter().zip(ref_npcs.iter()).enumerate() {
             if let Err(e) = validate_npc(npc, ref_npc) {
-                panic!(
-                    "NPC validation failed for {world_file} at index {i}: {e}"
-                );
+                panic!("NPC validation failed for {world_file} at index {i}: {e}");
             }
         }
 
@@ -479,9 +467,7 @@ fn test_world_parsing_against_lihzahrd() {
         );
         for (i, (mob, ref_mob)) in world.mobs.iter().zip(ref_mobs.iter()).enumerate() {
             if let Err(e) = validate_mob(mob, ref_mob) {
-                panic!(
-                    "Mob validation failed for {world_file} at index {i}: {e}"
-                );
+                panic!("Mob validation failed for {world_file} at index {i}: {e}");
             }
         }
 
@@ -590,9 +576,7 @@ fn test_world_parsing_basic_functionality() {
             accessible_tiles > 0,
             "Should be able to access at least some tiles"
         );
-        println!(
-            "Successfully accessed {accessible_tiles} tiles for {world_file}"
-        );
+        println!("Successfully accessed {accessible_tiles} tiles for {world_file}");
     }
 }
 
@@ -606,9 +590,7 @@ fn test_tile_frame_important_consistency() {
     }
 
     for world_file in world_files {
-        println!(
-            "Testing tile frame important consistency for: {world_file}"
-        );
+        println!("Testing tile frame important consistency for: {world_file}");
 
         let world = match World::from_file(&world_file) {
             Ok(w) => w,
@@ -700,18 +682,14 @@ fn test_chests_against_lihzahrd() {
         let world = match World::from_file(&world_file) {
             Ok(w) => w,
             Err(e) => {
-                eprintln!(
-                    "Failed to parse world {world_file} with Rust implementation: {e}"
-                );
+                eprintln!("Failed to parse world {world_file} with Rust implementation: {e}");
                 continue;
             }
         };
         let reference_data = match load_reference_data(&reference_file) {
             Ok(data) => data,
             Err(e) => {
-                eprintln!(
-                    "Failed to load reference data from {reference_file}: {e}"
-                );
+                eprintln!("Failed to load reference data from {reference_file}: {e}");
                 continue;
             }
         };
@@ -799,18 +777,14 @@ fn test_entities_against_lihzahrd() {
         let world = match World::from_file(&world_file) {
             Ok(w) => w,
             Err(e) => {
-                eprintln!(
-                    "Failed to parse world {world_file} with Rust implementation: {e}"
-                );
+                eprintln!("Failed to parse world {world_file} with Rust implementation: {e}");
                 continue;
             }
         };
         let reference_data = match load_reference_data(&reference_file) {
             Ok(data) => data,
             Err(e) => {
-                eprintln!(
-                    "Failed to load reference data from {reference_file}: {e}"
-                );
+                eprintln!("Failed to load reference data from {reference_file}: {e}");
                 continue;
             }
         };
@@ -824,9 +798,7 @@ fn test_entities_against_lihzahrd() {
         );
         for (i, (npc, ref_npc)) in world.npcs.iter().zip(ref_npcs.iter()).enumerate() {
             if let Err(e) = validate_npc(npc, ref_npc) {
-                panic!(
-                    "NPC validation failed for {world_file} at index {i}: {e}"
-                );
+                panic!("NPC validation failed for {world_file} at index {i}: {e}");
             }
         }
 
@@ -839,9 +811,7 @@ fn test_entities_against_lihzahrd() {
         );
         for (i, (mob, ref_mob)) in world.mobs.iter().zip(ref_mobs.iter()).enumerate() {
             if let Err(e) = validate_mob(mob, ref_mob) {
-                panic!(
-                    "Mob validation failed for {world_file} at index {i}: {e}"
-                );
+                panic!("Mob validation failed for {world_file} at index {i}: {e}");
             }
         }
 

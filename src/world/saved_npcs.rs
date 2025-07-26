@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct SavedNPCs {
     pub saved_goblin_tinkerer: bool,
     pub saved_wizard: bool,
@@ -28,7 +27,6 @@ pub struct SavedNPCs {
     pub saved_slime_mystic: bool,
     pub saved_slime_squire: bool,
 }
-
 
 // write a function to maximize the saved NPCs
 impl SavedNPCs {
