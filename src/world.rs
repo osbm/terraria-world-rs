@@ -1346,7 +1346,6 @@ impl World {
         final_writer.u32(self.revision);
         final_writer.u64(self.is_favorite);
         final_writer.u16(pointer_vector.len() as u16);
-        println!("Current offset after header: {}", final_writer.offset());
 
         // Write actual pointer values from world object for debugging section sizes
         for pointer in pointer_vector {
