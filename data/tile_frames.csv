@@ -2863,8 +2863,8 @@ id,name,variety,u,v,anchor
 110,Grass,Three Small,54,0,Right
 110,Grass,Gold Flower,72,0,Left
 110,Grass,Three Medium,90,0,Left
-110,Flowers,Purple, Immature,108,0,Left
-110,Flowers,Pink, Immature,126,0,Right
+110,Flowers,"Purple, Immature",108,0,Left
+110,Flowers,"Pink, Immature",126,0,Right
 110,Mushroom,,144,0,Bottom
 110,Small Y,,162,0,Bottom
 113,Grass,G,0,0,Bottom
