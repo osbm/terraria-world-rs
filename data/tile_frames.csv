@@ -1,104 +1,104 @@
 id,name,variety,u,v,anchor
-3,Grass,Single Blade,,,Right
-3,Grass,Double Blade,18,,Right
-3,Grass,Small Y,36,,Bottom
-3,Grass,Three Small,54,,Right
-3,Grass,Single Blade,72,,Left
-3,Grass,Three Large,90,,Left
-3,Flowers,Purple, Immature,108,,Left
-3,Flowers,Pink, Immature,126,,Right
-3,Mushroom,,144,,Bottom
-4,Torch,On,,,Bottom
-4,Torch,On,22,,Left
-4,Torch,On,44,,Right
-4,Torch,Off,66,,Bottom
-4,Torch,Off,88,,Left
-4,Torch,Off,110,,Right
-4,Blue,On,,22,Bottom
+3,Grass,Single Blade,0,0,Right
+3,Grass,Double Blade,18,0,Right
+3,Grass,Small Y,36,0,Bottom
+3,Grass,Three Small,54,0,Right
+3,Grass,Single Blade,72,0,Left
+3,Grass,Three Large,90,0,Left
+3,Flowers,"Purple, Immature",108,0,Left
+3,Flowers,"Pink, Immature",126,0,Right
+3,Mushroom,,144,0,Bottom
+4,Torch,On,0,0,Bottom
+4,Torch,On,22,0,Left
+4,Torch,On,44,0,Right
+4,Torch,Off,66,0,Bottom
+4,Torch,Off,88,0,Left
+4,Torch,Off,110,0,Right
+4,Blue,On,0,22,Bottom
 4,Blue,On,22,22,Left
 4,Blue,On,44,22,Right
 4,Blue,Off,66,22,Bottom
 4,Blue,Off,88,22,Left
 4,Blue,Off,110,22,Right
-4,Red,On,,44,Bottom
+4,Red,On,0,44,Bottom
 4,Red,On,22,44,Left
 4,Red,On,44,44,Right
 4,Red,Off,66,44,Bottom
 4,Red,Off,88,44,Left
 4,Red,Off,110,44,Right
-4,Green,On,,66,Bottom
+4,Green,On,0,66,Bottom
 4,Green,On,22,66,Left
 4,Green,On,44,66,Right
 4,Green,Off,66,66,Bottom
 4,Green,Off,88,66,Left
 4,Green,Off,110,66,Right
-4,Purple,On,,88,Bottom
+4,Purple,On,0,88,Bottom
 4,Purple,On,22,88,Left
 4,Purple,On,44,88,Right
 4,Purple,Off,66,88,Bottom
 4,Purple,Off,88,88,Left
 4,Purple,Off,110,88,Right
-4,White,On,,110,Bottom
+4,White,On,0,110,Bottom
 4,White,On,22,110,Left
 4,White,On,44,110,Right
 4,White,Off,66,110,Bottom
 4,White,Off,88,110,Left
 4,White,Off,110,110,Right
-4,Yellow,On,,132,Bottom
+4,Yellow,On,0,132,Bottom
 4,Yellow,On,22,132,Left
 4,Yellow,On,44,132,Right
 4,Yellow,Off,66,132,Bottom
 4,Yellow,Off,88,132,Left
 4,Yellow,Off,110,132,Right
-4,Demon,On,,154,Bottom
+4,Demon,On,0,154,Bottom
 4,Demon,On,22,154,Left
 4,Demon,On,44,154,Right
 4,Demon,Off,66,154,Bottom
 4,Demon,Off,88,154,Left
 4,Demon,Off,110,154,Right
-4,Cursed,On,,176,Bottom
+4,Cursed,On,0,176,Bottom
 4,Cursed,On,22,176,Left
 4,Cursed,On,44,176,Right
 4,Cursed,Off,66,176,Bottom
 4,Cursed,Off,88,176,Left
 4,Cursed,Off,110,176,Right
-4,Ice,On,,198,Bottom
+4,Ice,On,0,198,Bottom
 4,Ice,On,22,198,Left
 4,Ice,On,44,198,Right
 4,Ice,Off,66,198,Bottom
 4,Ice,Off,88,198,Left
 4,Ice,Off,110,198,Right
-4,Orange,On,,220,Bottom
+4,Orange,On,0,220,Bottom
 4,Orange,On,22,220,Left
 4,Orange,On,44,220,Right
 4,Orange,Off,66,220,Bottom
 4,Orange,Off,88,220,Left
 4,Orange,Off,110,220,Right
-4,Ichor,On,,242,Bottom
+4,Ichor,On,0,242,Bottom
 4,Ichor,On,22,242,Left
 4,Ichor,On,44,242,Right
 4,Ichor,Off,66,242,Bottom
 4,Ichor,Off,88,242,Left
 4,Ichor,Off,110,242,Right
-4,Ultrabright,On,,264,Bottom
+4,Ultrabright,On,0,264,Bottom
 4,Ultrabright,On,22,264,Left
 4,Ultrabright,On,44,264,Right
 4,Ultrabright,Off,66,264,Bottom
 4,Ultrabright,Off,88,264,Left
 4,Ultrabright,Off,110,264,Right
-4,Bone,On,,286,Bottom
+4,Bone,On,0,286,Bottom
 4,Bone,On,22,286,Left
 4,Bone,On,44,286,Right
 4,Bone,Off,66,286,Bottom
 4,Bone,Off,88,286,Left
 4,Bone,Off,110,286,Right
-4,Rainbow,On,,308,Bottom
+4,Rainbow,On,0,308,Bottom
 4,Rainbow,On,22,308,Left
 4,Rainbow,On,44,308,Right
 4,Rainbow,Off,66,308,Bottom
 4,Rainbow,Off,88,308,Left
 4,Rainbow,Off,110,308,Right
-4,Pink,On,,330,Bottom
+4,Pink,On,0,330,Bottom
 4,Pink,On,22,330,Left
 4,Pink,On,44,330,Right
 4,Pink,Off,66,330,Bottom
@@ -107,15 +107,15 @@ id,name,variety,u,v,anchor
 5,Tree Top Leafy,A,22,198,Bottom
 5,Tree Top Leafy,B,22,220,Bottom
 5,Tree Top Leafy,C,22,242,Bottom
-5,Tree Trunk,Plain A,,,Bottom
-5,Tree Trunk,Right Indent A,22,,Bottom
-5,Tree Trunk,Right Slight Bulge A,44,,Bottom
-5,Tree Branch,Plain A,66,,Left
-5,Tree Trunk,Left Slight Bulge A,88,,Bottom
-5,Tree Top,Medium A,110,,Bottom
-5,Tree Top,Small A,132,,Bottom
-5,Tree Top,Large A,154,,Right
-5,Tree Trunk,Plain B,,22,Bottom
+5,Tree Trunk,Plain A,0,0,Bottom
+5,Tree Trunk,Right Indent A,22,0,Bottom
+5,Tree Trunk,Right Slight Bulge A,44,0,Bottom
+5,Tree Branch,Plain A,66,0,Left
+5,Tree Trunk,Left Slight Bulge A,88,0,Bottom
+5,Tree Top,Medium A,110,0,Bottom
+5,Tree Top,Small A,132,0,Bottom
+5,Tree Top,Large A,154,0,Right
+5,Tree Trunk,Plain B,0,22,Bottom
 5,Tree Trunk,Right Indent B,22,22,Bottom
 5,Tree Trunk,Right Slight Bulge B,44,22,Bottom
 5,Tree Branch,Plain B,66,22,Left
@@ -123,7 +123,7 @@ id,name,variety,u,v,anchor
 5,Tree Top,Medium B,110,22,Bottom
 5,Tree Top,Small B,132,22,Bottom
 5,Tree Top,Large B,154,22,Right
-5,Tree Trunk,Plain C,,44,Bottom
+5,Tree Trunk,Plain C,0,44,Bottom
 5,Tree Trunk,Right Indent C,22,44,Bottom
 5,Tree Trunk,Right Slight Bulge C,44,44,Bottom
 5,Tree Branch,Plain C,66,44,Left
@@ -131,7 +131,7 @@ id,name,variety,u,v,anchor
 5,Tree Top,Medium C,110,44,Bottom
 5,Tree Top,Small C,132,44,Bottom
 5,Tree Top,Large C,154,44,Right
-5,Tree Trunk,Left Indent A,,66,Bottom
+5,Tree Trunk,Left Indent A,0,66,Bottom
 5,Tree Trunk,Right Bulge A,22,66,Bottom
 5,Tree Trunk,Left Bulge A,44,66,Bottom
 5,Tree Trunk,Right Slight Bulge D,66,66,Bottom
@@ -139,7 +139,7 @@ id,name,variety,u,v,anchor
 5,Tree Trunk,Double Slight Bulge A,110,66,Bottom
 5,Tree Top,Small Right Slight Bulge A,132,66,Bottom
 5,Tree Top,Large A,154,66,Left
-5,Tree Trunk,Left Indent B,,88,Bottom
+5,Tree Trunk,Left Indent B,0,88,Bottom
 5,Tree Trunk,Right Bulge B,22,88,Bottom
 5,Tree Trunk,Left Bulge B,44,88,Bottom
 5,Tree Trunk,Right Slight Bulge E,66,88,Bottom
@@ -147,7 +147,7 @@ id,name,variety,u,v,anchor
 5,Tree Trunk,Double Slight Bulge B,110,88,Bottom
 5,Tree Top,Small Right Slight Bulge B,132,88,Bottom
 5,Tree Top,Large B,154,88,Left
-5,Tree Trunk,Left Indent C,,110,Bottom
+5,Tree Trunk,Left Indent C,0,110,Bottom
 5,Tree Trunk,Right Bulge C,22,110,Bottom
 5,Tree Trunk,Left Bulge C,44,110,Bottom
 5,Tree Trunk,Right Slight Bulge F,66,110,Bottom
@@ -155,395 +155,395 @@ id,name,variety,u,v,anchor
 5,Tree Trunk,Double Slight Bulge C,110,110,Bottom
 5,Tree Top,Small Right Slight Bulge C,132,110,Bottom
 5,Tree Top,Large C,154,110,Left
-5,Tree Trunk,Large A,,132,Left
+5,Tree Trunk,Large A,0,132,Left
 5,Tree Base,Plain A,22,132,Right
 5,Tree Base,Plain A,44,132,Left
 5,Tree Trunk,Large A,66,132,Right
 5,Tree Trunk,Large A,88,132,Center
 5,Tree Top,Small Double Slight Bulge A,132,132,Bottom
 5,Tree Top,Huge,154,132,Left
-5,Tree Trunk,Large B,,154,Left
+5,Tree Trunk,Large B,0,154,Left
 5,Tree Base,Plain B,22,154,Right
 5,Tree Base,Plain B,44,154,Left
 5,Tree Trunk,Large B,66,154,Right
 5,Tree Trunk,Large B,88,154,Center
 5,Tree Top,Small Double Slight Bulge B,132,154,Bottom
 5,Tree Top,Huge,154,154,Center
-5,Tree Trunk,Large C,,176,Left
+5,Tree Trunk,Large C,0,176,Left
 5,Tree Base,Plain C,22,176,Right
 5,Tree Base,Plain C,44,176,Left
 5,Tree Trunk,Large C,66,176,Right
 5,Tree Trunk,Large C,88,176,Center
 5,Tree Top,Small Double Slight Bulge C,132,176,Bottom
 5,Tree Top,Huge,154,176,Right
-5,Tree Top,Jagged,,198,Right
-5,Tree Trunk,Jagged,,220,Bottom
-5,Tree Trunk,Jagged,,242,Left
-10,,Wooden Door A,,,
-10,,Wooden Door B,18,,
-10,,Wooden Door C,36,,
-10,,Ebonwood Door A,,54,
+5,Tree Top,Jagged,0,198,Right
+5,Tree Trunk,Jagged,0,220,Bottom
+5,Tree Trunk,Jagged,0,242,Left
+10,,Wooden Door A,0,0,
+10,,Wooden Door B,18,0,
+10,,Wooden Door C,36,0,
+10,,Ebonwood Door A,0,54,
 10,,Ebonwood Door B,18,54,
 10,,Ebonwood Door C,36,54,
-10,,Rich Mahogany Door A,,108,
+10,,Rich Mahogany Door A,0,108,
 10,,Rich Mahogany Door B,18,108,
 10,,Rich Mahogany Door C,36,108,
-10,,Pearlwood Door A,,162,
+10,,Pearlwood Door A,0,162,
 10,,Pearlwood Door B,18,162,
 10,,Pearlwood Door C,36,162,
-10,,Cactus Door A,,216,
+10,,Cactus Door A,0,216,
 10,,Cactus Door B,18,216,
 10,,Cactus Door C,36,216,
-10,,Flesh Door A,,270,
+10,,Flesh Door A,0,270,
 10,,Flesh Door B,18,270,
 10,,Flesh Door C,36,270,
-10,,Mushroom Door A,,324,
+10,,Mushroom Door A,0,324,
 10,,Mushroom Door B,18,324,
 10,,Mushroom Door C,36,324,
-10,,Living Wood Door A,,378,
+10,,Living Wood Door A,0,378,
 10,,Living Wood Door B,18,378,
 10,,Living Wood Door C,36,378,
-10,,Bone Door A,,432,
+10,,Bone Door A,0,432,
 10,,Bone Door B,18,432,
 10,,Bone Door C,36,432,
-10,,Skyware Door A,,486,
+10,,Skyware Door A,0,486,
 10,,Skyware Door B,18,486,
 10,,Skyware Door C,36,486,
-10,,Shadewood Door A,,540,
+10,,Shadewood Door A,0,540,
 10,,Shadewood Door B,18,540,
 10,,Shadewood Door C,36,540,
-10,,Lihzahrd Locked Door A,,594,
+10,,Lihzahrd Locked Door A,0,594,
 10,,Lihzahrd Locked Door B,18,594,
 10,,Lihzahrd Locked Door C,36,594,
-10,,Lihzahrd Door A,,648,
+10,,Lihzahrd Door A,0,648,
 10,,Lihzahrd Door B,18,648,
 10,,Lihzahrd Door C,36,648,
-10,,Dungeon Door A,,702,
+10,,Dungeon Door A,0,702,
 10,,Dungeon Door B,18,702,
 10,,Dungeon Door C,36,702,
-10,,Lead Door A,,756,
+10,,Lead Door A,0,756,
 10,,Lead Door B,18,756,
 10,,Lead Door C,36,756,
-10,,Iron Door A,,810,
+10,,Iron Door A,0,810,
 10,,Iron Door B,18,810,
 10,,Iron Door C,36,810,
-10,,Blue Dungeon Door A,,864,
+10,,Blue Dungeon Door A,0,864,
 10,,Blue Dungeon Door B,18,864,
 10,,Blue Dungeon Door C,36,864,
-10,,Green Dungeon Door A,,918,
+10,,Green Dungeon Door A,0,918,
 10,,Green Dungeon Door B,18,918,
 10,,Green Dungeon Door C,36,918,
-10,,Pink Dungeon Door A,,972,
+10,,Pink Dungeon Door A,0,972,
 10,,Pink Dungeon Door B,18,972,
 10,,Pink Dungeon Door C,36,972,
-10,,Obsidian Door A,,1026,
+10,,Obsidian Door A,0,1026,
 10,,Obsidian Door B,18,1026,
 10,,Obsidian Door C,36,1026,
-10,,Glass Door A,,1080,
+10,,Glass Door A,0,1080,
 10,,Glass Door B,18,1080,
 10,,Glass Door C,36,1080,
-10,,Golden Door A,,1134,
+10,,Golden Door A,0,1134,
 10,,Golden Door B,18,1134,
 10,,Golden Door C,36,1134,
-10,,Honey Door A,,1188,
+10,,Honey Door A,0,1188,
 10,,Honey Door B,18,1188,
 10,,Honey Door C,36,1188,
-10,,Steam Punk Door A,,1242,
+10,,Steam Punk Door A,0,1242,
 10,,Steam Punk Door B,18,1242,
 10,,Steam Punk Door C,36,1242,
-10,,Pumpkin Door A,,1296,
+10,,Pumpkin Door A,0,1296,
 10,,Pumpkin Door A,18,1296,
 10,,Pumpkin Door A,36,1296,
-10,,Spooky Door A,,1350,
+10,,Spooky Door A,0,1350,
 10,,Spooky Door B,18,1350,
 10,,Spooky Door C,36,1350,
-10,,Pine Door A,,1404,
+10,,Pine Door A,0,1404,
 10,,Pine Door B,18,1404,
 10,,Pine Door C,36,1404,
-10,,Frozen Door A,,1458,
+10,,Frozen Door A,0,1458,
 10,,Frozen Door B,18,1458,
 10,,Frozen Door C,36,1458,
-10,,Dynasty Door A,,1512,
+10,,Dynasty Door A,0,1512,
 10,,Dynasty Door B,18,1512,
 10,,Dynasty Door C,36,1512,
-10,,Palm Wood Door A,,1566,
+10,,Palm Wood Door A,0,1566,
 10,,Palm Wood Door B,18,1566,
 10,,Palm Wood Door C,36,1566,
-10,,Boreal Wood Door A,,1620,
+10,,Boreal Wood Door A,0,1620,
 10,,Boreal Wood Door B,18,1620,
 10,,Boreal Wood Door C,36,1620,
-10,,Slime Door A,,1674,
+10,,Slime Door A,0,1674,
 10,,Slime Door B,18,1674,
 10,,Slime Door C,36,1674,
-10,,Martian Door A,,1728,
+10,,Martian Door A,0,1728,
 10,,Martian Door B,18,1728,
 10,,Martian Door C,36,1728,
-10,,Meteorite Door A,,1782,
+10,,Meteorite Door A,0,1782,
 10,,Meteorite Door B,18,1782,
 10,,Meteorite Door C,36,1782,
-10,,Granite Door A,,1836,
+10,,Granite Door A,0,1836,
 10,,Granite Door B,18,1836,
 10,,Granite Door C,36,1836,
-10,,Marble Door A,,1890,
+10,,Marble Door A,0,1890,
 10,,Marble Door B,18,1890,
 10,,Marble Door C,36,1890,
-10,,Crystal Door A,54,,
-10,,Crystal Door B,72,,
-10,,Crystal Door C,90,,
-11,,Wooden Door,,,Door Right
-11,,Wooden Door,36,,Door Left
-11,,Ebonwood Door,,54,Door Right
+10,,Crystal Door A,54,0,
+10,,Crystal Door B,72,0,
+10,,Crystal Door C,90,0,
+11,,Wooden Door,0,0,Door Right
+11,,Wooden Door,36,0,Door Left
+11,,Ebonwood Door,0,54,Door Right
 11,,Ebonwood Door,36,54,Door Left
-11,,Rich Mahogany Door,,108,Door Right
+11,,Rich Mahogany Door,0,108,Door Right
 11,,Rich Mahogany Door,36,108,Door Left
-11,,Pearlwood Door,,162,Door Right
+11,,Pearlwood Door,0,162,Door Right
 11,,Pearlwood Door,36,162,Door Left
-11,,Cactus Door,,216,Door Right
+11,,Cactus Door,0,216,Door Right
 11,,Cactus Door,36,216,Door Left
-11,,Flesh Door,,270,Door Right
+11,,Flesh Door,0,270,Door Right
 11,,Flesh Door,36,270,Door Left
-11,,Mushroom Door,,324,Door Right
+11,,Mushroom Door,0,324,Door Right
 11,,Mushroom Door,36,324,Door Left
-11,,Living Wood Door,,378,Door Right
+11,,Living Wood Door,0,378,Door Right
 11,,Living Wood Door,36,378,Door Left
-11,,Bone Door,,432,Door Right
+11,,Bone Door,0,432,Door Right
 11,,Bone Door,36,432,Door Left
-11,,Skyware Door,,486,Door Right
+11,,Skyware Door,0,486,Door Right
 11,,Skyware Door,36,486,Door Left
-11,,Shadewood Door,,540,Door Right
+11,,Shadewood Door,0,540,Door Right
 11,,Shadewood Door,36,540,Door Left
-11,,Lihzahrd Door,,648,Door Right
+11,,Lihzahrd Door,0,648,Door Right
 11,,Lihzahrd Door,36,648,Door Left
-11,,Dungeon Door,,702,Door Right
+11,,Dungeon Door,0,702,Door Right
 11,,Dungeon Door,36,702,Door Left
-11,,Lead Door,,756,Door Right
+11,,Lead Door,0,756,Door Right
 11,,Lead Door,36,756,Door Left
-11,,Iron Door,,810,Door Right
+11,,Iron Door,0,810,Door Right
 11,,Iron Door,36,810,Door Left
-11,,Blue Dungeon Door,,864,Door Right
+11,,Blue Dungeon Door,0,864,Door Right
 11,,Blue Dungeon Door,36,864,Door Left
-11,,Green Dungeon Door,,918,Door Right
+11,,Green Dungeon Door,0,918,Door Right
 11,,Green Dungeon Door,36,918,Door Left
-11,,Pink Dungeon Door,,972,Door Right
+11,,Pink Dungeon Door,0,972,Door Right
 11,,Pink Dungeon Door,36,972,Door Left
-11,,Obsidian Door,,1026,Door Right
+11,,Obsidian Door,0,1026,Door Right
 11,,Obsidian Door,36,1026,Door Left
-11,,Glass Door,,1080,Door Right
+11,,Glass Door,0,1080,Door Right
 11,,Glass Door,36,1080,Door Left
-11,,Golden Door,,1134,Door Right
+11,,Golden Door,0,1134,Door Right
 11,,Golden Door,36,1134,Door Left
-11,,Honey Door,,1188,Door Right
+11,,Honey Door,0,1188,Door Right
 11,,Honey Door,36,1188,Door Left
-11,,Steam Punk Door,,1242,Door Right
+11,,Steam Punk Door,0,1242,Door Right
 11,,Steam Punk Door,36,1242,Door Left
-11,,Pumpkin Door,,1296,Door Right
+11,,Pumpkin Door,0,1296,Door Right
 11,,Pumpkin Door,36,1296,Door Left
-11,,Spooky Door,,1350,Door Right
+11,,Spooky Door,0,1350,Door Right
 11,,Spooky Door,36,1350,Door Left
-11,,Pine Door,,1404,Door Right
+11,,Pine Door,0,1404,Door Right
 11,,Pine Door,36,1404,Door Left
-11,,Frozen Door,,1458,Door Right
+11,,Frozen Door,0,1458,Door Right
 11,,Frozen Door,36,1458,Door Left
-11,,Dynasty Door,,1512,Door Right
+11,,Dynasty Door,0,1512,Door Right
 11,,Dynasty Door,36,1512,Door Left
-11,,Palm Wood Door,,1566,Door Right
+11,,Palm Wood Door,0,1566,Door Right
 11,,Palm Wood Door,36,1566,Door Left
-11,,Boreal Wood Door,,1620,Door Right
+11,,Boreal Wood Door,0,1620,Door Right
 11,,Boreal Wood Door,36,1620,Door Left
-11,,Slime Door,,1674,Door Right
+11,,Slime Door,0,1674,Door Right
 11,,Slime Door,36,1674,Door Left
-11,,Martian Door,,1728,Door Right
+11,,Martian Door,0,1728,Door Right
 11,,Martian Door,36,1728,Door Left
-11,,Meteorite Door,,1782,Door Right
+11,,Meteorite Door,0,1782,Door Right
 11,,Meteorite Door,36,1782,Door Left
-11,,Granite Door,,1836,Door Right
+11,,Granite Door,0,1836,Door Right
 11,,Granite Door,36,1836,Door Left
-11,,Marble Door,,1890,Door Right
+11,,Marble Door,0,1890,Door Right
 11,,Marble Door,36,1890,Door Left
-11,,Crystal Door,72,,Door Right
-11,,Crystal Door,108,,Door Left
-12,Default,Default,,,
-13,Bottle,,,,
-13,Healing Potion,,18,,
-13,Mana Potion,,36,,
-13,Pink Vase,,54,,
-13,Mug,,72,,
-13,Dynasty Cup,,90,,
-13,Wine Glass,,108,,
-13,Honey Cup,,126,,
-13,Chalice,,144,,
-14,Table,Wooden Table,,,Left
-14,Table,Ebonwood Table,54,,Left
-14,Table,Rich Mahogany Table,108,,Left
-14,Table,Pearlwood Table,162,,Left
-14,Table,Bone Table,216,,Left
-14,Table,Flesh Table,270,,Left
-14,Table,Living Wood Table,324,,Left
-14,Table,Skyware Table,378,,Left
-14,Table,Shadewood Table,432,,Left
-14,Table,Lihzahrd Table,486,,Left
-14,Table,Blue Dungeon Table,540,,Left
-14,Table,Green Dungeon Table,594,,Left
-14,Table,Pink Dungeon Table,648,,Left
-14,Table,Obsidian Table,702,,Left
-14,Table,Gothic Table,756,,Left
-14,Table,Glass Table,810,,Left
-14,Banquet Table,Wooden Banquet,864,,Left
-14,Bar Table,Wooden Bar,918,,Left
-14,Banquet Table,Golden Banquet,972,,Left
-14,Table,Honey Table,1026,,Left
-14,Table,Steam Punk Table,1080,,Left
-14,Table,Pumpkin Table,1134,,Left
-14,Table,Spooky Table,1188,,Left
-14,Table,Pine Table,1242,,Left
-14,Table,Frozen Table,1296,,Left
-14,Table,Dynasty Table,1350,,Left
-14,Table,Palm Wood Table,1404,,Left
-14,Table,Mushroom Table,1458,,Left
-14,Table,Boreal Wood Table,1512,,Left
-14,Table,Slime Table,1566,,Left
-14,Table,Cactus Table,1620,,Left
-14,Table,Martian Table,1674,,Left
-14,Table,Meteorite Table,1728,,Left
-14,Table,Granite Table,1782,,Left
-14,Table,Marble Table,1836,,Left
-15,Wooden Chair,,,,Left
-15,Wooden Chair,,18,,Right
-15,Toilet,,,40,Left
+11,,Crystal Door,72,0,Door Right
+11,,Crystal Door,108,0,Door Left
+12,Default,Default,0,0,
+13,Bottle,,0,0,
+13,Healing Potion,,18,0,
+13,Mana Potion,,36,0,
+13,Pink Vase,,54,0,
+13,Mug,,72,0,
+13,Dynasty Cup,,90,0,
+13,Wine Glass,,108,0,
+13,Honey Cup,,126,0,
+13,Chalice,,144,0,
+14,Table,Wooden Table,0,0,Left
+14,Table,Ebonwood Table,54,0,Left
+14,Table,Rich Mahogany Table,108,0,Left
+14,Table,Pearlwood Table,162,0,Left
+14,Table,Bone Table,216,0,Left
+14,Table,Flesh Table,270,0,Left
+14,Table,Living Wood Table,324,0,Left
+14,Table,Skyware Table,378,0,Left
+14,Table,Shadewood Table,432,0,Left
+14,Table,Lihzahrd Table,486,0,Left
+14,Table,Blue Dungeon Table,540,0,Left
+14,Table,Green Dungeon Table,594,0,Left
+14,Table,Pink Dungeon Table,648,0,Left
+14,Table,Obsidian Table,702,0,Left
+14,Table,Gothic Table,756,0,Left
+14,Table,Glass Table,810,0,Left
+14,Banquet Table,Wooden Banquet,864,0,Left
+14,Bar Table,Wooden Bar,918,0,Left
+14,Banquet Table,Golden Banquet,972,0,Left
+14,Table,Honey Table,1026,0,Left
+14,Table,Steam Punk Table,1080,0,Left
+14,Table,Pumpkin Table,1134,0,Left
+14,Table,Spooky Table,1188,0,Left
+14,Table,Pine Table,1242,0,Left
+14,Table,Frozen Table,1296,0,Left
+14,Table,Dynasty Table,1350,0,Left
+14,Table,Palm Wood Table,1404,0,Left
+14,Table,Mushroom Table,1458,0,Left
+14,Table,Boreal Wood Table,1512,0,Left
+14,Table,Slime Table,1566,0,Left
+14,Table,Cactus Table,1620,0,Left
+14,Table,Martian Table,1674,0,Left
+14,Table,Meteorite Table,1728,0,Left
+14,Table,Granite Table,1782,0,Left
+14,Table,Marble Table,1836,0,Left
+15,Wooden Chair,,0,0,Left
+15,Wooden Chair,,18,0,Right
+15,Toilet,,0,40,Left
 15,Toilet,,18,40,Right
-15,Ebonwood Chair,,,80,Left
+15,Ebonwood Chair,,0,80,Left
 15,Ebonwood Chair,,18,80,Right
-15,Rich Mahogany Chair,,,120,Left
+15,Rich Mahogany Chair,,0,120,Left
 15,Rich Mahogany Chair,,18,120,Right
-15,Pearlwood Chair,,,160,Left
+15,Pearlwood Chair,,0,160,Left
 15,Pearlwood Chair,,18,160,Right
-15,Living Wood Chair,,,200,Left
+15,Living Wood Chair,,0,200,Left
 15,Living Wood Chair,,18,200,Right
-15,Cactus Chair,,,240,Left
+15,Cactus Chair,,0,240,Left
 15,Cactus Chair,,18,240,Right
-15,Bone Chair,,,280,Left
+15,Bone Chair,,0,280,Left
 15,Bone Chair,,18,280,Right
-15,Flesh Chair,,,320,Left
+15,Flesh Chair,,0,320,Left
 15,Flesh Chair,,18,320,Right
-15,Mushroom Chair,,,360,Left
+15,Mushroom Chair,,0,360,Left
 15,Mushroom Chair,,18,360,Right
-15,Skyware Chair,,,400,Left
+15,Skyware Chair,,0,400,Left
 15,Skyware Chair,,18,400,Right
-15,Shadewood Chair,,,440,Left
+15,Shadewood Chair,,0,440,Left
 15,Shadewood Chair,,18,440,Right
-15,Lihzahrd Chair,,,480,Left
+15,Lihzahrd Chair,,0,480,Left
 15,Lihzahrd Chair,,18,480,Right
-15,Blue Dungeon Chair,,,520,Left
+15,Blue Dungeon Chair,,0,520,Left
 15,Blue Dungeon Chair,,18,520,Right
-15,Green Dungeon Chair,,,560,Left
+15,Green Dungeon Chair,,0,560,Left
 15,Green Dungeon Chair,,18,560,Right
-15,Pink Dungeon Chair,,,600,Left
+15,Pink Dungeon Chair,,0,600,Left
 15,Pink Dungeon Chair,,18,600,Right
-15,Obsidian Chair,,,640,Left
+15,Obsidian Chair,,0,640,Left
 15,Obsidian Chair,,18,640,Right
-15,Gothic Chair,,,680,Left
+15,Gothic Chair,,0,680,Left
 15,Gothic Chair,,18,680,Right
-15,Glass Chair,,,720,Left
+15,Glass Chair,,0,720,Left
 15,Glass Chair,,18,720,Right
-15,Golden Chair,,,760,Left
+15,Golden Chair,,0,760,Left
 15,Golden Chair,,18,760,Right
-15,Golden Toilet,,,800,Left
+15,Golden Toilet,,0,800,Left
 15,Golden Toilet,,18,800,Right
-15,Barstool,,,840,Left
+15,Barstool,,0,840,Left
 15,Barstool,,18,840,Right
-15,Honey Chair,,,880,Left
+15,Honey Chair,,0,880,Left
 15,Honey Chair,,18,880,Right
-15,Steam Punk Chair,,,920,Left
+15,Steam Punk Chair,,0,920,Left
 15,Steam Punk Chair,,18,920,Right
-15,Pumpkin Chair,,,960,Left
+15,Pumpkin Chair,,0,960,Left
 15,Pumpkin Chair,,18,960,Right
-15,Spooky Chair,,,1000,Left
+15,Spooky Chair,,0,1000,Left
 15,Spooky Chair,,18,1000,Right
-15,Pine Chair,,,1040,Left
+15,Pine Chair,,0,1040,Left
 15,Pine Chair,,18,1040,Right
-15,Dynasty Chair,,,1080,Left
+15,Dynasty Chair,,0,1080,Left
 15,Dynasty Chair,,18,1080,Right
-15,Frozen Chair,,,1120,Left
+15,Frozen Chair,,0,1120,Left
 15,Frozen Chair,,18,1120,Right
-15,Palm Wood Chair,,,1160,Left
+15,Palm Wood Chair,,0,1160,Left
 15,Palm Wood Chair,,18,1160,Right
-15,Boreal Wood Chair,,,1200,Left
+15,Boreal Wood Chair,,0,1200,Left
 15,Boreal Wood Chair,,18,1200,Right
-15,Slime Chair,,,1240,Left
+15,Slime Chair,,0,1240,Left
 15,Slime Chair,,18,1240,Right
-15,Martian Hover Chair,,,1280,Left
+15,Martian Hover Chair,,0,1280,Left
 15,Martian Hover Chair,,18,1280,Right
-15,Meteorite Chair,,,1320,Left
+15,Meteorite Chair,,0,1320,Left
 15,Meteorite Chair,,18,1320,Right
-15,Granite Chair,,,1360,Left
+15,Granite Chair,,0,1360,Left
 15,Granite Chair,,18,1360,Right
-15,Marble Chair,,,1400,Left
+15,Marble Chair,,0,1400,Left
 15,Marble Chair,,18,1400,Right
-15,Crystal Chair,,,1440,Left
+15,Crystal Chair,,0,1440,Left
 15,Crystal Chair,,18,1440,Right
-16,Iron Anvil,,,,
-16,Lead Anvil,,36,,
-18,Work Bench,Wood,,,
-18,Work Bench,Ebonwood,36,,
-18,Work Bench,Rich Mahogany,72,,
-18,Work Bench,Pearlwood,108,,
-18,Work Bench,Bone,144,,
-18,Work Bench,Cactus,180,,
-18,Work Bench,Flesh,216,,
-18,Work Bench,Mushroom,252,,
-18,Work Bench,Slime,288,,
-18,Work Bench,Shadewood,324,,
-18,Work Bench,Lihzahrd,360,,
-18,Work Bench,Blue Dungeon,396,,
-18,Work Bench,Green Dungeon,432,,
-18,Work Bench,Pink Dungeon,468,,
-18,Work Bench,Obsidian,504,,
-18,Work Bench,Gothic,540,,
-18,Work Bench,Pumpkin,576,,
-18,Work Bench,Spooky,612,,
-18,Work Bench,Dynasty,648,,
-18,Work Bench,Honey,684,,
-18,Work Bench,Frozen,720,,
-18,Work Bench,Steampunk,756,,
-18,Work Bench,Palm Wood,792,,
-18,Work Bench,Boreal,828,,
-18,Work Bench,Skyware,864,,
-18,Work Bench,Glass,900,,
-18,Work Bench,Living Wood,936,,
-18,Work Bench,Martian,972,,
-18,Work Bench,Meteorite,1008,,
-18,Work Bench,Granite,1044,,
-18,Work Bench,Marble,1080,,
-18,,Crystal,1116,,
-18,,Golden,1152,,
-19,Platform,Wood Flat,,,
-19,Platform,Wood Endcap Right,18,,
-19,Platform,Wood Endcap Left,36,,
-19,Platform,Wood Attach Left,54,,
-19,Platform,Wood Attach Right,72,,
-19,Platform,Wood Single,90,,
-19,Platform,Wood Attach Left Endcap,108,,
-19,Platform,Wood Attach Right Endcap,126,,
-19,Stair,Wood Up-Right Riser,144,,
-19,Stair,Wood Up-Right Stringer,162,,
-19,Stair,Wood Up-Left Riser,180,,
-19,Stair,Wood Up-Left Stringer,198,,
-19,Stair,Wood Top Landing R,216,,
-19,Stair,Wood Top Landing L,234,,
-19,Stair,Wood Top Landing L-R,252,,
-19,Stair,Wood Top Landing R Endcap,270,,
-19,Stair,Wood Top Landing L Endcap,288,,
-19,Stair,Wood Bottom Landing R,306,,
-19,Stair,Wood Bottom Landing L,324,,
-19,Stair,Wood Inset Up-Right 1,342,,
-19,Stair,Wood Inset Up-Left 1,360,,
-19,Stair,Wood Inset Up-Right 2,378,,
-19,Stair,Wood Inset Up-Left 2,396,,
-19,Stair,Wood Inset Up-Right 3,414,,
-19,Stair,Wood Inset Up-Left 3,432,,
-19,Stair,Wood Inverted Right,450,,
-19,Stair,Wood Inverted Left,468,,
-19,Platform,Ebonwood Flat,,18,
+16,Iron Anvil,,0,0,
+16,Lead Anvil,,36,0,
+18,Work Bench,Wood,0,0,
+18,Work Bench,Ebonwood,36,0,
+18,Work Bench,Rich Mahogany,72,0,
+18,Work Bench,Pearlwood,108,0,
+18,Work Bench,Bone,144,0,
+18,Work Bench,Cactus,180,0,
+18,Work Bench,Flesh,216,0,
+18,Work Bench,Mushroom,252,0,
+18,Work Bench,Slime,288,0,
+18,Work Bench,Shadewood,324,0,
+18,Work Bench,Lihzahrd,360,0,
+18,Work Bench,Blue Dungeon,396,0,
+18,Work Bench,Green Dungeon,432,0,
+18,Work Bench,Pink Dungeon,468,0,
+18,Work Bench,Obsidian,504,0,
+18,Work Bench,Gothic,540,0,
+18,Work Bench,Pumpkin,576,0,
+18,Work Bench,Spooky,612,0,
+18,Work Bench,Dynasty,648,0,
+18,Work Bench,Honey,684,0,
+18,Work Bench,Frozen,720,0,
+18,Work Bench,Steampunk,756,0,
+18,Work Bench,Palm Wood,792,0,
+18,Work Bench,Boreal,828,0,
+18,Work Bench,Skyware,864,0,
+18,Work Bench,Glass,900,0,
+18,Work Bench,Living Wood,936,0,
+18,Work Bench,Martian,972,0,
+18,Work Bench,Meteorite,1008,0,
+18,Work Bench,Granite,1044,0,
+18,Work Bench,Marble,1080,0,
+18,,Crystal,1116,0,
+18,,Golden,1152,0,
+19,Platform,Wood Flat,0,0,
+19,Platform,Wood Endcap Right,18,0,
+19,Platform,Wood Endcap Left,36,0,
+19,Platform,Wood Attach Left,54,0,
+19,Platform,Wood Attach Right,72,0,
+19,Platform,Wood Single,90,0,
+19,Platform,Wood Attach Left Endcap,108,0,
+19,Platform,Wood Attach Right Endcap,126,0,
+19,Stair,Wood Up-Right Riser,144,0,
+19,Stair,Wood Up-Right Stringer,162,0,
+19,Stair,Wood Up-Left Riser,180,0,
+19,Stair,Wood Up-Left Stringer,198,0,
+19,Stair,Wood Top Landing R,216,0,
+19,Stair,Wood Top Landing L,234,0,
+19,Stair,Wood Top Landing L-R,252,0,
+19,Stair,Wood Top Landing R Endcap,270,0,
+19,Stair,Wood Top Landing L Endcap,288,0,
+19,Stair,Wood Bottom Landing R,306,0,
+19,Stair,Wood Bottom Landing L,324,0,
+19,Stair,Wood Inset Up-Right 1,342,0,
+19,Stair,Wood Inset Up-Left 1,360,0,
+19,Stair,Wood Inset Up-Right 2,378,0,
+19,Stair,Wood Inset Up-Left 2,396,0,
+19,Stair,Wood Inset Up-Right 3,414,0,
+19,Stair,Wood Inset Up-Left 3,432,0,
+19,Stair,Wood Inverted Right,450,0,
+19,Stair,Wood Inverted Left,468,0,
+19,Platform,Ebonwood Flat,0,18,
 19,Platform,Ebonwood Endcap Right,18,18,
 19,Platform,Ebonwood Endcap Left,36,18,
 19,Platform,Ebonwood Attach Left,54,18,
@@ -570,7 +570,7 @@ id,name,variety,u,v,anchor
 19,Stair,Ebonwood Inset Up-Left 3,432,18,
 19,Stair,Ebonwood Inverted Right,450,18,
 19,Stair,Ebonwood Inverted Left,468,18,
-19,Platform,Rich Mahogany Flat,,36,
+19,Platform,Rich Mahogany Flat,0,36,
 19,Platform,Rich Mahogany Endcap Right,18,36,
 19,Platform,Rich Mahogany Endcap Left,36,36,
 19,Platform,Rich Mahogany Attach Left,54,36,
@@ -597,7 +597,7 @@ id,name,variety,u,v,anchor
 19,Stair,Rich Mahogany Inset Up-Left 3,432,36,
 19,Stair,Rich Mahogany Inverted Right,450,36,
 19,Stair,Rich Mahogany Inverted Left,468,36,
-19,Platform,Pearlwood Flat,,54,
+19,Platform,Pearlwood Flat,0,54,
 19,Platform,Pearlwood Endcap Right,18,54,
 19,Platform,Pearlwood Endcap Left,36,54,
 19,Platform,Pearlwood Attach Left,54,54,
@@ -624,7 +624,7 @@ id,name,variety,u,v,anchor
 19,Stair,Pearlwood Inset Up-Left 3,432,54,
 19,Stair,Pearlwood Inverted Right,450,54,
 19,Stair,Pearlwood Inverted Left,468,54,
-19,Platform,Bone Flat,,72,
+19,Platform,Bone Flat,0,72,
 19,Platform,Bone Endcap Right,18,72,
 19,Platform,Bone Endcap Left,36,72,
 19,Platform,Bone Attach Left,54,72,
@@ -651,7 +651,7 @@ id,name,variety,u,v,anchor
 19,Stair,Bone Inset Up-Left 3,432,72,
 19,Stair,Bone Inverted Right,450,72,
 19,Stair,Bone Inverted Left,468,72,
-19,Platform,Shadewood Flat,,90,
+19,Platform,Shadewood Flat,0,90,
 19,Platform,Shadewood Endcap Right,18,90,
 19,Platform,Shadewood Endcap Left,36,90,
 19,Platform,Shadewood Attach Left,54,90,
@@ -678,7 +678,7 @@ id,name,variety,u,v,anchor
 19,Stair,Shadewood Inset Up-Left 3,432,90,
 19,Stair,Shadewood Inverted Right,450,90,
 19,Stair,Shadewood Inverted Left,468,90,
-19,Platform,Blue Brick Flat,,108,
+19,Platform,Blue Brick Flat,0,108,
 19,Platform,Blue Brick Endcap Right,18,108,
 19,Platform,Blue Brick Endcap Left,36,108,
 19,Platform,Blue Brick Attach Left,54,108,
@@ -705,7 +705,7 @@ id,name,variety,u,v,anchor
 19,Stair,Blue Brick Inset Up-Left 3,432,108,
 19,Stair,Blue Brick Inverted Right,450,108,
 19,Stair,Blue Brick Inverted Left,468,108,
-19,Platform,Pink Brick Flat,,126,
+19,Platform,Pink Brick Flat,0,126,
 19,Platform,Pink Brick Endcap Right,18,126,
 19,Platform,Pink Brick Endcap Left,36,126,
 19,Platform,Pink Brick Attach Left,54,126,
@@ -732,7 +732,7 @@ id,name,variety,u,v,anchor
 19,Stair,Pink Brick Inset Up-Left 3,432,126,
 19,Stair,Pink Brick Inverted Right,450,126,
 19,Stair,Pink Brick Inverted Left,468,126,
-19,Platform,Green Brick Flat,,144,
+19,Platform,Green Brick Flat,0,144,
 19,Platform,Green Brick Endcap Right,18,144,
 19,Platform,Green Brick Endcap Left,36,144,
 19,Platform,Green Brick Attach Left,54,144,
@@ -759,7 +759,7 @@ id,name,variety,u,v,anchor
 19,Stair,Green Brick Inset Up-Left 3,432,144,
 19,Stair,Green Brick Inverted Right,450,144,
 19,Stair,Green Brick Inverted Left,468,144,
-19,Platform,Metal Shelf Flat,,162,
+19,Platform,Metal Shelf Flat,0,162,
 19,Platform,Metal Shelf Endcap Right,18,162,
 19,Platform,Metal Shelf Endcap Left,36,162,
 19,Platform,Metal Shelf Attach Left,54,162,
@@ -786,7 +786,7 @@ id,name,variety,u,v,anchor
 19,Stair,Metal Shelf Inset Up-Left 3,432,162,
 19,Stair,Metal Shelf Inverted Right,450,162,
 19,Stair,Metal Shelf Inverted Left,468,162,
-19,Platform,Brass Shelf Flat,,180,
+19,Platform,Brass Shelf Flat,0,180,
 19,Platform,Brass Shelf Endcap Right,18,180,
 19,Platform,Brass Shelf Endcap Left,36,180,
 19,Platform,Brass Shelf Attach Left,54,180,
@@ -813,7 +813,7 @@ id,name,variety,u,v,anchor
 19,Stair,Brass Shelf Inset Up-Left 3,432,180,
 19,Stair,Brass Shelf Inverted Right,450,180,
 19,Stair,Brass Shelf Inverted Left,468,180,
-19,Platform,Wood Shelf Flat,,198,
+19,Platform,Wood Shelf Flat,0,198,
 19,Platform,Wood Shelf Endcap Right,18,198,
 19,Platform,Wood Shelf Endcap Left,36,198,
 19,Platform,Wood Shelf Attach Left,54,198,
@@ -840,7 +840,7 @@ id,name,variety,u,v,anchor
 19,Stair,Wood Shelf Inset Up-Left 3,432,198,
 19,Stair,Wood Shelf Inverted Right,450,198,
 19,Stair,Wood Shelf Inverted Left,468,198,
-19,Platform,Dungeon Shelf Flat,,216,
+19,Platform,Dungeon Shelf Flat,0,216,
 19,Platform,Dungeon Shelf Endcap Right,18,216,
 19,Platform,Dungeon Shelf Endcap Left,36,216,
 19,Platform,Dungeon Shelf Attach Left,54,216,
@@ -867,7 +867,7 @@ id,name,variety,u,v,anchor
 19,Stair,Dungeon Shelf Inset Up-Left 3,432,216,
 19,Stair,Dungeon Shelf Inverted Right,450,216,
 19,Stair,Dungeon Shelf Inverted Left,468,216,
-19,Platform,Obsidian Flat,,234,
+19,Platform,Obsidian Flat,0,234,
 19,Platform,Obsidian Endcap Right,18,234,
 19,Platform,Obsidian Endcap Left,36,234,
 19,Platform,Obsidian Attach Left,54,234,
@@ -894,7 +894,7 @@ id,name,variety,u,v,anchor
 19,Stair,Obsidian Inset Up-Left 3,432,234,
 19,Stair,Obsidian Inverted Right,450,234,
 19,Stair,Obsidian Inverted Left,468,234,
-19,Platform,Glass Flat,,252,
+19,Platform,Glass Flat,0,252,
 19,Platform,Glass Endcap Right,18,252,
 19,Platform,Glass Endcap Left,36,252,
 19,Platform,Glass Attach Left,54,252,
@@ -921,7 +921,7 @@ id,name,variety,u,v,anchor
 19,Stair,Glass Inset Up-Left 3,432,252,
 19,Stair,Glass Inverted Right,450,252,
 19,Stair,Glass Inverted Left,468,252,
-19,Platform,Pumpkin Flat,,270,
+19,Platform,Pumpkin Flat,0,270,
 19,Platform,Pumpkin Endcap Right,18,270,
 19,Platform,Pumpkin Endcap Left,36,270,
 19,Platform,Pumpkin Attach Left,54,270,
@@ -948,7 +948,7 @@ id,name,variety,u,v,anchor
 19,Stair,Pumpkin Inset Up-Left 3,432,270,
 19,Stair,Pumpkin Inverted Right,450,270,
 19,Stair,Pumpkin Inverted Left,468,270,
-19,Platform,Spooky Flat,,288,
+19,Platform,Spooky Flat,0,288,
 19,Platform,Spooky Endcap Right,18,288,
 19,Platform,Spooky Endcap Left,36,288,
 19,Platform,Spooky Attach Left,54,288,
@@ -975,7 +975,7 @@ id,name,variety,u,v,anchor
 19,Stair,Spooky Inset Up-Left 3,432,288,
 19,Stair,Spooky Inverted Right,450,288,
 19,Stair,Spooky Inverted Left,468,288,
-19,Platform,Palm Wood Flat,,306,
+19,Platform,Palm Wood Flat,0,306,
 19,Platform,Palm Wood Endcap Right,18,306,
 19,Platform,Palm Wood Endcap Left,36,306,
 19,Platform,Palm Wood Attach Left,54,306,
@@ -1002,7 +1002,7 @@ id,name,variety,u,v,anchor
 19,Stair,Palm Wood Inset Up-Left 3,432,306,
 19,Stair,Palm Wood Inverted Right,450,306,
 19,Stair,Palm Wood Inverted Left,468,306,
-19,Platform,Mushroom Flat,,324,
+19,Platform,Mushroom Flat,0,324,
 19,Platform,Mushroom Endcap Right,18,324,
 19,Platform,Mushroom Endcap Left,36,324,
 19,Platform,Mushroom Attach Left,54,324,
@@ -1029,7 +1029,7 @@ id,name,variety,u,v,anchor
 19,Stair,Mushroom Inset Up-Left 3,432,324,
 19,Stair,Mushroom Inverted Right,450,324,
 19,Stair,Mushroom Inverted Left,468,324,
-19,Platform,Boreal Wood Flat,,342,
+19,Platform,Boreal Wood Flat,0,342,
 19,Platform,Boreal Wood Endcap Right,18,342,
 19,Platform,Boreal Wood Endcap Left,36,342,
 19,Platform,Boreal Wood Attach Left,54,342,
@@ -1056,7 +1056,7 @@ id,name,variety,u,v,anchor
 19,Stair,Boreal Wood Inset Up-Left 3,432,342,
 19,Stair,Boreal Wood Inverted Right,450,342,
 19,Stair,Boreal Wood Inverted Left,468,342,
-19,Platform,Slime Platform Flat,,360,
+19,Platform,Slime Platform Flat,0,360,
 19,Platform,Slime Platform Endcap Right,18,360,
 19,Platform,Slime Platform Endcap Left,36,360,
 19,Platform,Slime Platform Attach Left,54,360,
@@ -1083,7 +1083,7 @@ id,name,variety,u,v,anchor
 19,Stair,Slime Platform Inset Up-Left 3,432,360,
 19,Stair,Slime Platform Inverted Right,450,360,
 19,Stair,Slime Platform Inverted Left,468,360,
-19,Platform,Steampunk Flat,,378,
+19,Platform,Steampunk Flat,0,378,
 19,Platform,Steampunk Endcap Right,18,378,
 19,Platform,Steampunk Endcap Left,36,378,
 19,Platform,Steampunk Attach Left,54,378,
@@ -1110,7 +1110,7 @@ id,name,variety,u,v,anchor
 19,Stair,Steampunk Inset Up-Left 3,432,378,
 19,Stair,Steampunk Inverted Right,450,378,
 19,Stair,Steampunk Inverted Left,468,378,
-19,Platform,Skyware Flat,,396,
+19,Platform,Skyware Flat,0,396,
 19,Platform,Skyware Endcap Right,18,396,
 19,Platform,Skyware Endcap Left,36,396,
 19,Platform,Skyware Attach Left,54,396,
@@ -1137,7 +1137,7 @@ id,name,variety,u,v,anchor
 19,Stair,Skyware Inset Up-Left 3,432,396,
 19,Stair,Skyware Inverted Right,450,396,
 19,Stair,Skyware Inverted Left,468,396,
-19,Platform,Living Wood Flat,,414,
+19,Platform,Living Wood Flat,0,414,
 19,Platform,Living Wood Endcap Right,18,414,
 19,Platform,Living Wood Endcap Left,36,414,
 19,Platform,Living Wood Attach Left,54,414,
@@ -1164,7 +1164,7 @@ id,name,variety,u,v,anchor
 19,Stair,Living Wood Inset Up-Left 3,432,414,
 19,Stair,Living Wood Inverted Right,450,414,
 19,Stair,Living Wood Inverted Left,468,414,
-19,Platform,Honey Flat,,432,
+19,Platform,Honey Flat,0,432,
 19,Platform,Honey Endcap Right,18,432,
 19,Platform,Honey Endcap Left,36,432,
 19,Platform,Honey Attach Left,54,432,
@@ -1191,7 +1191,7 @@ id,name,variety,u,v,anchor
 19,Stair,Honey Inset Up-Left 3,432,432,
 19,Stair,Honey Inverted Right,450,432,
 19,Stair,Honey Inverted Left,468,432,
-19,Platform,Cactus Flat,,450,
+19,Platform,Cactus Flat,0,450,
 19,Platform,Cactus Endcap Right,18,450,
 19,Platform,Cactus Endcap Left,36,450,
 19,Platform,Cactus Attach Left,54,450,
@@ -1218,7 +1218,7 @@ id,name,variety,u,v,anchor
 19,Stair,Cactus Inset Up-Left 3,432,450,
 19,Stair,Cactus Inverted Right,450,450,
 19,Stair,Cactus Inverted Left,468,450,
-19,Platform,Martian Flat,,468,
+19,Platform,Martian Flat,0,468,
 19,Platform,Martian Endcap Right,18,468,
 19,Platform,Martian Endcap Left,36,468,
 19,Platform,Martian Attach Left,54,468,
@@ -1245,7 +1245,7 @@ id,name,variety,u,v,anchor
 19,Stair,Martian Inset Up-Left 3,432,468,
 19,Stair,Martian Inverted Right,450,468,
 19,Stair,Martian Inverted Left,468,468,
-19,Platform,Meteorite Flat,,486,
+19,Platform,Meteorite Flat,0,486,
 19,Platform,Meteorite Endcap Right,18,486,
 19,Platform,Meteorite Endcap Left,36,486,
 19,Platform,Meteorite Attach Left,54,486,
@@ -1272,7 +1272,7 @@ id,name,variety,u,v,anchor
 19,Stair,Meteorite Inset Up-Left 3,432,486,
 19,Stair,Meteorite Inverted Right,450,486,
 19,Stair,Meteorite Inverted Left,468,486,
-19,Platform,Granite Flat,,504,
+19,Platform,Granite Flat,0,504,
 19,Platform,Granite Endcap Right,18,504,
 19,Platform,Granite Endcap Left,36,504,
 19,Platform,Granite Attach Left,54,504,
@@ -1299,7 +1299,7 @@ id,name,variety,u,v,anchor
 19,Stair,Granite Inset Up-Left 3,432,504,
 19,Stair,Granite Inverted Right,450,504,
 19,Stair,Granite Inverted Left,468,504,
-19,Platform,Marble Flat,,522,
+19,Platform,Marble Flat,0,522,
 19,Platform,Marble Endcap Right,18,522,
 19,Platform,Marble Endcap Left,36,522,
 19,Platform,Marble Attach Left,54,522,
@@ -1326,7 +1326,7 @@ id,name,variety,u,v,anchor
 19,Stair,Marble Inset Up-Left 3,432,522,
 19,Stair,Marble Inverted Right,450,522,
 19,Stair,Marble Inverted Left,468,522,
-19,Platform,Crystal Flat,,540,
+19,Platform,Crystal Flat,0,540,
 19,Platform,Crystal Endcap Right,18,540,
 19,Platform,Crystal Endcap Left,36,540,
 19,Platform,Crystal Attach Left,54,540,
@@ -1353,7 +1353,7 @@ id,name,variety,u,v,anchor
 19,Stair,Crystal Inset Up-Left 3,432,540,
 19,Stair,Crystal Inverted Right,450,540,
 19,Stair,Crystal Inverted Left,468,540,
-19,Platform,Golden Flat,,558,
+19,Platform,Golden Flat,0,558,
 19,Platform,Golden Endcap Right,18,558,
 19,Platform,Golden Endcap Left,36,558,
 19,Platform,Golden Attach Left,54,558,
@@ -1380,7 +1380,7 @@ id,name,variety,u,v,anchor
 19,Stair,Golden Inset Up-Left 3,432,558,
 19,Stair,Golden Inverted Right,450,558,
 19,Stair,Golden Inverted Left,468,558,
-19,Platform,Dynasty Flat,,576,
+19,Platform,Dynasty Flat,0,576,
 19,Platform,Dynasty Endcap Right,18,576,
 19,Platform,Dynasty Endcap Left,36,576,
 19,Platform,Dynasty Attach Left,54,576,
@@ -1407,7 +1407,7 @@ id,name,variety,u,v,anchor
 19,Stair,Dynasty Inset Up-Left 3,432,576,
 19,Stair,Dynasty Inverted Right,450,576,
 19,Stair,Dynasty Inverted Left,468,576,
-19,Platform,Lihzahrd Flat,,592,
+19,Platform,Lihzahrd Flat,0,592,
 19,Platform,Lihzahrd Endcap Right,18,592,
 19,Platform,Lihzahrd Endcap Left,36,592,
 19,Platform,Lihzahrd Attach Left,54,592,
@@ -1434,7 +1434,7 @@ id,name,variety,u,v,anchor
 19,Stair,Lihzahrd Inset Up-Left 3,432,592,
 19,Stair,Lihzahrd Inverted Right,450,592,
 19,Stair,Lihzahrd Inverted Left,468,592,
-19,Platform,Flesh Flat,,610,
+19,Platform,Flesh Flat,0,610,
 19,Platform,Flesh Endcap Right,18,610,
 19,Platform,Flesh Endcap Left,36,610,
 19,Platform,Flesh Attach Left,54,610,
@@ -1461,7 +1461,7 @@ id,name,variety,u,v,anchor
 19,Stair,Flesh Inset Up-Left 3,432,610,
 19,Stair,Flesh Inverted Right,450,610,
 19,Stair,Flesh Inverted Left,468,610,
-19,Platform,Frozen Flat,,628,
+19,Platform,Frozen Flat,0,628,
 19,Platform,Frozen Endcap Right,18,628,
 19,Platform,Frozen Endcap Left,36,628,
 19,Platform,Frozen Attach Left,54,628,
@@ -1488,845 +1488,845 @@ id,name,variety,u,v,anchor
 19,Stair,Frozen Inset Up-Left 3,432,628,
 19,Stair,Frozen Inverted Right,450,628,
 19,Stair,Frozen Inverted Left,468,628,
-20,,,,,Left
-20,,,18,,Bottom
-20,,,36,,Right
-21,Chest,,,,
-21,Gold Chest,,36,,
-21,Gold Chest,Locked,72,,
-21,Shadow Chest,,108,,
-21,Shadow Chest,Locked,144,,
-21,Barrel,,180,,
-21,Trash Can,,216,,
-21,Ebonwood Chest,,252,,
-21,Rich Mahogany Chest,,288,,
-21,Pearlwood Chest,,324,,
-21,Ivy Chest,,360,,
-21,Ice Chest,,396,,
-21,Living Wood Chest,,432,,
-21,Skyware Chest,,468,,
-21,Shadewood Chest,,504,,
-21,Web Covered Chest,,540,,
-21,Lihzahrd Chest,,576,,
-21,Water Chest,,612,,
-21,Jungle Chest,,648,,
-21,Corruption Chest,,684,,
-21,Crimson Chest,,720,,
-21,Hallowed Chest,,756,,
-21,Frozen Chest,,792,,
-21,Jungle Chest,Locked,828,,
-21,Corruption Chest,Locked,864,,
-21,Crimson Chest,Locked,900,,
-21,Hallowed Chest,Locked,936,,
-21,Frozen Chest,Locked,972,,
-21,Dynasty Chest,,1008,,
-21,Honey Chest,,1044,,
-21,Steampunk Chest,,1080,,
-21,Palm Wood Chest,,1116,,
-21,Mushroom Chest,,1152,,
-21,Boreal Wood Chest,,1188,,
-21,Slime Chest,,1224,,
-21,Green Dungeon Chest,,1260,,
-21,Green Dungeon Chest,Locked,1296,,
-21,Pink Dungeon Chest,,1332,,
-21,Pink Dungeon Chest,Locked,1368,,
-21,Blue Dungeon Chest,,1404,,
-21,Blue Dungeon Chest,Locked,1440,,
-21,Bone Chest,,1476,,
-21,Cactus Chest,,1512,,
-21,Flesh Chest,,1548,,
-21,Obsidian Chest,,1584,,
-21,Pumpkin Chest,,1620,,
-21,Spooky Chest,,1656,,
-21,Glass Chest,,1692,,
-21,Martian Chest,,1728,,
-21,Meteorite Chest,,1764,,
-21,Granite Chest,,1800,,
-21,Marble Chest,,1836,,
-24,Vile Grass,Single Blade,,,Right
-24,Vile Grass,Double Blade,18,,Right
-24,Vile Grass,Small Y,36,,Bottom
-24,Vile Grass,Three Small,54,,Right
-24,Vile Grass,Single Blade,72,,Left
-24,Vile Grass,Three Large,90,,Left
-24,Vile Flower,Yellow,108,,Left
-24,Vile Flower,Red,126,,Right
-24,Vile Mushroom,,144,,Bottom
-26,,Demon Altar,,,
-26,,Crimson Altar,54,,
-27,,A,,,
-27,,B,36,,
-27,,C,72,,
-28,,Clay Pot A1,,,
-28,,Clay Pot A2,36,,
-28,,Clay Pot A3,72,,
-28,,Clay Pot B1,,36,
+20,,,0,0,Left
+20,,,18,0,Bottom
+20,,,36,0,Right
+21,Chest,,0,0,
+21,Gold Chest,,36,0,
+21,Gold Chest,Locked,72,0,
+21,Shadow Chest,,108,0,
+21,Shadow Chest,Locked,144,0,
+21,Barrel,,180,0,
+21,Trash Can,,216,0,
+21,Ebonwood Chest,,252,0,
+21,Rich Mahogany Chest,,288,0,
+21,Pearlwood Chest,,324,0,
+21,Ivy Chest,,360,0,
+21,Ice Chest,,396,0,
+21,Living Wood Chest,,432,0,
+21,Skyware Chest,,468,0,
+21,Shadewood Chest,,504,0,
+21,Web Covered Chest,,540,0,
+21,Lihzahrd Chest,,576,0,
+21,Water Chest,,612,0,
+21,Jungle Chest,,648,0,
+21,Corruption Chest,,684,0,
+21,Crimson Chest,,720,0,
+21,Hallowed Chest,,756,0,
+21,Frozen Chest,,792,0,
+21,Jungle Chest,Locked,828,0,
+21,Corruption Chest,Locked,864,0,
+21,Crimson Chest,Locked,900,0,
+21,Hallowed Chest,Locked,936,0,
+21,Frozen Chest,Locked,972,0,
+21,Dynasty Chest,,1008,0,
+21,Honey Chest,,1044,0,
+21,Steampunk Chest,,1080,0,
+21,Palm Wood Chest,,1116,0,
+21,Mushroom Chest,,1152,0,
+21,Boreal Wood Chest,,1188,0,
+21,Slime Chest,,1224,0,
+21,Green Dungeon Chest,,1260,0,
+21,Green Dungeon Chest,Locked,1296,0,
+21,Pink Dungeon Chest,,1332,0,
+21,Pink Dungeon Chest,Locked,1368,0,
+21,Blue Dungeon Chest,,1404,0,
+21,Blue Dungeon Chest,Locked,1440,0,
+21,Bone Chest,,1476,0,
+21,Cactus Chest,,1512,0,
+21,Flesh Chest,,1548,0,
+21,Obsidian Chest,,1584,0,
+21,Pumpkin Chest,,1620,0,
+21,Spooky Chest,,1656,0,
+21,Glass Chest,,1692,0,
+21,Martian Chest,,1728,0,
+21,Meteorite Chest,,1764,0,
+21,Granite Chest,,1800,0,
+21,Marble Chest,,1836,0,
+24,Vile Grass,Single Blade,0,0,Right
+24,Vile Grass,Double Blade,18,0,Right
+24,Vile Grass,Small Y,36,0,Bottom
+24,Vile Grass,Three Small,54,0,Right
+24,Vile Grass,Single Blade,72,0,Left
+24,Vile Grass,Three Large,90,0,Left
+24,Vile Flower,Yellow,108,0,Left
+24,Vile Flower,Red,126,0,Right
+24,Vile Mushroom,,144,0,Bottom
+26,,Demon Altar,0,0,
+26,,Crimson Altar,54,0,
+27,,A,0,0,
+27,,B,36,0,
+27,,C,72,0,
+28,,Clay Pot A1,0,0,
+28,,Clay Pot A2,36,0,
+28,,Clay Pot A3,72,0,
+28,,Clay Pot B1,0,36,
 28,,Clay Pot B2,36,36,
 28,,Clay Pot B3,72,36,
-28,,Clay Pot C1,,72,
+28,,Clay Pot C1,0,72,
 28,,Clay Pot C2,36,72,
 28,,Clay Pot C3,72,72,
-28,,Clay Pot D1,,108,
+28,,Clay Pot D1,0,108,
 28,,Clay Pot D2,36,108,
 28,,Clay Pot D3,72,108,
-28,,Frozen Pot A1,,144,
+28,,Frozen Pot A1,0,144,
 28,,Frozen Pot A2,36,144,
 28,,Frozen Pot A3,72,144,
-28,,Frozen Pot B1,,180,
+28,,Frozen Pot B1,0,180,
 28,,Frozen Pot B2,36,180,
 28,,Frozen Pot B3,72,180,
-28,,Frozen Pot C1,,216,
+28,,Frozen Pot C1,0,216,
 28,,Frozen Pot C2,36,216,
 28,,Frozen Pot C3,72,216,
-28,,Jungle Pot A1,,252,
+28,,Jungle Pot A1,0,252,
 28,,Jungle Pot A2,36,252,
 28,,Jungle Pot A3,72,252,
-28,,Jungle Pot B1,,288,
+28,,Jungle Pot B1,0,288,
 28,,Jungle Pot B2,36,288,
 28,,Jungle Pot B3,72,288,
-28,,Jungle Pot C1,,324,
+28,,Jungle Pot C1,0,324,
 28,,Jungle Pot C2,36,324,
 28,,Jungle Pot C3,72,324,
-28,,Skull Pot A1,,360,
+28,,Skull Pot A1,0,360,
 28,,Skull Pot A2,36,360,
 28,,Skull Pot A3,72,360,
-28,,Skull Pot B1,,396,
+28,,Skull Pot B1,0,396,
 28,,Skull Pot B2,36,396,
 28,,Skull Pot B3,72,396,
-28,,Skull Pot C1,,432,
+28,,Skull Pot C1,0,432,
 28,,Skull Pot C2,36,432,
 28,,Skull Pot C3,72,432,
-28,,Obsidian Pot A1,,468,
+28,,Obsidian Pot A1,0,468,
 28,,Obsidian Pot A2,36,468,
 28,,Obsidian Pot A3,72,468,
-28,,Obsidian Pot B1,,504,
+28,,Obsidian Pot B1,0,504,
 28,,Obsidian Pot B2,36,504,
 28,,Obsidian Pot B3,72,504,
-28,,Obsidian Pot C1,,540,
+28,,Obsidian Pot C1,0,540,
 28,,Obsidian Pot C2,36,540,
 28,,Obsidian Pot C3,72,540,
-28,,Corrupt Pot A1,,576,
+28,,Corrupt Pot A1,0,576,
 28,,Corrupt Pot A2,36,576,
 28,,Corrupt Pot A3,72,576,
-28,,Corrupt Pot B1,,612,
+28,,Corrupt Pot B1,0,612,
 28,,Corrupt Pot B2,36,612,
 28,,Corrupt Pot B3,72,612,
-28,,Corrupt Pot C1,,648,
+28,,Corrupt Pot C1,0,648,
 28,,Corrupt Pot C2,36,648,
 28,,Corrupt Pot C2,36,648,
 28,,Corrupt Pot C3,72,648,
-28,,Webbed Pot A1,,684,
+28,,Webbed Pot A1,0,684,
 28,,Webbed Pot A2,36,684,
 28,,Webbed Pot A3,72,684,
-28,,Webbed Pot B1,,720,
+28,,Webbed Pot B1,0,720,
 28,,Webbed Pot B2,36,720,
 28,,Webbed Pot B3,72,720,
-28,,Webbed Pot C1,,756,
+28,,Webbed Pot C1,0,756,
 28,,Webbed Pot C2,36,756,
 28,,Webbed Pot C3,72,756,
-28,,Crimson Pot A1,,792,
+28,,Crimson Pot A1,0,792,
 28,,Crimson Pot A2,36,792,
 28,,Crimson Pot A3,72,792,
-28,,Crimson Pot B1,,828,
+28,,Crimson Pot B1,0,828,
 28,,Crimson Pot B2,36,828,
 28,,Crimson Pot B3,72,828,
-28,,Crimson Pot C1,,864,
+28,,Crimson Pot C1,0,864,
 28,,Crimson Pot C2,36,864,
 28,,Crimson Pot C3,72,864,
-28,,Elegant Pot A1,,900,
+28,,Elegant Pot A1,0,900,
 28,,Elegant Pot A2,36,900,
 28,,Elegant Pot A3,72,900,
-28,,Elegant Pot B1,,936,
+28,,Elegant Pot B1,0,936,
 28,,Elegant Pot B2,36,936,
 28,,Elegant Pot B3,72,936,
-28,,Elegant Pot C1,,972,
+28,,Elegant Pot C1,0,972,
 28,,Elegant Pot C2,36,972,
 28,,Elegant Pot C3,72,972,
-28,,Lihzahrd Pot A1,,1008,
+28,,Lihzahrd Pot A1,0,1008,
 28,,Lihzahrd Pot A2,36,1008,
 28,,Lihzahrd Pot A3,72,1008,
-28,,Lihzahrd Pot B1,,1044,
+28,,Lihzahrd Pot B1,0,1044,
 28,,Lihzahrd Pot B2,36,1044,
 28,,Lihzahrd Pot B3,72,1044,
-28,,Lihzahrd Pot C1,,1080,
+28,,Lihzahrd Pot C1,0,1080,
 28,,Lihzahrd Pot C2,36,1080,
 28,,Lihzahrd Pot C3,72,1080,
-28,,Marble Pot A1,,1116,
+28,,Marble Pot A1,0,1116,
 28,,Marble Pot A2,36,1116,
 28,,Marble Pot A3,72,1116,
-28,,Marble Pot B1,,1152,
+28,,Marble Pot B1,0,1152,
 28,,Marble Pot B2,36,1152,
 28,,Marble Pot B3,72,1152,
-28,,Marble Pot C1,,1188,
+28,,Marble Pot C1,0,1188,
 28,,Marble Pot C2,36,1188,
 28,,Marble Pot C3,72,1188,
-29,,Default,,,
-31,Shadow Orb,,,,
-31,Demon Heart,,36,,
-33,Candle,On,,,
-33,Candle,Off,18,,
-33,Blue Dungeon Candle,On,,22,
+29,,Default,0,0,
+31,Shadow Orb,,0,0,
+31,Demon Heart,,36,0,
+33,Candle,On,0,0,
+33,Candle,Off,18,0,
+33,Blue Dungeon Candle,On,0,22,
 33,Blue Dungeon Candle,Off,18,22,
-33,Green Dungeon Candle,On,,44,
+33,Green Dungeon Candle,On,0,44,
 33,Green Dungeon Candle,Off,18,44,
-33,Pink Dungeon Candle,On,,66,
+33,Pink Dungeon Candle,On,0,66,
 33,Pink Dungeon Candle,Off,18,66,
-33,Cactus Candle,On,,88,
+33,Cactus Candle,On,0,88,
 33,Cactus Candle,Off,18,88,
-33,Ebonwood Candle,On,,110,
+33,Ebonwood Candle,On,0,110,
 33,Ebonwood Candle,Off,18,110,
-33,Flesh Candle,On,,132,
+33,Flesh Candle,On,0,132,
 33,Flesh Candle,Off,18,132,
-33,Glass Candle,On,,154,
+33,Glass Candle,On,0,154,
 33,Glass Candle,Off,18,154,
-33,Frozen Candle,On,,176,
+33,Frozen Candle,On,0,176,
 33,Frozen Candle,Off,18,176,
-33,Rich Mahogany Candle,On,,198,
+33,Rich Mahogany Candle,On,0,198,
 33,Rich Mahogany Candle,Off,18,198,
-33,Pearlwood Candle,On,,220,
+33,Pearlwood Candle,On,0,220,
 33,Pearlwood Candle,Off,18,220,
-33,Lihzahrd Candle,On,,242,
+33,Lihzahrd Candle,On,0,242,
 33,Lihzahrd Candle,Off,18,242,
-33,Skyware Candle,On,,264,
+33,Skyware Candle,On,0,264,
 33,Skyware Candle,Off,18,264,
-33,Pumpkin Candle,On,,286,
+33,Pumpkin Candle,On,0,286,
 33,Pumpkin Candle,Off,18,286,
-33,Living Wood Candle,On,,308,
+33,Living Wood Candle,On,0,308,
 33,Living Wood Candle,Off,18,308,
-33,Shadewood Candle,On,,330,
+33,Shadewood Candle,On,0,330,
 33,Shadewood Candle,Off,18,330,
-33,Golden Candle,On,,352,
+33,Golden Candle,On,0,352,
 33,Golden Candle,Off,18,352,
-33,Dynasty Candle,On,,374,
+33,Dynasty Candle,On,0,374,
 33,Dynasty Candle,Off,18,374,
-33,Palm Wood Candle,On,,396,
+33,Palm Wood Candle,On,0,396,
 33,Palm Wood Candle,Off,18,396,
-33,Mushroom Candle,On,,418,
+33,Mushroom Candle,On,0,418,
 33,Mushroom Candle,Off,18,418,
-33,Boreal Wood Candle,On,,440,
+33,Boreal Wood Candle,On,0,440,
 33,Boreal Wood Candle,Off,18,440,
-33,Slime Candle,On,,462,
+33,Slime Candle,On,0,462,
 33,Slime Candle,Off,18,462,
-33,Honey Candle,On,,484,
+33,Honey Candle,On,0,484,
 33,Honey Candle,Off,18,484,
-33,Steampunk Candle,On,,506,
+33,Steampunk Candle,On,0,506,
 33,Steampunk Candle,Off,18,506,
-33,Spooky Candle,On,,528,
+33,Spooky Candle,On,0,528,
 33,Spooky Candle,Off,18,528,
-33,Obsidian Candle,On,,550,
+33,Obsidian Candle,On,0,550,
 33,Obsidian Candle,Off,18,550,
-33,Martian Hover Candle,On,,572,
+33,Martian Hover Candle,On,0,572,
 33,Martian Hover Candle,Off,18,572,
-33,Meteorite Candle,On,,594,
+33,Meteorite Candle,On,0,594,
 33,Meteorite Candle,Off,18,594,
-33,Granite Candle,On,,616,
+33,Granite Candle,On,0,616,
 33,Granite Candle,Off,18,616,
-33,Marble Candle,On,,638,
+33,Marble Candle,On,0,638,
 33,Marble Candle,Off,18,638,
-33,Crystal Candle,On,,654,
+33,Crystal Candle,On,0,654,
 33,Crystal Candle,Off,18,654,
-34,Copper Chandelier,On,,,
-34,Copper Chandelier,Off,54,,
-34,Silver Chandelier,On,,54,
+34,Copper Chandelier,On,0,0,
+34,Copper Chandelier,Off,54,0,
+34,Silver Chandelier,On,0,54,
 34,Silver Chandelier,Off,54,54,
-34,Gold Chandelier,On,,108,
+34,Gold Chandelier,On,0,108,
 34,Gold Chandelier,Off,54,108,
-34,Tin Chandelier,On,,162,
+34,Tin Chandelier,On,0,162,
 34,Tin Chandelier,Off,54,162,
-34,Tungsten Chandelier,On,,216,
+34,Tungsten Chandelier,On,0,216,
 34,Tungsten Chandelier,Off,54,216,
-34,Platinum Chandelier,On,,270,
+34,Platinum Chandelier,On,0,270,
 34,Platinum Chandelier,Off,54,270,
-34,Jackelier,On,,324,
+34,Jackelier,On,0,324,
 34,Jackelier,Off,54,324,
-34,Cactus Chandelier,On,,378,
+34,Cactus Chandelier,On,0,378,
 34,Cactus Chandelier,Off,54,378,
-34,Ebonwood Chandelier,On,,432,
+34,Ebonwood Chandelier,On,0,432,
 34,Ebonwood Chandelier,Off,54,432,
-34,Flesh Chandelier,On,,486,
+34,Flesh Chandelier,On,0,486,
 34,Flesh Chandelier,Off,54,486,
-34,Honey Chandelier,On,,540,
+34,Honey Chandelier,On,0,540,
 34,Honey Chandelier,Off,54,540,
-34,Frozen Chandelier,On,,594,
+34,Frozen Chandelier,On,0,594,
 34,Frozen Chandelier,Off,54,594,
-34,Rich Mahogany Chandelier,On,,648,
+34,Rich Mahogany Chandelier,On,0,648,
 34,Rich Mahogany Chandelier,Off,54,648,
-34,Pearlwood Chandelier,On,,702,
+34,Pearlwood Chandelier,On,0,702,
 34,Pearlwood Chandelier,Off,54,702,
-34,Lihzahrd Chandelier,On,,756,
+34,Lihzahrd Chandelier,On,0,756,
 34,Lihzahrd Chandelier,Off,54,756,
-34,Skyware Chandelier,On,,810,
+34,Skyware Chandelier,On,0,810,
 34,Skyware Chandelier,Off,54,810,
-34,Spooky Chandelier,On,,864,
+34,Spooky Chandelier,On,0,864,
 34,Spooky Chandelier,Off,54,864,
-34,Glass Chandelier,On,,918,
+34,Glass Chandelier,On,0,918,
 34,Glass Chandelier,Off,54,918,
-34,Living Wood Chandelier,On,,972,
+34,Living Wood Chandelier,On,0,972,
 34,Living Wood Chandelier,Off,54,972,
-34,Shadewood Chandelier,On,,1026,
+34,Shadewood Chandelier,On,0,1026,
 34,Shadewood Chandelier,Off,54,1026,
-34,Golden Chandelier,On,,1080,
+34,Golden Chandelier,On,0,1080,
 34,Golden Chandelier,Off,54,1080,
-34,Bone Chandelier,On,,1134,
+34,Bone Chandelier,On,0,1134,
 34,Bone Chandelier,Off,54,1134,
-34,Large Dynasty Lantern,On,,1188,
+34,Large Dynasty Lantern,On,0,1188,
 34,Large Dynasty Lantern,Off,54,1188,
-34,Palm Wood Chandelier,On,,1242,
+34,Palm Wood Chandelier,On,0,1242,
 34,Palm Wood Chandelier,Off,54,1242,
-34,Mushroom Chandelier,On,,1296,
+34,Mushroom Chandelier,On,0,1296,
 34,Mushroom Chandelier,Off,54,1296,
-34,Boreal Wood Chandelier,On,,1350,
+34,Boreal Wood Chandelier,On,0,1350,
 34,Boreal Wood Chandelier,Off,54,1350,
-34,Slime Chandelier,On,,1404,
+34,Slime Chandelier,On,0,1404,
 34,Slime Chandelier,Off,54,1404,
-34,Blue Dungeon Chandelier,On,,1458,
+34,Blue Dungeon Chandelier,On,0,1458,
 34,Blue Dungeon Chandelier,Off,54,1458,
-34,Green Dungeon Chandelier,On,,1512,
+34,Green Dungeon Chandelier,On,0,1512,
 34,Green Dungeon Chandelier,Off,54,1512,
-34,Pink Dungeon Chandelier,On,,1566,
+34,Pink Dungeon Chandelier,On,0,1566,
 34,Pink Dungeon Chandelier,Off,54,1566,
-34,Steampunk Chandelier,On,,1620,
+34,Steampunk Chandelier,On,0,1620,
 34,Steampunk Chandelier,Off,54,1620,
-34,Pumpkin Chandelier,On,,1674,
+34,Pumpkin Chandelier,On,0,1674,
 34,Pumpkin Chandelier,Off,54,1674,
-34,Obsidian Chandelier,On,,1728,
+34,Obsidian Chandelier,On,0,1728,
 34,Obsidian Chandelier,Off,54,1728,
-34,Martian Chandelier,On,,1782,
+34,Martian Chandelier,On,0,1782,
 34,Martian Chandelier,Off,54,1782,
-34,Meteorite Chandelier,On,,1836,
+34,Meteorite Chandelier,On,0,1836,
 34,Meteorite Chandelier,Off,54,1836,
-34,Granite Chandelier,On,,1890,
+34,Granite Chandelier,On,0,1890,
 34,Granite Chandelier,Off,54,1890,
-34,Marble Chandelier,On,,1944,
+34,Marble Chandelier,On,0,1944,
 34,Marble Chandelier,Off,54,1944,
-34,Crystal Chandelier,On,108,,
-34,Crystal Chandelier,Off,162,,
-35,Jack 'O Lantern 1,On,,,
-35,Jack 'O Lantern 1,Off,36,,
-35,Jack 'O Lantern 2,On,,36,
+34,Crystal Chandelier,On,108,0,
+34,Crystal Chandelier,Off,162,0,
+35,Jack 'O Lantern 1,On,0,0,
+35,Jack 'O Lantern 1,Off,36,0,
+35,Jack 'O Lantern 2,On,0,36,
 35,Jack 'O Lantern 2,Off,36,36,
-35,Jack 'O Lantern 3,On,,72,
+35,Jack 'O Lantern 3,On,0,72,
 35,Jack 'O Lantern 3,Off,36,72,
-35,Jack 'O Lantern 4,On,,108,
+35,Jack 'O Lantern 4,On,0,108,
 35,Jack 'O Lantern 4,Off,36,108,
-35,Jack 'O Lantern 5,On,,144,
+35,Jack 'O Lantern 5,On,0,144,
 35,Jack 'O Lantern 5,Off,36,144,
-35,Jack 'O Lantern 6,On,,180,
+35,Jack 'O Lantern 6,On,0,180,
 35,Jack 'O Lantern 6,Off,36,180,
-35,Jack 'O Lantern 7,On,,216,
+35,Jack 'O Lantern 7,On,0,216,
 35,Jack 'O Lantern 7,Off,36,216,
-35,Jack 'O Lantern 8,On,,252,
+35,Jack 'O Lantern 8,On,0,252,
 35,Jack 'O Lantern 8,Off,36,252,
-35,Jack 'O Lantern 9,On,,288,
+35,Jack 'O Lantern 9,On,0,288,
 35,Jack 'O Lantern 9,Off,36,288,
-35,Crystal Lantern,On,,1332,
+35,Crystal Lantern,On,0,1332,
 35,Crystal Lantern,Off,18,1332,
-36,Present,Red with White Ribbon,,,
-36,Present,Red with Blue Ribbon,18,,
-36,Present,Green with White Ribbon,36,,
-36,Present,Green with Red Ribbon,54,,
-36,Present,Yellow with White Ribbon,72,,
-36,Present,Blue with White Ribbon,90,,
-36,Present,Blue with Yellow Ribbon,108,,
-42,Chain Lantern,On,,,
-42,Chain Lantern,Off,18,,
-42,Brass Lantern,On,,36,
+36,Present,Red with White Ribbon,0,0,
+36,Present,Red with Blue Ribbon,18,0,
+36,Present,Green with White Ribbon,36,0,
+36,Present,Green with Red Ribbon,54,0,
+36,Present,Yellow with White Ribbon,72,0,
+36,Present,Blue with White Ribbon,90,0,
+36,Present,Blue with Yellow Ribbon,108,0,
+42,Chain Lantern,On,0,0,
+42,Chain Lantern,Off,18,0,
+42,Brass Lantern,On,0,36,
 42,Brass Lantern,Off,18,36,
-42,Caged Lantern,On,,72,
+42,Caged Lantern,On,0,72,
 42,Caged Lantern,Off,18,72,
-42,Carriage Lantern,On,,108,
+42,Carriage Lantern,On,0,108,
 42,Carriage Lantern,Off,18,108,
-42,Alchemy Lantern,On,,144,
+42,Alchemy Lantern,On,0,144,
 42,Alchemy Lantern,Off,18,144,
-42,Diablost Lamp,On,,180,
+42,Diablost Lamp,On,0,180,
 42,Diablost Lamp,Off,18,180,
-42,Oil Rag Sconse,On,,216,
+42,Oil Rag Sconse,On,0,216,
 42,Oil Rag Sconse,Off,18,216,
-42,Star in a Bottle,On,,252,
+42,Star in a Bottle,On,0,252,
 42,Star in a Bottle,Off,18,252,
-42,Hanging Jack 'O Lantern,On,,288,
+42,Hanging Jack 'O Lantern,On,0,288,
 42,Hanging Jack 'O Lantern,Off,18,288,
-42,Heart Lantern,On,,324,
+42,Heart Lantern,On,0,324,
 42,Heart Lantern,Off,18,324,
-42,Cactus Lantern,On,,360,
+42,Cactus Lantern,On,0,360,
 42,Cactus Lantern,Off,18,360,
-42,Ebonwood Lantern,On,,396,
+42,Ebonwood Lantern,On,0,396,
 42,Ebonwood Lantern,Off,18,396,
-42,Flesh Lantern,On,,432,
+42,Flesh Lantern,On,0,432,
 42,Flesh Lantern,Off,18,432,
-42,Honey Lantern,On,,468,
+42,Honey Lantern,On,0,468,
 42,Honey Lantern,Off,18,468,
-42,Steampunk Lantern,On,,504,
+42,Steampunk Lantern,On,0,504,
 42,Steampunk Lantern,Off,18,504,
-42,Glass Lantern,On,,540,
+42,Glass Lantern,On,0,540,
 42,Glass Lantern,Off,18,540,
-42,Rich Mahogany Lantern,On,,576,
+42,Rich Mahogany Lantern,On,0,576,
 42,Rich Mahogany Lantern,Off,18,576,
-42,Pearlwood Lantern,On,,612,
+42,Pearlwood Lantern,On,0,612,
 42,Pearlwood Lantern,Off,18,612,
-42,Frozen Lantern,On,,648,
+42,Frozen Lantern,On,0,648,
 42,Frozen Lantern,Off,18,648,
-42,Lihzahrd Lantern,On,,684,
+42,Lihzahrd Lantern,On,0,684,
 42,Lihzahrd Lantern,Off,18,684,
-42,Skyware Lantern,On,,720,
+42,Skyware Lantern,On,0,720,
 42,Skyware Lantern,Off,18,720,
-42,Spooky Lantern,On,,756,
+42,Spooky Lantern,On,0,756,
 42,Spooky Lantern,Off,18,756,
-42,Living Wood Lantern,On,,792,
+42,Living Wood Lantern,On,0,792,
 42,Living Wood Lantern,Off,18,792,
-42,Shadewood Lantern,On,,828,
+42,Shadewood Lantern,On,0,828,
 42,Shadewood Lantern,Off,18,828,
-42,Golden Lantern,On,,864,
+42,Golden Lantern,On,0,864,
 42,Golden Lantern,Off,18,864,
-42,Bone Lantern,On,,900,
+42,Bone Lantern,On,0,900,
 42,Bone Lantern,Off,18,900,
-42,Dynasty Lantern,On,,936,
+42,Dynasty Lantern,On,0,936,
 42,Dynasty Lantern,Off,18,936,
-42,Palm Wood Lantern,On,,972,
+42,Palm Wood Lantern,On,0,972,
 42,Palm Wood Lantern,Off,18,972,
-42,Mushroom Lantern,On,,1008,
+42,Mushroom Lantern,On,0,1008,
 42,Mushroom Lantern,Off,18,1008,
-42,Boreal Wood Lantern,On,,1044,
+42,Boreal Wood Lantern,On,0,1044,
 42,Boreal Wood Lantern,Off,18,1044,
-42,Slime Lantern,On,,1080,
+42,Slime Lantern,On,0,1080,
 42,Slime Lantern,Off,18,1080,
-42,Pumpkin Lantern,On,,1116,
+42,Pumpkin Lantern,On,0,1116,
 42,Pumpkin Lantern,Off,18,1116,
-42,Obsidian Lantern,On,,1152,
+42,Obsidian Lantern,On,0,1152,
 42,Obsidian Lantern,Off,18,1152,
-42,Martian Lantern,On,,1188,
+42,Martian Lantern,On,0,1188,
 42,Martian Lantern,Off,18,1188,
-42,Meteorite Lantern,On,,1224,
+42,Meteorite Lantern,On,0,1224,
 42,Meteorite Lantern,Off,18,1224,
-42,Granite Lantern,On,,1260,
+42,Granite Lantern,On,0,1260,
 42,Granite Lantern,Off,18,1260,
-42,Marble Lantern,On,,1296,
+42,Marble Lantern,On,0,1296,
 42,Marble Lantern,Off,18,1296,
-50,,Blue Red Brown,,,
-50,,Yellow Pink,18,,
-50,,Teal Brown,36,,
-50,,Purple Blue,54,,
-50,,Green Orange,72,,
-50,,Brown Water Bolt Gray,90,,
-55,,Ground,,,Top
-55,,Hanging,36,,Bottom
-55,,Left Side,72,,Left
-55,,Right Side,108,,Right
-61,Jungle Grass,Single Blade,,,Right
-61,Jungle Grass,Double Blade,18,,Right
-61,Jungle Grass,Small Y,36,,Bottom
-61,Jungle Grass,Three Small,54,,Right
-61,Jungle Grass,Single Blade,72,,Left
-61,Jungle Grass,Three Large,90,,Left
-61,Jungle Rose,Immature,108,,Left
-61,Jungle Rose,Immature,126,,Right
-61,Puff Light,,144,,Bottom
-61,Nature's Gift,Immature,162,,Right
-71,,Double Small,,,
-71,,Small,18,,
-71,,Malformed,36,,
-71,,Thin,54,,
-71,,Standard,72,,
-72,,Trunk A,,,
-72,,Tree Top,18,,Bottom
-72,,Trunk B,,18,
+50,,Blue Red Brown,0,0,
+50,,Yellow Pink,18,0,
+50,,Teal Brown,36,0,
+50,,Purple Blue,54,0,
+50,,Green Orange,72,0,
+50,,Brown Water Bolt Gray,90,0,
+55,,Ground,0,0,Top
+55,,Hanging,36,0,Bottom
+55,,Left Side,72,0,Left
+55,,Right Side,108,0,Right
+61,Jungle Grass,Single Blade,0,0,Right
+61,Jungle Grass,Double Blade,18,0,Right
+61,Jungle Grass,Small Y,36,0,Bottom
+61,Jungle Grass,Three Small,54,0,Right
+61,Jungle Grass,Single Blade,72,0,Left
+61,Jungle Grass,Three Large,90,0,Left
+61,Jungle Rose,Immature,108,0,Left
+61,Jungle Rose,Immature,126,0,Right
+61,Puff Light,,144,0,Bottom
+61,Nature's Gift,Immature,162,0,Right
+71,,Double Small,0,0,
+71,,Small,18,0,
+71,,Malformed,36,0,
+71,,Thin,54,0,
+71,,Standard,72,0,
+72,,Trunk A,0,0,
+72,,Tree Top,18,0,Bottom
+72,,Trunk B,0,18,
 72,,Tree Top,18,18,Right
-72,,Trunk C,,36,
+72,,Trunk C,0,36,
 72,,Tree Top,18,36,Left
-73,Grass,G,,,Bottom
-73,Grass,C,18,,Bottom
-73,Grass,?,36,,Bottom
-73,Grass,u,54,,Bottom
-73,Grass,w,72,,Bottom
-73,Grass,W,90,,Bottom
-73,Rose,A,108,,Bottom
-73,Rose,B,126,,Bottom
-74,Jungle Grass,G,,,Bottom
-74,Jungle Grass,C,18,,Bottom
-74,Jungle Grass,?,36,,Bottom
-74,Jungle Grass,u,54,,Bottom
-74,Jungle Grass,w,72,,Bottom
-74,Jungle Grass,W,90,,Bottom
-74,Jungle Rose,A,108,,Bottom
-74,Jungle Rose,B,126,,Bottom
-79,Wooden Bed,,,,Left
-79,Wooden Bed,Right,72,,
-79,Ebonwood Bed,,,36,Left
+73,Grass,G,0,0,Bottom
+73,Grass,C,18,0,Bottom
+73,Grass,?,36,0,Bottom
+73,Grass,u,54,0,Bottom
+73,Grass,w,72,0,Bottom
+73,Grass,W,90,0,Bottom
+73,Rose,A,108,0,Bottom
+73,Rose,B,126,0,Bottom
+74,Jungle Grass,G,0,0,Bottom
+74,Jungle Grass,C,18,0,Bottom
+74,Jungle Grass,?,36,0,Bottom
+74,Jungle Grass,u,54,0,Bottom
+74,Jungle Grass,w,72,0,Bottom
+74,Jungle Grass,W,90,0,Bottom
+74,Jungle Rose,A,108,0,Bottom
+74,Jungle Rose,B,126,0,Bottom
+79,Wooden Bed,,0,0,Left
+79,Wooden Bed,Right,72,0,
+79,Ebonwood Bed,,0,36,Left
 79,Ebonwood Bed,Right,72,36,
-79,Rich Mahogany Bed,,,72,Left
+79,Rich Mahogany Bed,,0,72,Left
 79,Rich Mahogany Bed,Right,72,72,
-79,Pearlwood Bed,,,108,Left
+79,Pearlwood Bed,,0,108,Left
 79,Pearlwood Bed,Right,72,108,
-79,Shadewood Bed,,,144,Left
+79,Shadewood Bed,,0,144,Left
 79,Shadewood Bed,Right,72,144,
-79,Blue Dungeon Bed,,,180,Left
+79,Blue Dungeon Bed,,0,180,Left
 79,Blue Dungeon Bed,Right,72,180,
-79,Green Dungeon Bed,,,216,Left
+79,Green Dungeon Bed,,0,216,Left
 79,Green Dungeon Bed,Right,72,216,
-79,Pink Dungeon Bed,,,252,Left
+79,Pink Dungeon Bed,,0,252,Left
 79,Pink Dungeon Bed,Right,72,252,
-79,Obsidian Bed,,,288,Left
+79,Obsidian Bed,,0,288,Left
 79,Obsidian Bed,Right,72,288,
-79,Glass Bed,,,324,Left
+79,Glass Bed,,0,324,Left
 79,Glass Bed,Right,72,324,
-79,Golden Bed,,,360,Left
+79,Golden Bed,,0,360,Left
 79,Golden Bed,Right,72,360,
-79,Honey Bed,,,396,Left
+79,Honey Bed,,0,396,Left
 79,Honey Bed,Right,72,396,
-79,Steam Punk Bed,,,432,Left
+79,Steam Punk Bed,,0,432,Left
 79,Steam Punk Bed,Right,72,432,
-79,Cactus Bed,,,468,Left
+79,Cactus Bed,,0,468,Left
 79,Cactus Bed,Right,72,468,
-79,Flesh Bed,,,504,Left
+79,Flesh Bed,,0,504,Left
 79,Flesh Bed,Right,72,504,
-79,Frozen Bed,,,540,Left
+79,Frozen Bed,,0,540,Left
 79,Frozen Bed,Right,72,540,
-79,Lihzahrd Bed,,,576,Left
+79,Lihzahrd Bed,,0,576,Left
 79,Lihzahrd Bed,Right,72,576,
-79,Skyware Bed,,,612,Left
+79,Skyware Bed,,0,612,Left
 79,Skyware Bed,Right,72,612,
-79,Spooky Bed,,,648,Left
+79,Spooky Bed,,0,648,Left
 79,Spooky Bed,Right,72,648,
-79,Living Wood Bed,,,684,Left
+79,Living Wood Bed,,0,684,Left
 79,Living Wood Bed,Right,72,684,
-79,Bone Bed,,,720,Left
+79,Bone Bed,,0,720,Left
 79,Bone Bed,Right,72,720,
-79,Dynasty Bed,,,756,Left
+79,Dynasty Bed,,0,756,Left
 79,Dynasty Bed,Right,72,756,
-79,Palm Wood Bed,,,792,Left
+79,Palm Wood Bed,,0,792,Left
 79,Palm Wood Bed,Right,72,792,
-79,Mushroom Bed,,,828,Left
+79,Mushroom Bed,,0,828,Left
 79,Mushroom Bed,Right,72,828,
-79,Boreal Wood Bed,,,864,Left
+79,Boreal Wood Bed,,0,864,Left
 79,Boreal Wood Bed,Right,72,864,
-79,Slime Bed,,,900,Left
+79,Slime Bed,,0,900,Left
 79,Slime Bed,Right,72,900,
-79,Pumpkin Bed,,,936,Left
+79,Pumpkin Bed,,0,936,Left
 79,Pumpkin Bed,Right,72,936,
-79,Martian Bed,,,972,Left
+79,Martian Bed,,0,972,Left
 79,Martian Bed,Right,72,972,
-79,Meteorite Bed,,,1008,Left
+79,Meteorite Bed,,0,1008,Left
 79,Meteorite Bed,Right,72,1008,
-79,Granite Bed,,,1044,Left
+79,Granite Bed,,0,1044,Left
 79,Granite Bed,Right,72,1044,
-79,Marble Bed,,,1080,Left
+79,Marble Bed,,0,1080,Left
 79,Marble Bed,Right,72,1080,
-79,Crystal Bed,Left,,1116,
+79,Crystal Bed,Left,0,1116,
 79,Crystal Bed,Right,72,1116,
-80,,Default,,,
-81,,Red,,,
-81,,Pink,26,,
-81,,Yellow,52,,
-81,,Green,78,,
-81,,Blue,104,,
-81,,Sponge,130,,
-82,Daybloom,,,,
-82,Moonglow,,18,,
-82,Blinkroot,,36,,
-82,Deathweed,,54,,
-82,Waterleaf,,72,,
-82,Fireblossom,,90,,
-82,Shiverthorn,,108,,
-83,Daybloom,,,,
-83,Moonglow,,18,,
-83,Blinkroot,,36,,
-83,Deathweed,,54,,
-83,Waterleaf,,72,,
-83,Fireblossom,,90,,
-83,Shiverthorn,,108,,
-84,Daybloom,,,,
-84,Moonglow,,18,,
-84,Blinkroot,,36,,
-84,Deathweed,,54,,
-84,Waterleaf,,72,,
-84,Fireblossom,,90,,
-84,Shiverthorn,,108,,
-85,,Tombstone,,,
-85,,Grave Marker,36,,
-85,,Cross Grave Marker,72,,
-85,,Headstone,108,,
-85,,Gravestone,144,,
-85,,Obelisk,180,,
-85,,Golden Cross Grave Marker,216,,
-85,,Golden Tombstone,252,,
-85,,Golden Grave Marker,288,,
-85,,Golden Gravestone,324,,
-85,,Golden Headstone,360,,
-87,,Wooden,,,
-87,,Ebonwood,54,,
-87,,Rich Mahogany,108,,
-87,,Pearlwood,162,,
-87,,Shadewood,216,,
-87,,Living Wood,270,,
-87,,Flesh,324,,
-87,,Frozen,378,,
-87,,Glass,432,,
-87,,Honey,486,,
-87,,Steampunk,540,,
-87,,Blue Dungeon,594,,
-87,,Green Dungeon,648,,
-87,,Pink Dungeon,702,,
-87,,Golden,756,,
-87,,Obsidian,810,,
-87,,Bone,864,,
-87,,Cactus,918,,
-87,,Spooky,972,,
-87,,Skyware,1026,,
-87,,Lihzahrd,1080,,
-87,,Palm Wood,1134,,
-87,,Mushroom,1188,,
-87,,Boreal Wood,1242,,
-87,,Slime,1296,,
-87,,Pumpkin,1350,,
-87,,Martian,1404,,
-87,,Meteorite,1458,,
-87,,Granite,1512,,
-87,,Marble,1566,,
-87,,Crystal,1620,,
-87,,Dynasty,1674,,
-88,,Wooden,,,
-88,,Ebonwood,54,,
-88,,Rich Mahogany,108,,
-88,,Pearlwood,162,,
-88,,Shadewood,216,,
-88,,Blue Dungeon,270,,
-88,,Green Dungeon,324,,
-88,,Pink Dungeon,378,,
-88,,Golden,432,,
-88,,Obsidian,486,,
-88,,Bone,540,,
-88,,Cactus,594,,
-88,,Spooky,648,,
-88,,Skyware,702,,
-88,,Honey,756,,
-88,,Lihzahrd,810,,
-88,,Palm Wood,864,,
-88,,Mushroom,918,,
-88,,Boreal Wood,972,,
-88,,Slime,1026,,
-88,,Pumpkin,1080,,
-88,,Steampunk,1134,,
-88,,Glass,1188,,
-88,,Flesh,1242,,
-88,,Martian,1296,,
-88,,Meteorite,1350,,
-88,,Granite,1404,,
-88,,Marble,1458,,
-88,,Crystal,1512,,
-88,,Dynasty,1566,,
-88,,Frozen,1620,,
-88,,Living Wood,1674,,
-89,,Wood Bench,,,
-89,,Sofa,54,,
-89,,Ebonwood Sofa,108,,
-89,,Rich Mahogany Sofa,162,,
-89,,Pearlwood Sofa,216,,
-89,,Shadewood Sofa,270,,
-89,,Blue Dungeon Sofa,324,,
-89,,Green Dungeon Sofa,378,,
-89,,Pink Dungeon Sofa,432,,
-89,,Golden Sofa,486,,
-89,,Obsidian Sofa,540,,
-89,,Bone Sofa,594,,
-89,,Cactus Sofa,648,,
-89,,Spooky Sofa,702,,
-89,,Skyware Sofa,756,,
-89,,Honey Sofa,810,,
-89,,Steampunk Sofa,864,,
-89,,Mushroom Sofa,918,,
-89,,Glass Sofa,972,,
-89,,Pumpkin Sofa,1026,,
-89,,Lihzahrd Sofa,1080,,
-89,,Palm Wood Bench,1134,,
-89,,Palm Wood Sofa,1188,,
-89,,Mushroom Bench,1242,,
-89,,Boreal Wood Sofa,1296,,
-89,,Slime Sofa,1350,,
-89,,Flesh Sofa,1404,,
-89,,Frozen Sofa,1458,,
-89,,Living Wood Sofa,1512,,
-89,,Martian Sofa,1566,,
-89,,Meteorite Sofa,1620,,
-89,,Granite Sofa,1674,,
-89,,Marble Sofa,1728,,
-89,,Crystal Sofa,1782,,
-89,,Dynasty Sofa,1826,,
-90,,Metal Bathtub,,,Left
-90,,Metal Bathtub,72,,Left
-90,,Cactus Bathtub,,36,Left
+80,,Default,0,0,
+81,,Red,0,0,
+81,,Pink,26,0,
+81,,Yellow,52,0,
+81,,Green,78,0,
+81,,Blue,104,0,
+81,,Sponge,130,0,
+82,Daybloom,,0,0,
+82,Moonglow,,18,0,
+82,Blinkroot,,36,0,
+82,Deathweed,,54,0,
+82,Waterleaf,,72,0,
+82,Fireblossom,,90,0,
+82,Shiverthorn,,108,0,
+83,Daybloom,,0,0,
+83,Moonglow,,18,0,
+83,Blinkroot,,36,0,
+83,Deathweed,,54,0,
+83,Waterleaf,,72,0,
+83,Fireblossom,,90,0,
+83,Shiverthorn,,108,0,
+84,Daybloom,,0,0,
+84,Moonglow,,18,0,
+84,Blinkroot,,36,0,
+84,Deathweed,,54,0,
+84,Waterleaf,,72,0,
+84,Fireblossom,,90,0,
+84,Shiverthorn,,108,0,
+85,,Tombstone,0,0,
+85,,Grave Marker,36,0,
+85,,Cross Grave Marker,72,0,
+85,,Headstone,108,0,
+85,,Gravestone,144,0,
+85,,Obelisk,180,0,
+85,,Golden Cross Grave Marker,216,0,
+85,,Golden Tombstone,252,0,
+85,,Golden Grave Marker,288,0,
+85,,Golden Gravestone,324,0,
+85,,Golden Headstone,360,0,
+87,,Wooden,0,0,
+87,,Ebonwood,54,0,
+87,,Rich Mahogany,108,0,
+87,,Pearlwood,162,0,
+87,,Shadewood,216,0,
+87,,Living Wood,270,0,
+87,,Flesh,324,0,
+87,,Frozen,378,0,
+87,,Glass,432,0,
+87,,Honey,486,0,
+87,,Steampunk,540,0,
+87,,Blue Dungeon,594,0,
+87,,Green Dungeon,648,0,
+87,,Pink Dungeon,702,0,
+87,,Golden,756,0,
+87,,Obsidian,810,0,
+87,,Bone,864,0,
+87,,Cactus,918,0,
+87,,Spooky,972,0,
+87,,Skyware,1026,0,
+87,,Lihzahrd,1080,0,
+87,,Palm Wood,1134,0,
+87,,Mushroom,1188,0,
+87,,Boreal Wood,1242,0,
+87,,Slime,1296,0,
+87,,Pumpkin,1350,0,
+87,,Martian,1404,0,
+87,,Meteorite,1458,0,
+87,,Granite,1512,0,
+87,,Marble,1566,0,
+87,,Crystal,1620,0,
+87,,Dynasty,1674,0,
+88,,Wooden,0,0,
+88,,Ebonwood,54,0,
+88,,Rich Mahogany,108,0,
+88,,Pearlwood,162,0,
+88,,Shadewood,216,0,
+88,,Blue Dungeon,270,0,
+88,,Green Dungeon,324,0,
+88,,Pink Dungeon,378,0,
+88,,Golden,432,0,
+88,,Obsidian,486,0,
+88,,Bone,540,0,
+88,,Cactus,594,0,
+88,,Spooky,648,0,
+88,,Skyware,702,0,
+88,,Honey,756,0,
+88,,Lihzahrd,810,0,
+88,,Palm Wood,864,0,
+88,,Mushroom,918,0,
+88,,Boreal Wood,972,0,
+88,,Slime,1026,0,
+88,,Pumpkin,1080,0,
+88,,Steampunk,1134,0,
+88,,Glass,1188,0,
+88,,Flesh,1242,0,
+88,,Martian,1296,0,
+88,,Meteorite,1350,0,
+88,,Granite,1404,0,
+88,,Marble,1458,0,
+88,,Crystal,1512,0,
+88,,Dynasty,1566,0,
+88,,Frozen,1620,0,
+88,,Living Wood,1674,0,
+89,,Wood Bench,0,0,
+89,,Sofa,54,0,
+89,,Ebonwood Sofa,108,0,
+89,,Rich Mahogany Sofa,162,0,
+89,,Pearlwood Sofa,216,0,
+89,,Shadewood Sofa,270,0,
+89,,Blue Dungeon Sofa,324,0,
+89,,Green Dungeon Sofa,378,0,
+89,,Pink Dungeon Sofa,432,0,
+89,,Golden Sofa,486,0,
+89,,Obsidian Sofa,540,0,
+89,,Bone Sofa,594,0,
+89,,Cactus Sofa,648,0,
+89,,Spooky Sofa,702,0,
+89,,Skyware Sofa,756,0,
+89,,Honey Sofa,810,0,
+89,,Steampunk Sofa,864,0,
+89,,Mushroom Sofa,918,0,
+89,,Glass Sofa,972,0,
+89,,Pumpkin Sofa,1026,0,
+89,,Lihzahrd Sofa,1080,0,
+89,,Palm Wood Bench,1134,0,
+89,,Palm Wood Sofa,1188,0,
+89,,Mushroom Bench,1242,0,
+89,,Boreal Wood Sofa,1296,0,
+89,,Slime Sofa,1350,0,
+89,,Flesh Sofa,1404,0,
+89,,Frozen Sofa,1458,0,
+89,,Living Wood Sofa,1512,0,
+89,,Martian Sofa,1566,0,
+89,,Meteorite Sofa,1620,0,
+89,,Granite Sofa,1674,0,
+89,,Marble Sofa,1728,0,
+89,,Crystal Sofa,1782,0,
+89,,Dynasty Sofa,1826,0,
+90,,Metal Bathtub,0,0,Left
+90,,Metal Bathtub,72,0,Left
+90,,Cactus Bathtub,0,36,Left
 90,,Cactus Bathtub,72,36,Left
-90,,Ebonwood Bathtub,,72,Left
+90,,Ebonwood Bathtub,0,72,Left
 90,,Ebonwood Bathtub,72,72,Left
-90,,Flesh Bathtub,,108,Left
+90,,Flesh Bathtub,0,108,Left
 90,,Flesh Bathtub,72,108,Left
-90,,Glass Bathtub,,144,Left
+90,,Glass Bathtub,0,144,Left
 90,,Glass Bathtub,72,144,Left
-90,,Frozen Bathtub,,180,Left
+90,,Frozen Bathtub,0,180,Left
 90,,Frozen Bathtub,72,180,Left
-90,,Rich Mahogany Bathtub,,216,Left
+90,,Rich Mahogany Bathtub,0,216,Left
 90,,Rich Mahogany Bathtub,72,216,Left
-90,,Pearlwood Bathtub,,252,Left
+90,,Pearlwood Bathtub,0,252,Left
 90,,Pearlwood Bathtub,72,252,Left
-90,,Lihzahrd Bathtub,,288,Left
+90,,Lihzahrd Bathtub,0,288,Left
 90,,Lihzahrd Bathtub,72,288,Left
-90,,Skyware Bathtub,,324,Left
+90,,Skyware Bathtub,0,324,Left
 90,,Skyware Bathtub,72,324,Left
-90,,Spooky Bathtub,,360,Left
+90,,Spooky Bathtub,0,360,Left
 90,,Spooky Bathtub,72,360,Left
-90,,Honey Bathtub,,396,Left
+90,,Honey Bathtub,0,396,Left
 90,,Honey Bathtub,72,396,Left
-90,,Steampunk Bathtub,,432,Left
+90,,Steampunk Bathtub,0,432,Left
 90,,Steampunk Bathtub,72,432,Left
-90,,Living Wood Bathtub,,468,Left
+90,,Living Wood Bathtub,0,468,Left
 90,,Living Wood Bathtub,72,468,Left
-90,,Shadewood Bathtub,,504,Left
+90,,Shadewood Bathtub,0,504,Left
 90,,Shadewood Bathtub,72,504,Left
-90,,Bone Bathtub,,540,Left
+90,,Bone Bathtub,0,540,Left
 90,,Bone Bathtub,72,540,Left
-90,,Dynasty Bathtub,,576,Left
+90,,Dynasty Bathtub,0,576,Left
 90,,Dynasty Bathtub,72,576,Left
-90,,Palm Wood Bathtub,,612,Left
+90,,Palm Wood Bathtub,0,612,Left
 90,,Palm Wood Bathtub,72,612,Left
-90,,Mushroom Bathtub,,648,Left
+90,,Mushroom Bathtub,0,648,Left
 90,,Mushroom Bathtub,72,648,Left
-90,,Boreal Wood Bathtub,,684,Left
+90,,Boreal Wood Bathtub,0,684,Left
 90,,Boreal Wood Bathtub,72,684,Left
-90,,Slime Bathtub,,720,Left
+90,,Slime Bathtub,0,720,Left
 90,,Slime Bathtub,72,720,Left
-90,,Blue Dungeon Bathtub,,756,Left
+90,,Blue Dungeon Bathtub,0,756,Left
 90,,Blue Dungeon Bathtub,72,756,Left
-90,,Green Dungeon Bathtub,,792,Left
+90,,Green Dungeon Bathtub,0,792,Left
 90,,Green Dungeon Bathtub,72,792,Left
-90,,Pink Dungeon Bathtub,,828,Left
+90,,Pink Dungeon Bathtub,0,828,Left
 90,,Pink Dungeon Bathtub,72,828,Left
-90,,Pumpkin Bathtub,,864,Left
+90,,Pumpkin Bathtub,0,864,Left
 90,,Pumpkin Bathtub,72,864,Left
-90,,Obsidian Bathtub,,900,Left
+90,,Obsidian Bathtub,0,900,Left
 90,,Obsidian Bathtub,72,900,Left
 90,,Golden Bathtub,72,936,Left
-90,,Golden Bathtub,,936,Left
+90,,Golden Bathtub,0,936,Left
 90,,Martian Bathtub,72,972,Left
-90,,Martian Bathtub,,972,Left
+90,,Martian Bathtub,0,972,Left
 90,,Meteorite Bathtub,72,1008,Left
-90,,Meteorite Bathtub,,1008,Left
+90,,Meteorite Bathtub,0,1008,Left
 90,,Granite Bathtub,72,1044,Left
-90,,Granite Bathtub,,1044,Left
+90,,Granite Bathtub,0,1044,Left
 90,,Marble Bathtub,72,1080,Left
-90,,Marble Bathtub,,1080,Left
+90,,Marble Bathtub,0,1080,Left
 90,Crystal Bathtub,Left,72,1116,
-90,Crystal Bathtub,Right,,1116,
-91,Craftable Banner,Red Banner,,,
-91,Craftable Banner,Green Banner,18,,
-91,Craftable Banner,Blue Banner,36,,
-91,Craftable Banner,Yellow Banner,54,,
-91,Pyramid Banner,Ankh Banner,72,,
-91,Pyramid Banner,Snake Banner,90,,
-91,Pyramid Banner,Omega Banner,108,,
-91,Sky Banner,World Banner,126,,
-91,Sky Banner,Sun Banner,144,,
-91,Sky Banner,Gravity Banner,162,,
-91,Faction Banner,Marching Bones Banner,180,,
-91,Faction Banner,Necromantic Sign,198,,
-91,Faction Banner,Rusted Company Standard,216,,
-91,Faction Banner,Ragged Brotherhood Sigil,234,,
-91,Faction Banner,Molten Legion Flag,252,,
-91,Faction Banner,Diabolic Sigil,270,,
-91,Underworld Banner,Hellbound Banner,288,,
-91,Underworld Banner,Hell Hammer Banner,306,,
-91,Underworld Banner,Helltower Banner,324,,
-91,Underworld Banner,Lost Hopes of Man Banner,342,,
-91,Underworld Banner,Obsidian Watcher Banner,360,,
-91,Underworld Banner,Lava Erupts Banner,378,,
-91,Monster Banner,Angler Fish Banner,396,,
-91,Monster Banner,Angry Nimbus Banner,414,,
-91,Monster Banner,Anomura Fungus Banner,432,,
-91,Monster Banner,Antlion Banner,450,,
-91,Monster Banner,Arapaima Banner,468,,
-91,Monster Banner,Armored Skeleton Banner,486,,
-91,Monster Banner,Bat Banner,504,,
-91,Monster Banner,Bird Banner,522,,
-91,Monster Banner,Black Recluse Banner,540,,
-91,Monster Banner,Blood Feeder Banner,558,,
-91,Monster Banner,Blood Jelly Banner,576,,
-91,Monster Banner,Blood Crawler Banner,594,,
-91,Monster Banner,Bone Serpent Banner,612,,
-91,Monster Banner,Bunny Banner,630,,
-91,Monster Banner,Chaos Elemental Banner,648,,
-91,Monster Banner,Mimic Banner,666,,
-91,Monster Banner,Clown Banner,684,,
-91,Monster Banner,Corrupt Bunny Banner,702,,
-91,Monster Banner,Corrupt Goldfish Banner,720,,
-91,Monster Banner,Crab Banner,738,,
-91,Monster Banner,Crimera Banner,756,,
-91,Monster Banner,Crimson Axe Banner,774,,
-91,Monster Banner,Cursed Hammer Banner,792,,
-91,Monster Banner,Demon Banner,810,,
-91,Monster Banner,Demon Eye Banner,828,,
-91,Monster Banner,Derpling Banner,846,,
-91,Monster Banner,Eater of Souls Banner,864,,
-91,Monster Banner,Enchanted Sword Banner,882,,
-91,Monster Banner,Zombie Eskimo Banner,900,,
-91,Monster Banner,Face Monster Banner,918,,
-91,Monster Banner,Floaty Gross Banner,936,,
-91,Monster Banner,Flying Fish Banner,954,,
-91,Monster Banner,Flying Snake Banner,972,,
-91,Monster Banner,Frankenstein Banner,990,,
-91,Monster Banner,Fungi Bulb Banner,1008,,
-91,Monster Banner,Fungo Fish Banner,1026,,
-91,Monster Banner,Gastropod Banner,1044,,
-91,Monster Banner,Goblin Archer Banner,1062,,
-91,Monster Banner,Goblin Sorcerer Banner,1080,,
-91,Monster Banner,Goblin Scout Banner,1098,,
-91,Monster Banner,Goblin Thief Banner,1116,,
-91,Monster Banner,Goblin Warrior Banner,1134,,
-91,Monster Banner,Goldfish Banner,1152,,
-91,Monster Banner,Harpy Banner,1170,,
-91,Monster Banner,Hellbat Banner,1188,,
-91,Monster Banner,Herpling Banner,1206,,
-91,Monster Banner,Hornet Banner,1224,,
-91,Monster Banner,Ice Elemental Banner,1242,,
-91,Monster Banner,Icy Merman Banner,1260,,
-91,Monster Banner,Fire Imp Banner,1278,,
-91,Monster Banner,Blue Jellyfish Banner,1296,,
-91,Monster Banner,Jungle Creeper Banner,1314,,
-91,Monster Banner,Lihzahrd Banner,1332,,
-91,Monster Banner,Man Eater Banner,1350,,
-91,Monster Banner,Meteor Head Banner,1368,,
-91,Monster Banner,Moth Banner,1386,,
-91,Monster Banner,Mummy Banner,1404,,
-91,Monster Banner,Mushi Ladybug Banner,1422,,
-91,Monster Banner,Parrot Banner,1440,,
-91,Monster Banner,Pigron Banner,1458,,
-91,Monster Banner,Piranha Banner,1476,,
-91,Monster Banner,Pirate Deckhand Banner,1494,,
-91,Monster Banner,Pixie Banner,1512,,
-91,Monster Banner,Raincoat Zombie Banner,1530,,
-91,Monster Banner,Reaper Banner,1548,,
-91,Monster Banner,Shark Banner,1566,,
-91,Monster Banner,Skeleton Banner,1584,,
-91,Monster Banner,Skeleton Mage Banner,1602,,
-91,Monster Banner,Blue Slime Banner,1620,,
-91,Monster Banner,Snow Flinx Banner,1638,,
-91,Monster Banner,Spider Banner,1656,,
-91,Monster Banner,Spore Zombie Banner,1674,,
-91,Monster Banner,Swamp Thing Banner,1692,,
-91,Monster Banner,Tortoise Banner,1710,,
-91,Monster Banner,Toxic Sludge Banner,1728,,
-91,Monster Banner,Umbrella Slime Banner,1746,,
-91,Monster Banner,Unicorn Banner,1764,,
-91,Monster Banner,Vampire Banner,1782,,
-91,Monster Banner,Vulture Banner,1800,,
-91,Monster Banner,Nypmh Banner,1818,,
-91,Monster Banner,Werewolf Banner,1836,,
-91,Monster Banner,Wolf Banner,1854,,
-91,Monster Banner,World Feeder Banner,1872,,
-91,Monster Banner,Worm Banner,1890,,
-91,Monster Banner,Wraith Banner,1908,,
-91,Monster Banner,Wyvern Banner,1926,,
-91,Monster Banner,Zombie Banner,1944,,
-91,Monster Banner,,1962,,
-91,Monster Banner,,1980,,
-91,Monster Banner,,,54,
+90,Crystal Bathtub,Right,0,1116,
+91,Craftable Banner,Red Banner,0,0,
+91,Craftable Banner,Green Banner,18,0,
+91,Craftable Banner,Blue Banner,36,0,
+91,Craftable Banner,Yellow Banner,54,0,
+91,Pyramid Banner,Ankh Banner,72,0,
+91,Pyramid Banner,Snake Banner,90,0,
+91,Pyramid Banner,Omega Banner,108,0,
+91,Sky Banner,World Banner,126,0,
+91,Sky Banner,Sun Banner,144,0,
+91,Sky Banner,Gravity Banner,162,0,
+91,Faction Banner,Marching Bones Banner,180,0,
+91,Faction Banner,Necromantic Sign,198,0,
+91,Faction Banner,Rusted Company Standard,216,0,
+91,Faction Banner,Ragged Brotherhood Sigil,234,0,
+91,Faction Banner,Molten Legion Flag,252,0,
+91,Faction Banner,Diabolic Sigil,270,0,
+91,Underworld Banner,Hellbound Banner,288,0,
+91,Underworld Banner,Hell Hammer Banner,306,0,
+91,Underworld Banner,Helltower Banner,324,0,
+91,Underworld Banner,Lost Hopes of Man Banner,342,0,
+91,Underworld Banner,Obsidian Watcher Banner,360,0,
+91,Underworld Banner,Lava Erupts Banner,378,0,
+91,Monster Banner,Angler Fish Banner,396,0,
+91,Monster Banner,Angry Nimbus Banner,414,0,
+91,Monster Banner,Anomura Fungus Banner,432,0,
+91,Monster Banner,Antlion Banner,450,0,
+91,Monster Banner,Arapaima Banner,468,0,
+91,Monster Banner,Armored Skeleton Banner,486,0,
+91,Monster Banner,Bat Banner,504,0,
+91,Monster Banner,Bird Banner,522,0,
+91,Monster Banner,Black Recluse Banner,540,0,
+91,Monster Banner,Blood Feeder Banner,558,0,
+91,Monster Banner,Blood Jelly Banner,576,0,
+91,Monster Banner,Blood Crawler Banner,594,0,
+91,Monster Banner,Bone Serpent Banner,612,0,
+91,Monster Banner,Bunny Banner,630,0,
+91,Monster Banner,Chaos Elemental Banner,648,0,
+91,Monster Banner,Mimic Banner,666,0,
+91,Monster Banner,Clown Banner,684,0,
+91,Monster Banner,Corrupt Bunny Banner,702,0,
+91,Monster Banner,Corrupt Goldfish Banner,720,0,
+91,Monster Banner,Crab Banner,738,0,
+91,Monster Banner,Crimera Banner,756,0,
+91,Monster Banner,Crimson Axe Banner,774,0,
+91,Monster Banner,Cursed Hammer Banner,792,0,
+91,Monster Banner,Demon Banner,810,0,
+91,Monster Banner,Demon Eye Banner,828,0,
+91,Monster Banner,Derpling Banner,846,0,
+91,Monster Banner,Eater of Souls Banner,864,0,
+91,Monster Banner,Enchanted Sword Banner,882,0,
+91,Monster Banner,Zombie Eskimo Banner,900,0,
+91,Monster Banner,Face Monster Banner,918,0,
+91,Monster Banner,Floaty Gross Banner,936,0,
+91,Monster Banner,Flying Fish Banner,954,0,
+91,Monster Banner,Flying Snake Banner,972,0,
+91,Monster Banner,Frankenstein Banner,990,0,
+91,Monster Banner,Fungi Bulb Banner,1008,0,
+91,Monster Banner,Fungo Fish Banner,1026,0,
+91,Monster Banner,Gastropod Banner,1044,0,
+91,Monster Banner,Goblin Archer Banner,1062,0,
+91,Monster Banner,Goblin Sorcerer Banner,1080,0,
+91,Monster Banner,Goblin Scout Banner,1098,0,
+91,Monster Banner,Goblin Thief Banner,1116,0,
+91,Monster Banner,Goblin Warrior Banner,1134,0,
+91,Monster Banner,Goldfish Banner,1152,0,
+91,Monster Banner,Harpy Banner,1170,0,
+91,Monster Banner,Hellbat Banner,1188,0,
+91,Monster Banner,Herpling Banner,1206,0,
+91,Monster Banner,Hornet Banner,1224,0,
+91,Monster Banner,Ice Elemental Banner,1242,0,
+91,Monster Banner,Icy Merman Banner,1260,0,
+91,Monster Banner,Fire Imp Banner,1278,0,
+91,Monster Banner,Blue Jellyfish Banner,1296,0,
+91,Monster Banner,Jungle Creeper Banner,1314,0,
+91,Monster Banner,Lihzahrd Banner,1332,0,
+91,Monster Banner,Man Eater Banner,1350,0,
+91,Monster Banner,Meteor Head Banner,1368,0,
+91,Monster Banner,Moth Banner,1386,0,
+91,Monster Banner,Mummy Banner,1404,0,
+91,Monster Banner,Mushi Ladybug Banner,1422,0,
+91,Monster Banner,Parrot Banner,1440,0,
+91,Monster Banner,Pigron Banner,1458,0,
+91,Monster Banner,Piranha Banner,1476,0,
+91,Monster Banner,Pirate Deckhand Banner,1494,0,
+91,Monster Banner,Pixie Banner,1512,0,
+91,Monster Banner,Raincoat Zombie Banner,1530,0,
+91,Monster Banner,Reaper Banner,1548,0,
+91,Monster Banner,Shark Banner,1566,0,
+91,Monster Banner,Skeleton Banner,1584,0,
+91,Monster Banner,Skeleton Mage Banner,1602,0,
+91,Monster Banner,Blue Slime Banner,1620,0,
+91,Monster Banner,Snow Flinx Banner,1638,0,
+91,Monster Banner,Spider Banner,1656,0,
+91,Monster Banner,Spore Zombie Banner,1674,0,
+91,Monster Banner,Swamp Thing Banner,1692,0,
+91,Monster Banner,Tortoise Banner,1710,0,
+91,Monster Banner,Toxic Sludge Banner,1728,0,
+91,Monster Banner,Umbrella Slime Banner,1746,0,
+91,Monster Banner,Unicorn Banner,1764,0,
+91,Monster Banner,Vampire Banner,1782,0,
+91,Monster Banner,Vulture Banner,1800,0,
+91,Monster Banner,Nypmh Banner,1818,0,
+91,Monster Banner,Werewolf Banner,1836,0,
+91,Monster Banner,Wolf Banner,1854,0,
+91,Monster Banner,World Feeder Banner,1872,0,
+91,Monster Banner,Worm Banner,1890,0,
+91,Monster Banner,Wraith Banner,1908,0,
+91,Monster Banner,Wyvern Banner,1926,0,
+91,Monster Banner,Zombie Banner,1944,0,
+91,Monster Banner,,1962,0,
+91,Monster Banner,,1980,0,
+91,Monster Banner,,0,54,
 91,Monster Banner,,18,54,
 91,Monster Banner,,36,54,
 91,Monster Banner,,54,54,
@@ -2437,7 +2437,7 @@ id,name,variety,u,v,anchor
 91,Monster Banner,,1944,54,
 91,Monster Banner,,1962,54,
 91,Monster Banner,,1980,54,
-91,Monster Banner,,,108,
+91,Monster Banner,,0,108,
 91,Monster Banner,,18,108,
 91,Monster Banner,,36,108,
 91,Monster Banner,,54,108,
@@ -2487,266 +2487,266 @@ id,name,variety,u,v,anchor
 91,Monster Banner,,846,108,
 91,Monster Banner,,864,108,
 91,Monster Banner,,882,108,
-92,,On,,,
-92,,Off,18,,
-93,Tiki Torch,On,,,
-93,Tiki Torch,Off,18,,
-93,Cactus Lamp,On,,54,
+92,,On,0,0,
+92,,Off,18,0,
+93,Tiki Torch,On,0,0,
+93,Tiki Torch,Off,18,0,
+93,Cactus Lamp,On,0,54,
 93,Cactus Lamp,Off,18,54,
-93,Ebonwood Lamp,On,,108,
+93,Ebonwood Lamp,On,0,108,
 93,Ebonwood Lamp,Off,18,108,
-93,Flesh Lamp,On,,162,
+93,Flesh Lamp,On,0,162,
 93,Flesh Lamp,Off,18,162,
-93,Glass Lamp,On,,216,
+93,Glass Lamp,On,0,216,
 93,Glass Lamp,Off,18,216,
-93,Frozen Lamp,On,,270,
+93,Frozen Lamp,On,0,270,
 93,Frozen Lamp,Off,18,270,
-93,Rich Mahogany Lamp,On,,324,
+93,Rich Mahogany Lamp,On,0,324,
 93,Rich Mahogany Lamp,Off,18,324,
-93,Pearlwood Lamp,On,,378,
+93,Pearlwood Lamp,On,0,378,
 93,Pearlwood Lamp,Off,18,378,
-93,Lihzahrd Lamp,On,,432,
+93,Lihzahrd Lamp,On,0,432,
 93,Lihzahrd Lamp,Off,18,432,
-93,Skyware Lamp,On,,486,
+93,Skyware Lamp,On,0,486,
 93,Skyware Lamp,Off,18,486,
-93,Spooky Lamp,On,,540,
+93,Spooky Lamp,On,0,540,
 93,Spooky Lamp,Off,18,540,
-93,Honey Lamp,On,,594,
+93,Honey Lamp,On,0,594,
 93,Honey Lamp,Off,18,594,
-93,Steampunk Lamp,On,,648,
+93,Steampunk Lamp,On,0,648,
 93,Steampunk Lamp,Off,18,648,
-93,Living Wood Lamp,On,,702,
+93,Living Wood Lamp,On,0,702,
 93,Living Wood Lamp,Off,18,702,
-93,Shadewood Lamp,On,,756,
+93,Shadewood Lamp,On,0,756,
 93,Shadewood Lamp,Off,18,756,
-93,Golden Lamp,On,,810,
+93,Golden Lamp,On,0,810,
 93,Golden Lamp,Off,18,810,
-93,Bone Lamp,On,,864,
+93,Bone Lamp,On,0,864,
 93,Bone Lamp,Off,18,864,
-93,Dynasty Lamp,On,,918,
+93,Dynasty Lamp,On,0,918,
 93,Dynasty Lamp,Off,18,918,
-93,Palm Wood Lamp,On,,972,
+93,Palm Wood Lamp,On,0,972,
 93,Palm Wood Lamp,Off,18,972,
-93,Mushroom Lamp,On,,1026,
+93,Mushroom Lamp,On,0,1026,
 93,Mushroom Lamp,Off,18,1026,
-93,Boreal Wood Lamp,On,,1080,
+93,Boreal Wood Lamp,On,0,1080,
 93,Boreal Wood Lamp,Off,18,1080,
-93,Slime Lamp,On,,1134,
+93,Slime Lamp,On,0,1134,
 93,Slime Lamp,Off,18,1134,
-93,Pumpkin Lamp,On,,1188,
+93,Pumpkin Lamp,On,0,1188,
 93,Pumpkin Lamp,Off,18,1188,
-93,Obsidian Lamp,On,,1242,
+93,Obsidian Lamp,On,0,1242,
 93,Obsidian Lamp,Off,18,1242,
-93,Blue Dungeon Lamp,On,,1296,
+93,Blue Dungeon Lamp,On,0,1296,
 93,Blue Dungeon Lamp,Off,18,1296,
-93,Green Dungeon Lamp,On,,1350,
+93,Green Dungeon Lamp,On,0,1350,
 93,Green Dungeon Lamp,Off,18,1350,
-93,Pink Dungeon Lamp,On,,1404,
+93,Pink Dungeon Lamp,On,0,1404,
 93,Pink Dungeon Lamp,Off,18,1404,
-93,Martian Lamppost,On,,1458,
+93,Martian Lamppost,On,0,1458,
 93,Martian Lamppost,Off,18,1458,
-93,Meteorite Lamp,On,,1512,
+93,Meteorite Lamp,On,0,1512,
 93,Meteorite Lamp,Off,18,1512,
-93,Granite Lamp,On,,1566,
+93,Granite Lamp,On,0,1566,
 93,Granite Lamp,Off,18,1566,
-93,Marble Lamp,On,,1620,
+93,Marble Lamp,On,0,1620,
 93,Marble Lamp,Off,18,1620,
-93,Crystal Lamp,On,,1674,
+93,Crystal Lamp,On,0,1674,
 93,Crystal Lamp,Off,18,1674,
-95,,On,,,
-95,,Off,36,,
-96,,Cooking Pot,,,
-96,,Cauldron,36,,
-100,Candelabra,On,,,
-100,Candelabra,Off,36,,
-100,Cactus Candelabra,On,,36,
+95,,On,0,0,
+95,,Off,36,0,
+96,,Cooking Pot,0,0,
+96,,Cauldron,36,0,
+100,Candelabra,On,0,0,
+100,Candelabra,Off,36,0,
+100,Cactus Candelabra,On,0,36,
 100,Cactus Candelabra,Off,36,36,
-100,Ebonwood Candelabra,On,,72,
+100,Ebonwood Candelabra,On,0,72,
 100,Ebonwood Candelabra,Off,36,72,
-100,Flesh Candelabra,On,,108,
+100,Flesh Candelabra,On,0,108,
 100,Flesh Candelabra,Off,36,108,
-100,Honey Candelabra,On,,144,
+100,Honey Candelabra,On,0,144,
 100,Honey Candelabra,Off,36,144,
-100,Steampunk Candelabra,On,,180,
+100,Steampunk Candelabra,On,0,180,
 100,Steampunk Candelabra,Off,36,180,
-100,Glass Candelabra,On,,216,
+100,Glass Candelabra,On,0,216,
 100,Glass Candelabra,Off,36,216,
-100,Rich Mahogany Candelabra,On,,252,
+100,Rich Mahogany Candelabra,On,0,252,
 100,Rich Mahogany Candelabra,Off,36,252,
-100,Pearlwood Candelabra,On,,288,
+100,Pearlwood Candelabra,On,0,288,
 100,Pearlwood Candelabra,Off,36,288,
-100,Frozen Candelabra,On,,324,
+100,Frozen Candelabra,On,0,324,
 100,Frozen Candelabra,Off,36,324,
-100,Lihzahrd Candelabra,On,,360,
+100,Lihzahrd Candelabra,On,0,360,
 100,Lihzahrd Candelabra,Off,36,360,
-100,Skyware Candelabra,On,,396,
+100,Skyware Candelabra,On,0,396,
 100,Skyware Candelabra,Off,36,396,
-100,Spooky Candelabra,On,,432,
+100,Spooky Candelabra,On,0,432,
 100,Spooky Candelabra,Off,36,432,
-100,Living Wood Candelabra,On,,468,
+100,Living Wood Candelabra,On,0,468,
 100,Living Wood Candelabra,Off,36,468,
-100,Shadewood Candelabra,On,,504,
+100,Shadewood Candelabra,On,0,504,
 100,Shadewood Candelabra,Off,36,504,
-100,Golden Candelabra,On,,540,
+100,Golden Candelabra,On,0,540,
 100,Golden Candelabra,Off,36,540,
-100,Bone Candelabra,On,,576,
+100,Bone Candelabra,On,0,576,
 100,Bone Candelabra,Off,36,576,
-100,Large Dynasty Candelabra,On,,612,
+100,Large Dynasty Candelabra,On,0,612,
 100,Large Dynasty Candelabra,Off,36,612,
-100,Palm Wood Candelabra,On,,648,
+100,Palm Wood Candelabra,On,0,648,
 100,Palm Wood Candelabra,Off,36,648,
-100,Mushroom Candelabra,On,,684,
+100,Mushroom Candelabra,On,0,684,
 100,Mushroom Candelabra,Off,36,684,
-100,Boreal Wood Candelabra,On,,720,
+100,Boreal Wood Candelabra,On,0,720,
 100,Boreal Wood Candelabra,Off,36,720,
-100,Slime Candelabra,On,,756,
+100,Slime Candelabra,On,0,756,
 100,Slime Candelabra,Off,36,756,
-100,Blue Dungeon Candelabra,On,,792,
+100,Blue Dungeon Candelabra,On,0,792,
 100,Blue Dungeon Candelabra,Off,36,792,
-100,Green Dungeon Candelabra,On,,828,
+100,Green Dungeon Candelabra,On,0,828,
 100,Green Dungeon Candelabra,Off,36,828,
-100,Pink Dungeon Candelabra,On,,864,
+100,Pink Dungeon Candelabra,On,0,864,
 100,Pink Dungeon Candelabra,Off,36,864,
-100,Obsidian Candelabra,On,,900,
+100,Obsidian Candelabra,On,0,900,
 100,Obsidian Candelabra,Off,36,900,
-100,Pumpkin Candelabra,On,,936,
+100,Pumpkin Candelabra,On,0,936,
 100,Pumpkin Candelabra,Off,36,936,
-100,Martian Candelabra,On,,972,
+100,Martian Candelabra,On,0,972,
 100,Martian Candelabra,Off,36,972,
-100,Meteorite Candelabra,On,,1008,
+100,Meteorite Candelabra,On,0,1008,
 100,Meteorite Candelabra,Off,36,1008,
-100,Granite Candelabra,On,,1044,
+100,Granite Candelabra,On,0,1044,
 100,Granite Candelabra,Off,36,1044,
-100,Marble Candelabra,On,,1080,
+100,Marble Candelabra,On,0,1080,
 100,Marble Candelabra,Off,36,1080,
-100,Crystal Candelabra,On,,1116,
+100,Crystal Candelabra,On,0,1116,
 100,Crystal Candelabra,Off,36,1116,
-101,,Wooden,,,
-101,,Blue Dungeon Bookcase,54,,
-101,,Green Dungeon Bookcase,108,,
-101,,Pink Dungeon Bookcase,162,,
-101,,Obsidian Bookcase,216,,
-101,,Gothic Bookcase,270,,
-101,,Cactus Bookcase,324,,
-101,,Ebonwood Bookcase,378,,
-101,,Flesh Bookcase,432,,
-101,,Honey Bookcase,486,,
-101,,Steampunk Bookcase,540,,
-101,,Glass Bookcase,594,,
-101,,Rich Mahogany Bookcase,648,,
-101,,Pearlwood Bookcase,702,,
-101,,Spooky Bookcase,756,,
-101,,Skyware Bookcase,810,,
-101,,Lihzahrd Bookcase,864,,
-101,,Frozen Bookcase,918,,
-101,,Living Wood Bookcase,972,,
-101,,Shadewood Bookcase,1026,,
-101,,Golden Bookcase,1080,,
-101,,Bone Bookcase,1134,,
-101,,Dynasty Bookcase,1188,,
-101,,Palm Wood Bookcase,1242,,
-101,,Mushroom Bookcase,1296,,
-101,,Boreal Wood Bookcase,1350,,
-101,,Slime Bookcase,1404,,
-101,,Pumpkin Bookcase,1458,,
-101,,Martian Holobookcase,1512,,
-101,,Meteorite Bookcase,1566,,
-101,,Granite Bookcase,1620,,
-101,,Marble Bookcase,1674,,
-101,,Crystal Bookcase,1728,,
-103,Bowl,Default,,,
-103,Bowl,Dynasty Bowl,36,,
-103,Bowl,Fancy Dishes,72,,
-103,Bowl,Glass Bowl,108,,
-104,Grandfather Clock,,,,
-104,Dynasty Clock,,36,,
-104,Golden Clock,,72,,
-104,Glass Clock,,108,,
-104,Honey Clock,,144,,
-104,Steampunk Clock,,180,,
-104,Boreal Wood Clock,,216,,
-104,Slime Clock,,252,,
-104,Bone Clock,,288,,
-104,Cactus Clock,,324,,
-104,Ebonwood Clock,,360,,
-104,Frozen Clock,,396,,
-104,Lihzahrd Clock,,432,,
-104,Living Wood Clock,,468,,
-104,Rich Mahogany Clock,,504,,
-104,Flesh Clock,,540,,
-104,Mushroom Clock,,576,,
-104,Obsidian Clock,,612,,
-104,Palm Wood Clock,,648,,
-104,Pearlwood Clock,,684,,
-104,Pumpkin Clock,,720,,
-104,Shadewood Clock,,756,,
-104,Spooky Clock,,792,,
-104,Sunplate Clock,,828,,
-104,Martian Astro Clock,,864,,
-104,Meteorite Clock,,900,,
-104,Granite Clock,,936,,
-104,Marble Clock,,972,,
-104,Crystal Clock,,1008,,
-104,Sunplate Clock,,1044,,
-104,Blue Dungeon Clock,,1080,,
-104,Green Dungeon Clock,,1116,,
-104,Pink Dungeon Clock,,1152,,
-105,Armor Statue,Left,,,
-105,Angel Statue,Left,36,,
-105,Star Statue,Left,72,,
-105,Sword Statue,Left,108,,
-105,Slime Statue,Left,144,,
-105,Goblin Statue,Left,180,,
-105,Shield Statue,Left,216,,
-105,Bat Statue,Left,252,,
-105,Fish Statue,Left,288,,
-105,Bunny Statue,Left,324,,
-105,Skeleton Statue,Left,360,,
-105,Reaper Statue,Left,396,,
-105,Woman Statue,Left,432,,
-105,Imp Statue,Left,468,,
-105,Gargoyle Statue,Left,504,,
-105,Gloom Statue,Left,540,,
-105,Hornet Statue,Left,576,,
-105,Bomb Statue,Left,612,,
-105,Crab Statue,Left,648,,
-105,Hammer Statue,Left,684,,
-105,Potion Statue,Left,720,,
-105,Spear Statue,Left,756,,
-105,Cross Statue,Left,792,,
-105,Jellyfish Statue,Left,828,,
-105,Bow Statue,Left,864,,
-105,Boomerang Statue,Left,900,,
-105,Boot Statue,Left,936,,
-105,Chest Statue,Left,972,,
-105,Bird Statue,Left,1008,,
-105,Axe Statue,Left,1044,,
-105,Corrupt Statue,Left,1080,,
-105,Tree Statue,Left,1116,,
-105,Anvil Statue,Left,1152,,
-105,Pickaxe Statue,Left,1188,,
-105,Mushroom Statue,Left,1224,,
-105,Eyeball Statue,Left,1260,,
-105,Pillar Statue,Left,1296,,
-105,Heart Statue,Left,1332,,
-105,Pot Statue,Left,1368,,
-105,Sunflower Statue,Left,1404,,
-105,King Statue,Left,1440,,
-105,Queen Statue,Left,1476,,
-105,Piranha Statue,Left,1512,,
-105,Lihzahrd Statue,Left,1548,,
-105,Lihzahrd Watcher Statue,Left,1584,,
-105,Lihzahrd Guardian Statue,Left,1620,,
-105,Blue Dungeon Vase,Left,1656,,
-105,Green Dungeon Vase,Left,1692,,
-105,Pink Dungeon Vase,Left,1728,,
-105,Obsidian Vase,Left,1764,,
-105,Shark Statue,Left,1800,,
-105,Squirrel Statue,Left,1836,,
-105,Butterfly Statue,Left,1872,,
-105,Worm Statue,Left,1908,,
-105,Firefly Statue,Left,1944,,
-105,Scorpion Statue,Left,,54,
+101,,Wooden,0,0,
+101,,Blue Dungeon Bookcase,54,0,
+101,,Green Dungeon Bookcase,108,0,
+101,,Pink Dungeon Bookcase,162,0,
+101,,Obsidian Bookcase,216,0,
+101,,Gothic Bookcase,270,0,
+101,,Cactus Bookcase,324,0,
+101,,Ebonwood Bookcase,378,0,
+101,,Flesh Bookcase,432,0,
+101,,Honey Bookcase,486,0,
+101,,Steampunk Bookcase,540,0,
+101,,Glass Bookcase,594,0,
+101,,Rich Mahogany Bookcase,648,0,
+101,,Pearlwood Bookcase,702,0,
+101,,Spooky Bookcase,756,0,
+101,,Skyware Bookcase,810,0,
+101,,Lihzahrd Bookcase,864,0,
+101,,Frozen Bookcase,918,0,
+101,,Living Wood Bookcase,972,0,
+101,,Shadewood Bookcase,1026,0,
+101,,Golden Bookcase,1080,0,
+101,,Bone Bookcase,1134,0,
+101,,Dynasty Bookcase,1188,0,
+101,,Palm Wood Bookcase,1242,0,
+101,,Mushroom Bookcase,1296,0,
+101,,Boreal Wood Bookcase,1350,0,
+101,,Slime Bookcase,1404,0,
+101,,Pumpkin Bookcase,1458,0,
+101,,Martian Holobookcase,1512,0,
+101,,Meteorite Bookcase,1566,0,
+101,,Granite Bookcase,1620,0,
+101,,Marble Bookcase,1674,0,
+101,,Crystal Bookcase,1728,0,
+103,Bowl,Default,0,0,
+103,Bowl,Dynasty Bowl,36,0,
+103,Bowl,Fancy Dishes,72,0,
+103,Bowl,Glass Bowl,108,0,
+104,Grandfather Clock,,0,0,
+104,Dynasty Clock,,36,0,
+104,Golden Clock,,72,0,
+104,Glass Clock,,108,0,
+104,Honey Clock,,144,0,
+104,Steampunk Clock,,180,0,
+104,Boreal Wood Clock,,216,0,
+104,Slime Clock,,252,0,
+104,Bone Clock,,288,0,
+104,Cactus Clock,,324,0,
+104,Ebonwood Clock,,360,0,
+104,Frozen Clock,,396,0,
+104,Lihzahrd Clock,,432,0,
+104,Living Wood Clock,,468,0,
+104,Rich Mahogany Clock,,504,0,
+104,Flesh Clock,,540,0,
+104,Mushroom Clock,,576,0,
+104,Obsidian Clock,,612,0,
+104,Palm Wood Clock,,648,0,
+104,Pearlwood Clock,,684,0,
+104,Pumpkin Clock,,720,0,
+104,Shadewood Clock,,756,0,
+104,Spooky Clock,,792,0,
+104,Sunplate Clock,,828,0,
+104,Martian Astro Clock,,864,0,
+104,Meteorite Clock,,900,0,
+104,Granite Clock,,936,0,
+104,Marble Clock,,972,0,
+104,Crystal Clock,,1008,0,
+104,Sunplate Clock,,1044,0,
+104,Blue Dungeon Clock,,1080,0,
+104,Green Dungeon Clock,,1116,0,
+104,Pink Dungeon Clock,,1152,0,
+105,Armor Statue,Left,0,0,
+105,Angel Statue,Left,36,0,
+105,Star Statue,Left,72,0,
+105,Sword Statue,Left,108,0,
+105,Slime Statue,Left,144,0,
+105,Goblin Statue,Left,180,0,
+105,Shield Statue,Left,216,0,
+105,Bat Statue,Left,252,0,
+105,Fish Statue,Left,288,0,
+105,Bunny Statue,Left,324,0,
+105,Skeleton Statue,Left,360,0,
+105,Reaper Statue,Left,396,0,
+105,Woman Statue,Left,432,0,
+105,Imp Statue,Left,468,0,
+105,Gargoyle Statue,Left,504,0,
+105,Gloom Statue,Left,540,0,
+105,Hornet Statue,Left,576,0,
+105,Bomb Statue,Left,612,0,
+105,Crab Statue,Left,648,0,
+105,Hammer Statue,Left,684,0,
+105,Potion Statue,Left,720,0,
+105,Spear Statue,Left,756,0,
+105,Cross Statue,Left,792,0,
+105,Jellyfish Statue,Left,828,0,
+105,Bow Statue,Left,864,0,
+105,Boomerang Statue,Left,900,0,
+105,Boot Statue,Left,936,0,
+105,Chest Statue,Left,972,0,
+105,Bird Statue,Left,1008,0,
+105,Axe Statue,Left,1044,0,
+105,Corrupt Statue,Left,1080,0,
+105,Tree Statue,Left,1116,0,
+105,Anvil Statue,Left,1152,0,
+105,Pickaxe Statue,Left,1188,0,
+105,Mushroom Statue,Left,1224,0,
+105,Eyeball Statue,Left,1260,0,
+105,Pillar Statue,Left,1296,0,
+105,Heart Statue,Left,1332,0,
+105,Pot Statue,Left,1368,0,
+105,Sunflower Statue,Left,1404,0,
+105,King Statue,Left,1440,0,
+105,Queen Statue,Left,1476,0,
+105,Piranha Statue,Left,1512,0,
+105,Lihzahrd Statue,Left,1548,0,
+105,Lihzahrd Watcher Statue,Left,1584,0,
+105,Lihzahrd Guardian Statue,Left,1620,0,
+105,Blue Dungeon Vase,Left,1656,0,
+105,Green Dungeon Vase,Left,1692,0,
+105,Pink Dungeon Vase,Left,1728,0,
+105,Obsidian Vase,Left,1764,0,
+105,Shark Statue,Left,1800,0,
+105,Squirrel Statue,Left,1836,0,
+105,Butterfly Statue,Left,1872,0,
+105,Worm Statue,Left,1908,0,
+105,Firefly Statue,Left,1944,0,
+105,Scorpion Statue,Left,0,54,
 105,Snail Statue,Left,36,54,
 105,Grasshopper Statue,Left,72,54,
 105,Mouse Statue,Left,108,54,
@@ -2774,7 +2774,7 @@ id,name,variety,u,v,anchor
 105,Macaw Statue,Left,900,54,
 105,Toucan Statue,Left,936,54,
 105,Cockatiel Statue,Left,972,54,
-105,Armor Statue,Right,,162,
+105,Armor Statue,Right,0,162,
 105,Angel Statue,Right,36,162,
 105,Star Statue,Right,72,162,
 105,Sword Statue,Right,108,162,
@@ -2829,7 +2829,7 @@ id,name,variety,u,v,anchor
 105,Butterfly Statue,Right,1872,162,
 105,Worm Statue,Right,1908,162,
 105,Firefly Statue,Right,1944,162,
-105,Scorpion Statue,Right,,216,
+105,Scorpion Statue,Right,0,216,
 105,Snail Statue,Right,36,216,
 105,Grasshopper Statue,Right,72,216,
 105,Mouse Statue,Right,108,216,
@@ -2857,369 +2857,369 @@ id,name,variety,u,v,anchor
 105,Macaw Statue,Right,900,216,
 105,Toucan Statue,Right,936,216,
 105,Cockatiel Statue,Right,972,216,
-110,Grass,Single Blade,,,Right
-110,Grass,Double Blade,18,,Right
-110,Grass,Single Blade,36,,Bottom
-110,Grass,Three Small,54,,Right
-110,Grass,Gold Flower,72,,Left
-110,Grass,Three Medium,90,,Left
-110,Flowers,Purple, Immature,108,,Left
-110,Flowers,Pink, Immature,126,,Right
-110,Mushroom,,144,,Bottom
-110,Small Y,,162,,Bottom
-113,Grass,G,,,Bottom
-113,Grass,C,18,,Bottom
-113,Grass,?,36,,Bottom
-113,Grass,u,54,,Bottom
-113,Grass,w,72,,Bottom
-113,Grass,W,90,,Bottom
-113,Rose,A,108,,Bottom
-113,Rose,B,126,,Bottom
-126,,On,,,
-126,,Off,36,,
-128,,,,,Left
-128,,,36,,Right
-129,,Large Blue,,,Bottom
-129,,Large Blue,,18,Top
-129,,Large Blue,,36,Right
-129,,Large Blue,,54,Left
-129,,Medium Blue,108,,Bottom
+110,Grass,Single Blade,0,0,Right
+110,Grass,Double Blade,18,0,Right
+110,Grass,Single Blade,36,0,Bottom
+110,Grass,Three Small,54,0,Right
+110,Grass,Gold Flower,72,0,Left
+110,Grass,Three Medium,90,0,Left
+110,Flowers,Purple, Immature,108,0,Left
+110,Flowers,Pink, Immature,126,0,Right
+110,Mushroom,,144,0,Bottom
+110,Small Y,,162,0,Bottom
+113,Grass,G,0,0,Bottom
+113,Grass,C,18,0,Bottom
+113,Grass,?,36,0,Bottom
+113,Grass,u,54,0,Bottom
+113,Grass,w,72,0,Bottom
+113,Grass,W,90,0,Bottom
+113,Rose,A,108,0,Bottom
+113,Rose,B,126,0,Bottom
+126,,On,0,0,
+126,,Off,36,0,
+128,,,0,0,Left
+128,,,36,0,Right
+129,,Large Blue,0,0,Bottom
+129,,Large Blue,0,18,Top
+129,,Large Blue,0,36,Right
+129,,Large Blue,0,54,Left
+129,,Medium Blue,108,0,Bottom
 129,,Medium Blue,108,18,Top
 129,,Medium Blue,108,36,Right
 129,,Medium Blue,108,54,Left
-129,,Small Blue,54,,Bottom
+129,,Small Blue,54,0,Bottom
 129,,Small Blue,54,18,Top
 129,,Small Blue,54,36,Right
 129,,Small Blue,54,54,Left
-129,,Large Pink,18,,Bottom
+129,,Large Pink,18,0,Bottom
 129,,Large Pink,18,18,Top
 129,,Large Pink,18,36,Right
 129,,Large Pink,18,54,Left
-129,,Medium Pink,126,,Bottom
+129,,Medium Pink,126,0,Bottom
 129,,Medium Pink,126,18,Top
 129,,Medium Pink,126,36,Right
 129,,Medium Pink,126,54,Left
-129,,Small Pink,72,,Bottom
+129,,Small Pink,72,0,Bottom
 129,,Small Pink,72,18,Top
 129,,Small Pink,72,36,Right
 129,,Small Pink,72,54,Left
-129,,Large Purple,36,,Bottom
+129,,Large Purple,36,0,Bottom
 129,,Large Purple,36,18,Top
 129,,Large Purple,36,36,Right
 129,,Large Purple,36,54,Left
-129,,Medium Purple,144,,Bottom
+129,,Medium Purple,144,0,Bottom
 129,,Medium Purple,144,18,Top
 129,,Medium Purple,144,36,Right
 129,,Medium Purple,144,54,Left
-129,,Small Purple,90,,Bottom
+129,,Small Purple,90,0,Bottom
 129,,Small Purple,90,18,Top
 129,,Small Purple,90,36,Right
 129,,Small Purple,90,54,Left
-132,,Right,,,Left
-132,,Left,36,,Right
-132,,Up,72,,Center
-132,,Down,108,,Center
-133,Adamantite Forge,,,,
-133,Titanium Forge,,54,,
-134,Mythril Anvil,,,,
-134,Orichalcum Anvil,,36,,
-135,,Red,,,
-135,,Green,,18,
-135,,Gray,,36,
-135,,Brown,,54,
-135,,Blue,,72,
-135,,Yellow,,90,
-135,,Lihzahrd,,108,
-136,Switch,Setting One,,,Bottom
+132,,Right,0,0,Left
+132,,Left,36,0,Right
+132,,Up,72,0,Center
+132,,Down,108,0,Center
+133,Adamantite Forge,,0,0,
+133,Titanium Forge,,54,0,
+134,Mythril Anvil,,0,0,
+134,Orichalcum Anvil,,36,0,
+135,,Red,0,0,
+135,,Green,0,18,
+135,,Gray,0,36,
+135,,Brown,0,54,
+135,,Blue,0,72,
+135,,Yellow,0,90,
+135,,Lihzahrd,0,108,
+136,Switch,Setting One,0,0,Bottom
 136,Switch,Setting One,18,18,Left
-136,Switch,Setting One,36,,Right
-136,Switch,Setting One,54,,Center
-136,Switch,Setting Two,,18,Bottom
-136,Switch,Setting Two,18,,Left
+136,Switch,Setting One,36,0,Right
+136,Switch,Setting One,54,0,Center
+136,Switch,Setting Two,0,18,Bottom
+136,Switch,Setting Two,18,0,Left
 136,Switch,Setting Two,36,18,Right
 136,Switch,Setting Two,54,18,Center
-137,Dart Trap,,,,Left
-137,Dart Trap,Right,18,,
-137,Super Dart Trap,,,18,Left
+137,Dart Trap,,0,0,Left
+137,Dart Trap,Right,18,0,
+137,Super Dart Trap,,0,18,Left
 137,Super Dart Trap,Right,18,18,
-137,Flame  Trap,,,36,Left
+137,Flame  Trap,,0,36,Left
 137,Flame  Trap,Right,18,36,
-137,Spiky Ball Trap,,,54,Top
-137,Spear Trap,,,72,Top
-139,Music Box (Overworld Day),Off,,,
-139,Music Box (Overworld Day),On,36,,
-139,Music Box (Eerie),Off,,36,
+137,Spiky Ball Trap,,0,54,Top
+137,Spear Trap,,0,72,Top
+139,Music Box (Overworld Day),Off,0,0,
+139,Music Box (Overworld Day),On,36,0,
+139,Music Box (Eerie),Off,0,36,
 139,Music Box (Eerie),On,36,36,
-139,Music Box (Night),Off,,72,
+139,Music Box (Night),Off,0,72,
 139,Music Box (Night),On,36,72,
-139,Music Box (Title),Off,,108,
+139,Music Box (Title),Off,0,108,
 139,Music Box (Title),On,36,108,
-139,Music Box (Underground),Off,,144,
+139,Music Box (Underground),Off,0,144,
 139,Music Box (Underground),On,36,144,
-139,Music Box (Boss 1),Off,,180,
+139,Music Box (Boss 1),Off,0,180,
 139,Music Box (Boss 1),On,36,180,
-139,Music Box (Jungle),Off,,216,
+139,Music Box (Jungle),Off,0,216,
 139,Music Box (Jungle),On,36,216,
-139,Music Box (Corruption),Off,,252,
+139,Music Box (Corruption),Off,0,252,
 139,Music Box (Corruption),On,36,252,
-139,Music Box (Underground Corruption),Off,,288,
+139,Music Box (Underground Corruption),Off,0,288,
 139,Music Box (Underground Corruption),On,36,288,
-139,Music Box (The Hallow),Off,,324,
+139,Music Box (The Hallow),Off,0,324,
 139,Music Box (The Hallow),On,36,324,
-139,Music Box (Boss 2),Off,,360,
+139,Music Box (Boss 2),Off,0,360,
 139,Music Box (Boss 2),On,36,360,
-139,Music Box (Underground Hallow),Off,,396,
+139,Music Box (Underground Hallow),Off,0,396,
 139,Music Box (Underground Hallow),On,36,396,
-139,Music Box (Boss 3),Off,,432,
+139,Music Box (Boss 3),Off,0,432,
 139,Music Box (Boss 3),On,36,432,
-139,Music Box (Snow),Off,,468,
+139,Music Box (Snow),Off,0,468,
 139,Music Box (Snow),On,36,468,
-139,Music Box (Space),Off,,504,
+139,Music Box (Space),Off,0,504,
 139,Music Box (Space),On,36,504,
-139,Music Box (Crimson),Off,,540,
+139,Music Box (Crimson),Off,0,540,
 139,Music Box (Crimson),On,36,540,
-139,Music Box (Boss 4),Off,,576,
+139,Music Box (Boss 4),Off,0,576,
 139,Music Box (Boss 4),On,36,576,
-139,Music Box (Alt Overworld Day),Off,,612,
+139,Music Box (Alt Overworld Day),Off,0,612,
 139,Music Box (Alt Overworld Day),On,36,612,
-139,Music Box (Rain),Off,,648,
+139,Music Box (Rain),Off,0,648,
 139,Music Box (Rain),On,36,648,
-139,Music Box (Ice),Off,,684,
+139,Music Box (Ice),Off,0,684,
 139,Music Box (Ice),On,36,684,
-139,Music Box (Desert),Off,,720,
+139,Music Box (Desert),Off,0,720,
 139,Music Box (Desert),On,36,720,
-139,Music Box (Ocean),Off,,756,
+139,Music Box (Ocean),Off,0,756,
 139,Music Box (Ocean),On,36,756,
-139,Music Box (Dungeon),Off,,792,
+139,Music Box (Dungeon),Off,0,792,
 139,Music Box (Dungeon),On,36,792,
-139,Music Box (Plantera),Off,,828,
+139,Music Box (Plantera),Off,0,828,
 139,Music Box (Plantera),On,36,828,
-139,Music Box (Boss 5),Off,,864,
+139,Music Box (Boss 5),Off,0,864,
 139,Music Box (Boss 5),On,36,864,
-139,Music Box (Temple),Off,,900,
+139,Music Box (Temple),Off,0,900,
 139,Music Box (Temple),On,36,900,
-139,Music Box (Eclipse),Off,,936,
+139,Music Box (Eclipse),Off,0,936,
 139,Music Box (Eclipse),On,36,936,
-139,Music Box (Mushrooms),Off,,972,
+139,Music Box (Mushrooms),Off,0,972,
 139,Music Box (Mushrooms),On,36,972,
-139,Music Box (Pumpkin Moon),Off,,1008,
+139,Music Box (Pumpkin Moon),Off,0,1008,
 139,Music Box (Pumpkin Moon),On,36,1008,
-139,Music Box (Alt Underground),Off,,1044,
+139,Music Box (Alt Underground),Off,0,1044,
 139,Music Box (Alt Underground),On,36,1044,
-139,Music Box (Frost Moon),Off,,1080,
+139,Music Box (Frost Moon),Off,0,1080,
 139,Music Box (Frost Moon),On,36,1080,
-139,Music Box (Underground Crimson),Off,,1116,
+139,Music Box (Underground Crimson),Off,0,1116,
 139,Music Box (Underground Crimson),On,36,1116,
-139,Music Box (Lunar Boss),Off,,1152,
+139,Music Box (Lunar Boss),Off,0,1152,
 139,Music Box (Lunar Boss),On,36,1152,
-139,Music Box (Martian Madness),Off,,1188,
+139,Music Box (Martian Madness),Off,0,1188,
 139,Music Box (Martian Madness),On,36,1188,
-139,Music Box (Pirate Invasion),Off,,1224,
+139,Music Box (Pirate Invasion),Off,0,1224,
 139,Music Box (Pirate Invasion),On,36,1224,
-139,Music Box (Hell),Off,,1260,
+139,Music Box (Hell),Off,0,1260,
 139,Music Box (Hell),On,36,1260,
-139,Music Box (The Towers),Off,,1296,
+139,Music Box (The Towers),Off,0,1296,
 139,Music Box (The Towers),On,36,1296,
-139,Music Box (Goblin Invasion),Off,,1332,
+139,Music Box (Goblin Invasion),Off,0,1332,
 139,Music Box (Goblin Invasion),On,36,1332,
-141,,Single,,,
-141,,Multi,,18,
-144,,Inactive 1 Second,,,
-144,,Active 1 Second,,18,
-144,,Inactive 3 Second,18,,
+141,,Single,0,0,
+141,,Multi,0,18,
+144,,Inactive 1 Second,0,0,
+144,,Active 1 Second,0,18,
+144,,Inactive 3 Second,18,0,
 144,,Active 3 Second,18,18,
-144,,Inactive 5 Second,36,,
+144,,Inactive 5 Second,36,0,
 144,,Active 5 Second,36,18,
-149,Blue Light,On,,,Bottom
-149,Blue Light,On,,18,Top
-149,Blue Light,On,,36,Right
-149,Blue Light,On,,54,Left
-149,Blue Light,Off,54,,Bottom
+149,Blue Light,On,0,0,Bottom
+149,Blue Light,On,0,18,Top
+149,Blue Light,On,0,36,Right
+149,Blue Light,On,0,54,Left
+149,Blue Light,Off,54,0,Bottom
 149,Blue Light,Off,54,18,Top
 149,Blue Light,Off,54,36,Right
 149,Blue Light,Off,54,54,Left
-149,Red Light,On,18,,Bottom
+149,Red Light,On,18,0,Bottom
 149,Red Light,On,18,18,Top
 149,Red Light,On,18,36,Right
 149,Red Light,On,18,54,Left
-149,Red Light,Off,72,,Bottom
+149,Red Light,Off,72,0,Bottom
 149,Red Light,Off,72,18,Top
 149,Red Light,Off,72,36,Right
 149,Red Light,Off,72,54,Left
-149,Green Light,On,36,,Bottom
+149,Green Light,On,36,0,Bottom
 149,Green Light,On,36,18,Top
 149,Green Light,On,36,36,Right
 149,Green Light,On,36,54,Left
-149,Green Light,Off,90,,Bottom
+149,Green Light,Off,90,0,Bottom
 149,Green Light,Off,90,18,Top
 149,Green Light,Off,90,36,Right
 149,Green Light,Off,90,54,Left
-165,Default,Default,,,
-165,Large Icicle 1,,18,,
-165,Large Icicle 2,,36,,
-165,Large Icicle 3,,54,,
+165,Default,Default,0,0,
+165,Large Icicle 1,,18,0,
+165,Large Icicle 2,,36,0,
+165,Large Icicle 3,,54,0,
 165,Small Icicle 1,,18,72,
 165,Small Icicle 2,,36,72,
 165,Small Icicle 3,,54,72,
-165,Stalactite 1,,,,
-165,Stalactite 2,,,,
-165,Stalactite 3,,,,
-165,Stalagmite 1,,,,
-165,Stalagmite 2,,,,
-165,Stalagmite 3,,,,
-165,Stalactite/Stalagmite 1,,,,
-165,Stalactite/Stalagmite 2,,,,
-165,Stalactite/Stalagmite 3,,,,
-165,Honey Stalactite/Stalagmite 1,,,,
-165,Honey Stalactite/Stalagmite 2,,,,
-165,Honey Stalactite/Stalagmite 3,,,,
-165,Hallow Stalactite 1,,,,
-165,Hallow Stalactite 2,,,,
-165,Hallow Stalactite 3,,,,
-165,Hallow Stalagmite 1,,,,
-165,Hallow Stalagmite 2,,,,
-165,Hallow Stalagmite 3,,,,
-165,Hallow Stalactite/Stalagmite 1,,,,
-165,Hallow Stalactite/Stalagmite 2,,,,
-165,Hallow Stalactite/Stalagmite 3,,,,
-165,Corrupt Stalactite 1,,,,
-165,Corrupt Stalactite 2,,,,
-165,Corrupt Stalactite 3,,,,
-165,Corrupt Stalagmite 1,,,,
-165,Corrupt Stalagmite 2,,,,
-165,Corrupt Stalagmite 3,,,,
-165,Corrupt Stalactite/Stalagmite 1,,,,
-165,Corrupt Stalactite/Stalagmite 2,,,,
-165,Corrupt Stalactite/Stalagmite 3,,,,
-165,Crimson Stalactite 1,,,,
-165,Crimson Stalactite 2,,,,
-165,Crimson Stalactite 3,,,,
-165,Crimson Stalagmite 1,,,,
-165,Crimson Stalagmite 2,,,,
-165,Crimson Stalagmite 3,,,,
-165,Crimson Stalactite/Stalagmite 1,,,,
-165,Crimson Stalactite/Stalagmite 2,,,,
-165,Crimson Stalactite/Stalagmite 3,,,,
-170,,On,,,
-170,,Off,54,,
-172,Wooden Sink,,,,
-172,Ebonwood Sink,,,38,
-172,Rich Mahogany Sink,,,76,
-172,Pearlwood Sink,,,114,
-172,Bone Sink,,,152,
-172,Flesh Sink,,,190,
-172,Living Wood Sink,,,228,
-172,Skyware Sink,,,266,
-172,Shadewood Sink,,,304,
-172,Lihzahrd Sink,,,342,
-172,Blue Dungeon Sink,,,380,
-172,Green Dungeon Sink,,,418,
-172,Pink Dungeon Sink,,,456,
-172,Obsidian Sink,,,494,
-172,Metal Sink,,,532,
-172,Glass Sink,,,570,
-172,Golden Sink,,,608,
-172,Honey Sink,,,646,
-172,Steampunk Sink,,,684,
-172,Pumpkin Sink,,,722,
-172,Spooky Sink,,,760,
-172,Frozen Sink,,,798,
-172,Dynasty Sink,,,836,
-172,Palm Wood Sink,,,874,
-172,Mushroom Sink,,,912,
-172,Boreal Wood Sink,,,950,
-172,Slime Sink,,,988,
-172,Cactus Sink,,,1026,
-172,Martian Sink,,,1064,
-172,Meteorite Sink,,,1102,
-172,Granite Sink,,,1140,
-172,Marble Sink,,,1178,
-172,Crystal Sink,,,1216,
-173,,On,,,
-173,,Off,36,,
-174,,On,,,
-174,,Off,18,,
-178,Amethyst,Default,,,
-178,Topaz,Default,18,,
-178,Sapphire,Default,36,,
-178,Emerald,Default,54,,
-178,Ruby,Default,72,,
-178,Diamond,Default,90,,
-178,Amber,Default,108,,
-184,Default,Default,,,
-185,,Small Stone 1,,,
-185,,Small Stone 2,18,,
-185,,Small Stone 3,36,,
-185,,Small Stone 4,54,,
-185,,Small Stone 5,72,,
-185,,Small Stone 6,90,,
-185,,Small Dirt 1,108,,
-185,,Small Dirt 2,126,,
-185,,Small Dirt 3,144,,
-185,,Small Dirt 4,162,,
-185,,Small Dirt 5,180,,
-185,,Small Dirt 6,198,,
-185,,Skull Right,216,,
-185,,Skull Down,234,,
-185,,Skull Up,252,,
-185,,Skull Crushed,270,,
-185,,Bone 1,288,,
-185,,Bone 2,306,,
-185,,Bone 3,324,,
-185,,Bone 4,342,,
-185,,Gore Skull Up,360,,
-185,,Gore Skull Down,378,,
-185,,Gore Skull left,396,,
-185,,Gore Skull Crushed,414,,
-185,,Gore 1,432,,
-185,,Gore 2,450,,
-185,,Gore 3,468,,
-185,,Gore 4,486,,
-185,,Broken Tool 1,504,,
-185,,Broken Tool 2,522,,
-185,,Broken Tool 3,540,,
-185,,Broken Tool 4,558,,
-185,,Broken Tool 5,576,,
-185,,Broken Tool 6,594,,
-185,,Broken Tool 7,612,,
-185,,Broken Tool 8,630,,
-185,,Snowy 1,648,,
-185,,Snowy 2,666,,
-185,,Snowy 3,684,,
-185,,Snowy 4,702,,
-185,,Snowy 5,720,,
-185,,Snowy 6,738,,
-185,,Icy 1,756,,
-185,,Icy 2,774,,
-185,,Icy 3,792,,
-185,,Icy 4,810,,
-185,,Icy 5,828,,
-185,,Icy 6,846,,
-185,,Small Debris 1,864,,
-185,,Small Debris 2,882,,
-185,,Small Debris 3,900,,
-185,,White 1,918,,
-185,,White 2,936,,
-185,,White 3,954,,
-185,,Sandstone 1,972,,
-185,,Sandstone 2,990,,
-185,,Sandstone 3,1008,,
-185,,Sandstone 4,1026,,
-185,,Sandstone 5,1044,,
-185,,Sandstone 6,1062,,
-185,,Granite 1,1080,,
-185,,Granite 2,1098,,
-185,,Granite 3,1116,,
-185,,Granite 4,1134,,
-185,,Granite 5,1152,,
-185,,Granite 6,1170,,
-185,,Marble 1,1188,,
-185,,Marble 2,1206,,
-185,,Marble 3,1224,,
-185,,Marble 4,1242,,
-185,,Marble 5,1260,,
-185,,Marble 6,1278,,
-185,,Stone 1,,18,
+165,Stalactite 1,,undefined,undefined,
+165,Stalactite 2,,undefined,undefined,
+165,Stalactite 3,,undefined,undefined,
+165,Stalagmite 1,,undefined,undefined,
+165,Stalagmite 2,,undefined,undefined,
+165,Stalagmite 3,,undefined,undefined,
+165,Stalactite/Stalagmite 1,,undefined,undefined,
+165,Stalactite/Stalagmite 2,,undefined,undefined,
+165,Stalactite/Stalagmite 3,,undefined,undefined,
+165,Honey Stalactite/Stalagmite 1,,undefined,undefined,
+165,Honey Stalactite/Stalagmite 2,,undefined,undefined,
+165,Honey Stalactite/Stalagmite 3,,undefined,undefined,
+165,Hallow Stalactite 1,,undefined,undefined,
+165,Hallow Stalactite 2,,undefined,undefined,
+165,Hallow Stalactite 3,,undefined,undefined,
+165,Hallow Stalagmite 1,,undefined,undefined,
+165,Hallow Stalagmite 2,,undefined,undefined,
+165,Hallow Stalagmite 3,,undefined,undefined,
+165,Hallow Stalactite/Stalagmite 1,,undefined,undefined,
+165,Hallow Stalactite/Stalagmite 2,,undefined,undefined,
+165,Hallow Stalactite/Stalagmite 3,,undefined,undefined,
+165,Corrupt Stalactite 1,,undefined,undefined,
+165,Corrupt Stalactite 2,,undefined,undefined,
+165,Corrupt Stalactite 3,,undefined,undefined,
+165,Corrupt Stalagmite 1,,undefined,undefined,
+165,Corrupt Stalagmite 2,,undefined,undefined,
+165,Corrupt Stalagmite 3,,undefined,undefined,
+165,Corrupt Stalactite/Stalagmite 1,,undefined,undefined,
+165,Corrupt Stalactite/Stalagmite 2,,undefined,undefined,
+165,Corrupt Stalactite/Stalagmite 3,,undefined,undefined,
+165,Crimson Stalactite 1,,undefined,undefined,
+165,Crimson Stalactite 2,,undefined,undefined,
+165,Crimson Stalactite 3,,undefined,undefined,
+165,Crimson Stalagmite 1,,undefined,undefined,
+165,Crimson Stalagmite 2,,undefined,undefined,
+165,Crimson Stalagmite 3,,undefined,undefined,
+165,Crimson Stalactite/Stalagmite 1,,undefined,undefined,
+165,Crimson Stalactite/Stalagmite 2,,undefined,undefined,
+165,Crimson Stalactite/Stalagmite 3,,undefined,undefined,
+170,,On,0,0,
+170,,Off,54,0,
+172,Wooden Sink,,0,0,
+172,Ebonwood Sink,,0,38,
+172,Rich Mahogany Sink,,0,76,
+172,Pearlwood Sink,,0,114,
+172,Bone Sink,,0,152,
+172,Flesh Sink,,0,190,
+172,Living Wood Sink,,0,228,
+172,Skyware Sink,,0,266,
+172,Shadewood Sink,,0,304,
+172,Lihzahrd Sink,,0,342,
+172,Blue Dungeon Sink,,0,380,
+172,Green Dungeon Sink,,0,418,
+172,Pink Dungeon Sink,,0,456,
+172,Obsidian Sink,,0,494,
+172,Metal Sink,,0,532,
+172,Glass Sink,,0,570,
+172,Golden Sink,,0,608,
+172,Honey Sink,,0,646,
+172,Steampunk Sink,,0,684,
+172,Pumpkin Sink,,0,722,
+172,Spooky Sink,,0,760,
+172,Frozen Sink,,0,798,
+172,Dynasty Sink,,0,836,
+172,Palm Wood Sink,,0,874,
+172,Mushroom Sink,,0,912,
+172,Boreal Wood Sink,,0,950,
+172,Slime Sink,,0,988,
+172,Cactus Sink,,0,1026,
+172,Martian Sink,,0,1064,
+172,Meteorite Sink,,0,1102,
+172,Granite Sink,,0,1140,
+172,Marble Sink,,0,1178,
+172,Crystal Sink,,0,1216,
+173,,On,0,0,
+173,,Off,36,0,
+174,,On,0,0,
+174,,Off,18,0,
+178,Amethyst,Default,0,0,
+178,Topaz,Default,18,0,
+178,Sapphire,Default,36,0,
+178,Emerald,Default,54,0,
+178,Ruby,Default,72,0,
+178,Diamond,Default,90,0,
+178,Amber,Default,108,0,
+184,Default,Default,0,0,
+185,,Small Stone 1,0,0,
+185,,Small Stone 2,18,0,
+185,,Small Stone 3,36,0,
+185,,Small Stone 4,54,0,
+185,,Small Stone 5,72,0,
+185,,Small Stone 6,90,0,
+185,,Small Dirt 1,108,0,
+185,,Small Dirt 2,126,0,
+185,,Small Dirt 3,144,0,
+185,,Small Dirt 4,162,0,
+185,,Small Dirt 5,180,0,
+185,,Small Dirt 6,198,0,
+185,,Skull Right,216,0,
+185,,Skull Down,234,0,
+185,,Skull Up,252,0,
+185,,Skull Crushed,270,0,
+185,,Bone 1,288,0,
+185,,Bone 2,306,0,
+185,,Bone 3,324,0,
+185,,Bone 4,342,0,
+185,,Gore Skull Up,360,0,
+185,,Gore Skull Down,378,0,
+185,,Gore Skull left,396,0,
+185,,Gore Skull Crushed,414,0,
+185,,Gore 1,432,0,
+185,,Gore 2,450,0,
+185,,Gore 3,468,0,
+185,,Gore 4,486,0,
+185,,Broken Tool 1,504,0,
+185,,Broken Tool 2,522,0,
+185,,Broken Tool 3,540,0,
+185,,Broken Tool 4,558,0,
+185,,Broken Tool 5,576,0,
+185,,Broken Tool 6,594,0,
+185,,Broken Tool 7,612,0,
+185,,Broken Tool 8,630,0,
+185,,Snowy 1,648,0,
+185,,Snowy 2,666,0,
+185,,Snowy 3,684,0,
+185,,Snowy 4,702,0,
+185,,Snowy 5,720,0,
+185,,Snowy 6,738,0,
+185,,Icy 1,756,0,
+185,,Icy 2,774,0,
+185,,Icy 3,792,0,
+185,,Icy 4,810,0,
+185,,Icy 5,828,0,
+185,,Icy 6,846,0,
+185,,Small Debris 1,864,0,
+185,,Small Debris 2,882,0,
+185,,Small Debris 3,900,0,
+185,,White 1,918,0,
+185,,White 2,936,0,
+185,,White 3,954,0,
+185,,Sandstone 1,972,0,
+185,,Sandstone 2,990,0,
+185,,Sandstone 3,1008,0,
+185,,Sandstone 4,1026,0,
+185,,Sandstone 5,1044,0,
+185,,Sandstone 6,1062,0,
+185,,Granite 1,1080,0,
+185,,Granite 2,1098,0,
+185,,Granite 3,1116,0,
+185,,Granite 4,1134,0,
+185,,Granite 5,1152,0,
+185,,Granite 6,1170,0,
+185,,Marble 1,1188,0,
+185,,Marble 2,1206,0,
+185,,Marble 3,1224,0,
+185,,Marble 4,1242,0,
+185,,Marble 5,1260,0,
+185,,Marble 6,1278,0,
+185,,Stone 1,0,18,
 185,,Stone 2,18,18,
 185,,Stone 3,36,18,
 185,,Stone 4,54,18,
@@ -3313,83 +3313,83 @@ id,name,variety,u,v,anchor
 185,,Granite 4,1800,18,
 185,,Granite 5,1836,18,
 185,,Granite 6,1872,18,
-185,,Marble 1,,54,
+185,,Marble 1,0,54,
 185,,Marble 2,36,54,
 185,,Marble 3,72,54,
 185,,Marble 4,108,54,
 185,,Marble 5,144,54,
 185,,Marble 6,180,54,
-186,Bones 1,,,,
-186,Bones 2,,54,,
-186,Bones 3,,108,,
-186,Bones 4,,162,,
-186,Bones 5,,216,,
-186,Bones 6,,270,,
-186,Sword Bones,,324,,
-186,Rocks 1,,378,,
-186,Rocks 2,,432,,
-186,Rocks 3,,486,,
-186,Rocks 4,,540,,
-186,Rocks 5,,594,,
-186,Rocks 6,,648,,
-186,Rocks 7,,702,,
-186,Rocks Pick,,756,,
-186,Rocks Sword,,810,,
-186,Copper Pile 1,,864,,
-186,Copper Pile 2,,918,,
-186,Silver Pile 1,,972,,
-186,Silver Pile 2,,1026,,
-186,Gold Pile 1,,1080,,
-186,Gold Pile 2,,1134,,
-186,Broken Machine 1,,1188,,
-186,Broken Machine 2,,1242,,
-186,Broken Chest,,1296,,
-186,Broken Candelabra,,1350,,
-186,Frozen 1,,1404,,
-186,Frozen 2,,1458,,
-186,Frozen 3,,1512,,
-186,Frozen 4,,1566,,
-186,Frozen 5,,1620,,
-186,Frozen 6,,1674,,
-186,Mushroom 1,,1728,,
-186,Mushroom 2,,1782,,
-186,Mushroom 3,,1836,,
-187,Jungle Stone 1,,,,
-187,Jungle Stone 2,,54,,
-187,Jungle Stone 3,,108,,
-187,Jungle Stone 4,,162,,
-187,Jungle Stone 5,,216,,
-187,Jungle Stone 6,,270,,
-187,Corrupt Stone 1,,324,,
-187,Corrupt Stone 2,,378,,
-187,Corrupt Stone 3,,432,,
-187,Webbed Stone 1,,486,,
-187,Webbed Stone 2,,540,,
-187,Webbed Stone 3,,594,,
-187,Cocoon 1,,648,,
-187,Cocoon 2,,702,,
-187,Mossy Stone 1,,756,,
-187,Mossy Stone 2,,810,,
-187,Mossy Stone 3,,864,,
-187,Enchanted Sword,,918,,
-187,Lihzahrd 1,,972,,
-187,Lihzahrd 2,,1026,,
-187,Lihzahrd 3,,1080,,
-187,Cage 1,,1134,,
-187,Cage 2,,1188,,
-187,Minecart,,1242,,
-187,Cave In,,1296,,
-187,Dirt Pile,,1350,,
-187,Abandoned Tent,,1404,,
-187,Wheelbarrow,,1458,,
-187,Peg,,1512,,
-187,Sandstone 1,,1566,,
-187,Sandstone 2,,1620,,
-187,Sandstone 3,,1674,,
-187,Sandstone 4,,1728,,
-187,Sandstone 5,,1782,,
-187,Sandstone 6,,1836,,
-187,Granite 1,,,36,
+186,Bones 1,,0,0,
+186,Bones 2,,54,0,
+186,Bones 3,,108,0,
+186,Bones 4,,162,0,
+186,Bones 5,,216,0,
+186,Bones 6,,270,0,
+186,Sword Bones,,324,0,
+186,Rocks 1,,378,0,
+186,Rocks 2,,432,0,
+186,Rocks 3,,486,0,
+186,Rocks 4,,540,0,
+186,Rocks 5,,594,0,
+186,Rocks 6,,648,0,
+186,Rocks 7,,702,0,
+186,Rocks Pick,,756,0,
+186,Rocks Sword,,810,0,
+186,Copper Pile 1,,864,0,
+186,Copper Pile 2,,918,0,
+186,Silver Pile 1,,972,0,
+186,Silver Pile 2,,1026,0,
+186,Gold Pile 1,,1080,0,
+186,Gold Pile 2,,1134,0,
+186,Broken Machine 1,,1188,0,
+186,Broken Machine 2,,1242,0,
+186,Broken Chest,,1296,0,
+186,Broken Candelabra,,1350,0,
+186,Frozen 1,,1404,0,
+186,Frozen 2,,1458,0,
+186,Frozen 3,,1512,0,
+186,Frozen 4,,1566,0,
+186,Frozen 5,,1620,0,
+186,Frozen 6,,1674,0,
+186,Mushroom 1,,1728,0,
+186,Mushroom 2,,1782,0,
+186,Mushroom 3,,1836,0,
+187,Jungle Stone 1,,0,0,
+187,Jungle Stone 2,,54,0,
+187,Jungle Stone 3,,108,0,
+187,Jungle Stone 4,,162,0,
+187,Jungle Stone 5,,216,0,
+187,Jungle Stone 6,,270,0,
+187,Corrupt Stone 1,,324,0,
+187,Corrupt Stone 2,,378,0,
+187,Corrupt Stone 3,,432,0,
+187,Webbed Stone 1,,486,0,
+187,Webbed Stone 2,,540,0,
+187,Webbed Stone 3,,594,0,
+187,Cocoon 1,,648,0,
+187,Cocoon 2,,702,0,
+187,Mossy Stone 1,,756,0,
+187,Mossy Stone 2,,810,0,
+187,Mossy Stone 3,,864,0,
+187,Enchanted Sword,,918,0,
+187,Lihzahrd 1,,972,0,
+187,Lihzahrd 2,,1026,0,
+187,Lihzahrd 3,,1080,0,
+187,Cage 1,,1134,0,
+187,Cage 2,,1188,0,
+187,Minecart,,1242,0,
+187,Cave In,,1296,0,
+187,Dirt Pile,,1350,0,
+187,Abandoned Tent,,1404,0,
+187,Wheelbarrow,,1458,0,
+187,Peg,,1512,0,
+187,Sandstone 1,,1566,0,
+187,Sandstone 2,,1620,0,
+187,Sandstone 3,,1674,0,
+187,Sandstone 4,,1728,0,
+187,Sandstone 5,,1782,0,
+187,Sandstone 6,,1836,0,
+187,Granite 1,,0,36,
 187,Granite 2,,54,36,
 187,Granite 3,,108,36,
 187,Granite 4,,162,36,
@@ -3401,157 +3401,157 @@ id,name,variety,u,v,anchor
 187,Marble 4,,486,36,
 187,Marble 5,,540,36,
 187,Marble 6,,594,36,
-201,Crimson Grass,Three Blades,,,
-201,Crimson Grass,Two Blades,18,,
-201,Crimson Grass,Hooked,36,,
-201,Crimson Grass,Short,54,,
-201,Crimson Grass,Thick 1,72,,
-201,Crimson Grass,Fleshy 1,90,,
-201,Crimson Grass,Sparse,108,,
-201,Crimson Grass,Fleshy 2,126,,
-201,Crimson Grass,Thick 2,144,,
-201,Crimson Grass,Thick 3,162,,
-201,Crimson Grass,Fleshy 3,180,,
-201,Crimson Grass,Thick 4,198,,
-201,Crimson Grass,Thick 5,216,,
-201,Crimson Grass,Thick 6,234,,
-201,Crimson Grass,Thick 7,252,,
-207,Pure Water Fountain,Off,,,
-207,Pure Water Fountain,On,,72,
-207,Desert Water Fountain,Off,36,,
+201,Crimson Grass,Three Blades,0,0,
+201,Crimson Grass,Two Blades,18,0,
+201,Crimson Grass,Hooked,36,0,
+201,Crimson Grass,Short,54,0,
+201,Crimson Grass,Thick 1,72,0,
+201,Crimson Grass,Fleshy 1,90,0,
+201,Crimson Grass,Sparse,108,0,
+201,Crimson Grass,Fleshy 2,126,0,
+201,Crimson Grass,Thick 2,144,0,
+201,Crimson Grass,Thick 3,162,0,
+201,Crimson Grass,Fleshy 3,180,0,
+201,Crimson Grass,Thick 4,198,0,
+201,Crimson Grass,Thick 5,216,0,
+201,Crimson Grass,Thick 6,234,0,
+201,Crimson Grass,Thick 7,252,0,
+207,Pure Water Fountain,Off,0,0,
+207,Pure Water Fountain,On,0,72,
+207,Desert Water Fountain,Off,36,0,
 207,Desert Water Fountain,On,36,72,
-207,Jungle Water Fountain,Off,72,,
+207,Jungle Water Fountain,Off,72,0,
 207,Jungle Water Fountain,On,72,72,
-207,Icy Water Fountain,Off,108,,
+207,Icy Water Fountain,Off,108,0,
 207,Icy Water Fountain,On,108,72,
-207,Corrupt Water Fountain,Off,144,,
+207,Corrupt Water Fountain,Off,144,0,
 207,Corrupt Water Fountain,On,144,72,
-207,Crimson Water Fountain,Off,180,,
+207,Crimson Water Fountain,Off,180,0,
 207,Crimson Water Fountain,On,180,72,
-207,Hallowed Water Fountain,Off,216,,
+207,Hallowed Water Fountain,Off,216,0,
 207,Hallowed Water Fountain,On,216,72,
-207,Blood Water Fountain,Off,252,,
+207,Blood Water Fountain,Off,252,0,
 207,Blood Water Fountain,On,252,72,
-209,Cannon,0 deg Elevation Right,,,
-209,Bunny Cannon,0 deg Elevation Right,72,,
-209,Confetti Cannon,0 deg Elevation Right,144,,
-209,Cannon,22.5 deg Elevation Right,,54,
+209,Cannon,0 deg Elevation Right,0,0,
+209,Bunny Cannon,0 deg Elevation Right,72,0,
+209,Confetti Cannon,0 deg Elevation Right,144,0,
+209,Cannon,22.5 deg Elevation Right,0,54,
 209,Bunny Cannon,22.5 deg Elevation Right,72,54,
 209,Confetti Cannon,22.5 deg Elevation Right,144,54,
-209,Cannon,45 deg Elevation Right,,108,
+209,Cannon,45 deg Elevation Right,0,108,
 209,Bunny Cannon,45 deg Elevation Right,72,108,
 209,Confetti Cannon,45 deg Elevation Right,144,108,
-209,Cannon,67.5 deg Elevation Right,,162,
+209,Cannon,67.5 deg Elevation Right,0,162,
 209,Bunny Cannon,67.5 deg Elevation Right,72,162,
 209,Confetti Cannon,67.5 deg Elevation Right,144,162,
-209,Cannon,90 deg Elevation,,216,
+209,Cannon,90 deg Elevation,0,216,
 209,Bunny Cannon,90 deg Elevation,72,216,
 209,Confetti Cannon,90 deg Elevation,144,216,
-209,Cannon,67.5 deg Elevation Left,,270,
+209,Cannon,67.5 deg Elevation Left,0,270,
 209,Bunny Cannon,67.5 deg Elevation Left,72,270,
 209,Confetti Cannon,67.5 deg Elevation Left,144,270,
-209,Cannon,45 deg Elevation Left,,324,
+209,Cannon,45 deg Elevation Left,0,324,
 209,Bunny Cannon,45 deg Elevation Left,72,324,
 209,Confetti Cannon,45 deg Elevation Left,144,324,
-209,Cannon,22.5 deg Elevation Left,,378,
+209,Cannon,22.5 deg Elevation Left,0,378,
 209,Bunny Cannon,22.5 deg Elevation Left,72,378,
 209,Confetti Cannon,22.5 deg Elevation Left,144,378,
-209,Cannon,0 deg Elevation Left,,432,
+209,Cannon,0 deg Elevation Left,0,432,
 209,Bunny Cannon,0 deg Elevation Left,72,432,
 209,Confetti Cannon,0 deg Elevation Left,144,432,
-212,,,,,Left
-212,,,54,,Right
-215,Campfire,Lit,,,
-215,Campfire,Unlit,,288,
-215,Cursed Campfire,Lit,54,,
+212,,,0,0,Left
+212,,,54,0,Right
+215,Campfire,Lit,0,0,
+215,Campfire,Unlit,0,288,
+215,Cursed Campfire,Lit,54,0,
 215,Cursed Campfire,Unlit,54,288,
-215,Demon Campfire,Lit,108,,
+215,Demon Campfire,Lit,108,0,
 215,Demon Campfire,Unlit,108,288,
-215,Frozen Campfire,Lit,162,,
+215,Frozen Campfire,Lit,162,0,
 215,Frozen Campfire,Unlit,162,288,
-215,Ichor Campfire,Lit,216,,
+215,Ichor Campfire,Lit,216,0,
 215,Ichor Campfire,Unlit,216,288,
-215,Rainbow Campfire,Lit,270,,
+215,Rainbow Campfire,Lit,270,0,
 215,Rainbow Campfire,Unlit,270,288,
-216,Rocket,Red Rocket,,,
-216,Rocket,Green Rocket,,40,
-216,Rocket,Blue Rocket,,80,
-216,Rocket,Yellow Rocket,,120,
-227,Dye Plant,Teal Mushroom,,,
-227,Dye Plant,Green Mushroom,34,,
-227,Dye Plant,Sky Blue Flower,68,,
-227,Dye Plant,Yellow Marigold,102,,
-227,Dye Plant,Blue Berries,136,,
-227,Dye Plant,Lime Kelp,170,,
-227,Dye Plant,Pink Prickly Pear,204,,
-227,Dye Plant,Orange Bloodroot,238,,
-227,Dye Plant,Strange Plant 1,272,,
-227,Dye Plant,Strange Plant 2,306,,
-227,Dye Plant,Strange Plant 3,340,,
-227,Dye Plant,Strange Plant 4,374,,
-233,Default,Default,,,
-236,Default,Default,,,
-236,Life Fruit,Default,36,,
-239,Metal Bar,Copper Bar,,,
-239,Metal Bar,Tin Bar,18,,
-239,Metal Bar,Iron Bar,36,,
-239,Metal Bar,Lead Bar,54,,
-239,Metal Bar,Silver Bar,72,,
-239,Metal Bar,Tungsten Bar,90,,
-239,Metal Bar,Gold Bar,108,,
-239,Metal Bar,Platinum Bar,126,,
-239,Metal Bar,Demonite Bar,144,,
-239,Metal Bar,Meteorite Bar,162,,
-239,Metal Bar,Hellstone Bar,180,,
-239,Metal Bar,Cobalt Bar,198,,
-239,Metal Bar,Palladium Bar,216,,
-239,Metal Bar,Mythril Bar,234,,
-239,Metal Bar,Orichalcum Bar,252,,
-239,Metal Bar,Adamantite Bar,270,,
-239,Metal Bar,Titanium Bar,288,,
-239,Metal Bar,Chlorophyte Bar,306,,
-239,Metal Bar,Hallowed Bar,324,,
-239,Metal Bar,Crimtane Bar,342,,
-239,Metal Bar,Shroomite Bar,360,,
-239,Metal Bar,Spectre Bar,378,,
-239,Metal Bar,Luminite Bar,396,,
-240,Boss Trophy,Eye of Cthulhu,,,
-240,Boss Trophy,Eater of Worlds,54,,
-240,Boss Trophy,Brain of Cthulhu,108,,
-240,Boss Trophy,Skeletron,162,,
-240,Boss Trophy,Queen Bee,216,,
-240,Boss Trophy,Wall of Flesh,270,,
-240,Boss Trophy,Destroyer,324,,
-240,Boss Trophy,Skeletron Prime,378,,
-240,Boss Trophy,Retinazer,432,,
-240,Boss Trophy,Spazmatism,486,,
-240,Boss Trophy,Plantera,540,,
-240,Boss Trophy,Golem,594,,
-240,Painting,Blood Moon Rising,648,,
-240,Painting,The Hanged Man,702,,
-240,Painting,Glory of the Fire,756,,
-240,Painting,Bone Warp,810,,
-240,Hanging,Wall Skeleton,864,,
-240,Hanging,Hanging Skeleton,918,,
-240,Painting,Skellington J Skellingsworth,972,,
-240,Painting,The Cursed Man,1026,,
-240,Painting,Sunflowers,1080,,
-240,Painting,Terrarian Gothic,1134,,
-240,Painting,Guide Picasso,1188,,
-240,Painting,The Guardian's Gaze,1242,,
-240,Painting,Father of Someone,1296,,
-240,Painting,Nurse Lisa,1350,,
-240,Painting,Discover,1404,,
-240,Painting,Hand Earth,1458,,
-240,Painting,Old Miner,1512,,
-240,Painting,Skelehead,1566,,
-240,Painting,Imp Face,1620,,
-240,Painting,Ominous Presence,1674,,
-240,Painting,Shining Moon,1728,,
-240,Painting,The Merchant,1782,,
-240,Painting,Crowno Devours His Lunch,1836,,
-240,Painting,Rare Enchantment,1890,,
-240,Boss Trophy,Mourning Wood Trophy,,54,
+216,Rocket,Red Rocket,0,0,
+216,Rocket,Green Rocket,0,40,
+216,Rocket,Blue Rocket,0,80,
+216,Rocket,Yellow Rocket,0,120,
+227,Dye Plant,Teal Mushroom,0,0,
+227,Dye Plant,Green Mushroom,34,0,
+227,Dye Plant,Sky Blue Flower,68,0,
+227,Dye Plant,Yellow Marigold,102,0,
+227,Dye Plant,Blue Berries,136,0,
+227,Dye Plant,Lime Kelp,170,0,
+227,Dye Plant,Pink Prickly Pear,204,0,
+227,Dye Plant,Orange Bloodroot,238,0,
+227,Dye Plant,Strange Plant 1,272,0,
+227,Dye Plant,Strange Plant 2,306,0,
+227,Dye Plant,Strange Plant 3,340,0,
+227,Dye Plant,Strange Plant 4,374,0,
+233,Default,Default,0,0,
+236,Default,Default,0,0,
+236,Life Fruit,Default,36,0,
+239,Metal Bar,Copper Bar,0,0,
+239,Metal Bar,Tin Bar,18,0,
+239,Metal Bar,Iron Bar,36,0,
+239,Metal Bar,Lead Bar,54,0,
+239,Metal Bar,Silver Bar,72,0,
+239,Metal Bar,Tungsten Bar,90,0,
+239,Metal Bar,Gold Bar,108,0,
+239,Metal Bar,Platinum Bar,126,0,
+239,Metal Bar,Demonite Bar,144,0,
+239,Metal Bar,Meteorite Bar,162,0,
+239,Metal Bar,Hellstone Bar,180,0,
+239,Metal Bar,Cobalt Bar,198,0,
+239,Metal Bar,Palladium Bar,216,0,
+239,Metal Bar,Mythril Bar,234,0,
+239,Metal Bar,Orichalcum Bar,252,0,
+239,Metal Bar,Adamantite Bar,270,0,
+239,Metal Bar,Titanium Bar,288,0,
+239,Metal Bar,Chlorophyte Bar,306,0,
+239,Metal Bar,Hallowed Bar,324,0,
+239,Metal Bar,Crimtane Bar,342,0,
+239,Metal Bar,Shroomite Bar,360,0,
+239,Metal Bar,Spectre Bar,378,0,
+239,Metal Bar,Luminite Bar,396,0,
+240,Boss Trophy,Eye of Cthulhu,0,0,
+240,Boss Trophy,Eater of Worlds,54,0,
+240,Boss Trophy,Brain of Cthulhu,108,0,
+240,Boss Trophy,Skeletron,162,0,
+240,Boss Trophy,Queen Bee,216,0,
+240,Boss Trophy,Wall of Flesh,270,0,
+240,Boss Trophy,Destroyer,324,0,
+240,Boss Trophy,Skeletron Prime,378,0,
+240,Boss Trophy,Retinazer,432,0,
+240,Boss Trophy,Spazmatism,486,0,
+240,Boss Trophy,Plantera,540,0,
+240,Boss Trophy,Golem,594,0,
+240,Painting,Blood Moon Rising,648,0,
+240,Painting,The Hanged Man,702,0,
+240,Painting,Glory of the Fire,756,0,
+240,Painting,Bone Warp,810,0,
+240,Hanging,Wall Skeleton,864,0,
+240,Hanging,Hanging Skeleton,918,0,
+240,Painting,Skellington J Skellingsworth,972,0,
+240,Painting,The Cursed Man,1026,0,
+240,Painting,Sunflowers,1080,0,
+240,Painting,Terrarian Gothic,1134,0,
+240,Painting,Guide Picasso,1188,0,
+240,Painting,The Guardian's Gaze,1242,0,
+240,Painting,Father of Someone,1296,0,
+240,Painting,Nurse Lisa,1350,0,
+240,Painting,Discover,1404,0,
+240,Painting,Hand Earth,1458,0,
+240,Painting,Old Miner,1512,0,
+240,Painting,Skelehead,1566,0,
+240,Painting,Imp Face,1620,0,
+240,Painting,Ominous Presence,1674,0,
+240,Painting,Shining Moon,1728,0,
+240,Painting,The Merchant,1782,0,
+240,Painting,Crowno Devours His Lunch,1836,0,
+240,Painting,Rare Enchantment,1890,0,
+240,Boss Trophy,Mourning Wood Trophy,0,54,
 240,Boss Trophy,Pumpking Trophy,54,54,
 240,Boss Trophy,Ice Queen Trophy,108,54,
 240,Boss Trophy,Santa-NK1 Trophy,162,54,
@@ -3575,43 +3575,43 @@ id,name,variety,u,v,anchor
 240,Boss Trophy,Martian Saucer Trophy,1134,54,
 240,Boss Trophy,Flying Dutchman Trophy,1188,54,
 240,Boss Trophy,Moon Lord Trophy,1242,54,
-241,Catacomb,A,,,
-241,Catacomb,B,,54,
-241,Catacomb,C,,108,
-241,Catacomb,D,,162,
-241,Catacomb,E,,216,
-241,Catacomb,F,,270,
-241,Catacomb,G,,324,
-241,Catacomb,H,,378,
-241,Catacomb,I,,432,
-242,Painting,The Eye Sees the End,,,
-242,Painting,Something Evil is Watching You,,72,
-242,Painting,The Twins Have Awoken,,144,
-242,Painting,The Screamer,,216,
-242,Painting,Goblins Playing Poker,,288,
-242,Painting,Dryadisque,,360,
-242,Painting,Impact,,432,
-242,Painting,Powered by Birds,,504,
-242,Painting,The Destroyer,,576,
-242,Painting,The Persistency of Eyes,,648,
-242,Painting,Unicorn Crossing the Hallows,,720,
-242,Painting,Great Wave,,792,
-242,Painting,Starry Night,,864,
-242,Painting,Facing the Cerebral Mastermind,,936,
-242,Painting,Lake of Fire,,1008,
-242,Painting,Trio Super Heroes,,1080,
-242,Painting,The Creation of the Guide,,1152,
-242,Painting,Jacking Skeletron,,1224,
-242,Painting,Bitter Harvest,,1296,
-242,Painting,Blood Moon Countess,,1368,
-242,Painting,Hallow's Eve,,1440,
-242,Painting,Morbid Curiosity,,1512,
-242,Hanging,Tiger Skin,,1584,
-242,Hanging,Leopard Skin,,1656,
-242,Hanging,Zebra Skin,,1728,
-242,Hanging,Treasure Map,,1800,
-242,Painting,Pillagin Me Pixels,,1872,
-242,Painting,Castle Marsberg,108,,
+241,Catacomb,A,0,0,
+241,Catacomb,B,0,54,
+241,Catacomb,C,0,108,
+241,Catacomb,D,0,162,
+241,Catacomb,E,0,216,
+241,Catacomb,F,0,270,
+241,Catacomb,G,0,324,
+241,Catacomb,H,0,378,
+241,Catacomb,I,0,432,
+242,Painting,The Eye Sees the End,0,0,
+242,Painting,Something Evil is Watching You,0,72,
+242,Painting,The Twins Have Awoken,0,144,
+242,Painting,The Screamer,0,216,
+242,Painting,Goblins Playing Poker,0,288,
+242,Painting,Dryadisque,0,360,
+242,Painting,Impact,0,432,
+242,Painting,Powered by Birds,0,504,
+242,Painting,The Destroyer,0,576,
+242,Painting,The Persistency of Eyes,0,648,
+242,Painting,Unicorn Crossing the Hallows,0,720,
+242,Painting,Great Wave,0,792,
+242,Painting,Starry Night,0,864,
+242,Painting,Facing the Cerebral Mastermind,0,936,
+242,Painting,Lake of Fire,0,1008,
+242,Painting,Trio Super Heroes,0,1080,
+242,Painting,The Creation of the Guide,0,1152,
+242,Painting,Jacking Skeletron,0,1224,
+242,Painting,Bitter Harvest,0,1296,
+242,Painting,Blood Moon Countess,0,1368,
+242,Painting,Hallow's Eve,0,1440,
+242,Painting,Morbid Curiosity,0,1512,
+242,Hanging,Tiger Skin,0,1584,
+242,Hanging,Leopard Skin,0,1656,
+242,Hanging,Zebra Skin,0,1728,
+242,Hanging,Treasure Map,0,1800,
+242,Painting,Pillagin Me Pixels,0,1872,
+242,Painting,Castle Marsberg,108,0,
 242,Painting,Martia Lisa,108,72,
 242,Painting,The Truth Is Up There,108,144,
 242,Painting,Sparky,108,216,
@@ -3621,81 +3621,81 @@ id,name,variety,u,v,anchor
 242,Painting,Snowfellas,108,504,
 242,Painting,The Season,108,576,
 242,Painting,Not a Kid, nor a Squid,108,648,
-245,Painting,Waldo,,,
-245,Painting,Darkness,36,,
-245,Painting,Dark Soul Reaper,72,,
-245,Painting,Land,108,,
-245,Painting,Trapped Ghost,144,,
-245,Painting,American Explosive,180,,
-245,Painting,Glorious Night,216,,
-246,Painting,Demon's Eye,,,
-246,Painting,Finding Gold,,36,
-246,Painting,First Encounter,,72,
-246,Painting,Good Morning,,108,
-246,Painting,Underground Reward,,144,
-246,Painting,Through the Window,,180,
-246,Painting,Place Above the Clouds,,216,
-246,Painting,Do Not Step on the Grass,,252,
-246,Painting,Cold Waters in the White Land,,288,
-246,Painting,Lightless Chasms,,324,
-246,Painting,The Land of Deceiving Looks,,360,
-246,Painting,Daylight,,396,
-246,Painting,Secret of the Sands,,432,
-246,Painting,Deadland Comes Alive,,468,
-246,Painting,Evil Presence,,504,
-246,Painting,Sky Guardian,,540,
-246,Painting,Living Gore,,576,
-246,Painting,Flowing Magma,,612,
-246,Hanging,Holly,,684,
-254,,Sprout 1A,,,
-254,,Sprout 2A,,36,
-254,,Sprout 3A,,72,
-254,,Sprout 4A,,108,
-254,,Sprout 5A,,144,
-254,,Sprout 6A,,180,
-254,,Sprout 1B,36,,
+245,Painting,Waldo,0,0,
+245,Painting,Darkness,36,0,
+245,Painting,Dark Soul Reaper,72,0,
+245,Painting,Land,108,0,
+245,Painting,Trapped Ghost,144,0,
+245,Painting,American Explosive,180,0,
+245,Painting,Glorious Night,216,0,
+246,Painting,Demon's Eye,0,0,
+246,Painting,Finding Gold,0,36,
+246,Painting,First Encounter,0,72,
+246,Painting,Good Morning,0,108,
+246,Painting,Underground Reward,0,144,
+246,Painting,Through the Window,0,180,
+246,Painting,Place Above the Clouds,0,216,
+246,Painting,Do Not Step on the Grass,0,252,
+246,Painting,Cold Waters in the White Land,0,288,
+246,Painting,Lightless Chasms,0,324,
+246,Painting,The Land of Deceiving Looks,0,360,
+246,Painting,Daylight,0,396,
+246,Painting,Secret of the Sands,0,432,
+246,Painting,Deadland Comes Alive,0,468,
+246,Painting,Evil Presence,0,504,
+246,Painting,Sky Guardian,0,540,
+246,Painting,Living Gore,0,576,
+246,Painting,Flowing Magma,0,612,
+246,Hanging,Holly,0,684,
+254,,Sprout 1A,0,0,
+254,,Sprout 2A,0,36,
+254,,Sprout 3A,0,72,
+254,,Sprout 4A,0,108,
+254,,Sprout 5A,0,144,
+254,,Sprout 6A,0,180,
+254,,Sprout 1B,36,0,
 254,,Sprout 2B,36,36,
 254,,Sprout 3B,36,72,
 254,,Sprout 4B,36,108,
 254,,Sprout 5B,36,144,
 254,,Sprout 6B,36,180,
-254,,Immature 1A,72,,
+254,,Immature 1A,72,0,
 254,,Immature 2A,72,36,
 254,,Immature 3A,72,72,
 254,,Immature 4A,72,108,
 254,,Immature 5A,72,144,
 254,,Immature 6A,72,180,
-254,,Immature 1B,108,,
+254,,Immature 1B,108,0,
 254,,Immature 2B,108,36,
 254,,Immature 3B,108,72,
 254,,Immature 4B,108,108,
 254,,Immature 5B,108,144,
 254,,Immature 6B,108,180,
-254,,Mature 1,144,,
+254,,Mature 1,144,0,
 254,,Mature 2,144,36,
 254,,Mature 3,144,72,
 254,,Mature 4,144,108,
 254,,Mature 5,144,144,
 254,,Mature 6,144,180,
-269,,,,,Left
-269,,,36,,Right
-314,,Rail A,,,
-314,,Rail B,18,,
-314,,Rail C,36,,
-314,,Rail D,54,,
-314,,Diagonal A,72,,
-314,,Diagonal B,90,,
-314,,Diagonal C,108,,
-314,,Diagonal D,126,,
+269,,,0,0,Left
+269,,,36,0,Right
+314,,Rail A,0,0,
+314,,Rail B,18,0,
+314,,Rail C,36,0,
+314,,Rail D,54,0,
+314,,Diagonal A,72,0,
+314,,Diagonal B,90,0,
+314,,Diagonal C,108,0,
+314,,Diagonal D,126,0,
 314,,Slope Transition Up-Right,18,18,
-314,,Slope Transition Up-Left,,18,
-314,,Half Height Slope A,,36,
+314,,Slope Transition Up-Left,0,18,
+314,,Half Height Slope A,0,36,
 314,,Half Height Slope B,18,36,
-314,,Slope A,,54,
+314,,Slope A,0,54,
 314,,Slope B,18,54,
-314,,Tie Upper Left,,108,
+314,,Tie Upper Left,0,108,
 314,,Tie Upper Right,18,108,
-314,,End Cap,,126,
+314,,End Cap,0,126,
 314,,End Cap Level A,36,18,
 314,,End Cap Level B,54,18,
 314,,End Cap Diagonal A,72,18,
@@ -3715,146 +3715,146 @@ id,name,variety,u,v,anchor
 314,,Booster Down-Left,90,54,
 314,,Booster Up-Left,108,54,
 314,,Booster Up-Right,126,54,
-314,,Pressure Plate Track A,,72,
+314,,Pressure Plate Track A,0,72,
 314,,Pressure Plate Track B,18,72,
-314,,Pressure Plate Track C,,90,
+314,,Pressure Plate Track C,0,90,
 314,,Pressure Plate Track D,18,90,
-324,,Seashell A,,,
-324,,Seashell B,22,,
-324,,Seashell C,44,,
-324,,Starfish A,,22,
+324,,Seashell A,0,0,
+324,,Seashell B,22,0,
+324,,Seashell C,44,0,
+324,,Starfish A,0,22,
 324,,Starfish B,22,22,
 324,,Starfish C,44,22,
-337,Text Statue,0 Statue,,,
-337,Text Statue,1 Statue,36,,
-337,Text Statue,2 Statue,72,,
-337,Text Statue,3 Statue,108,,
-337,Text Statue,4 Statue,144,,
-337,Text Statue,5 Statue,180,,
-337,Text Statue,6 Statue,216,,
-337,Text Statue,7 Statue,252,,
-337,Text Statue,8 Statue,288,,
-337,Text Statue,9 Statue,324,,
-337,Text Statue,A Statue,360,,
-337,Text Statue,B Statue,396,,
-337,Text Statue,C Statue,432,,
-337,Text Statue,D Statue,468,,
-337,Text Statue,E Statue,504,,
-337,Text Statue,F Statue,540,,
-337,Text Statue,G Statue,576,,
-337,Text Statue,H Statue,612,,
-337,Text Statue,I Statue,648,,
-337,Text Statue,J Statue,684,,
-337,Text Statue,K Statue,720,,
-337,Text Statue,L Statue,756,,
-337,Text Statue,M Statue,792,,
-337,Text Statue,N Statue,828,,
-337,Text Statue,O Statue,864,,
-337,Text Statue,P Statue,900,,
-337,Text Statue,Q Statue,936,,
-337,Text Statue,R Statue,972,,
-337,Text Statue,S Statue,1008,,
-337,Text Statue,T Statue,1044,,
-337,Text Statue,U Statue,1080,,
-337,Text Statue,V Statue,1116,,
-337,Text Statue,W Statue,1152,,
-337,Text Statue,X Statue,1188,,
-337,Text Statue,Y Statue,1224,,
-337,Text Statue,Z Statue,1260,,
-376,Fishing Crate,Wooden Crate,,,
-376,Fishing Crate,Iron Crate,36,,
-376,Fishing Crate,Gold Crate,72,,
-376,Fishing Crate,Corrupt Crate,108,,
-376,Fishing Crate,Crimson Crate,144,,
-376,Fishing Crate,Dungeon Crate,180,,
-376,Fishing Crate,Sky Crate,216,,
-376,Fishing Crate,Hallow Crate,252,,
-376,Fishing Crate,Jungle Crate,288,,
-377,Sharpening Station,Left,,,
-377,Sharpening Station,Right,54,,
-378,Target Dummy,Left,,,
-378,Target Dummy,Right,36,,
-380,Daybloom Planter,Left,,,
-380,Daybloom Planter,Middle,18,,
-380,Daybloom Planter,Right,36,,
-380,Daybloom Planter,Single,54,,
-380,Moonglow Planter,Left,,18,
+337,Text Statue,0 Statue,0,0,
+337,Text Statue,1 Statue,36,0,
+337,Text Statue,2 Statue,72,0,
+337,Text Statue,3 Statue,108,0,
+337,Text Statue,4 Statue,144,0,
+337,Text Statue,5 Statue,180,0,
+337,Text Statue,6 Statue,216,0,
+337,Text Statue,7 Statue,252,0,
+337,Text Statue,8 Statue,288,0,
+337,Text Statue,9 Statue,324,0,
+337,Text Statue,A Statue,360,0,
+337,Text Statue,B Statue,396,0,
+337,Text Statue,C Statue,432,0,
+337,Text Statue,D Statue,468,0,
+337,Text Statue,E Statue,504,0,
+337,Text Statue,F Statue,540,0,
+337,Text Statue,G Statue,576,0,
+337,Text Statue,H Statue,612,0,
+337,Text Statue,I Statue,648,0,
+337,Text Statue,J Statue,684,0,
+337,Text Statue,K Statue,720,0,
+337,Text Statue,L Statue,756,0,
+337,Text Statue,M Statue,792,0,
+337,Text Statue,N Statue,828,0,
+337,Text Statue,O Statue,864,0,
+337,Text Statue,P Statue,900,0,
+337,Text Statue,Q Statue,936,0,
+337,Text Statue,R Statue,972,0,
+337,Text Statue,S Statue,1008,0,
+337,Text Statue,T Statue,1044,0,
+337,Text Statue,U Statue,1080,0,
+337,Text Statue,V Statue,1116,0,
+337,Text Statue,W Statue,1152,0,
+337,Text Statue,X Statue,1188,0,
+337,Text Statue,Y Statue,1224,0,
+337,Text Statue,Z Statue,1260,0,
+376,Fishing Crate,Wooden Crate,0,0,
+376,Fishing Crate,Iron Crate,36,0,
+376,Fishing Crate,Gold Crate,72,0,
+376,Fishing Crate,Corrupt Crate,108,0,
+376,Fishing Crate,Crimson Crate,144,0,
+376,Fishing Crate,Dungeon Crate,180,0,
+376,Fishing Crate,Sky Crate,216,0,
+376,Fishing Crate,Hallow Crate,252,0,
+376,Fishing Crate,Jungle Crate,288,0,
+377,Sharpening Station,Left,0,0,
+377,Sharpening Station,Right,54,0,
+378,Target Dummy,Left,0,0,
+378,Target Dummy,Right,36,0,
+380,Daybloom Planter,Left,0,0,
+380,Daybloom Planter,Middle,18,0,
+380,Daybloom Planter,Right,36,0,
+380,Daybloom Planter,Single,54,0,
+380,Moonglow Planter,Left,0,18,
 380,Moonglow Planter,Middle,18,18,
 380,Moonglow Planter,Right,36,18,
 380,Moonglow Planter,Single,54,18,
-380,Deathweed Planter,Left,,36,
+380,Deathweed Planter,Left,0,36,
 380,Deathweed Planter,Middle,18,36,
 380,Deathweed Planter,Right,36,36,
 380,Deathweed Planter,Single,54,36,
-380,Crimsonweed Planter,Left,,54,
+380,Crimsonweed Planter,Left,0,54,
 380,Crimsonweed Planter,Middle,18,54,
 380,Crimsonweed Planter,Right,36,54,
 380,Crimsonweed Planter,Single,54,54,
-380,Blinkroot Planter,Left,,72,
+380,Blinkroot Planter,Left,0,72,
 380,Blinkroot Planter,Middle,18,72,
 380,Blinkroot Planter,Right,36,72,
 380,Blinkroot Planter,Single,54,72,
-380,Waterleaf Planter,Left,,90,
+380,Waterleaf Planter,Left,0,90,
 380,Waterleaf Planter,Middle,18,90,
 380,Waterleaf Planter,Right,36,90,
 380,Waterleaf Planter,Single,54,90,
-380,Shiverthorn Planter,Left,,108,
+380,Shiverthorn Planter,Left,0,108,
 380,Shiverthorn Planter,Middle,18,108,
 380,Shiverthorn Planter,Right,36,108,
 380,Shiverthorn Planter,Single,54,108,
-380,Fireblossom Planter,Left,,126,
+380,Fireblossom Planter,Left,0,126,
 380,Fireblossom Planter,Middle,18,126,
 380,Fireblossom Planter,Right,36,126,
 380,Fireblossom Planter,Single,54,126,
-386,Trapdoor Open,Up,,,
-386,Trapdoor Open,Down,36,,
-388,Closed,Style 1,,,
-388,Closed,Style 2,,94,
-389,Open,Style 1,,,
-389,Open,Style 2,,94,
-405,Fireplace,Lit,,,
-405,Fireplace,Unlit,54,,
-410,Lunar Monolith,Vortex,,,
-410,Lunar Monolith,Nebula,36,,
-410,Lunar Monolith,Stardust,72,,
-410,Lunar Monolith,Solar,108,,
-411,Detonator,Trigger Up,,,
-411,Detonator,Trigger Down,36,,
-467,Crystal Chest,,,,
-467,Golden Chest,,36,,
-467,Spider Chest,,72,,
-467,Lesion Chest,,108,,
-467,Dead Man's Chest,,144,,
-467,Solar Chest,,180,,
-467,Vortex Chest,,216,,
-467,Nebula Chest,,252,,
-467,Stardust Chest,,288,,
-467,Golf Chest,,324,,
-467,Sandstone Chest,,360,,
-467,Bamboo Chest,,396,,
-467,Desert Chest,Locked,432,,
-467,Desert Chest,,468,,
-467,Desert Chest,,486,,
-468,Trapped Crystal,,,,
-468,Trapped Golden,,36,,
-468,Trapped Spider,,72,,
-468,Trapped Lesion,,108,,
-468,Trapped Dead Man's,,144,,
-468,Trapped Solar,,180,,
-468,Trapped Vortex,,216,,
-468,Trapped Nebula,,252,,
-468,Trapped Stardust,,288,,
-468,Trapped Golf,,324,,
-468,Trapped Sandstone,,360,,
-468,Trapped Bamboo,,396,,
-468,Trapped Desert,,432,,
-468,Trapped Desert,Locked,468,,
-597,Forest Pylon,,,,
-597,Jungle Pylon,,54,,
-597,Hallow Pylon,,108,,
-597,Cavern Pylon,,162,,
-597,Ocean Pylon,,216,,
-597,Desert Pylon,,270,,
-597,Snow Pylon,,324,,
-597,Mushroom Pylon,,378,,
-597,Universal Pylon,,432,,
+386,Trapdoor Open,Up,0,0,
+386,Trapdoor Open,Down,36,0,
+388,Closed,Style 1,0,0,
+388,Closed,Style 2,0,94,
+389,Open,Style 1,0,0,
+389,Open,Style 2,0,94,
+405,Fireplace,Lit,0,0,
+405,Fireplace,Unlit,54,0,
+410,Lunar Monolith,Vortex,0,0,
+410,Lunar Monolith,Nebula,36,0,
+410,Lunar Monolith,Stardust,72,0,
+410,Lunar Monolith,Solar,108,0,
+411,Detonator,Trigger Up,0,0,
+411,Detonator,Trigger Down,36,0,
+467,Crystal Chest,,0,0,
+467,Golden Chest,,36,0,
+467,Spider Chest,,72,0,
+467,Lesion Chest,,108,0,
+467,Dead Man's Chest,,144,0,
+467,Solar Chest,,180,0,
+467,Vortex Chest,,216,0,
+467,Nebula Chest,,252,0,
+467,Stardust Chest,,288,0,
+467,Golf Chest,,324,0,
+467,Sandstone Chest,,360,0,
+467,Bamboo Chest,,396,0,
+467,Desert Chest,Locked,432,0,
+467,Desert Chest,,468,0,
+467,Desert Chest,,486,0,
+468,Trapped Crystal,,0,0,
+468,Trapped Golden,,36,0,
+468,Trapped Spider,,72,0,
+468,Trapped Lesion,,108,0,
+468,Trapped Dead Man's,,144,0,
+468,Trapped Solar,,180,0,
+468,Trapped Vortex,,216,0,
+468,Trapped Nebula,,252,0,
+468,Trapped Stardust,,288,0,
+468,Trapped Golf,,324,0,
+468,Trapped Sandstone,,360,0,
+468,Trapped Bamboo,,396,0,
+468,Trapped Desert,,432,0,
+468,Trapped Desert,Locked,468,0,
+597,Forest Pylon,,0,0,
+597,Jungle Pylon,,54,0,
+597,Hallow Pylon,,108,0,
+597,Cavern Pylon,,162,0,
+597,Ocean Pylon,,216,0,
+597,Desert Pylon,,270,0,
+597,Snow Pylon,,324,0,
+597,Mushroom Pylon,,378,0,
+597,Universal Pylon,,432,0,
