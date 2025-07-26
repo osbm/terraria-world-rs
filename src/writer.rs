@@ -144,7 +144,7 @@ impl ByteWriter {
     pub fn datetime(&mut self, datetime_str: &str) {
         // Helper function to write default date (April 7, 2001)
         let write_default_date = |writer: &mut Self, reason: &str| {
-            println!("⚠️ WARNING: {}, using default date (April 7, 2001)", reason);
+            println!("⚠️ WARNING: {reason}, using default date (April 7, 2001)");
 
             // Create default date: April 7, 2001 00:00:00
             let default_date = chrono::NaiveDate::from_ymd_opt(2001, 4, 7)

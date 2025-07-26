@@ -77,7 +77,7 @@ impl Tile {
 
     pub fn set_block_name(&mut self, name: &str) {
         if !BLOCK_TYPE_NAMES.values().any(|&n| n == name) {
-            panic!("Block name '{}' not found in BLOCK_TYPE_NAMES", name);
+            panic!("Block name '{name}' not found in BLOCK_TYPE_NAMES");
         }
         self.block_id = BLOCK_TYPE_NAMES
             .iter()
@@ -96,7 +96,7 @@ impl Tile {
 
     pub fn set_wall_name(&mut self, name: &str) {
         if !WALL_TYPE_NAMES.values().any(|&n| n == name) {
-            panic!("Wall name '{}' not found in WALL_TYPE_NAMES", name);
+            panic!("Wall name '{name}' not found in WALL_TYPE_NAMES");
         }
         self.wall_id = WALL_TYPE_NAMES
             .iter()
@@ -146,7 +146,7 @@ impl std::fmt::Display for Tile {
         let block = if self.has_block() {
             let paint = self
                 .block_paint
-                .map(|p| format!("[{}]", p))
+                .map(|p| format!("[{p}]"))
                 .unwrap_or_default();
             let frame = self
                 .block_frame
@@ -173,7 +173,7 @@ impl std::fmt::Display for Tile {
         let wall = if self.has_wall() {
             let paint = self
                 .wall_paint
-                .map(|p| format!("[{}]", p))
+                .map(|p| format!("[{p}]"))
                 .unwrap_or_default();
             let illum = if self.wall_illuminant { "✨" } else { "" };
             let echo = if self.wall_echo { "🔊" } else { "" };
@@ -206,7 +206,7 @@ impl std::fmt::Display for Tile {
         ]
         .join("");
 
-        write!(f, "{} {} {} {}", block, wall, liquid, wires)
+        write!(f, "{block} {wall} {liquid} {wires}")
     }
 }
 

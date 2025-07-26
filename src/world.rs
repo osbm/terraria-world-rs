@@ -844,7 +844,7 @@ impl World {
                 12 => journey_powers.difficulty = r.f32(),
                 13 => journey_powers.freeze_biome_spread = r.bool(),
                 _ => {
-                    println!("Unknown journey power ID: {} please open a issue at github.com/osbm/terraria-world-rs", power_id);
+                    println!("Unknown journey power ID: {power_id} please open a issue at github.com/osbm/terraria-world-rs");
                 }
             }
         }
@@ -1958,14 +1958,14 @@ impl World {
                     let dye_flags: Vec<bool> = dyes.iter().map(|i| i.is_some()).collect();
                     writer.bits(&item_flags);
                     writer.bits(&dye_flags);
-                    for (_i, item) in items.iter().enumerate() {
+                    for item in items.iter() {
                         if let Some(item) = item {
                             writer.i16(item.type_id as i16);
                             writer.u8(item.prefix);
                             writer.i16(item.quantity);
                         }
                     }
-                    for (_i, dye) in dyes.iter().enumerate() {
+                    for dye in dyes.iter() {
                         if let Some(dye) = dye {
                             writer.i16(dye.type_id as i16);
                             writer.u8(dye.prefix);
@@ -2067,10 +2067,7 @@ impl World {
                 _ => {
                     // For unknown power IDs, we need to skip the value
                     // This shouldn't happen in normal cases, but we need to handle it
-                    println!(
-                        "Warning: Unknown journey power ID {} during writing",
-                        power_id
-                    );
+                    println!("Warning: Unknown journey power ID {power_id} during writing");
                 }
             }
         }

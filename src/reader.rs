@@ -259,8 +259,7 @@ impl<'a> ByteReader<'a> {
             );
         }
         let bytes = self.bytes(4);
-        let val = f32::from_le_bytes(bytes.try_into().unwrap());
-        val
+        f32::from_le_bytes(bytes.try_into().unwrap())
     }
 
     pub fn f64(&mut self) -> f64 {
@@ -272,8 +271,7 @@ impl<'a> ByteReader<'a> {
             );
         }
         let bytes = self.bytes(8);
-        let val = f64::from_le_bytes(bytes.try_into().unwrap());
-        val
+        f64::from_le_bytes(bytes.try_into().unwrap())
     }
 
     pub fn slice_bytes(&self, start: usize, end: usize) -> Vec<u8> {
