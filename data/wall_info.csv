@@ -1,0 +1,348 @@
+id,name,color,is_house
+0,Sky,#00000000,
+1,Stone Wall,#FF343434,true
+2,Dirt Wall,#FF583D2E,
+3,Ebonstone Wall,#FF3D3A4E,
+4,Wood Wall,#FF493324,true
+5,Gray Brick Wall,#FF3B3B3B,true
+6,Red Brick Wall,#FF5B1E1E,true
+7,Dungeon Blue Brick Wall,#FF272D39,
+8,Dungeon Green Brick Wall,#FF25311F,
+9,Dungeon Pink Brick Wall,#FF3B2534,
+10,Gold Brick Wall,#FF4A3E0C,true
+11,Silver Brick Wall,#FF2E383B,true
+12,Copper Brick Wall,#FF4B200B,true
+13,Hellstone Wall,#FF432525,
+14,Obsidian Wall,#FF0F0F0F,
+15,Mud Wall,#FF342B2D,
+16,Player Dirt Wall,#FF583D2E,true
+17,Player Blue Brick Wall,#FF272D39,true
+18,Player Green Brick Wall,#FF25311F,true
+19,Player Pink Brick Wall,#FF3B2534,true
+20,Player Obsidian Wall,#FF0F0F0F,true
+21,Glass Wall,#DD8DB2FE,true
+22,Pearlstone Brick,#FF716363,
+23,Iridescent Wall,#FF26262B,true
+24,Mudstone Wall,#FF352729,true
+25,Cobalt Brick Wall,#FF0B233E,true
+26,Mythril Brick Wall,#FF153F46,true
+27,Planked Wall,#FF3E332C,true
+28,Pearlstone Wall,#FF515465,
+29,Red Candy Cane Wall,#FF581717,true
+30,Green Candy Cane Wall,#FF1C5817,true
+31,Snow Brick Wall,#FF4E5763,true
+32,Adamantite Beam Wall,#FF561128,true
+33,Demonite Brick Wall,#FF312F53,true
+34,Sandstone Brick Wall,#FF454329,true
+35,Ebonstone Brick Wall,#FF333346,true
+36,Red Stucco Wall,#FF573B37,true
+37,Yellow Stucco Wall,#FF454329,true
+38,Green Stucco Wall,#FF313931,true
+39,Gray Stucco Wall,#FF4E4F49,true
+40,Snow Wall,#FF556667,false
+41,Ebonwood Wall,#FF34323E,true
+42,Rich Mahogany Wall,#FF472A2C,true
+43,Pearlwood Wall,#FF494232,true
+44,Rainbow Brick Wall,#FF343434,true
+45,Tin Brick Wall,#FF3C3B33,true
+46,Tungsten Brick Wall,#FF30392F,true
+47,Platinum Brick Wall,#FF474D55,true
+48,Amethyst Gemstone Wall,#FF401D4B,false
+49,Topaz Gemstone Wall,#FF4B381D,false
+50,Sapphire Gemstone Wall,#FF1D304B,false
+51,Emerald Gemstone Wall,#FF1D4B31,false
+52,Ruby Gemstone Wall,#FF4B1D26,false
+53,Diamond Gemstone Wall,#FF1D474B,false
+54,Green Moss Cave Wall,#FF283832,false
+55,Yellow Moss Cave Wall,#FF313024,false
+56,Red Moss Cave Wall,#FF2B2120,false
+57,Blue Moss Cave Wall,#FF1F2831,false
+58,Purple Moss Cave Wall,#FF302334,false
+59,Cave Wall,#FF442F24,false
+60,Moss Wall,#FF013414,false
+61,Iron Cave Wall,#FF37271A,false
+62,Spider Wall,#FF27211A,false
+63,Grass Wall,#FF1E5030,false
+64,Jungle Wall,#FF35501E,false
+65,Flower Wall,#FF225A36,false
+66,Player Grass Wall,#FF1E5030,true
+67,Player Jungle Wall,#FF35501E,true
+68,Player Flower Wall,#FF1E5030,true
+69,Corruption Jungle Wall,#FF2B2A44,false
+70,Hallowed Jungle Wall,#FF1E4650,false
+71,Ice Wall,#FF4E6987,false
+72,Cactus Wall,#FF34540C,true
+73,Cloud Wall,#FFBECCDF,true
+74,Mushroom Wall,#FF403E50,true
+75,Bone Block Wall,#FF414123,true
+76,Slime Block Wall,#FF142E68,true
+77,Flesh Block Wall,#FF3D0D10,true
+78,Livingwood Wall,#FF3F271A,true
+79,Obsidian Cave Wall,#FF332F60,false
+80,Mushroom Cave Wall,#FF403E50,false
+81,Crimson Jungle Wall,#FF653333,false
+82,Disc Wall,#FF4D4022,true
+83,Crimstone Wall,#FF3E2629,false
+84,Ice Brick Wall,#FF304E5D,true
+85,Shadewood Wall,#FF363F45,true
+86,Hive Wall,#FF8A4926,false
+87,Lihzahrd Brick Wall,#FF320F08,false
+88,Purple Stained Glass,#EECB8FFD,true
+89,Yellow Stained Glass,#EEFDCF8F,true
+90,Blue Stained Glass,#EEA6C1E6,true
+91,Green Stained Glass,#EE8FFDBF,true
+92,Red Stained Glass,#EEFD8FA3,true
+93,Multicolored Stained Glass,#EEFD8FFD,true
+94,Dungeon Blue Slab Wall,#FF2A3A42,false
+95,Dungeon Blue Tiled Wall,#FF32324E,false
+96,Dungeon Pink Slab Wall,#FF45324E,false
+97,Dungeon Pink Tiled Wall,#FF4E324E,false
+98,Dungeon Green Slab Wall,#FF293F2D,false
+99,Dungeon Green Tiled Wall,#FF324E45,false
+100,Player Blue Slab Wall,#FF2A3A42,false
+101,Player Blue Tiled Wall,#FF32324E,true
+102,Player Pink Slab Wall,#FF45324E,true
+103,Player Pink Tiled Wall,#FF4E324E,true
+104,Player Green Slab Wall,#FF293F2D,true
+105,Player Green Tiled Wall,#FF324E45,true
+106,Wooden Fence,#FF55402B,false
+107,Metal Fence,#FF404040,false
+108,Hive Wall,#FF8A4926,true
+109,Palladium Column Wall,#FF5E1911,true
+110,Bubblegum Block Wall,#FF7D247A,true
+111,Titanstone Block Wall,#FF33231B,true
+112,Player Lihzahrd Brick Wall,#FF320F08,true
+113,Pumpkin Wall,#FF873A00,true
+114,Hay Wall,#FF41340F,true
+115,Spooky Wood Wall,#FF272A33,true
+116,Christmas Tree Wallpaper,#FF332A22,true
+117,Ornament Wallpaper,#FF524632,true
+118,Candy Cane Wallpaper,#FF444141,true
+119,Festive Wallpaper,#FF353028,true
+120,Stars Wallpaper,#FF665A69,true
+121,Squiggles Wallpaper,#FFB59B84,true
+122,Snowflake Wallpaper,#FF757B99,true
+123,Krampus Horn Wallpaper,#FF857668,true
+124,Bluegreen Wallpaper,#FF1A3233,true
+125,Grinch Finger Wallpaper,#FF696F44,true
+126,Fancy Grey Wallpaper,#FF7C6888,true
+127,Ice Floe Wallpaper,#FF748DD6,true
+128,Music Wallpaper,#FF6D5A79,true
+129,Purple Rain Wallpaper,#FF5F35A0,true
+130,Rainbow Wallpaper,#FF805F89,true
+131,Sparkle Stone Wallpaper,#FF8176A9,true
+132,Starlit Heaven Wallpaper,#FF7C6A7D,true
+133,Bubble Wallpaper,#FF6471B3,true
+134,Copper Pipe Wallpaper,#FF8F4B19,true
+135,Ducky Wallpaper,#FF778A83,true
+136,Waterfall Wall,#FF4B698C,true
+137,Lavafall Wall,#FF6C6558,true
+138,Ebonwood Fence,#FF81668E,false
+139,Rich Mahogany Fence,#FF8C4E65,false
+140,Pearlwood Fence,#FFAF8A8A,false
+141,Shadewood Fence,#FF6E6768,false
+142,White Dynasty Wall,#FFA59187,true
+143,Blue Dynasty Wall,#FF9E8D7B,true
+144,Mystic Rune Wallpaper,#FF675149,true
+145,Iron Fence,#FF947995,false
+146,Copper Plating,#FF783E36,true
+147,Stone Slab Wall,#FF584359,true
+148,Sail,#FFC9AC9A,false
+149,Boreal Wood Wall,#FF604752,true
+150,Boreal Wood Fence,#FF877680,false
+151,Palm Wood Wall,#FF714C3D,true
+152,Palm Wood Fence,#FF736E36,false
+153,Amber Gemspark Wall,#FF9F3B21,true
+154,Amethyst Gemspark Wall,#FF6D229F,true
+155,Diamond Gemspark Wall,#FF8A8EA0,true
+156,Emerald Gemspark Wall,#FF2F9E24,true
+157,Offline Amber Gemspark Wall,#FF7A4026,true
+158,Offline Amethyst Gemspark Wall,#FF55287A,true
+159,Offline Diamond Gemspark Wall,#FF44455C,true
+160,Offline Emerald Gemspark Wall,#FF267A32,true
+161,Offline Ruby Gemspark Wall,#FF7A283C,true
+162,Offline Sapphire Gemspark Wall,#FF26287A,true
+163,Offline Topaz Gemspark Wall,#FF7A7426,true
+164,Ruby Gemspark Wall,#FF9F2231,true
+165,Sapphire Gemspark Wall,#FF21429F,true
+166,Topaz Gemspark Wall,#FF9D8A21,true
+167,Tin Plating Wall,#FF644E56,true
+168,Confetti Wall,#FF587A7B,true
+169,Midnight Confetti Wall,#FF577C7D,true
+170,Unique Cave Wall 7 (natural),#FF6C4A44,false
+171,Unique Cave Wall 8 (natural),#FF643F42,false
+172,Honeyfall Wall,#FFA36000,true
+173,Chlorophyte Brick Wall,#FF5EA32E,true
+174,Crimtane Brick Wall,#FF75203B,true
+175,Shroomite Plating Wall,#FF140BCB,true
+176,Martian Conduit Wall,#FF4A4558,true
+177,Hellstone Brick Wall,#FF3C1E1E,true
+178,Marble (natural),#FF6F7587,false
+179,Marble Block Wall,#FF6F7587,true
+180,Granite (natural),#FF191736,false
+181,Granite Block Wall,#FF191736,true
+182,Meteorite Brick Wall,#FF4A4781,true
+183,Smooth Marble Wall,#FF6F7587,true
+184,Smooth Granite Wall,#FF191736,true
+185,Cave 8 (natural),#FF343434,false
+186,Crystal Block Wall,#FF260942,true
+187,Sandstone Wall,#FF955033,true
+188,Corruption 1 (natural),#FF523F50,false
+189,Corruption 2 (natural),#FF413D4D,false
+190,Corruption 3 (natural),#FF40415C,false
+191,Corruption 4 (natural),#FF4C3554,false
+192,Crimson 1 (natural),#FF904334,false
+193,Crimson 2 (natural),#FF953030,false
+194,Crimson 3 (natural),#FF6F2024,false
+195,Crimson 4 (natural),#FF933037,false
+196,Dirt 1 (natural),#FF614333,false
+197,Dirt 2 (natural),#FF70503E,false
+198,Dirt 3 (natural),#FF583D2E,false
+199,Dirt 4 (natural),#FF7F5E4C,false
+200,Hallow 1 (natural),#FF8F327B,false
+201,Hallow 2 (natural),#FF887883,false
+202,Hallow 3 (natural),#FFDB5C8F,false
+203,Hallow 4 (natural),#FF714096,false
+204,Jungle 1 (natural),#FF4A433C,false
+205,Jungle 2 (natural),#FF3C4E3B,false
+206,Jungle 3 (natural),#FF003615,false
+207,Jungle 4 (natural),#FF4A6148,false
+208,Lava 1 (natural),#FF282523,false
+209,Lava 2 (natural),#FF4D3F42,false
+210,Lava 3 (natural),#FF6F0606,false
+211,Lava 4 (natural),#FF58433B,false
+212,Rocks 1 (natural),#FF585750,false
+213,Rocks 2 (natural),#FF474743,false
+214,Rocks 3 (natural),#FF4C343C,false
+215,Rocks 4 (natural),#FF59303B,false
+216,Hardened Sand Wall,#FF9E6440,true
+217,Hardened Ebonsand Wall,#FF3E2D4B,true
+218,Hardened Crimsand Wall,#FF390E0C,true
+219,Hardened Pearlsand Wall,#FF604885,true
+220,Ebonsandstone Wall,#FF433750,true
+221,Crimsandstone Wall,#FF40251D,true
+222,Pearlsandstone Wall,#FF46335B,true
+223,Desert Fossil Wall,#FF331204,true
+224,Lunar Brick Wall,#FF393734,true
+225,CogWall,,
+226,SandFall,,
+227,SnowFall,,
+228,SillyBalloonPinkWall,,
+229,SillyBalloonPurpleWall,,
+230,SillyBalloonGreenWall,,
+231,IronBrick,,
+232,LeadBrick,,
+233,LesionBlock,,
+234,CrimstoneBrick,,
+235,SmoothSandstone,,
+236,Spider,,
+237,SolarBrick,,
+238,VortexBrick,,
+239,NebulaBrick,,
+240,StardustBrick,,
+241,OrangeStainedGlass,,
+242,GoldStarryGlassWall,,
+243,BlueStarryGlassWall,,
+244,LivingWoodUnsafe,,
+245,WroughtIronFence,,
+246,EbonstoneEcho,,
+247,MudWallEcho,,
+248,PearlstoneEcho,,
+249,SnowWallEcho,,
+250,AmethystEcho,,
+251,TopazEcho,,
+252,SapphireEcho,,
+253,EmeraldEcho,,
+254,RubyEcho,,
+255,DiamondEcho,,
+256,Cave1Echo,,
+257,Cave2Echo,,
+258,Cave3Echo,,
+259,Cave4Echo,,
+260,Cave5Echo,,
+261,Cave6Echo,,
+262,Cave7Echo,,
+263,SpiderEcho,,
+264,CorruptGrassEcho,,
+265,HallowedGrassEcho,,
+266,IceEcho,,
+267,ObsidianBackEcho,,
+268,CrimsonGrassEcho,,
+269,CrimstoneEcho,,
+270,CaveWall1Echo,,
+271,CaveWall2Echo,,
+272,MarbleEchoUnused,,
+273,GraniteEchoUnused,,
+274,Cave8Echo,,
+275,SandstoneEcho,,
+276,Corruption1Echo,,
+277,Corruption2Echo,,
+278,Corruption3Echo,,
+279,Corruption4Echo,,
+280,Crimson1Echo,,
+281,Crimson2Echo,,
+282,Crimson3Echo,,
+283,Crimson4Echo,,
+284,Dirt1Echo,,
+285,Dirt2Echo,,
+286,Dirt3Echo,,
+287,Dirt4Echo,,
+288,Hallow1Echo,,
+289,Hallow2Echo,,
+290,Hallow3Echo,,
+291,Hallow4Echo,,
+292,Jungle1Echo,,
+293,Jungle2Echo,,
+294,Jungle3Echo,,
+295,Jungle4Echo,,
+296,Lava1Echo,,
+297,Lava2Echo,,
+298,Lava3Echo,,
+299,Lava4Echo,,
+300,Rocks1Echo,,
+301,Rocks2Echo,,
+302,Rocks3Echo,,
+303,Rocks4Echo,,
+304,HardenedSandEcho,,
+305,CorruptHardenedSandEcho,,
+306,CrimsonHardenedSandEcho,,
+307,HallowHardenedSandEcho,,
+308,CorruptSandstoneEcho,,
+309,CrimsonSandstoneEcho,,
+310,HallowSandstoneEcho,,
+311,DesertFossilEcho,,
+312,BambooBlockWall,,
+313,LargeBambooBlockWall,,
+314,AmberStoneWallEcho,,
+315,BambooFence,,
+316,AshWood,,
+317,AshWoodFence,,
+318,EchoWall,,
+319,ReefWall,,
+320,PoopWall,,
+321,ShimmerBlockWall,,
+322,ShimmerBrickWall,,
+323,LunarRustBrickWall,,
+324,DarkCelestialBrickWall,,
+325,AstraBrickWall,,
+326,CosmicEmberBrickWall,,
+327,CryocoreBrickWall,,
+328,MercuryBrickWall,,
+329,StarRoyaleBrickWall,,
+330,HeavenforgeBrickWall,,
+331,AncientBlueBrickWall,,
+332,AncientGreenBrickWall,,
+333,AncientPinkBrickWall,,
+334,AncientGoldBrickWall,,
+335,AncientSilverBrickWall,,
+336,AncientCopperBrickWall,,
+337,AncientObsidianBrickWall,,
+338,AncientHellstoneBrickWall,,
+339,AncientCobaltBrickWall,,
+340,AncientMythrilBrickWall,,
+341,LavaMossBlockWall,,
+342,ArgonMossBlockWall,,
+343,KryptonMossBlockWall,,
+344,XenonMossBlockWall,,
+345,VioletMossBlockWall,,
+346,RainbowMossBlockWall,,
