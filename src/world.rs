@@ -1093,7 +1093,7 @@ impl World {
             eprintln!("⚠️ Warning: This parser was tested only on version 279 (1.4.4.9). Parsed version is {}", self.version_integer);
         }
 
-        return match self.version_integer {
+        match self.version_integer {
             12 => "1.0.5",          // unconfirmed
             20 => "1.0.6",          // unconfirmed
             22 => "1.0.6.1",        // unconfirmed
@@ -1142,7 +1142,7 @@ impl World {
             278 => "1.4.4.8",       // unconfirmed
             279 => "1.4.4.9",
             _ => "Unknon version",
-        };
+        }
     }
 
     pub fn difficulty(&self) -> &str {
