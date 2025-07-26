@@ -5,7 +5,7 @@ use terraria_world::world::World;
 fn test_world_roundtrip() {
     let test_worlds_dir = std::env::var("TEST_WORLDS_DIR")
         .expect("TEST_WORLDS_DIR environment variable not set. Please provide the test worlds directory as a flake input.");
-    println!("Using test worlds directory: {}", test_worlds_dir);
+    println!("Using test worlds directory: {test_worlds_dir}");
     // Get all .wld files in the test worlds directory
     let entries = fs::read_dir(&test_worlds_dir).expect("Failed to read test worlds directory");
     let wld_files: Vec<_> = entries
@@ -30,21 +30,21 @@ fn test_world_roundtrip() {
     let mut failures = Vec::new();
     for wld_file in wld_files {
         let file_name = wld_file.file_name().unwrap().to_str().unwrap();
-        println!("Testing roundtrip for: {}", file_name);
+        println!("Testing roundtrip for: {file_name}");
 
         // Read the original world
         let mut world = World::from_file(wld_file.to_str().unwrap())
-            .expect(&format!("Failed to read world file: {}", file_name));
+            .unwrap_or_else(|_| panic!("Failed to read world file: {file_name}"));
         println!("World name: {}", world.world_name);
         // create the worlds directory if it doesn't exist
         fs::create_dir_all("./worlds").expect("Failed to create worlds directory");
 
         // Save as WLD
-        let output_wld_path = format!("./worlds/{}.roundtrip.wld", file_name);
+        let output_wld_path = format!("./worlds/{file_name}.roundtrip.wld");
         world
             .save_as_wld(&output_wld_path)
-            .expect(&format!("Failed to save WLD for: {}", file_name));
-        println!("Saved roundtrip WLD to: {}", output_wld_path);
+            .unwrap_or_else(|_| panic!("Failed to save WLD for: {file_name}"));
+        println!("Saved roundtrip WLD to: {output_wld_path}");
 
         // Read both files as bytes
         let orig_bytes = fs::read(&wld_file).expect("Failed to read original file bytes");
@@ -57,7 +57,7 @@ fn test_world_roundtrip() {
                 break;
             }
         }
-        let _result = if let Some(idx) = first_diff {
+        if let Some(idx) = first_diff {
             let percent = (idx as f64) / (orig_bytes.len().max(out_bytes.len()) as f64) * 100.0;
             println!(
                 "✗ {}: first difference at byte {}. total bytes {}. The first ({:.2}%) is correct.",
@@ -88,15 +88,14 @@ fn test_world_roundtrip() {
                 (min_len as f64) / (orig_bytes.len().max(out_bytes.len()) as f64) * 100.0,
             ));
         } else {
-            println!("✓ {}: OK (100%)", file_name);
+            println!("✓ {file_name}: OK (100%)");
         };
     }
     if !failures.is_empty() {
         println!("\nSummary of roundtrip failures:");
         for (file, idx, len, percent) in &failures {
             println!(
-                "  {}: first difference at byte {}. total bytes {}. The first  ({:.2}%) is correct.",
-                file, idx, len, percent
+                "  {file}: first difference at byte {idx}. total bytes {len}. The first  ({percent:.2}%) is correct."
             );
         }
         panic!("{} roundtrip test(s) failed", failures.len());
