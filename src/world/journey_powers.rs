@@ -12,6 +12,12 @@ pub struct JourneyPowers {
     pub power_order: Vec<i16>,
 }
 
+impl Default for JourneyPowers {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl JourneyPowers {
     pub fn new() -> Self {
         Self {

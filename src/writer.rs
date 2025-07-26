@@ -4,6 +4,12 @@ pub struct ByteWriter {
     offset: usize,
 }
 
+impl Default for ByteWriter {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ByteWriter {
     pub fn new() -> Self {
         ByteWriter {

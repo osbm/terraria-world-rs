@@ -43,6 +43,12 @@ pub struct Tile {
     pub activator_wire: bool,
 }
 
+impl Default for Tile {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Tile {
     pub fn new() -> Self {
         Self {

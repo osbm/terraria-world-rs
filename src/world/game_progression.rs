@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
+#[derive(Default)]
 pub struct GameProgression {
     // Boss defeats
     pub defeated_eye_of_cthulhu: bool,
@@ -55,53 +56,6 @@ pub struct GameProgression {
 // i will write default values for this struct
 // to initialize it easily
 // using GameProgression::default() will give you a new instance
-impl Default for GameProgression {
-    fn default() -> Self {
-        Self {
-            defeated_eye_of_cthulhu: false,
-            defeated_eater_of_worlds: false,
-            defeated_skeletron: false,
-            defeated_queen_bee: false,
-            defeated_the_twins: false,
-            defeated_the_destroyer: false,
-            defeated_skeletron_prime: false,
-            defeated_any_mechanical_boss: false,
-            defeated_plantera: false,
-            defeated_golem: false,
-            defeated_king_slime: false,
-            defeated_duke_fishron: false,
-            defeated_martian_madness: false,
-            defeated_lunatic_cultist: false,
-            defeated_moon_lord: false,
-            defeated_pumpking: false,
-            defeated_mourning_wood: false,
-            defeated_ice_queen: false,
-            defeated_santa_nk1: false,
-            defeated_everscream: false,
-            defeated_empress_of_light: false,
-            defeated_queen_slime: false,
-            defeated_deerclops: false,
-            defeated_solar_pillar: false,
-            defeated_vortex_pillar: false,
-            defeated_nebula_pillar: false,
-            defeated_stardust_pillar: false,
-            lunar_events_pillars_present_solar: false,
-            lunar_events_pillars_present_vortex: false,
-            lunar_events_pillars_present_nebula: false,
-            lunar_events_pillars_present_stardust: false,
-            lunar_events_are_active: false,
-            defeated_goblin_army: false,
-            defeated_clown: false,
-            defeated_frost_moon: false,
-            defeated_pirate_invasion: false,
-            is_hardmode: false,
-            shadow_orbs_smashed_at_least_once: false,
-            shadow_orbs_spawn_meteorite: false,
-            shadow_orbs_evil_boss_counter: 0,
-            altars_smashed: 0,
-        }
-    }
-}
 
 //implement a function to maximize the game progression
 impl GameProgression {
