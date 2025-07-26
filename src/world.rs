@@ -1593,16 +1593,14 @@ impl World {
 
     fn write_tiles_section(&self) -> ByteWriter {
         let mut writer = ByteWriter::new();
-        let (width, height) = (self.world_width as usize, self.world_height as usize);
         let tiles = &self.tiles.tiles;
 
-        for x in 0..width {
-            let column = &tiles[x];
-            let mut y = 0;
-            while y < height {
+        for column in tiles {
+            let mut y: usize = 0;
+            while y < self.world_height as usize {
                 // Find run length for RLE
                 let mut run_length = 1;
-                while y + run_length < height
+                while y + run_length < self.world_height as usize
                     && column[y].tiles_equal(&column[y + run_length])
                     && run_length < 0x10000
                 {
@@ -1958,19 +1956,15 @@ impl World {
                     let dye_flags: Vec<bool> = dyes.iter().map(|i| i.is_some()).collect();
                     writer.bits(&item_flags);
                     writer.bits(&dye_flags);
-                    for item in items.iter() {
-                        if let Some(item) = item {
-                            writer.i16(item.type_id as i16);
-                            writer.u8(item.prefix);
-                            writer.i16(item.quantity);
-                        }
+                    for item in items.iter().flatten() {
+                        writer.i16(item.type_id as i16);
+                        writer.u8(item.prefix);
+                        writer.i16(item.quantity);
                     }
-                    for dye in dyes.iter() {
-                        if let Some(dye) = dye {
-                            writer.i16(dye.type_id as i16);
-                            writer.u8(dye.prefix);
-                            writer.i16(dye.quantity);
-                        }
+                    for dye in dyes.iter().flatten() {
+                        writer.i16(dye.type_id as i16);
+                        writer.u8(dye.prefix);
+                        writer.i16(dye.quantity);
                     }
                 }
                 Some(crate::world::TileEntityExtra::WeaponRack { item }) => {
@@ -1985,12 +1979,11 @@ impl World {
                         .map(|i| i.is_some())
                         .collect();
                     writer.bits(&item_flags);
-                    for item in items.iter().chain(dyes.iter()) {
-                        if let Some(item) = item {
-                            writer.i16(item.type_id as i16);
-                            writer.u8(item.prefix);
-                            writer.i16(item.quantity);
-                        }
+                    for item in items.iter().chain(dyes.iter()).flatten() {
+                        writer.i16(item.type_id as i16);
+                        writer.u8(item.prefix);
+                        writer.i16(item.quantity);
+
                     }
                 }
                 Some(crate::world::TileEntityExtra::Plate { item }) => {
