@@ -111,7 +111,7 @@
               }
               ''
                 ${pkgs.rustfmt}/bin/cargo-fmt fmt --manifest-path ${./.}/Cargo.toml -- --check
-                ${pkgs.nixpkgs-fmt}/bin/nixpkgs-fmt --check ${./.}
+                ${pkgs.nixfmt}/bin/nixfmt --check ${./.}
                 touch $out # it worked!
               '';
           "${cargoToml.package.name}" = pkgs."${cargoToml.package.name}";
