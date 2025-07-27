@@ -1150,7 +1150,56 @@ impl World {
         }
     }
 
-    // there is 3 types of corruption:
+    // add block by name
+    pub fn add_block(&mut self, x: usize, y: usize, block_name: &str) {
+        if x < self.world_width as usize && y < self.world_height as usize {
+            let tile = &mut self.tiles.tiles[x][y];
+            tile.set_block_name(block_name);
+        }
+    }
+
+    pub fn get_tile(&self, x: usize, y: usize) -> Option<&Tile> {
+        if x < self.world_width as usize && y < self.world_height as usize {
+            Some(&self.tiles.tiles[x][y])
+        } else {
+            None
+        }
+    }
+
+    pub fn get_all_possible_block_names(&self) -> Vec<String> {
+        // TODO return from the enums
+        Vec::new()
+    }
+
+    pub fn add_wall(
+        &mut self,
+        x: usize,
+        y: usize,
+        wall_name: &str,
+    ) {
+        if x < self.world_width as usize && y < self.world_height as usize {
+            let tile = &mut self.tiles.tiles[x][y];
+            tile.set_wall_name(wall_name);
+        } else {
+            eprintln!("Coordinates ({}, {}) are out of bounds for the world size {}x{}.", x, y, self.world_width, self.world_height);
+        }
+    }
+
+
+    pub fn place_tile(
+        &mut self,
+        x: usize,
+        y: usize,
+        tile: Tile
+    ) {
+        if x < self.world_width as usize && y < self.world_height as usize {
+            self.tiles.tiles[x][y] = tile;
+        } else {
+            eprintln!("Coordinates ({}, {}) are out of bounds for the world size {}x{}.", x, y, self.world_width, self.world_height);
+        }
+    }
+
+    // there is 3 types of corruption: TODO make it 100% match the game
     // 0 - Corruption
     // 1 - Crimson
     // 2 - Hallow
