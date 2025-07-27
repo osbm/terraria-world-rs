@@ -1245,7 +1245,7 @@ impl World {
         Ok(world)
     }
 
-    pub fn save_as_wld(&mut self, path: &str) -> std::io::Result<()> {
+    pub fn save_as_wld(&self, path: &str) -> std::io::Result<()> {
         // Create all section writers
         let world_header_writer = self.write_world_header_section();
         let tiles_writer = self.write_tiles_section();

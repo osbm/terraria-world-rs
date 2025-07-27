@@ -20,7 +20,7 @@ fn main() {
     // println!("Invasion Data: {:#?}", world.invasions);
     // use std::env;
 
-    let mut world2 = World::new("example_world", "large", "classic");
+    let world2 = World::new("example_world", "large", "classic");
 
     world2
         .save_as_wld("example_world2.wld")
