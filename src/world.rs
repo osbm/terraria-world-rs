@@ -1171,31 +1171,26 @@ impl World {
         Vec::new()
     }
 
-    pub fn add_wall(
-        &mut self,
-        x: usize,
-        y: usize,
-        wall_name: &str,
-    ) {
+    pub fn add_wall(&mut self, x: usize, y: usize, wall_name: &str) {
         if x < self.world_width as usize && y < self.world_height as usize {
             let tile = &mut self.tiles.tiles[x][y];
             tile.set_wall_name(wall_name);
         } else {
-            eprintln!("Coordinates ({}, {}) are out of bounds for the world size {}x{}.", x, y, self.world_width, self.world_height);
+            eprintln!(
+                "Coordinates ({}, {}) are out of bounds for the world size {}x{}.",
+                x, y, self.world_width, self.world_height
+            );
         }
     }
 
-
-    pub fn place_tile(
-        &mut self,
-        x: usize,
-        y: usize,
-        tile: Tile
-    ) {
+    pub fn place_tile(&mut self, x: usize, y: usize, tile: Tile) {
         if x < self.world_width as usize && y < self.world_height as usize {
             self.tiles.tiles[x][y] = tile;
         } else {
-            eprintln!("Coordinates ({}, {}) are out of bounds for the world size {}x{}.", x, y, self.world_width, self.world_height);
+            eprintln!(
+                "Coordinates ({}, {}) are out of bounds for the world size {}x{}.",
+                x, y, self.world_width, self.world_height
+            );
         }
     }
 
