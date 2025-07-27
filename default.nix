@@ -63,7 +63,7 @@ naersk.lib."${targetPlatform.system}".buildPackage {
 
   meta = with lib; {
     description = cargoToml.package.description;
-    homepage = cargoToml.package.homepage;
+    homepage = cargoToml.package.repository;
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ osbm ];
   };
