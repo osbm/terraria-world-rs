@@ -1,126 +1,237 @@
 use terraria_world::world::World;
+use rand::seq::SliceRandom;
 
-fn main() {
-    use rand::seq::SliceRandom;
+#[derive(Debug, Clone)]
+struct MazeCell {
+    is_carved: bool,
+    connections: [bool; 4], // [right, left, down, up]
+}
 
-    fn carve_maze(
-        world: &mut World,
-        gx: usize,
-        gy: usize,
-        visited: &mut Vec<Vec<bool>>,
-        depth: usize,
-        margin: usize,
-        blocks_carved: &mut usize,
-    ) {
-        if depth > 5000 {
-            // Increased depth limit for better coverage
-            return;
+impl Default for MazeCell {
+    fn default() -> Self {
+        Self {
+            is_carved: false,
+            connections: [false; 4],
         }
+    }
+}
 
-        let directions = &[(1, 0), (-1, 0), (0, 1), (0, -1)];
-        let mut rng = rand::rng(); // Use the new rng function
-        let mut dirs = directions.to_vec();
-        dirs.shuffle(&mut rng);
+#[derive(Debug)]
+struct MazeData {
+    width: usize,
+    height: usize,
+    cells: Vec<Vec<MazeCell>>,
+    cell_size: usize,
+    hall_size: usize,
+    wall_size: usize,
+    margin: usize,
+}
 
-        visited[gx][gy] = true;
+impl MazeData {
+    fn new(world_width: usize, world_height: usize, margin: usize) -> Self {
+        let cell_size = 8;
+        let hall_size = 5;
+        let wall_size = 3;
 
-        let cell_size = 8; // Grid cell size (wall + hall)
-        let hall_size = 5; // Size of carved hall in each cell
-        let wall_size = 3; // Remaining wall thickness
+        let width = (world_width - 2 * margin) / cell_size;
+        let height = (world_height - 2 * margin) / cell_size;
 
-        let base_x = margin + gx * cell_size;
-        let base_y = margin + gy * cell_size;
+        println!("Maze grid will be {}x{} cells", width, height);
+        println!("Each cell is {}x{} blocks ({} hall + {} wall)", cell_size, cell_size, hall_size, wall_size);
 
-        if base_x + hall_size >= world.world_width as usize
-            || base_y + hall_size >= world.world_height as usize
-        {
-            return;
+        Self {
+            width,
+            height,
+            cells: vec![vec![MazeCell::default(); height]; width],
+            cell_size,
+            hall_size,
+            wall_size,
+            margin,
         }
+    }
 
-        // Carve current cell (hall_size x hall_size square) - set to air
-        for dx in 0..hall_size {
-            for dy in 0..hall_size {
-                let wx = base_x + dx;
-                let wy = base_y + dy;
-                if world.tiles.tiles[wx][wy].block_id != u16::MAX {
-                    *blocks_carved += 1;
+    fn generate_maze(&mut self) {
+        let mut visited = vec![vec![false; self.height]; self.width];
+        let directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]; // right, left, down, up
+        
+        // Use iterative approach with a stack to avoid stack overflow
+        let mut stack = Vec::new();
+        let start_x = 1;
+        let start_y = 1;
+        
+        // Start the maze generation
+        visited[start_x][start_y] = true;
+        self.cells[start_x][start_y].is_carved = true;
+        stack.push((start_x, start_y));
+        
+        let mut rng = rand::rng();
+        
+        while let Some((x, y)) = stack.last().cloned() {
+            let mut dirs = directions.to_vec();
+            dirs.shuffle(&mut rng);
+            
+            let mut found_unvisited = false;
+            
+            for &(dx, dy) in &dirs {
+                let nx = x as isize + dx;
+                let ny = y as isize + dy;
+                
+                if nx < 0 || ny < 0 || nx as usize >= self.width || ny as usize >= self.height {
+                    continue;
                 }
-                world.tiles.tiles[wx][wy].block_id = u16::MAX; // Air
-                world.tiles.tiles[wx][wy].block_active = false;
+                
+                let nx = nx as usize;
+                let ny = ny as usize;
+                
+                if visited[nx][ny] {
+                    continue;
+                }
+                
+                // Found an unvisited neighbor
+                visited[nx][ny] = true;
+                self.cells[nx][ny].is_carved = true;
+                
+                // Create connection between current cell and next cell
+                let direction_index = if dx == 1 { 0 } else if dx == -1 { 1 } else if dy == 1 { 2 } else { 3 };
+                let opposite_index = if dx == 1 { 1 } else if dx == -1 { 0 } else if dy == 1 { 3 } else { 2 };
+                
+                self.cells[x][y].connections[direction_index] = true;
+                self.cells[nx][ny].connections[opposite_index] = true;
+                
+                stack.push((nx, ny));
+                found_unvisited = true;
+                break;
+            }
+            
+            if !found_unvisited {
+                stack.pop();
             }
         }
 
-        for &(dx, dy) in &dirs {
-            let nx = gx as isize + dx;
-            let ny = gy as isize + dy;
-
-            if nx < 0 || ny < 0 || nx as usize >= visited.len() || ny as usize >= visited[0].len() {
-                continue;
-            }
-
-            let nx = nx as usize;
-            let ny = ny as usize;
-
-            if visited[nx][ny] {
-                continue;
-            }
-
-            // Carve passage between cells - set to air
-            // Calculate the passage area between current cell and next cell
-            let passage_start_x = if dx > 0 {
-                base_x + hall_size
-            } else if dx < 0 {
-                base_x - wall_size
-            } else {
-                base_x
-            };
-            let passage_start_y = if dy > 0 {
-                base_y + hall_size
-            } else if dy < 0 {
-                base_y - wall_size
-            } else {
-                base_y
-            };
-
-            let passage_width = if dx != 0 { wall_size } else { hall_size };
-            let passage_height = if dy != 0 { wall_size } else { hall_size };
-
-            for i in 0..passage_width {
-                for j in 0..passage_height {
-                    let wx = passage_start_x as isize + i as isize;
-                    let wy = passage_start_y as isize + j as isize;
-
-                    if wx >= 0
-                        && wy >= 0
-                        && (wx as usize) < world.world_width as usize
-                        && (wy as usize) < world.world_height as usize
-                    {
-                        if world.tiles.tiles[wx as usize][wy as usize].block_id != u16::MAX {
-                            *blocks_carved += 1;
-                        }
-                        world.tiles.tiles[wx as usize][wy as usize].block_id = u16::MAX; // Air
-                        world.tiles.tiles[wx as usize][wy as usize].block_active = false;
+        // Count carved cells
+        let mut carved_count = 0;
+        let mut connection_count = 0;
+        for x in 0..self.width {
+            for y in 0..self.height {
+                if self.cells[x][y].is_carved {
+                    carved_count += 1;
+                }
+                for &connected in &self.cells[x][y].connections {
+                    if connected {
+                        connection_count += 1;
                     }
                 }
             }
-
-            carve_maze(world, nx, ny, visited, depth + 1, margin, blocks_carved);
         }
+
+        println!("Generated maze: {} carved cells, {} connections", carved_count, connection_count / 2);
     }
-    // Usage
+
+    fn apply_to_world(&self, world: &mut World) -> usize {
+        let mut blocks_carved = 0;
+
+        println!("Applying maze to world...");
+
+        for gx in 0..self.width {
+            for gy in 0..self.height {
+                let cell = &self.cells[gx][gy];
+
+                if cell.is_carved {
+                    // Carve the main hall area
+                    let base_x = self.margin + gx * self.cell_size;
+                    let base_y = self.margin + gy * self.cell_size;
+
+                    // Carve hall
+                    for dx in 0..self.hall_size {
+                        for dy in 0..self.hall_size {
+                            let wx = base_x + dx;
+                            let wy = base_y + dy;
+
+                            if wx < world.world_width as usize && wy < world.world_height as usize {
+                                if world.tiles.tiles[wx][wy].block_id != u16::MAX {
+                                    blocks_carved += 1;
+                                }
+                                world.tiles.tiles[wx][wy].block_id = u16::MAX;
+                                world.tiles.tiles[wx][wy].block_active = false;
+                            }
+                        }
+                    }
+
+                    // Carve connections to neighboring cells
+                    // Right connection
+                    if cell.connections[0] {
+                        for dy in 0..self.hall_size {
+                            for dx in self.hall_size..self.cell_size {
+                                let wx = base_x + dx;
+                                let wy = base_y + dy;
+
+                                if wx < world.world_width as usize && wy < world.world_height as usize {
+                                    if world.tiles.tiles[wx][wy].block_id != u16::MAX {
+                                        blocks_carved += 1;
+                                    }
+                                    world.tiles.tiles[wx][wy].block_id = u16::MAX;
+                                    world.tiles.tiles[wx][wy].block_active = false;
+                                }
+                            }
+                        }
+                    }
+
+                    // Down connection
+                    if cell.connections[2] {
+                        for dx in 0..self.hall_size {
+                            for dy in self.hall_size..self.cell_size {
+                                let wx = base_x + dx;
+                                let wy = base_y + dy;
+
+                                if wx < world.world_width as usize && wy < world.world_height as usize {
+                                    if world.tiles.tiles[wx][wy].block_id != u16::MAX {
+                                        blocks_carved += 1;
+                                    }
+                                    world.tiles.tiles[wx][wy].block_id = u16::MAX;
+                                    world.tiles.tiles[wx][wy].block_active = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        blocks_carved
+    }
+}
+
+fn main() {
     let mut world = World::new("maze_world", "small", "classic", "corruption");
 
-    println!(
-        "World dimensions: {}x{}",
-        world.world_width, world.world_height
-    );
+    println!("World dimensions: {}x{}", world.world_width, world.world_height);
 
-    // Counters for tracking block placement and carving
-    let mut stone_blocks_placed = 0;
-    let mut blocks_carved = 0;
+    // Create maze data structure
+    let margin = 50;
+    let mut maze = MazeData::new(world.world_width as usize, world.world_height as usize, margin);
 
-    // First, fill the world with solid blocks (stone)
+    // Generate the maze structure
+    println!("Generating maze structure...");
+    maze.generate_maze();
+
+    // Calculate expected carving statistics before applying
+    let total_cells = maze.width * maze.height;
+    let carved_cells = maze.cells.iter()
+        .flat_map(|row| row.iter())
+        .filter(|cell| cell.is_carved)
+        .count();
+
+    let blocks_per_carved_cell = maze.hall_size * maze.hall_size;
+    let estimated_blocks_carved = carved_cells * blocks_per_carved_cell;
+
+    println!("Maze generation complete:");
+    println!("  Total grid cells: {}", total_cells);
+    println!("  Carved cells: {} ({:.1}%)", carved_cells, (carved_cells as f64 / total_cells as f64) * 100.0);
+    println!("  Estimated blocks to carve: {}", estimated_blocks_carved);
+
+    // Fill the world with solid blocks (stone)
     println!("Filling world with stone blocks...");
+    let mut stone_blocks_placed = 0;
     for x in 0..world.world_width as usize {
         for y in 0..world.world_height as usize {
             world.tiles.tiles[x][y].block_id = 1; // 1 = STONE
@@ -129,52 +240,15 @@ fn main() {
         }
     }
 
-    let margin = 50;
-
-    // Create visited grid with correct dimensions for grid coordinates
-    let grid_width = (world.world_width as usize - 2 * margin) / 8;
-    let grid_height = (world.world_height as usize - 2 * margin) / 8;
-    let mut visited = vec![vec![false; grid_height]; grid_width];
-
-    println!("Grid dimensions: {}x{} cells", grid_width, grid_height);
-
-    // Start in grid-aligned position within the margin
-    let start_x = 1; // Grid coordinate, not world coordinate
-    let start_y = 1; // Grid coordinate, not world coordinate
-
-    println!("Starting maze carving...");
-    carve_maze(
-        &mut world,
-        start_x,
-        start_y,
-        &mut visited,
-        0,
-        margin,
-        &mut blocks_carved,
-    );
-
-    // Count how many cells were actually visited
-    let mut visited_count = 0;
-    for row in &visited {
-        for &cell in row {
-            if cell {
-                visited_count += 1;
-            }
-        }
-    }
-
-    println!(
-        "Visited {} out of {} total grid cells ({:.1}%)",
-        visited_count,
-        grid_width * grid_height,
-        (visited_count as f64 / (grid_width * grid_height) as f64) * 100.0
-    );
+    // Apply the maze to the world
+    println!("Applying maze to world...");
+    let blocks_carved = maze.apply_to_world(&mut world);
 
     world
         .save_as_wld("maze_world.wld")
         .expect("Failed to save maze world");
 
-    // Calculate and display statistics
+    // Calculate and display final statistics
     let total_blocks = (world.world_width * world.world_height) as usize;
     let remaining_stone_blocks = stone_blocks_placed - blocks_carved;
     let air_blocks = blocks_carved;
@@ -182,7 +256,7 @@ fn main() {
     let stone_percentage = (remaining_stone_blocks as f64 / total_blocks as f64) * 100.0;
     let air_percentage = (air_blocks as f64 / total_blocks as f64) * 100.0;
 
-    println!("Maze carving statistics:");
+    println!("Final maze statistics:");
     println!("  Total blocks in world: {}", total_blocks);
     println!("  Stone blocks placed initially: {}", stone_blocks_placed);
     println!("  Blocks carved (turned to air): {}", blocks_carved);
