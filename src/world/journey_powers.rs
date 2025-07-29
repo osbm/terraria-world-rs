@@ -20,10 +20,10 @@ impl JourneyPowers {
     pub fn new() -> Self {
         Self {
             freeze_time: false,
-            time_rate: 1.0,
+            time_rate: 0.0,
             freeze_rain: false,
             freeze_wind: false,
-            difficulty: 1.0,
+            difficulty: 0.0,
             freeze_biome_spread: false,
         }
     }
