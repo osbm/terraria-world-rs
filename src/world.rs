@@ -169,7 +169,7 @@ impl World {
             22,
             "Jacob".to_string(),
             world_width as f32 * 16.0 / 2.0,
-            world_height as f32 * 16.0 / 2.0 + (16.0 * 4.0),
+            world_height as f32 * 16.0 / 2.0 - (16.0 * 5.0),
             true,
             Coordinates {
                 x: 4196,
