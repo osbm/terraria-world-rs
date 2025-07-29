@@ -58,7 +58,7 @@ fn main() {
 
     // use std::env;
 
-    let mut world2 = World::new("example_world", "large", "classic");
+    let mut world2 = World::new("example_world", "large", "classic", "corruption");
 
     for x in 0..world2.world_width as usize {
         for y in 0..world2.world_height as usize {
