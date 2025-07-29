@@ -53,56 +53,56 @@ impl MazeData {
     fn generate_maze(&mut self) {
         let mut visited = vec![vec![false; self.height]; self.width];
         let directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]; // right, left, down, up
-        
+
         // Use iterative approach with a stack to avoid stack overflow
         let mut stack = Vec::new();
         let start_x = 1;
         let start_y = 1;
-        
+
         // Start the maze generation
         visited[start_x][start_y] = true;
         self.cells[start_x][start_y].is_carved = true;
         stack.push((start_x, start_y));
-        
+
         let mut rng = rand::rng();
-        
+
         while let Some((x, y)) = stack.last().cloned() {
             let mut dirs = directions.to_vec();
             dirs.shuffle(&mut rng);
-            
+
             let mut found_unvisited = false;
-            
+
             for &(dx, dy) in &dirs {
                 let nx = x as isize + dx;
                 let ny = y as isize + dy;
-                
+
                 if nx < 0 || ny < 0 || nx as usize >= self.width || ny as usize >= self.height {
                     continue;
                 }
-                
+
                 let nx = nx as usize;
                 let ny = ny as usize;
-                
+
                 if visited[nx][ny] {
                     continue;
                 }
-                
+
                 // Found an unvisited neighbor
                 visited[nx][ny] = true;
                 self.cells[nx][ny].is_carved = true;
-                
+
                 // Create connection between current cell and next cell
                 let direction_index = if dx == 1 { 0 } else if dx == -1 { 1 } else if dy == 1 { 2 } else { 3 };
                 let opposite_index = if dx == 1 { 1 } else if dx == -1 { 0 } else if dy == 1 { 3 } else { 2 };
-                
+
                 self.cells[x][y].connections[direction_index] = true;
                 self.cells[nx][ny].connections[opposite_index] = true;
-                
+
                 stack.push((nx, ny));
                 found_unvisited = true;
                 break;
             }
-            
+
             if !found_unvisited {
                 stack.pop();
             }
