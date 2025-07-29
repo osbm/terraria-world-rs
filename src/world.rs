@@ -854,8 +854,6 @@ impl World {
         let mut journey_powers = JourneyPowers::new();
         while r.bool() {
             let power_id = r.i16();
-            // Record the order of power IDs
-            journey_powers.power_order.push(power_id);
             match power_id {
                 0 => journey_powers.freeze_time = r.bool(),
                 8 => journey_powers.time_rate = r.f32(),
@@ -2109,8 +2107,13 @@ impl World {
     fn write_journey_powers_section(&self) -> ByteWriter {
         let mut writer = ByteWriter::new();
 
-        // Write each power as a pair (id, value) in the exact same order as read
-        for &power_id in &self.journey_powers.power_order {
+        // Write powers collect power IDs from the journey_powers
+        let power_ids = [
+            0, 8, 9, 10, 12, 13, // Known powers
+            // TODO fix collect these ids from journey_powers attribute
+        ];
+
+        for &power_id in &power_ids {
             writer.bool(true);
             writer.i16(power_id);
             match power_id {
