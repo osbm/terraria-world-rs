@@ -22,9 +22,9 @@ fn main() {
     // journey_powers
     println!("Journey Powers: {:#?}", world.journey_powers);
     // rooms
-    println!("Rooms: {:#?}", world.rooms);
+    // println!("Rooms: {:#?}", world.rooms);
     // tile_entities
-    println!("Tile Entities: {:#?}", world.tile_entities);
+    // println!("Tile Entities: {:#?}", world.tile_entities);
     // mobs
     println!("Mobs: {:#?}", world.mobs);
     // mob_kills
