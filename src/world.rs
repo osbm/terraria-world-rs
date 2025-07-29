@@ -146,6 +146,18 @@ impl World {
             "large" => (8400, 2400),
             _ => panic!("Invalid world size. Options are: small, medium, large"),
         };
+        let cavern_level: f64 = match world_size {
+            "small" => 451.0,
+            "medium" => 733.0,
+            "large" => 847.0,
+            _ => panic!("Invalid world size. Options are: small, medium, large"),
+        };
+        let underground_level: f64 = match world_size {
+            "small" => 337.0,
+            "medium" => 493.0,
+            "large" => 649.0,
+            _ => panic!("Invalid world size. Options are: small, medium, large"),
+        };
         let difficulty_value = match difficulty {
             "journey" => 3,
             "classic" => 0,
@@ -186,8 +198,8 @@ impl World {
             invasions: InvasionData::default(),
             spawn_point_x: 0,
             spawn_point_y: 0,
-            underground_level: 0.0,
-            cavern_level: 0.0,
+            underground_level,
+            cavern_level,
             dungeon_point_x: 0,
             dungeon_point_y: 0,
             world_evil_type: false,
