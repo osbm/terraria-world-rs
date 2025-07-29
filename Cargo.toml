@@ -1,6 +1,6 @@
 [package]
 name = "terraria-world"
-version = "1.2.0"
+version = "1.2.1"
 edition = "2021"
 authors = ["osbm <osbm@osbm.dev>"]
 description = "A simple Terraria world file (.wld) parser library"
