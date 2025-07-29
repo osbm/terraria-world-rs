@@ -218,7 +218,8 @@ impl World {
             peddler_satchel_used: false,
             angler_today_quest_completed_by: Vec::new(),
             angler_daily_quest_target: 0,
-            mob_kills: Vec::new(),
+            // mob_kills is 688 zeros
+            mob_kills: vec![0; 688],
             sundial_cooldown: 0,
             sundial_is_running: false,
             moondial_is_running: false,
