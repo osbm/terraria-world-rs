@@ -216,7 +216,7 @@ impl std::fmt::Display for Tile {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TileMatrix {
     pub tiles: Vec<Vec<Tile>>,
     pub size: (usize, usize), // (width, height)
