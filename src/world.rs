@@ -139,7 +139,7 @@ pub struct World {
 }
 
 impl World {
-    pub fn new(world_name: &str, world_size: &str, difficulty: &str) -> Self {
+    pub fn new(world_name: &str, world_size: &str, difficulty: &str, corruption_type: &str) -> Self {
         let (world_width, world_height) = match world_size {
             "small" => (4200, 1200),
             "medium" => (6400, 1800),
@@ -164,6 +164,13 @@ impl World {
             "expert" => 1,
             "master" => 2,
             _ => panic!("Invalid difficulty. Options are: journey, classic, expert, master"),
+        };
+        // corruption = 0
+        // crimson = 1
+        let world_evil_type = match corruption_type {
+            "corruption" => false,
+            "crimson" => true,
+            _ => panic!("Invalid corruption type. Options are: corruption, crimson"),
         };
         let guide_npc = NPC::new(
             22,
@@ -267,7 +274,7 @@ impl World {
             cavern_level,
             dungeon_point_x: 0,
             dungeon_point_y: 0,
-            world_evil_type: false,
+            world_evil_type,
             hardmode_ore_1: -1,
             hardmode_ore_2: -1,
             hardmode_ore_3: -1,
