@@ -33,7 +33,7 @@ fn test_world_roundtrip() {
         println!("Testing roundtrip for: {file_name}");
 
         // Read the original world
-        let mut world = World::from_file(wld_file.to_str().unwrap())
+        let world = World::from_file(wld_file.to_str().unwrap())
             .unwrap_or_else(|_| panic!("Failed to read world file: {file_name}"));
         println!("World name: {}", world.world_name);
         // create the worlds directory if it doesn't exist
