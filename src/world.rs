@@ -1173,8 +1173,8 @@ impl World {
         }
     }
 
-    // add block by name
-    pub fn add_block(&mut self, x: usize, y: usize, block_name: &str) {
+    // set block by name
+    pub fn set_block(&mut self, x: usize, y: usize, block_name: &str) {
         if x < self.world_width as usize && y < self.world_height as usize {
             let tile = &mut self.tiles.tiles[x][y];
             tile.set_block_name(block_name);
@@ -1194,7 +1194,7 @@ impl World {
         Vec::new()
     }
 
-    pub fn add_wall(&mut self, x: usize, y: usize, wall_name: &str) {
+    pub fn set_wall(&mut self, x: usize, y: usize, wall_name: &str) {
         if x < self.world_width as usize && y < self.world_height as usize {
             let tile = &mut self.tiles.tiles[x][y];
             tile.set_wall_name(wall_name);
