@@ -1,92 +1,166 @@
-// use std::env;
-
+use rand::Rng;
 use terraria_world::world::World;
 
-fn main() {
-    // // Get the path from command line arguments
-    // let args: Vec<String> = env::args().collect();
-    // if args.len() < 2 {
-    //     eprintln!("Usage: {} <path_to_wld_file>", args[0]);
-    //     std::process::exit(1);
-    // }
-    // let wld_path = &args[1];
+#[derive(Clone, Copy, PartialEq)]
+enum CellType {
+    Wall,
+    Path,
+}
 
-    // let world = World::from_file(wld_path).expect("Failed to load world file");
+struct MazeGenerator {
+    width: usize,
+    height: usize,
+    maze: Vec<Vec<CellType>>,
+}
 
-    // Print the world summary instead of full debug output
-    // println!("Tile frame: {:?}", world.tile_frame_important.len());
-    // sum is
-    // let tile_frame_sum: usize = world.tile_frame_important.iter().map(|&x| if x { 1 } else { 0 }).sum();
-    // println!("Tile frame sum: {}", tile_frame_sum);
+impl MazeGenerator {
+    fn new(width: usize, height: usize) -> Self {
+        // Initialize maze with all walls
+        let maze = vec![vec![CellType::Wall; height]; width];
+        Self { width, height, maze }
+    }
 
-    // // print 16 tile frames as 1 or 0 per line there are 800 or so
-    // for (i, frame) in world.tile_frame_important.iter().enumerate() {
-    //     if i % 16 == 0 && i != 0 {
-    //         println!();
-    //     }
-    //     print!("{}", if *frame { "1" } else { "0" });
-    //     print!(",");
-    // }
-    // println!();
-    // println!("World created on: {}", world.created_on);
-    // println!("World NPCs: {:#?}", world.npcs);
-    // println!("Weather and Events: {:#?}", world.weather_events);
-    // println!("Invasion Data: {:#?}", world.invasions);
-    // // journey_powers
-    // println!("Journey Powers: {:#?}", world.journey_powers);
-    // // rooms
-    // // println!("Rooms: {:#?}", world.rooms);
-    // // tile_entities
-    // // println!("Tile Entities: {:#?}", world.tile_entities);
-    // // mobs
-    // println!("Mobs: {:#?}", world.mobs);
-    // // mob_kills
-    // println!("Mob Kills: {:#?}", world.mob_kills.len());
-    // cavern_level
-    // println!("Cavern Level: {}", world.cavern_level);
-    // // underground_level
-    // println!("Underground Level: {}", world.underground_level);
-    // println!("Generator version: {}", world.generator_version);
-    // println!("Dungeon Point X: {}", world.dungeon_point_x);
-    // println!("Dungeon Point Y: {}", world.dungeon_point_y);
-    // // angler_daily_quest_target
-    // println!("Angler Daily Quest Target: {}", world.angler_daily_quest_target);
-    // println world world size
-    // println!("World Name: {}", world.world_name);
-    // println!("World Size: {}x{}", world.world_width, world.world_height);
-    // println!("World tile size: {}x{}", world.tiles.tiles.len(), world.tiles.tiles[0].len());
+    fn generate(&mut self) {
+        let mut rng = rand::rng();
+        let mut stack = Vec::new();
 
-    // use std::env;
+        // Start at top-left corner (make it odd coordinates for proper maze generation)
+        let start_x = 1;
+        let start_y = 1;
 
-    let mut world2 = World::new("example_world", "large", "classic", "corruption");
+        self.maze[start_x][start_y] = CellType::Path;
+        stack.push((start_x, start_y));
 
-    for x in 0..world2.world_width as usize {
-        for y in 0..world2.world_height as usize {
-            world2.tiles.tiles[x][y].wall_id = 4u16;
-            if y == world2.world_height as usize / 2 {
-                world2.tiles.tiles[x][y].block_id = 1u16;
-                world2.tiles.tiles[x][y].block_illuminant = true;
+        while let Some((current_x, current_y)) = stack.last().copied() {
+            let neighbors = self.get_unvisited_neighbors(current_x, current_y);
+
+            if neighbors.is_empty() {
+                stack.pop();
+            } else {
+                // Choose random neighbor
+                let &(next_x, next_y) = neighbors.choose(&mut rng).unwrap();
+
+                // Remove wall between current and next cell
+                let wall_x = (current_x + next_x) / 2;
+                let wall_y = (current_y + next_y) / 2;
+
+                self.maze[wall_x][wall_y] = CellType::Path;
+                self.maze[next_x][next_y] = CellType::Path;
+
+                stack.push((next_x, next_y));
             }
         }
 
+        // Ensure entrance and exit are clear
+        self.maze[1][1] = CellType::Path;
+        if self.width >= 3 && self.height >= 3 {
+            self.maze[self.width - 2][self.height - 2] = CellType::Path;
+        }
     }
-    println!("Spawn Point: ({}, {})", world2.spawn_point_x, world2.spawn_point_y);
-    world2.spawn_point_x = world2.world_width / 2;
-    world2.spawn_point_y = world2.world_height / 2 - 1;
-    // world2.bestiary = world.bestiary.clone();
-    // world2.tile_frame_important = world.tile_frame_important.clone();
-    // world2.weather_events = world.weather_events.clone();
-    // world2.environment = world.environment.clone();
-    // world2.invasions = world.invasions.clone();
-    // world2.journey_powers = world.journey_powers.clone();
-    // world2.tiles = world.tiles.clone();
-    // wor
 
-    println!("World2 Name: {}", world2.world_name);
-    println!("World2 Size: {}x{}", world2.world_width, world2.world_height);
-    println!("World2 tile size: {}x{}", world2.tiles.tiles.len(), world2.tiles.tiles[0].len());
+    fn get_unvisited_neighbors(&self, x: usize, y: usize) -> Vec<(usize, usize)> {
+        let mut neighbors = Vec::new();
+        let directions = [(0, 2), (2, 0), (0, -2i32), (-2i32, 0)];
 
-    world2
-        .save_as_wld("example_world2.wld")
-        .expect("Failed to save world");
+        for (dx, dy) in directions.iter() {
+            let new_x = x as i32 + dx;
+            let new_y = y as i32 + dy;
+
+            if new_x > 0 && new_y > 0 &&
+               (new_x as usize) < self.width - 1 &&
+               (new_y as usize) < self.height - 1 &&
+               self.maze[new_x as usize][new_y as usize] == CellType::Wall {
+                neighbors.push((new_x as usize, new_y as usize));
+            }
+        }
+
+        neighbors
+    }
+}
+
+trait SliceRandom<T> {
+    fn choose<R: Rng + ?Sized>(&self, rng: &mut R) -> Option<&T>;
+}
+
+impl<T> SliceRandom<T> for [T] {
+    fn choose<R: Rng + ?Sized>(&self, rng: &mut R) -> Option<&T> {
+        if self.is_empty() {
+            None
+        } else {
+            Some(&self[rng.random_range(0..self.len())])
+        }
+    }
+}
+
+fn main() {
+    let mut world = World::new("maze_world", "large", "classic", "corruption");
+
+    // Calculate maze dimensions based on world size
+    // We want cells to be 8 blocks wide (5 path + 3 wall)
+    let cell_size = 8;
+    let maze_width = (world.world_width as usize / cell_size) | 1; // Make odd
+    let maze_height = (world.world_height as usize / cell_size) | 1; // Make odd
+
+    println!("Generating maze of size {}x{}", maze_width, maze_height);
+
+    // Generate the maze
+    let mut maze_gen = MazeGenerator::new(maze_width, maze_height);
+    maze_gen.generate();
+
+    // Apply maze to world
+    for world_x in 0..world.world_width as usize {
+        for world_y in 0..world.world_height as usize {
+            // Convert world coordinates to maze coordinates
+            let maze_x = world_x / cell_size;
+            let maze_y = world_y / cell_size;
+
+            // Default to wall
+            let mut is_wall = true;
+
+            if maze_x < maze_width && maze_y < maze_height {
+                match maze_gen.maze[maze_x][maze_y] {
+                    CellType::Path => {
+                        // For path cells, create 5-block wide passages
+                        let offset_x = world_x % cell_size;
+                        let offset_y = world_y % cell_size;
+
+                        // Center 5 blocks are path, outer 3 are walls
+                        if offset_x >= 1 && offset_x <= 6 && offset_y >= 1 && offset_y <= 6 {
+                            is_wall = false;
+                        }
+                    },
+                    CellType::Wall => {
+                        is_wall = true;
+                    }
+                }
+            }
+
+            if is_wall {
+                // Wall blocks - use stone
+                world.tiles.tiles[world_x][world_y].block_id = 1u16; // Stone
+                world.tiles.tiles[world_x][world_y].wall_id = 4u16;  // Stone wall
+            } else {
+                // Path blocks - clear air
+                world.tiles.tiles[world_x][world_y].block_id = u16::MAX; // Air
+                world.tiles.tiles[world_x][world_y].wall_id = 0u16;  // No wall
+            }
+        }
+    }
+
+    // Add some lighting torches periodically
+    for world_x in (10..world.world_width as usize).step_by(20) {
+        for world_y in (10..world.world_height as usize).step_by(20) {
+            if world.tiles.tiles[world_x][world_y].block_id == 0 {
+                world.tiles.tiles[world_x][world_y].block_id = 4u16; // Torch
+                world.tiles.tiles[world_x][world_y].block_illuminant = true;
+            }
+        }
+    }
+
+    println!("Maze generated! Saving world...");
+    world
+        .save_as_wld("maze_world.wld")
+        .expect("Failed to save maze world");
+
+    println!("Maze world saved as 'maze_world.wld'");
 }
