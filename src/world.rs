@@ -165,6 +165,18 @@ impl World {
             "master" => 2,
             _ => panic!("Invalid difficulty. Options are: journey, classic, expert, master"),
         };
+        let guide_npc = NPC::new(
+            22,
+            "Jacob".to_string(),
+            world_width as f32 * 16.0 / 2.0,
+            world_height as f32 * 16.0 / 2.0 + (16.0 * 4.0),
+            true,
+            Coordinates {
+                x: 4196,
+                y: 572
+            },
+            0
+        );
         Self {
             version_integer: 279,
             savefile_type: 2,
@@ -228,7 +240,7 @@ impl World {
             chests_max_items: 0,
             chests: Vec::new(),
             signs: Vec::new(),
-            npcs: Vec::new(),
+            npcs: vec![guide_npc],
             mobs: Vec::new(),
             shimmered_npcs: Vec::new(),
             tile_entities: Vec::new(),
